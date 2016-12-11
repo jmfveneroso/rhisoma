@@ -1,0 +1,17 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "edges": [
+        {
+          "target": "2",
+          "type": "causation"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "edges": []
+    }
+  ]
+}
