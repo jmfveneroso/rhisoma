@@ -25,5 +25,6 @@ development: &default
   host: db
 
 test:
-  <<: *default
-  database: db/test.sqlite3
+  adapter: sqlite3
+  database: ":memory:"
+  timeout: 500
