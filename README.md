@@ -1,5 +1,8 @@
 # README
 
+# Travis status
+[![Build Status](https://api.travis-ci.org/jmfveneroso/orkhestra.png)](https://api.travis-ci.org/jmfveneroso/orkhestra.png)
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
@@ -23,4 +26,5 @@ Things you may want to cover:
 
 * ...
 
-TESTE
+# Acessar Postgres
+psql -h localhost -U postgres
