@@ -1,0 +1,8 @@
+{
+  "name": "Orkhestra",
+  "description": "Rhizomatic mental map creator",
+  "image": "heroku/ruby",
+  "addons": [
+    "heroku-postgresql"
+  ]
+}
