@@ -1,6 +1,5 @@
 # README
 
-# Travis status
 [![Build Status](https://api.travis-ci.org/jmfveneroso/orkhestra.png)](https://api.travis-ci.org/jmfveneroso/orkhestra.png)
 [![Docs](http://img.shields.io/badge/docs-yard.info-blue.svg)](https://jmfveneroso.github.io/orkhestra/)
 
