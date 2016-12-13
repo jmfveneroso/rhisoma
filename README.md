@@ -2,6 +2,7 @@
 
 # Travis status
 [![Build Status](https://api.travis-ci.org/jmfveneroso/orkhestra.png)](https://api.travis-ci.org/jmfveneroso/orkhestra.png)
+[![Docs](https://jmfveneroso.github.io/orkhestra/)](http://img.shields.io/badge/docs-yard.info-blue.svg)
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
