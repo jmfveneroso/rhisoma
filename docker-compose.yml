@@ -9,6 +9,9 @@ web:
   environment:
     PORT: 8080
     DATABASE_URL: 'postgres://postgres:@herokuPostgresql:5432/postgres'
+    RAILS_ENV: 'development'
+  volumes:
+    - '.:/app/user'
   ports:
     - '8080:8080'
   links:
