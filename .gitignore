@@ -24,4 +24,4 @@
 bower_components
 
 # Yard generated docs.
-doc
+.yardoc
