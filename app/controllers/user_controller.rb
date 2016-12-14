@@ -7,4 +7,7 @@ class UserController < ApplicationController
 
   def settings
   end
+
+  def signup
+  end
 end

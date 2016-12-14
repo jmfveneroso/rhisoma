@@ -2,12 +2,15 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
+gem 'bcrypt',         '3.1.11'
 
 group :production do
   # Use Puma as the app server
   gem 'puma', '~> 3.0'
 end
 
+# Twitter bootstrap
+gem 'bootstrap-sass', '3.3.6'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -37,6 +40,8 @@ group :development, :test do
 
   # For Travis CI
   gem 'rake'
+
+  gem 'rails-controller-testing'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

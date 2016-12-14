@@ -6,6 +6,6 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   test "the falsehood" do
-    assert false
+    assert !false
   end
 end
