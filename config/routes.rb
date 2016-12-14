@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get 'user/home'
+
+  get 'user/territories'
+
+  get 'user/settings'
+
   get 'welcome/index'
 
   resources :articles
