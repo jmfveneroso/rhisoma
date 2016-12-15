@@ -6,7 +6,4 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     assert_template 'static_pages/home'
     assert_select "a[href=?]", signup_path, count: 1
   end
-  # test "the truth" do
-  #   assert true
-  # end
 end
