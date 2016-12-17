@@ -5,6 +5,7 @@ herokuPostgresql:
 web:
   build: .
   command: 'bash -c ''bundle exec puma -C config/puma.rb'''
+  # command: 'bash -c ''bin/rails db:migrate:reset'''
   working_dir: /app/user
   environment:
     PORT: 8080
