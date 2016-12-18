@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   def settings
   end
 
-  def signup
+  def new
     @user = User.new
   end
 
@@ -31,7 +31,7 @@ class UsersController < ApplicationController
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
     else
-      render 'signup'
+      render 'new'
     end
   end
 

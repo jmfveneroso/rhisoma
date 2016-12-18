@@ -6,7 +6,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end
 
   test "login with invalid information" do
-    get login_path
+    get root_url
     assert_template 'sessions/new'
     post login_path, params: { session: { email: '', password: '' } }
     assert_template 'sessions/new'
@@ -15,7 +15,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end
 
   test "login with valid information" do
-    get login_path
+    get root_url
     post login_path, params: { session: { email:    @user.email,
                                           password: 'password' } }
 

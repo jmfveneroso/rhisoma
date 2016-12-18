@@ -18,7 +18,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       }
     end
     
-    assert_template 'users/signup'
+    assert_template 'users/new'
   end
 
   test "valid signup information with account activation" do

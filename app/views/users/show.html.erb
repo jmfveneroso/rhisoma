@@ -1,1 +1,10 @@
-<%= @user.email %>
+<% provide(:page_title, 'User Panel') %>
+
+<h1>User Panel</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <p>Email: <%= @user.email %></p>
+    <p>Admin: <%= @user.admin %></p>
+  </div>
+</div>

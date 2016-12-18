@@ -23,6 +23,10 @@ $gray-medium-light: #eaeaea;
 
 /* header */
 
+h1 {
+  text-align: center;
+}
+
 #logo {
   float: left;
   margin-right: 10px;
@@ -35,6 +39,16 @@ $gray-medium-light: #eaeaea;
   &:hover {
     color: #000;
     text-decoration: none;
+  }
+}
+
+.main {
+  margin-top: 125px;
+}
+
+@media (min-width: 768px) {
+  .main {
+    margin-top: 40px;
   }
 }
 
@@ -64,4 +78,8 @@ input {
   .form-control {
     color: $state-danger-text;
   }
+}
+
+.checkbox {
+  margin-left: 20px;
 }
