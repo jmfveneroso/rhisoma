@@ -5,10 +5,11 @@ herokuPostgresql:
 web:
   build: .
   command: 'bash -c ''bundle exec puma -C config/puma.rb'''
+  # command: 'bash -c ''bin/rails db:migrate:reset'''
   working_dir: /app/user
   environment:
     PORT: 8080
-    DATABASE_URL: 'postgres://postgres:@herokuPostgresql:5432/postgres'
+    # DATABASE_URL: 'postgres://postgres:@herokuPostgresql:5432/postgres'
     RAILS_ENV: 'development'
   volumes:
     - '.:/app/user'
@@ -16,14 +17,3 @@ web:
     - '8080:8080'
   links:
     - herokuPostgresql
-shell:
-  build: .
-  command: bash
-  working_dir: /app/user
-  environment:
-    PORT: 8080
-    DATABASE_URL: 'postgres://postgres:@herokuPostgresql:5432/postgres'
-  links:
-    - herokuPostgresql
-  volumes:
-    - '.:/app/user'

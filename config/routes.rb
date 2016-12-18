@@ -1,8 +1,16 @@
 Rails.application.routes.draw do
-  get 'welcome/index'
+  root 'sessions#new'
 
+  get 'about',   to: 'static_pages#about'
+  get 'signup',  to: 'users#new'
+  get 'users/home'
+  get 'users/territories'
+  get 'users/settings'
+
+  post   '/login',   to: 'sessions#create'
+  delete '/logout',  to: 'sessions#destroy'
+  resources :users
   resources :articles
-
-  root 'welcome#index'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :account_activations, only: [:edit]
+  resources :password_resets,     only: [:new, :create, :edit, :update]
 end
