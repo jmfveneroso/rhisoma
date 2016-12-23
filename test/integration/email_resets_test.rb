@@ -7,7 +7,7 @@ class EmailResetsTest < ActionDispatch::IntegrationTest
   end
 
   test "email resets" do
-    # ===New email reset===
+    # ===New===
     log_in_as(@user)
     get new_email_reset_path
     assert_template 'email_resets/new'
@@ -26,7 +26,7 @@ class EmailResetsTest < ActionDispatch::IntegrationTest
     assert_not flash.empty?
     assert_redirected_to account_path
 
-    # ===Edit email reset===
+    # ===Edit===
     user = assigns(:user)
 
     # Wrong email
@@ -50,7 +50,7 @@ class EmailResetsTest < ActionDispatch::IntegrationTest
     # Invalid password
     patch email_reset_path(user.email_reset_token),
           params: { email: user.email, user: { password: "wrongpassword" } }
-    assert_select 'div.errors-panel'
+    assert_select 'div.alert-danger'
 
     # Valid password
     patch email_reset_path(user.email_reset_token),

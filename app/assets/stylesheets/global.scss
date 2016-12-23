@@ -27,23 +27,12 @@ h1 {
   text-align: center;
 }
 
-#logo {
-  float: left;
-  margin-right: 10px;
-  font-size: 1.7em;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: -1px;
-  padding-top: 9px;
-  font-weight: bold;
-  &:hover {
-    color: #000;
-    text-decoration: none;
-  }
-}
-
 .main {
   margin-top: 60px;
+}
+
+.navbar-brand {
+  margin-left: -15px;
 }
 
 /* forms */
@@ -92,9 +81,28 @@ input {
   margin-bottom: 0;
 }
 
-.errors-panel {
-  background-color: #f2dede;
-  border-color: #ebccd1;
-  color: #a94442;
-  padding: 15px 0px;
+.alert {
+  border-radius: 0;
+}
+
+/* Helpers */
+
+.btn-lft {
+  display: inline-block;
+  width: 50%;
+  padding-right: 15px;
+  float: left;
+  .btn {
+    width: 100%;
+  }
+}
+
+.btn-rgt {
+  display: inline-block;
+  width: 50%;
+  padding-left: 15px;
+  float: left;
+  .btn {
+    width: 100%;
+  }
 }

@@ -1,10 +1,12 @@
+<% provide(:page_title, 'Account') %>
+
 <% content_for :errors do %>
   <%= render 'shared/error_messages' %>
 <% end %>
 
 <%= render 'settings_sidebar', :selected_option => 'account' %>
 
-<div class="col-md-9">
+<div class="col-md-6">
   <div class="panel panel-default">
     <div class="panel-heading">Change Password</div>
     <div class="panel-body">
@@ -22,11 +24,13 @@
       <% end %>
     </div>
   </div>
+</div>
 
+<div class="col-md-3">
   <div class="panel panel-default">
-    <div class="panel-heading">Change Username</div>
+    <div class="panel-heading">Change Email</div>
     <div class="panel-body">
-      <a href="<%= new_email_reset_path %>" class="no-decoration"><button type="submit" class="btn btn-primary">Change Username</button></a>
+      <a href="<%= new_email_reset_path %>" class="no-decoration"><button type="submit" class="btn btn-primary">Change Email</button></a>
     </div>
   </div>
 

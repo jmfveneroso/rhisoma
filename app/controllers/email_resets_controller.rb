@@ -1,18 +1,32 @@
+# The email resets controller is similar to the password resets controller,
+# but it handles email alteration logic.
+# 
+# @author João Mateus de Freitas Veneroso
+# @since 0.1.0
 class EmailResetsController < ApplicationController
   # The user must be logged in to request an email change, but since
-  # the password will be asked for during the update there is no 
+  # the update action requests the user password there is no 
   # need to require the user to be logged in during edit and update.
   before_action :logged_in_user,   only: [:new, :create]
   before_action :get_user,         only: [:edit, :update]
   before_action :valid_user,       only: [:edit, :update]
   before_action :check_expiration, only: [:edit, :update]
 
+  # Renders the email change request view.
+  # @route GET /emails_resets/new
   def new
     @user = current_user
   end
 
+  # Creates a new email change request. The new email address must be properly
+  # checked before it is activated, so a request message is sent to the new
+  # email address.
+  # @route POST /emails_resets/new
+  # @route_param email_reset [new_email]
   def create
     @user = current_user
+    # The new email is stored in the database so we can make sure it is 
+    # a valid address when the change is confirmed.
     @user[:new_email] = params[:email_reset][:new_email].downcase
     if @user.save
       @user.create_email_reset_digest
@@ -24,13 +38,18 @@ class EmailResetsController < ApplicationController
     end
   end
 
+  # Renders the email change confirmation view.
+  # @route GET /emails_resets/$(email_reset_token)/edit
+  # @route_param email
   def edit
   end
 
+  # Confirms the email change.
+  # @route PATCH /emails_resets/$(email_reset_token)
+  # @route_param user [email]
+  # @route_param user [password]
   def update
     if @user.authenticated?(:password, params[:user][:password])
-      # The new email is taken from the database so that we can
-      # make sure it is valid.
       @user.email = @user.new_email
       if @user.save
         @user.update_attribute(:new_email, nil)
@@ -49,13 +68,7 @@ class EmailResetsController < ApplicationController
 
   private
 
-    def user_params
-      params.require(:user).permit(:email)
-    end
-
-    # Before filters.
-  
-    # Confirms a logged-in user.
+    # Before filter that confirms the user is logged-in.
     def logged_in_user
       unless logged_in?
         store_location
@@ -64,11 +77,12 @@ class EmailResetsController < ApplicationController
       end
     end
 
+    # Before filter that finds user by email.
     def get_user
       @user = User.find_by(email: params[:email])
     end
 
-    # Confirms an user with a valid reset_email token.
+    # Before filter that confirms the email reset token is valid.
     def valid_user
       unless @user
         flash[:danger] = "Invalid user"
@@ -88,7 +102,7 @@ class EmailResetsController < ApplicationController
       end
     end
 
-    # Checks expiration of email reset token.
+    # Before filter that checks the expiration of the email reset token.
     def check_expiration
       if @user.email_reset_expired?
         flash[:danger] = "Email reset has expired"

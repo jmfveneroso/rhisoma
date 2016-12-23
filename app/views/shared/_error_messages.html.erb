@@ -1,9 +1,8 @@
 <% if @user.errors.any? %>
-  <div class="errors-panel">
+  <div class="alert alert-danger alert-dismissable">
     <div class="container">
-      <% @user.errors.full_messages.each do |msg| %>
-        <%= msg %>
-      <% end %>
+      <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+      <%= punctuate(@user.errors.full_messages) %>
     </div>
   </div>
 <% end %>

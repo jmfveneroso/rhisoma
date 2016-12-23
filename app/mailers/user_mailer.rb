@@ -1,25 +1,25 @@
+# The user mailer implements email sending functions for
+# user account management.
+# 
+# @author João Mateus de Freitas Veneroso
+# @since 0.1.0
 class UserMailer < ApplicationMailer
-
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.user_mailer.account_activation.subject
-  #
+  # Sends account activation mail.
+  # @param user [User]
   def account_activation(user)
     @user = user
     mail to: user.email, subject: "Account activation"
   end
 
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.user_mailer.password_reset.subject
-  #
+  # Sends password reset mail.
+  # @param user [User]
   def password_reset(user)
     @user = user
     mail to: user.email, subject: "Password reset"
   end
 
+  # Sends email reset mail.
+  # @param user [User]
   def email_reset(user)
     @user = user
     mail to: user.new_email, subject: "Email reset"

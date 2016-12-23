@@ -1,10 +1,24 @@
+# The sessions controller handles authentication logic in persistent and
+# non persistent sessions.
+# 
+# @author João Mateus de Freitas Veneroso
+# @since 0.1.0
 class SessionsController < ApplicationController
+  # Renders the sign in page. It is the root url.
+  # @route GET /
   def new
     if logged_in?
       redirect_to home_url and return
     end
   end
 
+  # Authenticates the user by checking the email and password. If the
+  # "remember me" option is selected, the session key is stored in a 
+  # persistent cookie.
+  # @route POST /sessions
+  # @route_param session [email]
+  # @route_param session [password]
+  # @route_param session [remember_me]
   def create
     @user = User.find_by(email: params[:session][:email].downcase)
     if @user && @user.authenticate(params[:session][:password])
@@ -24,6 +38,8 @@ class SessionsController < ApplicationController
     end
   end
 
+  # Logs the user out.
+  # @route DELETE /logout
   def destroy
     log_out if logged_in?
     redirect_to root_url
