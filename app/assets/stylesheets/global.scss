@@ -43,13 +43,7 @@ h1 {
 }
 
 .main {
-  margin-top: 125px;
-}
-
-@media (min-width: 768px) {
-  .main {
-    margin-top: 40px;
-  }
+  margin-top: 60px;
 }
 
 /* forms */
@@ -82,4 +76,25 @@ input {
 
 .checkbox {
   margin-left: 20px;
+}
+
+.no-decoration {
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.no-decoration:hover {
+  text-decoration: none;
+}
+
+.navbar {
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.errors-panel {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a94442;
+  padding: 15px 0px;
 }

@@ -1,0 +1,8 @@
+<h1>Email Change</h1>
+
+<p>Your email was changed in Orkhestra.</p>
+<%= @user.email_reset_token %>
+
+<%= link_to "Change email", edit_email_reset_url(@user.email_reset_token, email: @user.email) %>
+
+<p>Ignore this email if you didn't request an email change.</p>

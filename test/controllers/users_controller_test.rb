@@ -7,24 +7,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @other_user = users(:second_user)
   end
 
-  test "should get home" do
-    get users_home_url
-    assert_response :success
-    assert_select "title", "Home | #{@base_title}"
-  end
-
-  test "should get territories" do
-    get users_territories_url
-    assert_response :success
-    assert_select "title", "Territories | #{@base_title}"
-  end
-
-  test "should get settings" do
-    get users_settings_url
-    assert_response :success
-    assert_select "title", "Settings | #{@base_title}"
-  end
-
   test "should get signup" do
     get signup_path
     assert_response :success
@@ -84,5 +66,31 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       delete user_path(@user)
     end
     assert_redirected_to root_url
+  end
+
+  test "should redirect settings account when not logged" do
+    get account_path
+    assert_redirected_to login_url
+  end
+
+  test "should not update password when old password is wrong" do
+    log_in_as(@user)
+    old_digest = @user.password_digest
+    post change_password_path, params: {
+                        user: { old_password:          'wrong',
+                                password:              'newpassword',
+                                password_confirmation: 'newpassword' } }
+    assert_equal old_digest, @user.password_digest
+  end
+
+  test "should not update password when old password is correct" do
+    log_in_as(@user)
+    old_digest = @user.password_digest
+    post change_password_path, params: {
+                        user: { old_password:          'password',
+                                password:              'newpassword',
+                                password_confirmation: 'newpassword' } }
+    @user.reload
+    assert_not_equal old_digest, @user.password_digest
   end
 end

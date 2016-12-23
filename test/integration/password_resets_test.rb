@@ -42,13 +42,13 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
           params: { email: user.email,
                     user: { password:              "foobaz",
                             password_confirmation: "barquux" } }
-    assert_select 'div#error_explanation'
+    assert_select 'div.errors-panel'
     # Empty password
     patch password_reset_path(user.reset_token),
           params: { email: user.email,
                     user: { password:              "",
                             password_confirmation: "" } }
-    assert_select 'div#error_explanation'
+    assert_select 'div.errors-panel'
     # Valid password & confirmation
     patch password_reset_path(user.reset_token),
           params: { email: user.email,

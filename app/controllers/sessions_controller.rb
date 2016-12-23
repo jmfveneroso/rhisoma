@@ -1,8 +1,7 @@
 class SessionsController < ApplicationController
   def new
     if logged_in?
-      redirect_to current_user
-      return
+      redirect_to home_url and return
     end
   end
 

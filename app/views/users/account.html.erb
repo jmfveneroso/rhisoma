@@ -1,0 +1,39 @@
+<% content_for :errors do %>
+  <%= render 'shared/error_messages' %>
+<% end %>
+
+<%= render 'settings_sidebar', :selected_option => 'account' %>
+
+<div class="col-md-9">
+  <div class="panel panel-default">
+    <div class="panel-heading">Change Password</div>
+    <div class="panel-body">
+      <%= form_tag(controller: 'users', action: 'change_password', method: 'post') do %>
+        <%= label_tag :old_password %>
+        <%= password_field_tag 'user[old_password]', '', class: 'form-control' %>
+      
+        <%= label_tag :new_password %>
+        <%= password_field_tag 'user[password]', '', class: 'form-control' %>
+
+        <%= label_tag :password_confirmation %>
+        <%= password_field_tag 'user[password_confirmation]', '', class: 'form-control' %>
+      
+        <%= submit_tag 'Update password', class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Change Username</div>
+    <div class="panel-body">
+      <a href="<%= new_email_reset_path %>" class="no-decoration"><button type="submit" class="btn btn-primary">Change Username</button></a>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Delete Account</div>
+    <div class="panel-body">
+      <a href="<%= confirm_delete_account_path %>" class="no-decoration"><button type="submit" class="btn btn-primary">Delete Account</button></a>
+    </div>
+  </div>
+</div>

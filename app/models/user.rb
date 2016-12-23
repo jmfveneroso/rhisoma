@@ -1,9 +1,10 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token, :activation_token, :reset_token
+  attr_accessor :remember_token, :activation_token, :reset_token, :email_reset_token
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
+  validates :email,     presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+  validate  :is_new_email_valid
 
   before_save :downcase_email
   before_create :create_activation_digest
@@ -64,9 +65,31 @@ class User < ApplicationRecord
     UserMailer.password_reset(self).deliver_now
   end
 
+  # Sends email reset email.
+  def send_email_reset_email
+    UserMailer.email_reset(self).deliver_now
+  end
+
   # Returns true if a password reset has expired.
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  # Creates email reset digest.
+  def create_email_reset_digest
+    self.email_reset_token = User.new_token
+    update_columns(email_reset_digest: User.digest(email_reset_token), 
+                   email_reset_sent_at: Time.zone.now)
+  end
+
+  # Sends email reset email.
+  def send_email_reset_email
+    UserMailer.email_reset(self).deliver_now
+  end
+
+  # Returns true if an email reset has expired.
+  def email_reset_expired?
+    email_reset_sent_at < 2.hours.ago
   end
 
   private
@@ -80,5 +103,14 @@ class User < ApplicationRecord
     def create_activation_digest
       self.activation_token  = User.new_token
       self.activation_digest = User.digest(activation_token)
+    end
+
+    # Validates a new email address.
+    def is_new_email_valid
+      if new_email.present? 
+        errors.add(:new_email, "is too long")       if new_email.length > 255
+        errors.add(:new_email, "is invalid")        if (VALID_EMAIL_REGEX =~ new_email).nil?
+        errors.add(:new_email, "is already taken")  if User.find_by(email: new_email)
+      end
     end
 end
