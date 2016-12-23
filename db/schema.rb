@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161222133245) do
+ActiveRecord::Schema.define(version: 20161223213134) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,23 @@ ActiveRecord::Schema.define(version: 20161222133245) do
     t.text     "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "edges", force: :cascade do |t|
+    t.integer "source_id", null: false
+    t.integer "target_id", null: false
+    t.string  "category"
+  end
+
+  create_table "nodes", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "title"
+    t.string   "type"
+    t.boolean  "active"
+    t.boolean  "hidden"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_nodes_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -41,4 +58,5 @@ ActiveRecord::Schema.define(version: 20161222133245) do
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
   end
 
+  add_foreign_key "nodes", "users"
 end
