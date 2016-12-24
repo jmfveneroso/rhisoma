@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<meta name="author" content="sumbioun.com">
+<meta name="description" content="Tecnologias para arte e cultura. Conheça nossos projetos." />
+<meta name="keywords" content="mapa mental, mental map, think map, thought map, mapa de pensamento, rizoma, agenda, cartografia, calendário, tarefas, lista de tarefas, task list, tasks, calendar" />
+<link rel="icon" href="favicon.png" type="image/x-icon" />
+<title>Orkhestra | Cadastro</title>
+
+<link rel="stylesheet" type="text/css" href="public/css/main.css?v=0.0.1">
+<link href='http://fonts.googleapis.com/css?family=Source Sans Pro:200,300,400,500,600,700,800' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="public/js/mockData.js"></script>
+</head>
+
+<body>
+<script>
+
+var form_div = document.createElement("div");
+
+var email_field = document.createElement("div");
+	email_field.id = "email-form";
+	email_field.style.width = "350px";
+	email_field.style.position = "absolute";
+	email_field.style.display = "inline";
+	email_field.style.top = "200px";
+	email_field.style.left = "35px";
+	email_field.style.background = "none";
+	email_field.innerHTML = '<input id="input-email" class="block" type="text" name="email" placeholder="CONTE-NOS SEU EMAIL" value>';
+	email_field.innerHTML += '<div id="send-email">ENVIAR</div>';
+	form_div.appendChild(email_field);
+
+	var system_message = document.createElement("div");
+	system_message.id = "system_message";
+	system_message.style.width = "350px";
+	system_message.style.height = "30px";
+	system_message.style.background = "transparent";
+	system_message.style.position = "absolute";
+	system_message.style.display = "inline-block";
+	system_message.style.top = "260px";
+	system_message.style.left = "0px";
+	system_message.style.textTransform = "uppercase";
+	system_message.style.textAlign = "center";
+	system_message.style.fontSize = "12px";
+	system_message.style.fontWeight = "300px";
+	system_message.style.color = "#992388";
+	system_message.innerHTML = 'cadastre-se para receber acesso assim<br/>que a versão beta for lançada';
+	form_div.appendChild(system_message);
+
+	document.body.appendChild(form_div);
+
+var email = document.getElementById("input-email");
+	email.setAttribute( "autocomplete", "off" ); 
+	var button = document.getElementById("send-email");
+	var mouseOverSend = function () {
+		button.style.cursor = "pointer";
+		button.style.textDecoration = "underline";
+	};
+	var mouseOutSend = function () {
+		button.style.textDecoration = "none";
+	};
+	var mouseDownSend = function () {
+		button.style.textDecoration = "none";
+		var this_email = document.getElementById("input-email");
+		var send_email = this_email.value;
+		var currentdate = new Date(); 
+		var this_timestamp = currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " | "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+
+			    $.ajaxSetup({
+					beforeSend: master.loadingStart()
+			    });
+				$.post('modules/add_subscriber.php', {email: send_email, timestamp: this_timestamp}, function(data){
+						var result = jQuery.parseJSON(data);
+						console.log(result);
+						var message = document.getElementById("system_message");
+						message.style.top = "260px";
+						message.innerHTML = result;
+					  })
+					  .error(function() { alert("Problema com o banco de dados. Tente novamente mais tarde"); });
+	};
+	button.onmouseover = mouseOverSend;
+	button.onmouseout = mouseOutSend;
+	button.onmousedown = mouseDownSend;
+
+</script>
+</body>
+</html>

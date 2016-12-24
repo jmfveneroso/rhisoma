@@ -1,0 +1,75 @@
+
+
+- Inicialização processa informações relativas à navegação no grafo [hierarquia, tamanho, etc]
+		. stand-by, ativo, datas; reconhecer e processar tudo
+
+		UTC + Fuso GMT
+		2099-12-31 23:59:59
+
+- Ferramenta de apresentação do mapa por período [default = ontem,hoje,amanhã {visão simultânea de 3 dias}]
+		!!!!! necessário definir modelo padrão de data para programar o interpretador\
+
+
+
+ontem
+hoje
+amanha
+
+
+
+			*** AVANÇOS
+
+
+nodulo
+titulo
+descricao
+data
+hidden
+ativo
+stand-by
+pessoa
+lugar
+data de adicao
+....
+tipo 3 [tarefa]
+
+
+			nodulo = individual
+			modulo = grupo [de nodulos, por exemplo]
+
+			nodulo base
+			stand-by
+			ativo
+			hidden
+
+			nodulo categoria
+			titulo
+			descricao
+
+			nodulo data
+			data inicio
+			data fim
+			recorrencia
+			etc
+
+			nodulo pessoa
+
+			nodulo lugar
+
+			nodulo imagem
+
+			nodulo link
+
+			nodulo som
+
+			nodulo privacidade
+
+
+			nódulo do tipo data associado a um nódulo básico com ligação de tipo específico para definir datas
+				forma um módulo
+
+
+
+			função de busca por nódulo
+
+			quando usuário vai inserir nódulo novo, mostrar se ele já existe em algum lugar e dar opção de criar novo ou usar o já existente

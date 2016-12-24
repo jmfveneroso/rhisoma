@@ -1,0 +1,91 @@
+>> D3 FORCES
+
+
+	https://github.com/d3/d3-force
+	To fix a node in a given position, you may specify two additional properties:
+	
+	fx - the node’s fixed x-position
+	fy - the node’s fixed y-position
+	
+	http://bl.ocks.org/eyaler/10586116
+	movimento
+	zoom
+	etc
+
+>> ZOOM
+
+	d3 v4 https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2
+
+
+>> CUSTOM SYMBOLS
+	
+
+	http://stackoverflow.com/questions/25332120/create-additional-d3-js-symbols
+
+
+
+>> CUSTOM ICONS [FONT AWESOME]
+
+
+	https://icomoon.io/app/#/select
+	http://rafaltomal.com/how-to-create-and-use-your-own-icon-fonts/
+	http://thenextweb.com/dd/2012/10/12/7-gorgeous-icon-fonts-to-speed-up-your-site-and-your-design-process/
+	http://fontello.com/
+
+
+
+>> ARROWS
+
+
+	[SEVERAL] http://www.coppelia.io/2014/07/an-a-to-z-of-extra-features-for-the-d3-force-layout/
+
+
+
+>> MOUSE EVENTS
+
+
+
+	You might want to add the click event listener to the root or the group with id=buffer in your example, and look at the target of the event you get to figure out which line was clicked. That way you only need one event listener, instead of one on each element.
+
+
+>> PERFORMANCE
+
+
+	simulation.stop(); // pode ser usado para melhorar performance [dragended do forcedirected.html]
+
+
+
+>> ADD AND REMOVE NODES
+
+
+	https://bost.ocks.org/mike/join/
+	https://gist.github.com/rdpoor/3a66b3e082ffeaeb5e6e79961192f7d8
+	https://gist.github.com/mbostock/0adcc447925ffae87975a3a81628a196
+	http://grokbase.com/t/gg/d3-js/12cjmqc2cx/dynamically-updating-nodes-links-in-a-force-layout-diagram
+	http://bl.ocks.org/tgk/6068367
+	http://stackoverflow.com/questions/30063354/d3-adding-and-removing-force-nodes-based-on-slider-values
+
+
+>> DONUT CHART AND PIE CHART
+
+
+	http://bl.ocks.org/mbostock/3887193
+	http://bl.ocks.org/mbostock/3887235
+	http://bl.ocks.org/NPashaP/96447623ef4d342ee09b
+
+
+>> SELECT SEVERAL NODES
+
+	http://emptypipes.org/2015/02/15/selectable-force-directed-graph/
+
+- - - - -
+
+	TERRITORIOS:
+para desenhar territórios, limpar svg
+ svg.selectAll('*').remove();
+
+BURACO NEGRO
+forçar separação
+force.linkDistance(function(link) {
+       return link.graph === 0 ? height/2 : height/4;
+    });

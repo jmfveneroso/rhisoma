@@ -1,0 +1,87 @@
+LIGAÇÕES:
+Tipo 1
+	Dependência
+	[um node para o outro (ida ou volta)]
+
+Tipo 2
+	Relação
+	[um node para o outro para um (ida e volta)]
+
+Tipo 3
+	Posicionamento
+	[aproxima sem transferência (nem ida, nem volta)]
+
+
+
+NÓDULOS:
+Categoria
+	Nome
+	Descrição
+
+Tarefa
+	Nome
+	Descrição
+	Data
+		Início
+		Fim
+	Ou Recorrência
+		Diário
+		Semanal
+		Mensal
+		Anual
+		De x em x dias
+	Prioridade
+
+Link
+	Nome
+	Descrição
+	Link
+
+Texto
+	Nome
+	Descrição
+	Conteúdo
+
+Buraco negro
+	Conecta com outro território
+
+
+
+MAPA:
+O conjunto de territórios do usuário
+
+
+
+TERRITÓRIO:
+Os diversos grafos independentes do usuário
+
+
+
+PAINEL DE CONTROLE:
+Barra do lado esquerdo que contém as informações sobre o elemento selecionado
+O ícone de cadeado libera o nódulo para edição; ao fechar o cadeado, o nódulo é salvo
+
+
+
+PAINEL DE EDIÇÃO:
+Ícone no canto direito inferior que contém as ferramentas de edição
+	Nódulos
+		Adicionar
+		Remover
+		Editar
+	Ligações
+		Tipo 1, 2 ou 3
+			Adicionar
+			Remover
+			Editar
+	Estados
+		Stand-by
+		Fechar
+		...
+
+PAINEL DE NAVEGAÇÃO:
+Ícone no canto esquerdo inferior que contém as ferramentas de navegação
+	Zoom in
+	Zoom out
+	Marco zero (voltar para a condição inicial)
+	Mover para a direita, esquerda, cima, baixo
