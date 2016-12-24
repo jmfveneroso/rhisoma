@@ -384,7 +384,11 @@ function environmentStabilize(){
 function mouseDownEnvironment(){
   if(gui.editionMode() != undefined){
     if(gui.editionMode() === "nodeadd"){ 
-      structure.addNode(event.clientX,event.clientY);
+      var transform = d3.select("g").node();
+      var mouse_xy = d3.mouse(transform);
+      var node_x = mouse_xy[0];
+      var node_y = mouse_xy[1];
+      structure.addNode(node_x,node_y);
       gui.closeMenus();
       restart();
     }
