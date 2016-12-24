@@ -2,10 +2,25 @@ function RhizomaStyle(){
 
 	  /* LINK STYLING */
 
-	 this.linkStroke = function(d){
+	var inside_node = undefined;
+	var main_structure = undefined;
+
+	this.setInsideNode = function(in_inside){
+		inside_node = in_inside;
+	}
+
+	this.setStructure = function(in_structure){
+		main_structure = in_structure;
+	}
+
+	this.setEnvironment = function(in_inside,in_structure){
+		inside_node = in_inside;
+		main_structure = in_structure;
+	}
+
+	this.linkStroke = function(d){
 	  if(d.type===1){
-	  	return "yellow";
-	    //return color(structure.getTargetGroup(d.source));  //<<<<<<<
+	    return color(main_structure.getTargetGroup(d.source));
 	  }
 	  else if(d.type===2){
 	    return "black";
@@ -60,7 +75,7 @@ function RhizomaStyle(){
 	}
 
 	this.nodeFill = function(d){
-	  if(inside_node != d.id){ // <<<<<<<<< inside node
+	  if(inside_node != d.id){
 	    if(d.type != "buraco"){
 	      return color(d.group);
 	    }
@@ -74,7 +89,7 @@ function RhizomaStyle(){
 	}
 
 	this.nodeStroke = function(d){
-	  if(inside_node != d.id){ // <<<<<<<<< inside node
+	  if(inside_node != d.id){
 	    if(d.type != "buraco"){
 	      return "transparent";
 	    }
@@ -88,7 +103,7 @@ function RhizomaStyle(){
 	}
 
 	this.nodeStrokeWidth = function(d){
-	  if(inside_node != d.id){ // <<<<<<<<< inside node
+	  if(inside_node != d.id){
 	    if(d.type != "buraco"){
 	      return 0;
 	    }
@@ -111,6 +126,15 @@ function RhizomaStyle(){
 	}
 
 	  /* LABEL STYLING */
+
+	this.updateLabel = function(in_id){
+	  update_label = svg.selectAll("rect")
+	  	.filter("#rect-"+in_id)
+	      .style("width",function(d){return document.getElementById("label-"+d.id).getBBox().width+10;})
+	      .style("height",function(d){return document.getElementById("label-"+d.id).getBBox().height+6;})
+	      .attr("x", rst.labelRectX)
+	      .attr("y", rst.labelRectY);
+	}
 
 	this.labelTextY = function(d){
 	  if(d.parentConnections === 0){

@@ -20,6 +20,8 @@ Afazeres:
 
 			- Ctrl+C Ctrl+V para modificações no mapa (?)
 
+			- Atribuir pesos individuais diferentes para os nódulos [para afatar e aproximar]
+
 		***	ANALISAR
 			OK - atualizar entire_graph toda vez que algo for modificado
 			[entire_graph precisa estar atualizado para servir como uma referência para o active_graph]
@@ -77,7 +79,7 @@ Afazeres:
 		- Quando o zoom aproxima, revelar labels escondidos
 		- Implementar collapse, stand-by, etc
 		- Busca por nódulo
-5		- Quando entra ou sai de um nódulo: centralizar mapa no nódulo clicado e adaptar zoom para ser o mais próximo possível com todos os nodes sendo mostrados (se o zoom for negativo: considerar zoom = 1, tamanho natural, de modo que os labels fiquem legíveis)
+3		- Quando entra ou sai de um nódulo: centralizar mapa no nódulo clicado e adaptar zoom para ser o mais próximo possível com todos os nodes sendo mostrados (se o zoom for negativo: considerar zoom = 1, tamanho natural, de modo que os labels fiquem legíveis)
 		% Calibrar algoritmo de força do d3 (para espacializar melhor o mapa e promover interações mais fluidas)
 		% Modo para não perder nódulos desconectados [função para aproximar nódulos]
 
@@ -160,7 +162,10 @@ Afazeres:
 		- lentidão no primeiro drag do graph (e em momentos eventuais: fazer teste de benchmark quando estiver pronto para descobrir as funções que podem ser otimizadas)
 		% (?) iterar rect do label somente nos elementos sem sources (primários) de modo que não seja necessário desenhar todos os labels [integrar no init; colocar classe "primary" nos labels respectivos]
 
-
+		Estrutura do código
+	OK - Passar estilização do grafo no html para uma classe dedicada [rhizomaStyle.js]
+	OK - Transferir funções de atualização de label do index para o RhizomaStyle [updateLabel]
+		- Sintetizar rhizoma.js
 
 	> login.html
 - Estilizar com base no arquivo de referência do John
