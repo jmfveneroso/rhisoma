@@ -1,0 +1,36 @@
+nodulo
+
+**** espessura da linha denota prioridade (em relação à data [quando disponível] ou à prioridade estabelecida pelo usuário)
+
+
+ativo		se ainda não passou da data
+oculto		se o usuário indicar que ele não deve aparecer
+stand-by 	eventos ficam impedidos
+
+tipo de nódulo
+título
+descrição
+data
+
+
+=====
+- cálculo de tamanho dos nódulos com base nas conexões ativas que existem dentro dele
+- cálculo da espessura das linhas com base nas conexões ativas que existem dentro do nódulo target
+- comportamento de clique no nódulo fecha os nódulos que não estão dentro daquele sistema
+- reconhecer tipo de ligação para descobrir até onde desenhar o mapa em níveis superiores ao meso
+- guardar ações para poder desfazer (ctrl+z)
+
+
+
+
+
+---
+
+lugar
+pessoa
+
+pertence ao mapa
+usuário
+deletado - se o usuário removeu o nódulo
+cor fixa?
+posição fixa?

@@ -1,0 +1,38 @@
+
+The best way to use is the one that fits yours needs
+
+Orkhestra
+Think dynamic
+Pense dinâmico
+
+O que você pode fazer?
+- Organizar seus afazeres
+- Criar mapas mentais
+- Organizar anotações
+- Organizar bookmarks de sites
+Você imagina, o orkhestra te ajuda a organizar.
+Se você pensa diferente, use o orkhestra
+
+Molecular navigation
+
+LABELS:
+
+no mapa inicial:
+	- labels de categorias são mostrados com uppercase, peso normal e letra normal
+	- labels de atividades que encerram hoje são mostrados com bold e underline
+	- se existirem nodes que não têm source, os nodes são mostrados com retângulo, uppercase, bold e letra maior
+	~ no mouse over, mostra os labels na formatação dos labels de atividades, com peso normal
+
+	SHOW_LABEL direto no active_graph
+
+ao se aproximar dos nódulos [zoom], vai revelando os outros nódulos em função do tamanho
+
+
+// - depende do tamanho do nódulo
+//  base = 12 px
+//  	node.size 0 - 10: base + 1px
+//  	node.size 11-20: base + 2px
+//  	etc...
+//  
+//  usuário pode escolher
+

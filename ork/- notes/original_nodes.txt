@@ -1,0 +1,36 @@
+  // console.log(structure.distanceToPrimary("33"));
+  // structure.distanceToPrimary("32");
+
+  // var node = svg.append("g")
+  //     .attr("class", "nodes")
+  //   .selectAll("circle")
+  //   .data(graph.nodes)
+  //   .enter()
+  //   .append("circle")
+  //     .attr("id",function(d){return "circle-"+d.id;})
+  //     .attr("r", function(d) {return d.size+5;})//5)
+  //     .attr("fill", function(d) { return color(d.group); })
+  //     .on("mouseover", function(d){
+  //       // console.log("teste");
+  //       if(d.size+5 < 12){
+  //         document.getElementById("label-"+d.id).style.fontSize="12px";
+  //       }
+  //       document.getElementById("circle-"+d.id).style.cursor="pointer";
+  //     })
+  //     .on("mousedown", function(d){
+  //       // abre control_panel e escreve informações [toggle]
+  //       // atualiza e redesenha graph com base no active_graph novo
+  //       gui.drawControlPanel(d);
+  //       // console.log(d.description);
+  //     })
+  //     .on("mouseout", function(d){
+  //       var font_size = 0;
+  //       if(d.size+5 > 8){
+  //         font_size = d.size+5;
+  //       }
+  //       document.getElementById("label-"+d.id).style.fontSize= font_size+"px";
+  //     })
+  //     .call(d3.drag()
+  //         .on("start", dragstarted)
+  //         .on("drag", dragged)
+  //         .on("end", dragended));  

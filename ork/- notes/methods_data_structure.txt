@@ -1,0 +1,67 @@
+methods data structure
+
+	// this.currentNode = function(selected_node){
+	// 	var node_info = [];
+	// 	node_info.title = nodes
+	// 	return node_info;
+	// }
+
+	// this.initialize = function(){
+	// 	var crawl_node = true;
+	// 	// current_crawl = 0;
+	// 	$.ajax({
+	// 	    async: false,
+	// 	    url: 'public/json/test.json',
+	// 	    data: "",
+	// 	    accepts:'application/json',
+	// 	    dataType: 'json',
+	// 	    success: function (data) {
+	// 	    	console.log(data);
+	// 	    	for(var i = 0; i < data.nodes.length; i++){
+	// 	    		var count_nodes = null;
+	// 	    		count_nodes = [];
+	// 	    		all_nodes.push({id:data.nodes[i].id,group:data.nodes[i].group});
+	// 	    		count_nodes.push(data.nodes[i].id);
+	// 	    		current_crawl = 0;
+	// 		    	while((count_nodes.length-current_crawl) > 0){
+	// 		    		master.crawlNode(data,count_nodes);
+	// 		    		current_crawl++;
+	// 		    	}
+	// 		    	all_nodes[i].size = count_nodes.length;
+	// 		    	// console.log(count_nodes)
+	// 	    	}
+	// 	    	for(var i = 0; i < data.links.length; i++){
+	// 	    		all_edges.push(data.links[i]);
+	// 	    	}
+	// 	    	// console.log(all_nodes);
+	// 	    	// console.log(all_edges);
+	// 	      	return data;
+	// 	    }
+	// 	})
+	// 	// funções para inicializar graph
+	// 	// contabiliza tamanho dos nódulos, cores, espessura das linhas, etc
+	// 		// parte ativa (dia atual e pinned[pinned é básico para categorias, pode ser toggled off])
+	// }
+
+	// this.nodeStructure = function(selected_node){
+	// 	var crawl_node = true;
+	// 	current_crawl = 0;
+	// 	nodes = [];
+	// 	edges = [];
+	// 	$.ajax({
+	// 	    async: false,
+	// 	    url: 'public/json/test.json',
+	// 	    data: "",
+	// 	    accepts:'application/json',
+	// 	    dataType: 'json',
+	// 	    success: function (data) {
+	// 	    	nodes.push(selected_node);
+	// 	    	while((nodes.length-current_crawl) > 0){
+	// 	    		master.crawlNode(data,nodes);
+	// 	    		current_crawl++;
+	// 	    	}
+	// 	    	// console.log(nodes);
+	// 	      	return data;
+	// 	    }
+	// 	})
+	// }
