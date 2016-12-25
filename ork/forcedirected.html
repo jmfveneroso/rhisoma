@@ -130,6 +130,8 @@ var simulation = d3.forceSimulation()
 var min_zoom = 0.1,
     max_zoom = 7,
     zoom = d3.zoom().scaleExtent([min_zoom,max_zoom]);
+var go_to_center = false;
+var run_translate = false;
 
 var node;
 var link;
@@ -530,6 +532,7 @@ function clickNode(d){
 }
 
 function mouseDoubleClick(d){
+  run_translate = true;
   if(d.id != inside_node){       // increase one level on navigation (enter node)
     structure.navigateRhizomaEnter(d.id);
     inside_node = d.id;
@@ -541,11 +544,15 @@ function mouseDoubleClick(d){
       structure.navigateRhizomaExitCheck(drift[drift.length-2]);
       drift.pop();
       inside_node = drift[drift.length-1];
+      if(drift.length === 0){
+        go_to_center = true;
+      }
     }
     else{ // back to root if level-1 = primary
       structure.navigateRoot();
       drift = [];//.pop();
       inside_node = undefined;
+      go_to_center = true;
     }
     // drift.pop();
     // inside_node = drift[drift.length-1];
@@ -555,6 +562,7 @@ function mouseDoubleClick(d){
     structure.navigateRoot();
     drift = [];//.pop();
     inside_node = undefined;
+    go_to_center = true;
     restart(d);
   }
 }
@@ -673,29 +681,48 @@ function restart(e){
       // >>> go to center
 
   // Update and restart the simulation.
+  var transform = d3.select("g").node();
+      var mouse_xy = d3.mouse(transform);
+      var node_x = mouse_xy[0];
+      var node_y = mouse_xy[1];
   simulation.nodes(graph.nodes); // + on tick?
   simulation.force("link").links(graph.links); // graph.links
-  // simulation.force("center", d3.forceCenter(e.x,e.y)); // mouseX e mouseY com pan não funciona direito
+  if(run_translate){
+    if(go_to_center){
+      simulation.force("center", d3.forceCenter(width/2,height/2));
+      go_to_center = false;
+      zoomReset();
+    }
+    else{
+      simulation.force("center", d3.forceCenter(node_x,node_y));
+        zoomUpdate(node_x,node_y);
+    }
+    run_translate = false;
+  }
+  
   simulation.alpha(1).restart();
+  
+}
 
-  // Zoom
-  // var scaleTo = (window.innerHeight/document.getElementById("all-nodes").getBBox().height);
+  /* ZOOM */
 
-  // var t = d3.zoomTransform(d);
-  // // console.log(zoom);
-  // var dcx = (window.innerWidth/2-d.x*t.k);
-  // var dcy = (window.innerHeight/2-d.y*t.k);
-  // var translate = [dcx,dcy];
+function zoomUpdate(node_x,node_y){
+  var dx = document.getElementById("all-nodes").getBBox().height;
+  var dy = document.getElementById("all-nodes").getBBox().width;
 
-  // var tran = d3.transition()
-  //   .delay(250)
-  //   .duration(750)
-  //   .ease(d3.easeSinInOut);
+  // guardar no drift o bounding box?
+  scale = Math.max(1, Math.min(4, 0.8 / Math.max(dx / width, dy / height)));
+  translate = [width / 2 - scale * node_x, height / 2 - scale * node_y];
 
-  // // zoom.translateBy([dcx,dcy]);
-  // d3.selectAll("g").filter(".labels, .nodes, .links").transition(tran)/*.attr("transform", "translate("+ dcx + "," + dcy  + ")scale(" + t.k + ")")*/.call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(t.k) );
-  // // problema pode incluir o force center
-  // ref https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2
+  svg.transition()
+      .duration(750)
+      .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
+}
+
+function zoomReset(){
+  svg.transition()
+      .duration(750)
+      .call( zoom.transform, d3.zoomIdentity );
 }
 
 </script>

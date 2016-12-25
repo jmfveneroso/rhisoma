@@ -79,7 +79,7 @@ Afazeres:
 		- Quando o zoom aproxima, revelar labels escondidos
 		- Implementar collapse, stand-by, etc
 		- Busca por nódulo
-4		- Quando entra ou sai de um nódulo: centralizar mapa no nódulo clicado e adaptar zoom para ser o mais próximo possível com todos os nodes sendo mostrados (se o zoom for negativo: considerar zoom = 1, tamanho natural, de modo que os labels fiquem legíveis)
+5		~~ Quando entra ou sai de um nódulo: centralizar mapa no nódulo clicado e adaptar zoom para ser o mais próximo possível com todos os nodes sendo mostrados (se o zoom for negativo: considerar zoom = 1, tamanho natural, de modo que os labels fiquem legíveis)
 		% Calibrar algoritmo de força do d3 (para espacializar melhor o mapa e promover interações mais fluidas)
 		% Modo para não perder nódulos desconectados [função para aproximar nódulos]
 
@@ -155,11 +155,12 @@ Afazeres:
 	de d.id no exit para d.name] {resolvendo: label.data > return d, ao invés de d.id, daí compara todos os valores} {solução final foi workaround puxando os elementos afetados após o restart e atualizando os respectivos valores}
 	OK - Ao linkar dois nodes com conex tipo 2, entrando no primeiro node, depois no segundo, depois novamente no primeiro, volta para o root com as últimas seleções guardadas. Deletar seleções guardadas nesses casos [modificação no mouseDoubleClick]
 	OK- Translate mouse x e y quando for acrescentar node
+	OK - Adição de noda estava ativando recentralização para o local do clique
 		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
 		- (?) Node sem source que não seja categoria não deve mostrar label
 		~~ - Linkar um node primário como target de uma ligação de dependência não afeta sua cor [contabilizar todas as conexões (tipos 1, 2 e 3) para usar como referência]
 		- Se o novo node, quando ligado, for o source, acontecem erros (posicao fx e fy permanecem fixas, seleção fica no target, etc)
-5		- Cancelar ligação se o usuário clicar em qualquer outro botão do editing panel
+6		- Cancelar ligação se o usuário clicar em qualquer outro botão do editing panel
 		- lentidão no primeiro drag do graph (e em momentos eventuais: fazer teste de benchmark quando estiver pronto para descobrir as funções que podem ser otimizadas)
 		% (?) iterar rect do label somente nos elementos sem sources (primários) de modo que não seja necessário desenhar todos os labels [integrar no init; colocar classe "primary" nos labels respectivos]
 
