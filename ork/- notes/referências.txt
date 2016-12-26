@@ -38,12 +38,14 @@
 
 
 	[SEVERAL] http://www.coppelia.io/2014/07/an-a-to-z-of-extra-features-for-the-d3-force-layout/
-
-
+	http://bl.ocks.org/d3noob/5141278
+	
 
 >> MOUSE EVENTS
 
-
+	single click e double click:
+		https://gist.github.com/couchand/6394506
+		https://css-tricks.com/snippets/javascript/bind-different-events-to-click-and-double-click/
 
 	You might want to add the click event listener to the root or the group with id=buffer in your example, and look at the target of the event you get to figure out which line was clicked. That way you only need one event listener, instead of one on each element.
 

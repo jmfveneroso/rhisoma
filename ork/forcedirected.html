@@ -168,6 +168,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
     .data(graph.links)
     .enter().append("line")
     .attr("id",function(d){return "the-line-"+d.id;})
+    .style("marker-end",  "url(#suit)")
     .attr("stroke-width", rst.linkStrokeWidth)
     .attr("stroke-dasharray", rst.linkStrokeDash)
     .style("stroke-linecap", "round")
@@ -381,6 +382,13 @@ function environmentStabilize(){
     gui.resetCurrentEditing();
     restart();
   }
+
+  if(gui.deleteLink() != undefined){
+    structure.deleteLink(gui.deleteLink());
+    gui.resetLink();
+    gui.closeMenus();
+    restart();
+  }
 }
 
 function mouseDownEnvironment(){
@@ -491,14 +499,32 @@ function clickNode(d){
       current_node.id = d.id;
       current_node.group = d.group;
       current_node.type = d.type;
-      gui.setAllLinks(structure.getLinks(d));
+      var in_links = structure.getLinks(d);
+      for(var i = 0; i < in_links.length; i++){
+        for(var j = 0; j < graph.links.length; j++){
+          if(in_links[i].id === graph.links[j].id){
+            in_links[i].source.group = graph.links[j].source.group;
+            in_links[i].target.group = graph.links[j].target.group;
+          }
+        }
+      }
+      gui.setAllLinks(in_links);
       gui.updateControlPanel(d,"NODE", false);
     }
     else if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) === null){
       current_node.id = d.id;
       current_node.group = d.group;
       current_node.type = d.type;
-      gui.setAllLinks(structure.getLinks(d));
+      var in_links = structure.getLinks(d);
+      for(var i = 0; i < in_links.length; i++){
+        for(var j = 0; j < graph.links.length; j++){
+          if(in_links[i].id === graph.links[j].id){
+            in_links[i].source.group = graph.links[j].source.group;
+            in_links[i].target.group = graph.links[j].target.group;
+          }
+        }
+      }
+      gui.setAllLinks(in_links);
       gui.updateControlPanel(d, "NODE", false);
     }
     else{ // if(current_node === d.id)
@@ -570,7 +596,6 @@ function mouseDoubleClick(d){
   /* UPDATE GRAPH FUNCTIONS */
 
 function restart(e){
-    
   graph = structure.getGraph();
 
   rst.setEnvironment(inside_node,structure);
@@ -681,13 +706,13 @@ function restart(e){
       // >>> go to center
 
   // Update and restart the simulation.
-  var transform = d3.select("g").node();
-      var mouse_xy = d3.mouse(transform);
-      var node_x = mouse_xy[0];
-      var node_y = mouse_xy[1];
   simulation.nodes(graph.nodes); // + on tick?
   simulation.force("link").links(graph.links); // graph.links
   if(run_translate){
+    var transform = d3.select("g").node();
+      var mouse_xy = d3.mouse(transform);
+      var node_x = mouse_xy[0];
+      var node_y = mouse_xy[1];
     if(go_to_center){
       simulation.force("center", d3.forceCenter(width/2,height/2));
       go_to_center = false;

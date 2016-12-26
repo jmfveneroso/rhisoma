@@ -15,6 +15,7 @@ function RhizomaGui(gui){
 	var save_node_edition = false;
 	var save_link_edition = false;
 	var editing_mode = undefined;
+	var delete_link = undefined;
 
 	var tooltips = {};
 	tooltips.node = {text:"Nódulo",fa:"fa-bullseye"};
@@ -79,6 +80,14 @@ function RhizomaGui(gui){
 		else{
 			return current_editing;
 		}
+	}
+
+	this.deleteLink = function(){
+		return delete_link;
+	}
+
+	this.resetLink = function(){
+		delete_link = undefined;
 	}
 
 	this.setAllLinks = function(in_links){
@@ -234,6 +243,9 @@ function RhizomaGui(gui){
 			master.addEditTitle(the_node);
 			master.addEditDescription(the_node);
 		}
+		if(all_links != undefined){
+			master.addEditLinks(the_node);
+		}
 	}
 
 	this.drawLinkControl = function(){
@@ -258,6 +270,7 @@ function RhizomaGui(gui){
 		master.addEditLinkType(the_link);
 		master.addSource(the_link);
 		master.addTarget(the_link);
+		master.addRemoveLink(the_link);
 	}
 
 	this.hideControlPanel = function(){
@@ -306,7 +319,7 @@ function RhizomaGui(gui){
 
 	this.clearControlPanel = function(){
 		offset_x = 10;
-		var check_all_elements = ["title","description","date-start","date-end","type","link-type","source-label","source","target-label","target","links"];
+		var check_all_elements = ["title","description","date-start","date-end","type","link-type","source-label","source","target-label","target","links","remove"];
 		for(var i = 0; i < check_all_elements.length; i++){
 			master.removeElement(check_all_elements[i]);
 		}
@@ -402,18 +415,47 @@ function RhizomaGui(gui){
 		offset_x += 120;
 	}
 
+	this.formatTimestamp = function(in_date){
+		var elements = in_date.split(" ");
+		var date = elements[0].split("-");
+		var time = elements[1].split(":");
+
+		var processed_timestamp = [];
+
+		processed_timestamp[0] = date[2] + "/" + date[1] + "/" + date[0];
+		processed_timestamp[1] = time[0] + "h" + time[1];
+
+		return processed_timestamp;
+	}
+
 	this.addDateStart = function(node){
-		var field = {id:"control-panel-date-start",top:offset_x,height:24,width:300,fontsize:12,fontweight:400,color:"black"};
+		var current_date = master.formatTimestamp(node.date_start);
+		var field = {id:"control-panel-date-start",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
 		gui.addField(field,"control-panel");
-		gui.addText("control-panel-date-start",node.date_start);
-		offset_x += 14;
+
+		var field_label = {id:"control-panel-date-start-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
+		gui.addField(field_label,"control-panel-date-start");
+		gui.addText("control-panel-date-start-label","Início");
+
+		var field_date_start = {id:"control-panel-date-start-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
+		gui.addField(field_date_start,"control-panel-date-start");
+		gui.addText("control-panel-date-start-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
+		offset_x += 30;
 	}
 
 	this.addDateEnd = function(node){
-		var field = {id:"control-panel-date-end",top:offset_x,height:24,width:300,fontsize:12,fontweight:400,color:"black"};
+		var current_date = master.formatTimestamp(node.date_end);
+		var field = {id:"control-panel-date-end",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
 		gui.addField(field,"control-panel");
-		gui.addText("control-panel-date-end",node.date_start);
-		offset_x += 14;
+
+		var field_label = {id:"control-panel-date-end-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
+		gui.addField(field_label,"control-panel-date-end");
+		gui.addText("control-panel-date-end-label","Fim");
+
+		var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
+		gui.addField(field_date_end,"control-panel-date-end");
+		gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
+		offset_x += 30;
 	}
 
 	this.addLinks = function(node){
@@ -477,6 +519,18 @@ function RhizomaGui(gui){
 		gui.addField(target_field,"control-panel");
 		gui.addText("control-panel-target",link.target.name);
 
+		offset_x += 40;
+	}
+
+	this.addRemoveLink = function(link){
+		var field = {id: "control-panel-remove",height:40,width:40,top:offset_x};
+		gui.addField(field,"control-panel");
+
+		var remove_field = {id:"control-panel-remove-link-"+link.id,top:0,fontsize:36,height:40,width:40,font:"Font Awesome"};
+		gui.addField(remove_field,"control-panel-remove");
+		gui.addText("control-panel-remove-link-"+link.id,'<i class="fa fa-trash-o" aria-hidden="true"></i>');
+
+		master.removeLinkMouseBehavior(link);
 		offset_x += 40;
 	}
 
@@ -559,21 +613,58 @@ function RhizomaGui(gui){
 		var text_area_description = {class: "edit-description",id: "control-panel-edit-description",cols:38,rows:8,padding:4};
 		gui.addTextArea(text_area_description,"","control-panel-description",node.description);
 		document.getElementById("control-panel-edit-description").style.border = "1px "+color(node.group)+" solid";
-		offset_x += 120;
+		offset_x += 190;
 	}
 
 	this.addEditDateStart = function(node){
-		var field = {id:"control-panel-date-start",top:offset_x,height:24,width:300,fontsize:12,fontweight:400,color:"black"};
+		var current_date = master.formatTimestamp(node.date_start);
+		var field = {id:"control-panel-date-start",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
 		gui.addField(field,"control-panel");
-		gui.addText("control-panel-date-start",node.date_start);
-		offset_x += 14;
+
+		var field_label = {id:"control-panel-date-start-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
+		gui.addField(field_label,"control-panel-date-start");
+		gui.addText("control-panel-date-start-label","Início");
+
+		var field_date_start = {id:"control-panel-date-start-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
+		gui.addField(field_date_start,"control-panel-date-start");
+		gui.addText("control-panel-date-start-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
+		offset_x += 30;
 	}
 
 	this.addEditDateEnd = function(node){
-		var field = {id:"control-panel-date-end",top:offset_x,height:24,width:300,fontsize:12,fontweight:400,color:"black"};
+		var current_date = master.formatTimestamp(node.date_end);
+		var field = {id:"control-panel-date-end",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
 		gui.addField(field,"control-panel");
-		gui.addText("control-panel-date-end",node.date_start);
-		offset_x += 14;
+
+		var field_label = {id:"control-panel-date-end-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
+		gui.addField(field_label,"control-panel-date-end");
+		gui.addText("control-panel-date-end-label","Fim");
+
+		var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
+		gui.addField(field_date_end,"control-panel-date-end");
+		gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
+		offset_x += 40;
+	}
+
+	this.addEditLinks = function(node){
+		var field = {id:"control-panel-links",top:offset_x,height:24,width:300,fontsize:12,fontweight:400,color:"black"};
+		gui.addField(field,"control-panel");
+
+		var offset_link_x = 0;
+		if(all_links != undefined){
+			for(var i = 0; i < all_links.length; i++){
+				var this_link = {id:"control-panel-links-"+all_links[i].id,position:"absolute",texttransform:"uppercase",top:offset_link_x,height:16,width:300,fontsize:12,fontweight:400,color:"black",bordertop:"1px solid transparent",borderbottom:"1px solid transparent"};
+				gui.addField(this_link,"control-panel-links");
+				if(all_links[i].source.id === node.id){
+					gui.addText("control-panel-links-"+all_links[i].id,'<div style="position:absolute;width:12px;left:0px;top:2px;height:12px;border-radius:6px;background-color:'+color(node.group)+'"></div>'+master.getLinkLine(all_links[i].type,"RIGHT")+'<div style="position:absolute;text-align:left;width:248px;left:52px">'+all_links[i].target.name+'</div>');
+				}
+				else{
+					gui.addText("control-panel-links-"+all_links[i].id,'<div style="position:absolute;width:248px;text-align:right;left:0px">'+all_links[i].source.name+'</div>'+master.getLinkLine(all_links[i].type,"LEFT")+'<div style="position:absolute;left:288px;top:2px;width:12px;height:12px;border-radius:6px;background-color:'+color(node.group)+'"></div>');
+				}
+				offset_link_x += 18;
+				master.linksMouseBehavior(all_links[i].id,node.group);
+			}
+		}
 	}
 
 	this.addEditSource = function(link){
@@ -1047,6 +1138,58 @@ function RhizomaGui(gui){
 		button.onmouseover = mouseOverLock;
 		button.onmouseout = mouseOutLock;
 		button.onmousedown = mouseDownLock;
+	}
+
+	this.linksMouseBehavior = function(id,group){
+		var button = document.getElementById("control-panel-links-"+id);
+		var mouseOverLink = function(){
+			this.style.cursor = "pointer";
+			this.style.borderTop = "1px solid "+color(group);
+			this.style.borderBottom = "1px solid "+color(group);
+		}
+		var mouseOutLink = function(){
+			this.style.borderTop = "1px solid transparent";
+			this.style.borderBottom = "1px solid transparent";
+		}
+		var mouseDownLink = function(){
+			var current_id = this.id.split("-");
+			current_id = current_id[current_id.length-1];
+			var index = undefined;
+			for(var i = 0; i < all_links.length; i++){
+				if(all_links[i].id === current_id){
+					index = i;
+				}
+			}
+			if(index != undefined){
+				the_link = all_links[index];
+			}
+			editing_mode = "LINK";
+			master.lockControlPanel(editing_mode);
+		}
+		button.onmouseover = mouseOverLink;
+		button.onmouseout =   mouseOutLink;
+		button.onmousedown = mouseDownLink;
+	}
+
+	this.removeLinkMouseBehavior = function(link){
+		var button = document.getElementById("control-panel-remove-link-"+link.id);
+		var mouseOverLink = function(){
+			this.style.cursor = "pointer";
+			this.style.color = "#c9c9c9";
+		}
+		var mouseOutLink = function(){
+			this.style.color = "black";
+		}
+		var mouseDownLink = function(){
+			var current_id = this.id.split("-");
+			current_id = current_id[current_id.length-1];
+			delete_link = current_id;
+			master.hideControlPanel();
+			master.eventFire(document.body, 'click');
+		}
+		button.onmouseover = mouseOverLink;
+		button.onmouseout =   mouseOutLink;
+		button.onmousedown = mouseDownLink;
 	}
 
 	this.mainMouseBehavior = function(id){
