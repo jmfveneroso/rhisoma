@@ -20,4 +20,7 @@ Rails.application.routes.draw do
     post 'change_password',        to: 'users#change_password'
     post 'delete_account',         to: 'users#delete_account'
   end
+
+  resources :nodes
+  post 'nodes/:id/connect',        to: 'nodes#connect'
 end
