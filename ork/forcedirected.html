@@ -90,6 +90,7 @@ textarea.edit-description:focus{
 <script src="public/js/rhizoma.js"></script>
 <script src="public/js/rhizomaGui.js"></script>
 <script src="public/js/rhizomaStyle.js"></script>
+<script src="public/js/rhizomaCommunicator.js"></script>
 <script src="public/js/gui.js"></script>
 <body>
 <svg id="rhizoma" width="960" height="600" style="position:absolute;top:0px"></svg>
@@ -168,7 +169,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
     .data(graph.links)
     .enter().append("line")
     .attr("id",function(d){return "the-line-"+d.id;})
-    .style("marker-end",  "url(#suit)")
+    // .style("marker-end",  "url(#suit)")
     .attr("stroke-width", rst.linkStrokeWidth)
     .attr("stroke-dasharray", rst.linkStrokeDash)
     .style("stroke-linecap", "round")

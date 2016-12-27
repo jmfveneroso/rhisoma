@@ -24,10 +24,8 @@ function RhizomaGui(gui){
 	tooltips.environment = {text:"Mapa",fa:"fa-map"};
 	tooltips.nodeadd = {text:"Novo",fa:"fa-plus"};
 	tooltips.nodedelete = {text:"Remover",fa:"fa-minus"};
-	// tooltips.nodeedit = {text:"Editar",fa:"fa-edit"};
 	tooltips.linkadd = {text:"Nova",fa:"fa-plus"};
 	tooltips.linkdelete = {text:"Remover",fa:"fa-minus"};
-	// tooltips.linkedit = {text:"Editar",fa:"fa-edit"};
 	tooltips.stateidle = {text:"Espera",fa:"fa-hourglass-2"};
 	tooltips.stateexplode = {text:"Expandir",fa:"fa-folder-open"};
 	tooltips.statecontract = {text:"Contrair",fa:"fa-folder"};
@@ -42,14 +40,14 @@ function RhizomaGui(gui){
 	var editing = {};
 	editing.nodeadd =    	 		false;
 	editing.nodedelete = 	 		false;
-	// editing.nodeedit =   	 		false;
 	editing.linkadd =    	 		false;
 	editing.linkdelete = 	 		false;
-	// editing.linkedit =   	 		false;
 	editing.stateidle =  	 		false;
 	editing.stateexplode =   		false;
 	editing.statecontract =  		false;
 	editing.environmentstabilize =  false;
+	//editing.environmentcenter = false;
+	//editing.environment ???
 
 	var node_types = [];
 	node_types[0] = {type:"categoria",name:"categoria"};

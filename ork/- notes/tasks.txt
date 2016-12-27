@@ -77,9 +77,13 @@ Afazeres:
 	OK - Programar navegação com tipos de ligação 2 e 3
 		OK - entradas e saídas funcionam com relações tipo 1 (pegando source); 3 é ignorada e 2 revela o mapa todo
 	OK - Quando entra ou sai de um nódulo: centralizar mapa no nódulo clicado e adaptar zoom para ser o mais próximo possível com todos os nodes sendo mostrados (se o zoom for negativo: considerar zoom = 1, tamanho natural, de modo que os labels fiquem legíveis)
+	OK - Implementar collapse
 		- Quando o zoom aproxima, revelar labels escondidos
-		- Implementar collapse, stand-by, etc
+		- Implementar stand-by, etc
+		- Barra superior [de sistema] com infos da plataforma, do usuário, barra de busca, etc
 		- Busca por nódulo
+			- Autocomplete (busca pelo nome do nódulo)
+			- Quando acha: evidencia no rizoma o nódulo encontrado
 		% Calibrar centralização durante navegação nos nódulos
 		% Calibrar algoritmo de força do d3 (para espacializar melhor o mapa e promover interações mais fluidas)
 		% Modo para não perder nódulos desconectados [função para aproximar nódulos]
@@ -104,23 +108,25 @@ Afazeres:
 	OK - Links no control panel de node
 	OK - Seleção de link no control panel de node
 	OK - Remoção de link no control panel de link
-5		>> - Seleção de grupo no control panel do node
-6		>> - Na tarefa, criar botão para indicar que ela foi concluída
-7		>> - Date picker no control panel do node
+		- Seleção de grupo no control panel do node
+		- Na tarefa, criar botão para indicar que ela foi concluída
+		- Date picker no control panel do node
 		- Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 		- Edição de estado [guardar no BD]
 			Stand-by // cinza
-			Close // fecha children
-			Collapse // abre children
-		- Edição de ambiente
+2		>>	Close // fecha children
+1		>>	Collapse // abre children
+		- Edição de ambiente [?]
 			OK - Estabilizar // guarda posições dos nódulos para o sistema ser desenhado de forma constante (OK só habilita na root)
 			- Edição (?!) [feita no nódulo do tipo buraco negro]
-8			>> - Centralizar
+3			>> - Centralizar
+			- Parar simulação (melhora performance)
 		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
 
 		BD %integração com John
+	OK - Esboço de classe que comunica com o back-end
 		- Implementar funções de atualização do BD a cada modificação no grafo
 		- Guardar x, y, vx, vy no BD
 
@@ -159,11 +165,15 @@ Afazeres:
 	OK- Translate mouse x e y quando for acrescentar node
 	OK - Adição de noda estava ativando recentralização para o local do clique
 	OK - Acertar cor dos links quando usuário seleciona um link do control panel de node
+		- Bug quando liga link a um node que esteja com collapse 0
+		- Quando cria um nódulo, conecta e tenta editar o link: erro (não reconhece id do link [na criação do link tem que atualizar o all_links])
+		- Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
+		- Impedir desenho de date_start e date_end no control panel quando não estão setadas no BD
 		- Impedir ação de clique no clique duplo
 		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
 		~~ - Linkar um node primário como target de uma ligação de dependência não afeta sua cor [contabilizar todas as conexões (tipos 1, 2 e 3) para usar como referência]
 		- Se o novo node, quando ligado, for o source, acontecem erros (posicao fx e fy permanecem fixas, seleção fica no target, etc)
-9		>> - Cancelar ligação se o usuário clicar em qualquer outro botão do editing panel
+		- Cancelar ligação se o usuário clicar em qualquer outro botão do editing panel
 		% - (?) Node sem source que não seja categoria não deve mostrar label
 		% lentidão no primeiro drag do graph (e em momentos eventuais: fazer teste de benchmark quando estiver pronto para descobrir as funções que podem ser otimizadas)
 		% (?) iterar rect do label somente nos elementos sem sources (primários) de modo que não seja necessário desenhar todos os labels [integrar no init; colocar classe "primary" nos labels respectivos]

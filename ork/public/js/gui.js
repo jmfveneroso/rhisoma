@@ -349,49 +349,14 @@ function Gui(){
 		document.getElementById(id).style.fontFamily = font;
 	}
 
+	/* --- DATE PICKER --- */
 
+		// criar date_picker
 
+	/* --- TIME PICKER --- */
 
-/*
+		// criar time picker
 
-var form_div = document.createElement("div");
-
-var email_field = document.createElement("div");
-	email_field.id = "email-form";
-	email_field.style.width = "350px";
-	email_field.style.position = "absolute";
-	email_field.style.display = "inline";
-	email_field.style.top = "200px";
-	email_field.style.left = "35px";
-	email_field.style.background = "none";
-	email_field.innerHTML = '<input id="input-email" class="block" type="text" name="email" placeholder="CONTE-NOS SEU EMAIL" value>';
-	email_field.innerHTML += '<div id="send-email">ENVIAR</div>';
-	form_div.appendChild(email_field);
-
-	//
-
-	var system_message = document.createElement("div");
-	system_message.id = "system_message";
-	system_message.style.width = "350px";
-	system_message.style.height = "30px";
-	system_message.style.background = "transparent";
-	system_message.style.position = "absolute";
-	system_message.style.display = "inline-block";
-	system_message.style.top = "260px";
-	system_message.style.left = "0px";
-	system_message.style.textTransform = "uppercase";
-	system_message.style.textAlign = "center";
-	system_message.style.fontSize = "12px";
-	system_message.style.fontWeight = "300px";
-	system_message.style.color = "#992388";
-	system_message.innerHTML = 'cadastre-se para receber acesso assim<br/>que a versão beta for lançada';
-	form_div.appendChild(system_message);
-
-	document.body.appendChild(form_div);
-
-
-
-*/
 }
 
 
