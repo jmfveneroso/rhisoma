@@ -1,12 +1,8 @@
 <% if @user.errors.any? %>
-  <div id="error_explanation">
-    <div class="alert alert-danger">
-      The form contains <%= pluralize(@user.errors.count, "error") %>.
+  <div class="alert alert-danger alert-dismissable">
+    <div class="container">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+      <%= punctuate(@user.errors.full_messages) %>
     </div>
-    <ul>
-    <% @user.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
-    </ul>
   </div>
 <% end %>

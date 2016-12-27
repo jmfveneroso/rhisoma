@@ -1,0 +1,20 @@
+<% provide(:page_title, "Profile") %>
+<% content_for :errors do %>
+  <%= render 'shared/error_messages' %>
+<% end %>
+
+<%= render 'settings_sidebar', :selected_option => 'profile' %>
+
+<div class="col-md-9">
+  <div class="panel panel-default">
+    <div class="panel-heading">Profile</div>
+    <div class="panel-body">
+      <%= form_for(@user) do |f| %>
+        <%= f.label :name %>
+        <%= f.text_field :name, class: 'form-control' %>
+      
+        <%= f.submit 'Update profile', class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+</div>

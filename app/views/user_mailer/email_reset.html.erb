@@ -1,0 +1,10 @@
+<h1>Email change</h1>
+
+<p>To confirm the email change click the link below:</p>
+
+<%= link_to "Change email", edit_email_reset_url(@user.email_reset_token, email: @user.email) %>
+
+<p>
+If you did not request your email to be changed, please ignore this email and
+your email will stay as it is.
+</p>

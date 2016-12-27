@@ -54,7 +54,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert user.reload.activated?
 
     follow_redirect!
-    assert_template 'users/show'
+    assert_template 'users/home'
     assert logged_in?
   end
 end

@@ -27,29 +27,12 @@ h1 {
   text-align: center;
 }
 
-#logo {
-  float: left;
-  margin-right: 10px;
-  font-size: 1.7em;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: -1px;
-  padding-top: 9px;
-  font-weight: bold;
-  &:hover {
-    color: #000;
-    text-decoration: none;
-  }
-}
-
 .main {
-  margin-top: 125px;
+  margin-top: 60px;
 }
 
-@media (min-width: 768px) {
-  .main {
-    margin-top: 40px;
-  }
+.navbar-brand {
+  margin-left: -15px;
 }
 
 /* forms */
@@ -82,4 +65,44 @@ input {
 
 .checkbox {
   margin-left: 20px;
+}
+
+.no-decoration {
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.no-decoration:hover {
+  text-decoration: none;
+}
+
+.navbar {
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.alert {
+  border-radius: 0;
+}
+
+/* Helpers */
+
+.btn-lft {
+  display: inline-block;
+  width: 50%;
+  padding-right: 15px;
+  float: left;
+  .btn {
+    width: 100%;
+  }
+}
+
+.btn-rgt {
+  display: inline-block;
+  width: 50%;
+  padding-left: 15px;
+  float: left;
+  .btn {
+    width: 100%;
+  }
 }

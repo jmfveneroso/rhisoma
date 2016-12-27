@@ -20,9 +20,9 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
                                           password: 'password' } }
 
     assert logged_in?
-    assert_redirected_to @user
+    assert_redirected_to home_path
     follow_redirect!
-    assert_template 'users/show'
+    assert_template 'users/home'
     assert_select "a[href=?]", logout_path
 
     delete logout_path 
