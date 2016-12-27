@@ -1,14 +1,28 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  user: one
+node_one:
+  user: basic_user
   title: MyString
   type: 
   active: false
   hidden: false
 
-two:
-  user: two
+node_two:
+  user: basic_user
+  title: MyString
+  type: 
+  active: false
+  hidden: false
+
+node_three:
+  user: basic_user
+  title: MyString
+  type: 
+  active: false
+  hidden: false
+
+node_four:
+  user: second_user
   title: MyString
   type: 
   active: false

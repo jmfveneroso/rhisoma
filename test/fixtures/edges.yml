@@ -1,0 +1,4 @@
+edge_one:
+  source: node_one
+  target: node_three
+  category: MyString
