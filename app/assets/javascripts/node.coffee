@@ -113,7 +113,7 @@ class Physics
 
   @calculate_repulsive_forces: (node, nodes) ->
     for key, n of nodes
-      return if n.id == node.id
+      continue if n.id == node.id
       @add_repulsive_force node, n.pos, @repulsion_constant
 
   @calculate_elastic_forces: (node) ->
