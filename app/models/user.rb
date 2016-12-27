@@ -8,6 +8,9 @@ class User < ApplicationRecord
   attr_accessor :remember_token, :activation_token, 
                 :reset_token, :email_reset_token
 
+  has_many :nodes, dependent: :destroy
+  has_many :edges, through: :nodes
+
   # This regex is not 100% guaranteed because email addresses may contain 
   # all sorts of unusual characters but it is good enough for 99.9% of 
   # the cases.
@@ -122,6 +125,10 @@ class User < ApplicationRecord
   # @return [Boolean]
   def email_reset_expired?
     email_reset_sent_at < 2.hours.ago
+  end
+
+  def graph
+    { nodes: self.nodes, edges: self.edges }
   end
 
   private

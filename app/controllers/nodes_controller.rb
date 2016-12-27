@@ -1,73 +1,72 @@
 class NodesController < ApplicationController
-  # before_action :logged_in_user
-  # before_action :correct_user
-
-  def new
-    # create a new node.
-  end
-
-  # Shows the data of a single node.
-  # @route GET /nodes/$(id)
-  # @route_param node [id]
-  def show
-    # create a new node.
-  end
+  before_action :logged_in_user
+  before_action :correct_user, except: [:create, :graph]
 
   # Creates a new node.
   # @route POST /nodes
   # @route_param node [title]
   # @route_param node [type]
   def create
-    @node = Node.new(node_params)
-    @node.user = current_user
-    if @node.save
-      render :json => @node 
+    node = Node.new(node_params)
+    node.user = current_user
+    if node.save
+      render :json => node 
     else
-      render :json => { errors: @node.errors }
+      render :json => { errors: node.errors }
     end
   end
 
-  # Edits a new node.
+  # Updates a new node.
   # @route PATCH /nodes
   # @route_param node [title]
   # @route_param node [type]
   def update
-    @node = Node.find(params[:id])
-    if @node.update_attributes(node_params)
-      render :json => @node 
+    node = Node.find(params[:id])
+    if node.update_attributes(node_params)
+      render :json => node 
     else
-      render :json => { errors: @node.errors }
+      render :json => { errors: node.errors }
     end
   end
 
-  def delete
-    # delete a node.
+  # Deletes a node.
+  # @route DELETE /nodes/$(id)
+  def destroy
+    node = Node.find(params[:id])
+    if node.destroy
+      render :json => node 
+    else
+      render :json => { errors: node.errors }
+    end
   end
 
   # Creates a new edge connecting two nodes.
   # @route POST /nodes/$(id)/connect
   # @route_param edge [target_id]
   def connect
-    @node = Node.find(params[:id])
-    if edge = @node.edges.create(target_id: params[:edge][:target_id])
-      render :json => 'clach'
+    node = Node.find(params[:id])
+    if edge = node.edges.create(target_id: params[:edge][:target_id])
+      render :json => edge
     else
       render :json => { errors: edge.errors }
     end
   end
 
-  # Updates an edge connecting two nodes.
-  # @route POST /nodes/edit_edge
+  # Updates an edge.
+  # @route DELETE /nodes/$(id)/disconnect
+  # @route_param edge [target_id]
+  def disconnect
+    node = Node.find(params[:id])
+    node.edges.where(target_id: params[:edge][:target_id]).destroy_all
+    render :json => { status: 'success' }
+  end
+
+  # Gets a user graph in the timestamp range specified or
+  # all nodes if no timestamp is specified.
+  # @route PATCH /nodes/edge/$(id)
   # @route_param edge [category]
-  def update_edge
-  end
-
-  def delete_edge
-    # delete an edge.
-  end
-
-  def get_graph
-    # get all nodes and edges belonging to user. 
+  def graph
+    render :json => current_user.graph
   end
 
   private
@@ -87,9 +86,9 @@ class NodesController < ApplicationController
     end
 
     # Before filter that confirms the current user has permission to alter the
-    # requested user.
+    # requested node.
     def correct_user
-      @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
+      node = Node.find(params[:id])
+      redirect_to(root_url) unless current_user?(node.user)
     end
 end
