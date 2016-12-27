@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   end
 
   resources :nodes
-  post   'nodes/:id/connect',               to: 'nodes#connect'
+  post   'nodes/:id/connect',               to: 'nodes#connect', as: :connect
   get    'nodes/graph/show',                to: 'nodes#graph'
-  delete 'nodes/:id/disconnect',            to: 'nodes#disconnect'
+  delete 'nodes/:id/disconnect',            to: 'nodes#disconnect', as: :disconnect
 end

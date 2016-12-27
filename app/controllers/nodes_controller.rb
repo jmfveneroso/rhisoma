@@ -12,7 +12,7 @@ class NodesController < ApplicationController
     if node.save
       render :json => node 
     else
-      render :json => { errors: node.errors }
+      render :status => 400, :json => { code: 400, errors: node.errors }
     end
   end
 
@@ -25,7 +25,7 @@ class NodesController < ApplicationController
     if node.update_attributes(node_params)
       render :json => node 
     else
-      render :json => { errors: node.errors }
+      render :status => 400, :json => { code: 400, errors: node.errors }
     end
   end
 
@@ -79,9 +79,9 @@ class NodesController < ApplicationController
     # Before filter that confirms a logged-in user.
     def logged_in_user
       unless logged_in?
-        store_location
-        flash[:danger] = "Please log in"
-        redirect_to login_url
+        render :status => 401, :json => { code: 401, errors: [ {
+          message: 'Authentication failed' 
+        } ] }
       end
     end
 
@@ -89,6 +89,10 @@ class NodesController < ApplicationController
     # requested node.
     def correct_user
       node = Node.find(params[:id])
-      redirect_to(root_url) unless current_user?(node.user)
+      unless current_user?(node.user)
+        render :status => 403, :json => { code: 403, errors: [ {
+          message: 'Unauthorized user' 
+        } ] }
+      end
     end
 end
