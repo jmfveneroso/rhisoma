@@ -124,8 +124,8 @@ var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 var simulation = d3.forceSimulation()
     .velocityDecay(0.1)
-    .force("link", d3.forceLink().id(function(d) { return d.id; })/*.strength(function(d){console.log(d);})*/)
-    .force("charge", d3.forceManyBody())
+    .force("link", d3.forceLink().id(function(d) { return d.id; })/*.strength(function(d){return 0.5 / Math.min(d.source.size, d.target.size);})/*.distance(function(d){return 200;})*/)
+    .force("charge", d3.forceManyBody()/*.strength(function(d){return -200;})*/)
     .force("center", d3.forceCenter(width / 2, height / 2));
 
 var min_zoom = 0.1,
@@ -133,6 +133,7 @@ var min_zoom = 0.1,
     zoom = d3.zoom().scaleExtent([min_zoom,max_zoom]);
 var go_to_center = false;
 var run_translate = false;
+var stop_simulation = false;
 
 var node;
 var link;
@@ -350,22 +351,59 @@ function dragged(d) {
 }
 
 function dragended(d) {
-  if (!d3.event.active) simulation.alphaTarget(0);
-  d.fx = null;
-  d.fy = null;
-  document.getElementById("labels-"+d.id).style.display = "inline";
-  // simulation.stop(); // pode ser usado para melhorar performance
+  if(!stop_simulation){
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    document.getElementById("labels-"+d.id).style.display = "inline";
+  }
+  else{
+    simulation.stop();
+  }
 }
 
   /* MOUSE BEHAVIOR > EDITING */
 
 document.body.addEventListener("click", environmentStabilize, true);
 
+function centerEnvironment(){
+  if(inside_node === undefined){
+    zoomReset();
+  }
+  else{
+    // var this_node = svg.selectAll("g").filter("node-"+inside_node).attr("transform").translate;
+    var index = undefined;
+    for(var i = 0; i < graph.nodes.length; i++){
+      if(inside_node === graph.nodes[i].id){
+        index = i;
+      }
+    }
+    if(index != undefined){
+      zoomUpdate(graph.nodes[index].x, graph.nodes[index].y);
+    }
+  }
+}
+
 function environmentStabilize(){
   if(gui.editionMode() != undefined && inside_node === undefined){
     if(gui.editionMode() === "environmentstabilize"){
       var update_nodes = svg.selectAll("g").filter(".node").each(function(d){structure.updateNodeXY(d);});
       var update_links = svg.selectAll("line").each(function(d){structure.updateLinkXY(d);});
+      gui.closeMenus();
+    }
+    else if(gui.editionMode() === "environmentstop"){
+      stop_simulation = !stop_simulation;
+      simulation.stop();
+      gui.closeMenus();
+    }
+    else if(gui.editionMode() === "environmentcenter"){
+      centerEnvironment();
+      gui.closeMenus();
+    }
+  }
+  else if(gui.editionMode() != undefined && inside_node != undefined){
+    if(gui.editionMode() === "environmentcenter"){
+      centerEnvironment();
       gui.closeMenus();
     }
   }
@@ -485,7 +523,7 @@ function mouseOutNode(d){
 }
 
 function clickNode(d){
-  if(gui.editionMode() != "nodedelete" && gui.editionMode() != "linkadd"){
+  if(gui.editionMode() != "nodedelete" && gui.editionMode() != "linkadd" && gui.editionMode() != "stateexplode" && gui.editionMode() != "statecontract"){
     if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) != null){
       if(inside_node != current_node.id){
         if(current_node.type != "buraco"){
@@ -543,6 +581,7 @@ function clickNode(d){
   else if(gui.editionMode() === "linkadd"){
     if(link_to_add.source === null){
       link_to_add.source = d.id;
+      // show source
     }
     else if(link_to_add.source != null && link_to_add.source != d.id){
       link_to_add.target = d.id;
@@ -554,7 +593,18 @@ function clickNode(d){
       restart();
       rst.setEnvironment(inside_node,structure);
       rst.updateLabel(d.id);
+      // show target
     }
+  }
+  else if(gui.editionMode() === "stateexplode"){
+    structure.collapseNode(d.id);
+    gui.closeMenus();
+    restart();
+  }
+  else if(gui.editionMode() === "statecontract"){
+    structure.closeNode(d.id);
+    gui.closeMenus();
+    restart();
   }
 }
 

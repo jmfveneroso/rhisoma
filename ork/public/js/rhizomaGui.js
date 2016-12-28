@@ -16,6 +16,8 @@ function RhizomaGui(gui){
 	var save_link_edition = false;
 	var editing_mode = undefined;
 	var delete_link = undefined;
+	var collapse_node = undefined;
+	var close_node = undefined;
 
 	var tooltips = {};
 	tooltips.node = {text:"Nódulo",fa:"fa-bullseye"};
@@ -30,6 +32,8 @@ function RhizomaGui(gui){
 	tooltips.stateexplode = {text:"Expandir",fa:"fa-folder-open"};
 	tooltips.statecontract = {text:"Contrair",fa:"fa-folder"};
 	tooltips.environmentstabilize = {text:"Fixar",fa:"fa-anchor"};
+	tooltips.environmentstop = {text:"Parar",fa:"fa-hand-stop-o"};
+	tooltips.environmentcenter = {text:"Centro",fa:"fa-certificate"};
 
 	var togglemenus = {};
 	togglemenus.node = false;
@@ -46,8 +50,8 @@ function RhizomaGui(gui){
 	editing.stateexplode =   		false;
 	editing.statecontract =  		false;
 	editing.environmentstabilize =  false;
-	//editing.environmentcenter = false;
-	//editing.environment ???
+	editing.environmentcenter = 	false;
+	editing.environmentstop = 		false;
 
 	var node_types = [];
 	node_types[0] = {type:"categoria",name:"categoria"};
@@ -96,6 +100,14 @@ function RhizomaGui(gui){
 		save_node_edition = false;
 		save_link_edition = false;
 		current_editing = undefined;
+	}
+
+	this.collapseNode = function(){
+		return collapse_node;
+	}
+
+	this.closeNode = function(){
+		return close_node;
 	}
 
 	this.eventFire = function(el, etype){
@@ -829,13 +841,8 @@ function RhizomaGui(gui){
 		gui.addField(nodedelete_button,"edit-panel-nodes");
 		gui.addText("edit-panel-nodedelete",'<i class="fa fa-minus" aria-hidden="true"></i>');
 
-		// var nodeedit_button = {id:"edit-panel-nodeedit", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:100,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
-		// gui.addField(nodeedit_button,"edit-panel-nodes");
-		// gui.addText("edit-panel-nodeedit",'<i class="fa fa-edit" aria-hidden="true"></i>');
-
 		master.secondaryMouseBehavior("edit-panel-nodeadd");
 		master.secondaryMouseBehavior("edit-panel-nodedelete");
-		// master.secondaryMouseBehavior("edit-panel-nodeedit");
 	}
 
 	this.linksMenu = function(){
@@ -850,13 +857,8 @@ function RhizomaGui(gui){
 		gui.addField(linkdelete_button,"edit-panel-links");
 		gui.addText("edit-panel-linkdelete",'<i class="fa fa-minus" aria-hidden="true"></i>');
 
-		// var linkedit_button = {id:"edit-panel-linkedit", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:100,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
-		// gui.addField(linkedit_button,"edit-panel-links");
-		// gui.addText("edit-panel-linkedit",'<i class="fa fa-edit" aria-hidden="true"></i>');
-
 		master.secondaryMouseBehavior("edit-panel-linkadd");
 		master.secondaryMouseBehavior("edit-panel-linkdelete");
-		// master.secondaryMouseBehavior("edit-panel-linkedit");
 	}
 
 	this.statesMenu = function(){
@@ -884,11 +886,21 @@ function RhizomaGui(gui){
 		var container = {id:"edit-panel-environments", class:"noselect", position: "absolute", backgroundColor: "black",display: "inline",height:40,width:140, pointerevents:"none",left:(window.innerWidth-200),top:(((window.innerHeight-190)/2)+150), backgroundColor:"transparent", font:"Source Sans Pro"};
 		gui.addContainer(container);
 
-		var environmentstabilize_button = {id:"edit-panel-environmentstabilize", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:100,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
+		var environmentstabilize_button = {id:"edit-panel-environmentstabilize", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:0,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
 		gui.addField(environmentstabilize_button,"edit-panel-environments");
 		gui.addText("edit-panel-environmentstabilize",'<i class="fa fa-anchor" aria-hidden="true"></i>');
 
+		var environmentstop_button = {id:"edit-panel-environmentstop", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:50,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
+		gui.addField(environmentstop_button,"edit-panel-environments");
+		gui.addText("edit-panel-environmentstop",'<i class="fa fa-hand-stop-o" aria-hidden="true"></i>');
+
+		var environmentcenter_button = {id:"edit-panel-environmentcenter", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:100,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
+		gui.addField(environmentcenter_button,"edit-panel-environments");
+		gui.addText("edit-panel-environmentcenter",'<i class="fa fa-certificate" aria-hidden="true"></i>');
+
 		master.secondaryMouseBehavior("edit-panel-environmentstabilize");
+		master.secondaryMouseBehavior("edit-panel-environmentstop");
+		master.secondaryMouseBehavior("edit-panel-environmentcenter");
 	}
 
 	this.closeMenus = function(){

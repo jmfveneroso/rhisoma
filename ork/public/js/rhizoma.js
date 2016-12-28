@@ -121,7 +121,7 @@ function Rhizoma(){
 			if(entire_graph.nodes[i].collapse === 0){
 				check_block = true;
 			}
-			entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id); // PROBLEMA PODE ESTAR AQUI
+			entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id); 
 			entire_graph.nodes[i].parentConnections = 0;
 			entire_graph.nodes[i].childConnections = 0;
 		}
@@ -662,7 +662,7 @@ function Rhizoma(){
 		// ANALIZE check if link already exists
 		var link_match = false;
 		for(var i = 0; i < entire_graph.links.length; i++){
-			if(entire_graph.links[i].target === links.target.toString()){// && entire_graph.links[i].type != 3){
+			if(entire_graph.links[i].target === links.target){// && entire_graph.links[i].type != 3){
 				link_match = true;
 			}
 		}
@@ -671,10 +671,10 @@ function Rhizoma(){
 		var index_source = null;
 		if(!link_match){
 			for(var i = 0; i < entire_graph.nodes.length; i++){
-				if(entire_graph.nodes[i].id === links.target.toString()){
+				if(entire_graph.nodes[i].id === links.target){
 					index_target = i;
 				}
-				if(entire_graph.nodes[i].id === links.source.toString()){
+				if(entire_graph.nodes[i].id === links.source){
 					index_source = i;
 				}
 			}
@@ -692,7 +692,7 @@ function Rhizoma(){
 		link.type = 1;
 		link.id = entire_graph.links.length + Math.floor(Math.random() * (900 - 1)) + 1;;
 		entire_graph.links.push(link);
-		active_graph.links.push(link);
+		active_graph.links.push(link);	
 		master.updateGraph();
 	}
 
@@ -733,6 +733,21 @@ function Rhizoma(){
 		var this_node = undefined;
 		while(!found_match){
 			if(node_id === entire_graph.nodes[index].id){
+				found_match = true;
+			}
+			else{
+				index++;	
+			}
+		}
+		return index;
+	}
+
+	this.getActiveNodeIndex = function(node_id){
+		var found_match = false;
+		var index = 0;
+		var this_node = undefined;
+		while(!found_match){
+			if(node_id === active_graph.nodes[index].id){
 				found_match = true;
 			}
 			else{
@@ -848,6 +863,85 @@ function Rhizoma(){
 			    if (in_link.hasOwnProperty(property)) {
 			        active_graph.links[index][property] = in_link[property];
 			    }
+			}
+		}
+	}
+
+	this.collapseNode = function(node){
+		entire_graph.nodes[master.getNodeIndex(node)].collapse = 1;
+		active_graph.nodes[master.getActiveNodeIndex(node)].collapse = 1;
+		block_node = [];
+		master.updateNodes();
+
+	}
+
+	this.closeNode = function(node){
+		entire_graph.nodes[master.getNodeIndex(node)].collapse = 0;
+		active_graph.nodes[master.getActiveNodeIndex(node)].collapse = 0;
+		block_node = [];
+		master.updateNodes();
+	}
+
+	this.updateNodes = function(){
+		// atualizar para closeNode e collapseNode [tem que reconhecer o estado atual da rede]
+		for(var i = 0; i < entire_graph.nodes.length; i++){
+			if(entire_graph.nodes[i].collapse === 0){
+				check_block = true;
+			}
+			entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id);
+			entire_graph.nodes[i].parentConnections = 0;
+			entire_graph.nodes[i].childConnections = 0;
+				// corrigir .size [o maior fica sendo uma tamanho máximo predefinido, o menor, o menor tamanho predefinido]
+		}
+		for(var i = 0; i < entire_graph.links.length; i++){
+			if(entire_graph.links[i].type != 3){
+				for(var j = 0; j < entire_graph.nodes.length; j++){
+					if(entire_graph.links[i].target === entire_graph.nodes[j].id){
+						entire_graph.nodes[j].parentConnections++;
+					}
+					if(entire_graph.links[i].source === entire_graph.nodes[j].id){
+						entire_graph.nodes[j].childConnections++;
+					}
+				}
+			}
+		}		
+		active_graph = {};
+		active_graph.nodes = [];
+		active_graph.links = [];
+		var inc = 0;
+		for(var i = 0; i < entire_graph.nodes.length; i++){
+			var found_match = false;
+			for(var j = 0; j < block_node.length; j++){
+				if(entire_graph.nodes[i].id === block_node[j]){
+					found_match = true;
+				}
+			}
+			if(!found_match){
+				active_graph.nodes[inc] = {};
+				for (var property in entire_graph.nodes[i]) {
+				    if (entire_graph.nodes[i].hasOwnProperty(property)) {
+				        active_graph.nodes[inc][property] = entire_graph.nodes[i][property];
+				    }
+				}
+				inc++;
+			}
+		}
+		inc = 0;
+		for(var i = 0; i < entire_graph.links.length; i++){
+			var found_match = false;
+			for(var j = 0; j < block_node.length; j++){
+				if(entire_graph.links[i].source === block_node[j] || entire_graph.links[i].target === block_node[j]){
+					found_match = true;
+				}
+			}
+			if(!found_match){
+				active_graph.links[inc] = {};
+				for (var property in entire_graph.links[i]) {
+				    if (entire_graph.links[i].hasOwnProperty(property)) {
+				        active_graph.links[inc][property] = entire_graph.links[i][property];
+				    }
+				}
+				inc++;
 			}
 		}
 	}

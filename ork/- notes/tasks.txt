@@ -59,6 +59,8 @@ Afazeres:
 	OK - Estilo das linhas de relação tipo 1, 2 e 3
 	OK - Quando a navegação estiver dentro de um node, aplicar no node um estilo que o identifique como primário
 	OK - Data no control panel
+		- Ajustar distâncias entre os nódulos
+		- Ajustar tamanhos do nódulo no nodeClose [mínimo]
 		~~ Controlar tamanho do label em função da hierarquia e qual aparece ou não, posicionamento do label no mouse_over & estilo dos labels (especialmente nos que ficam ocultos); outros comportamentos relacionados
 		- Estilo das linhas em função da urgência [hoje é preto e grosso?, datas no futuro são mais finas?]
 				!!!!! definir tipos de nódulo e formatos
@@ -79,7 +81,10 @@ Afazeres:
 	OK - Quando entra ou sai de um nódulo: centralizar mapa no nódulo clicado e adaptar zoom para ser o mais próximo possível com todos os nodes sendo mostrados (se o zoom for negativo: considerar zoom = 1, tamanho natural, de modo que os labels fiquem legíveis)
 	OK - Implementar collapse
 		- Quando o zoom aproxima, revelar labels escondidos
-		- Implementar stand-by, etc
+5		>> - Implementar stand-by, etc
+		- Ajustar collapse e close para funcionar dentro de nodes
+			- Impedir ligações em nodes que estejam closed
+		- Só desenhar nodes active
 		- Barra superior [de sistema] com infos da plataforma, do usuário, barra de busca, etc
 		- Busca por nódulo
 			- Autocomplete (busca pelo nome do nódulo)
@@ -114,14 +119,15 @@ Afazeres:
 		- Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 		- Edição de estado [guardar no BD]
+		OK - Close // fecha children
+		OK - Collapse // abre children
 			Stand-by // cinza
-2		>>	Close // fecha children
-1		>>	Collapse // abre children
-		- Edição de ambiente [?]
-			OK - Estabilizar // guarda posições dos nódulos para o sistema ser desenhado de forma constante (OK só habilita na root)
-			- Edição (?!) [feita no nódulo do tipo buraco negro]
-3			>> - Centralizar
-			- Parar simulação (melhora performance)
+		- Edição de ambiente
+		OK - Estabilizar // guarda posições dos nódulos para o sistema ser desenhado de forma constante (OK só habilita na root)
+		OK - Parar simulação (melhora performance, Simulation.stop)
+		OK - Centralizar
+4			- Trocar ícone quando estiver ativado e desativado
+			
 		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
 
@@ -165,7 +171,10 @@ Afazeres:
 	OK- Translate mouse x e y quando for acrescentar node
 	OK - Adição de noda estava ativando recentralização para o local do clique
 	OK - Acertar cor dos links quando usuário seleciona um link do control panel de node
-		- Bug quando liga link a um node que esteja com collapse 0
+	OK - Bug quando liga link a um node que esteja com collapse 0
+		- Desaparecendo label no simulation.stop
+		- Ajustar simulation stop
+		- (?) Modificar tamanho do node quando collapse estiver on (será que deve ficar no mínimo?)
 		- Quando cria um nódulo, conecta e tenta editar o link: erro (não reconhece id do link [na criação do link tem que atualizar o all_links])
 		- Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
 		- Impedir desenho de date_start e date_end no control panel quando não estão setadas no BD
