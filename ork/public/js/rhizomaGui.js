@@ -205,8 +205,12 @@ function RhizomaGui(gui){
 		master.addTitle(the_node);
 
 		if(the_node.type === "tarefa"){
-			master.addDateStart(the_node);
-			master.addDateEnd(the_node);
+			if(the_node.date_start != "" && the_node.date_start != undefined && the_node.date_start != null){
+				master.addDateStart(the_node);
+			}
+			if(the_node.date_end != "" && the_node.date_end != undefined && the_node.date_end != null){
+				master.addDateEnd(the_node);
+			}
 		}
 		else if(the_node.type === "link"){
 			// master.addLink(the_node);
@@ -429,13 +433,24 @@ function RhizomaGui(gui){
 
 	this.formatTimestamp = function(in_date){
 		var elements = in_date.split(" ");
-		var date = elements[0].split("-");
-		var time = elements[1].split(":");
-
+		var date = undefined;
+		var time = undefined;
+		if(elements[0] != null){
+			date = elements[0].split("-");
+		}
+		if(elements[1] != null){
+			time = elements[1].split(":");
+		}
 		var processed_timestamp = [];
 
-		processed_timestamp[0] = date[2] + "/" + date[1] + "/" + date[0];
-		processed_timestamp[1] = time[0] + "h" + time[1];
+		if(date.length === 3 && time.length === 3){
+			processed_timestamp[0] = date[2] + "/" + date[1] + "/" + date[0];
+			processed_timestamp[1] = time[0] + "h" + time[1];
+		}
+		else{
+			processed_timestamp[0] = "-";
+			processed_timestamp[1] = "";
+		}
 
 		return processed_timestamp;
 	}

@@ -58,6 +58,7 @@ Afazeres:
 	OK - Estilo das linhas de relação tipo 1, 2 e 3
 	OK - Quando a navegação estiver dentro de um node, aplicar no node um estilo que o identifique como primário
 	OK - Data no control panel
+	OK - Estilo do node muda quando está closed (linha na cor do grupo, fill transparente)
 		- Ajustar distâncias entre os nódulos
 		- Ajustar tamanhos do nódulo no nodeClose [mínimo]
 		~~ Controlar tamanho do label em função da hierarquia e qual aparece ou não, posicionamento do label no mouse_over & estilo dos labels (especialmente nos que ficam ocultos); outros comportamentos relacionados
@@ -80,7 +81,7 @@ Afazeres:
 	OK - Quando entra ou sai de um nódulo: centralizar mapa no nódulo clicado e adaptar zoom para ser o mais próximo possível com todos os nodes sendo mostrados (se o zoom for negativo: considerar zoom = 1, tamanho natural, de modo que os labels fiquem legíveis)
 	OK - Implementar collapse
 		- Quando o zoom aproxima, revelar labels escondidos
-7		>> - Implementar stand-by, etc
+9		>> - Implementar stand-by, etc
 		- Ajustar collapse e close para funcionar dentro de nodes
 			- Impedir ligações em nodes que estejam closed
 		- Só desenhar active nodes
@@ -122,7 +123,6 @@ Afazeres:
 		- Date picker no control panel do node
 		- Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados
 		- Barra de seleção de tempo (na base, da primeira data até a última)
-		- Edição de estado [guardar no BD]
 		OK - Close // fecha children
 		OK - Collapse // abre children
 			Stand-by // cinza
@@ -171,11 +171,11 @@ Afazeres:
 	OK - Acertar cor dos links quando usuário seleciona um link do control panel de node
 	OK - Bug quando liga link a um node que esteja com collapse 0
 	OK - Desaparecendo label no simulation.stop
+	OK - Impedir desenho de date_start e date_end no control panel quando não estão setadas no BD
 		~~ Ajustar simulation stop
 		- (?) Modificar tamanho do node quando collapse estiver on (será que deve ficar no mínimo?)
 		- Quando cria um nódulo, conecta e tenta editar o link: erro (não reconhece id do link [na criação do link tem que atualizar o all_links])
-6		>> - Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
-		- Impedir desenho de date_start e date_end no control panel quando não estão setadas no BD
+8		>> - Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
 		- Impedir ação de clique no clique duplo
 		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
 		~~ - Linkar um node primário como target de uma ligação de dependência não afeta sua cor [contabilizar todas as conexões (tipos 1, 2 e 3) para usar como referência]
@@ -184,6 +184,7 @@ Afazeres:
 		% - (?) Node sem source que não seja categoria não deve mostrar label
 		% lentidão no primeiro drag do graph (e em momentos eventuais: fazer teste de benchmark quando estiver pronto para descobrir as funções que podem ser otimizadas)
 		% (?) iterar rect do label somente nos elementos sem sources (primários) de modo que não seja necessário desenhar todos os labels [integrar no init; colocar classe "primary" nos labels respectivos]
+		% buraco negro não pode ser source
 
 		Estrutura do código
 	OK - Passar estilização do grafo no html para uma classe dedicada [rhizomaStyle.js]

@@ -487,8 +487,14 @@ function mouseOverNode(d){
   }
   svg.style("cursor","pointer");
   if(inside_node != d.id){
-    document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
-    document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+    if(d.collapse === 1){
+      document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
+      document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+    }
+    else{
+      document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
+      document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+    }
   }
   else{
     document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
@@ -508,9 +514,15 @@ function mouseOutNode(d){
 
   if(inside_node != d.id){
     if(current_node.id != d.id && document.getElementById("node-symbol-"+d.id) != null){
-      if(d.type != "buraco"){
-        document.getElementById("node-symbol-"+d.id).style.stroke = "transparent";
-        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "0px";
+      if(d.collapse === 1){
+        if(d.type != "buraco"){
+          document.getElementById("node-symbol-"+d.id).style.stroke = "transparent";
+          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "0px";
+        }
+        else{
+          document.getElementById("node-symbol-"+d.id).style.stroke = color(d.group);
+          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+        }
       }
       else{
         document.getElementById("node-symbol-"+d.id).style.stroke = color(d.group);

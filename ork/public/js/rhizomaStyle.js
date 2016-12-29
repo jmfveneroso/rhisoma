@@ -76,11 +76,16 @@ function RhizomaStyle(){
 
 	this.nodeFill = function(d){
 	  if(inside_node != d.id){
-	    if(d.type != "buraco"){
-	      return color(d.group);
-	    }
+	  	if(d.collapse === 1){
+	  		if(d.type != "buraco"){
+		      return color(d.group);
+		    }
+		    else{
+		      return "white";
+		    }
+	  	}
 	    else{
-	      return "white";
+	    	return "white";
 	    }
 	  }
 	  else{
@@ -90,12 +95,17 @@ function RhizomaStyle(){
 
 	this.nodeStroke = function(d){
 	  if(inside_node != d.id){
-	    if(d.type != "buraco"){
-	      return "transparent";
-	    }
-	    else{
-	      return color(d.group);
-	    }
+	  	if(d.collapse === 1){
+		    if(d.type != "buraco"){
+		      return "transparent";
+		    }
+		    else{
+		      return color(d.group);
+		    }
+		}
+		else{
+			return color(d.group);
+		}
 	  }
 	  else{
 	    return d3.rgb(color(d.group)).darker(2.5);
@@ -104,11 +114,16 @@ function RhizomaStyle(){
 
 	this.nodeStrokeWidth = function(d){
 	  if(inside_node != d.id){
-	    if(d.type != "buraco"){
-	      return 0;
-	    }
+	  	if(d.collapse === 1){
+	  		if(d.type != "buraco"){
+		      return 0;
+		    }
+		    else{
+		      return 2;
+		    }
+	  	}
 	    else{
-	      return 2;
+	    	return 2;
 	    }
 	  }
 	  else{
