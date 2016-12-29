@@ -24,15 +24,14 @@ Afazeres:
 
 		***	ANALISAR
 			OK - atualizar entire_graph toda vez que algo for modificado
-			[entire_graph precisa estar atualizado para servir como uma referência para o active_graph]
+			OK - Implementar simulation.stop() como opção para melhoria de performance
 
-			- considerar territórios [criar, acessar, nódulo buraco negro (abrir a página novamente chamando novo json?), etc]
+			- considerar territórios [criar, acessar, nódulo buraco negro
+				- (abrir a página novamente chamando novo json?), etc]
 
-			- formas de propagação de estilo no stand-by
+			>> - formas de propagação de estilo no stand-by
 
 			- Revisar esquema de cores e modo como as cores são atribuídas
-
-			- Implementar simulation.stop() como opção para melhoria de performance
 
 			{CONFERIR INDEX E ID, ESPECIALMENTE NO ACTIVE_GRAPH.NODES}
 				!!!!! CONFERIR INDEXES E IDS NOS NODES; importante pegar sempre os ids para integrar com bd
@@ -81,10 +80,10 @@ Afazeres:
 	OK - Quando entra ou sai de um nódulo: centralizar mapa no nódulo clicado e adaptar zoom para ser o mais próximo possível com todos os nodes sendo mostrados (se o zoom for negativo: considerar zoom = 1, tamanho natural, de modo que os labels fiquem legíveis)
 	OK - Implementar collapse
 		- Quando o zoom aproxima, revelar labels escondidos
-5		>> - Implementar stand-by, etc
+7		>> - Implementar stand-by, etc
 		- Ajustar collapse e close para funcionar dentro de nodes
 			- Impedir ligações em nodes que estejam closed
-		- Só desenhar nodes active
+		- Só desenhar active nodes
 		- Barra superior [de sistema] com infos da plataforma, do usuário, barra de busca, etc
 		- Busca por nódulo
 			- Autocomplete (busca pelo nome do nódulo)
@@ -113,6 +112,11 @@ Afazeres:
 	OK - Links no control panel de node
 	OK - Seleção de link no control panel de node
 	OK - Remoção de link no control panel de link
+	OK- Edição de ambiente
+		OK - Estabilizar // guarda posições dos nódulos para o sistema ser desenhado de forma constante (OK só habilita na root)
+		OK - Parar simulação (melhora performance, Simulation.stop)
+		OK - Centralizar
+		OK - Trocar ícone quando estiver ativado e desativado
 		- Seleção de grupo no control panel do node
 		- Na tarefa, criar botão para indicar que ela foi concluída
 		- Date picker no control panel do node
@@ -122,12 +126,6 @@ Afazeres:
 		OK - Close // fecha children
 		OK - Collapse // abre children
 			Stand-by // cinza
-		- Edição de ambiente
-		OK - Estabilizar // guarda posições dos nódulos para o sistema ser desenhado de forma constante (OK só habilita na root)
-		OK - Parar simulação (melhora performance, Simulation.stop)
-		OK - Centralizar
-4			- Trocar ícone quando estiver ativado e desativado
-			
 		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
 
@@ -172,11 +170,11 @@ Afazeres:
 	OK - Adição de noda estava ativando recentralização para o local do clique
 	OK - Acertar cor dos links quando usuário seleciona um link do control panel de node
 	OK - Bug quando liga link a um node que esteja com collapse 0
-		- Desaparecendo label no simulation.stop
-		- Ajustar simulation stop
+	OK - Desaparecendo label no simulation.stop
+		~~ Ajustar simulation stop
 		- (?) Modificar tamanho do node quando collapse estiver on (será que deve ficar no mínimo?)
 		- Quando cria um nódulo, conecta e tenta editar o link: erro (não reconhece id do link [na criação do link tem que atualizar o all_links])
-		- Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
+6		>> - Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
 		- Impedir desenho de date_start e date_end no control panel quando não estão setadas no BD
 		- Impedir ação de clique no clique duplo
 		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)

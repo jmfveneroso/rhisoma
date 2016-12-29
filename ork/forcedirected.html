@@ -351,15 +351,16 @@ function dragged(d) {
 }
 
 function dragended(d) {
-  if(!stop_simulation){
+  // if(!stop_simulation){
     if (!d3.event.active) simulation.alphaTarget(0);
     d.fx = null;
     d.fy = null;
-    document.getElementById("labels-"+d.id).style.display = "inline";
-  }
-  else{
+  // }
+  // else{
+    if(stop_simulation)
     simulation.stop();
-  }
+  // }
+   document.getElementById("labels-"+d.id).style.display = "inline";
 }
 
   /* MOUSE BEHAVIOR > EDITING */

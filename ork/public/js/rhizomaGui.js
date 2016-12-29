@@ -18,6 +18,7 @@ function RhizomaGui(gui){
 	var delete_link = undefined;
 	var collapse_node = undefined;
 	var close_node = undefined;
+	var stop_simulation = false;
 
 	var tooltips = {};
 	tooltips.node = {text:"Nódulo",fa:"fa-bullseye"};
@@ -33,6 +34,7 @@ function RhizomaGui(gui){
 	tooltips.statecontract = {text:"Contrair",fa:"fa-folder"};
 	tooltips.environmentstabilize = {text:"Fixar",fa:"fa-anchor"};
 	tooltips.environmentstop = {text:"Parar",fa:"fa-hand-stop-o"};
+	tooltips.environmentcontinue = {text:"Retomar",fa:"fa-hand-pointer-o"};
 	tooltips.environmentcenter = {text:"Centro",fa:"fa-certificate"};
 
 	var togglemenus = {};
@@ -1268,7 +1270,17 @@ function RhizomaGui(gui){
 			var current_id = this.id.split("-");
 			current_id = current_id[current_id.length-1];
 			this.style.cursor = "pointer";
-			this.innerHTML = tooltips[current_id].text;
+			if(current_id != "environmentstop"){
+				this.innerHTML = tooltips[current_id].text;
+			}
+			else{
+				if(stop_simulation){
+					this.innerHTML = tooltips["environmentcontinue"].text;
+				}
+				else{
+					this.innerHTML = tooltips[current_id].text;
+				}
+			}
 			this.style.fontFamily = "Source Sans Pro";
 			this.style.fontSize = "8px";
 			this.style.height = "24px";
@@ -1280,7 +1292,17 @@ function RhizomaGui(gui){
 			current_id = current_id[current_id.length-1];
 			if(!editing[current_id]){
 				this.style.fontFamily = "Font Awesome";
-				this.innerHTML = '<i class="fa '+tooltips[current_id].fa+'" aria-hidden="true"></i>';
+				if(current_id != "environmentstop"){
+					this.innerHTML = '<i class="fa '+tooltips[current_id].fa+'" aria-hidden="true"></i>';
+				}
+				else{
+					if(stop_simulation){
+						this.innerHTML = '<i class="fa '+tooltips["environmentcontinue"].fa+'" aria-hidden="true"></i>';
+					}
+					else{
+						this.innerHTML = '<i class="fa '+tooltips[current_id].fa+'" aria-hidden="true"></i>';
+					}
+				}
 				this.style.fontSize = "20px";
 				this.style.height = "28px";
 				this.style.paddingTop = "10px";
@@ -1311,6 +1333,10 @@ function RhizomaGui(gui){
 				edit_item = current_id;
 				editing[edit_item] = !editing[edit_item];
 			}
+			if(current_id === "environmentstop"){
+				stop_simulation = !stop_simulation;
+			}
+			
 		};
 		button.onmouseover = mouseOverSecondary;
 		button.onmouseout =   mouseOutSecondary;
