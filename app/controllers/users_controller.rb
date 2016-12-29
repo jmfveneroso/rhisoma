@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   # by the site admin.
   # @route GET /users
   def index
-    @users = User.paginate(page: params[:page])
+    @users = User.order(:id).paginate(page: params[:page])
   end
 
   # Renders the user creation view.
