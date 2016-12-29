@@ -76,9 +76,14 @@ function RhizomaStyle(){
 
 	this.nodeFill = function(d){
 	  if(inside_node != d.id){
-	  	if(d.collapse === 1){
+  		if(d.collapse === 1){
 	  		if(d.type != "buraco"){
-		      return color(d.group);
+	  			if(d.standby === 0){
+	  				return color(d.group);
+	  			}
+	  			else{
+			  		return "#c9c9c9";
+			  	}
 		    }
 		    else{
 		      return "white";
@@ -89,26 +94,51 @@ function RhizomaStyle(){
 	    }
 	  }
 	  else{
-	    return d3.rgb(color(d.group)).brighter(0.5);
+	  	if(d.collapse === 1){
+	  		if(d.standby === 0){
+	  			return d3.rgb(color(d.group)).brighter(0.5);
+	  		}
+	  		else{
+	  			return d3.rgb("#c9c9c9").brighter(0.5);
+	  		}
+	  	}
+	    else{
+	    	return "white";
+	    }
 	  }
 	}
 
 	this.nodeStroke = function(d){
 	  if(inside_node != d.id){
-	  	if(d.collapse === 1){
+  		if(d.collapse === 1){
 		    if(d.type != "buraco"){
 		      return "transparent";
 		    }
 		    else{
-		      return color(d.group);
+		    	if(d.standby === 0){
+		    		return color(d.group);
+		    	}
+		    	else{
+		    		return "#c9c9c9";
+		    	}
 		    }
 		}
 		else{
-			return color(d.group);
+			if(d.standby === 0){
+	    		return color(d.group);
+	    	}
+	    	else{
+	    		return "#c9c9c9";
+	    	}
 		}
 	  }
 	  else{
-	    return d3.rgb(color(d.group)).darker(2.5);
+	  	if(d.standby === 0){
+	  		return d3.rgb(color(d.group)).darker(2.5);
+	  	}
+	    else{
+	    	return d3.rgb("#c9c9c9").darker(2.5);
+	    }
 	  }
 	}
 
@@ -224,7 +254,12 @@ function RhizomaStyle(){
 	}
 
 	this.labelRectStroke = function(d){
-	  return color(d.group);
+		if(d.standby === 0){
+			return color(d.group);
+		}
+		else{
+			return "#c9c9c9";
+		}
 	}
 
 	this.labelRectStrokeDash = function(d){

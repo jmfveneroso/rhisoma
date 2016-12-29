@@ -2,7 +2,7 @@ function Rhizoma(){
 
 	var master = this;
 	var json = null;
-	var processing_graph = []; // trocar nome por processing_graph
+	var processing_graph = [];
 	var entire_graph = {};
 	var active_graph = {};
 	var current_crawl = 0;

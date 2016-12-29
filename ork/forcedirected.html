@@ -295,12 +295,9 @@ d3.json("public/json/test.json", function(error, in_graph) {
           document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
         }
       }
-      
       current_node = {};
     }
     d3.selectAll("g").filter(".labels, .nodes, .links, .select-links").attr("transform", d3.event.transform);
-
-    // old d3 v3 >>> .attr("transform", "translate(" +  d3.event.transform.x + ',' + d3.event.transform.y + ")scale(" +  d3.event.transform.k + ")");
   });
    
   svg.call(zoom);   
@@ -488,12 +485,24 @@ function mouseOverNode(d){
   svg.style("cursor","pointer");
   if(inside_node != d.id){
     if(d.collapse === 1){
-      document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
-      document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+      if(d.standby === 0){
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
+        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+      }
+      else{
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
+        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+      }
     }
     else{
-      document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
-      document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+      if(d.standby === 0){
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
+        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+      }
+      else{
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
+        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+      }
     }
   }
   else{
@@ -525,8 +534,14 @@ function mouseOutNode(d){
         }
       }
       else{
-        document.getElementById("node-symbol-"+d.id).style.stroke = color(d.group);
-        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+        if(d.standby === 0){
+          document.getElementById("node-symbol-"+d.id).style.stroke = color(d.group);
+          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+        }
+        else{
+          document.getElementById("node-symbol-"+d.id).style.stroke = "#c9c9c9";
+          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+        }
       }
     }
   }

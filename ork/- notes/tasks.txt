@@ -59,6 +59,7 @@ Afazeres:
 	OK - Quando a navegação estiver dentro de um node, aplicar no node um estilo que o identifique como primário
 	OK - Data no control panel
 	OK - Estilo do node muda quando está closed (linha na cor do grupo, fill transparente)
+	OK - Estilo dos nodes em stand-by
 		- Ajustar distâncias entre os nódulos
 		- Ajustar tamanhos do nódulo no nodeClose [mínimo]
 		~~ Controlar tamanho do label em função da hierarquia e qual aparece ou não, posicionamento do label no mouse_over & estilo dos labels (especialmente nos que ficam ocultos); outros comportamentos relacionados
@@ -81,7 +82,7 @@ Afazeres:
 	OK - Quando entra ou sai de um nódulo: centralizar mapa no nódulo clicado e adaptar zoom para ser o mais próximo possível com todos os nodes sendo mostrados (se o zoom for negativo: considerar zoom = 1, tamanho natural, de modo que os labels fiquem legíveis)
 	OK - Implementar collapse
 		- Quando o zoom aproxima, revelar labels escondidos
-9		>> - Implementar stand-by, etc
+10		>> - Implementar stand-by, etc
 		- Ajustar collapse e close para funcionar dentro de nodes
 			- Impedir ligações em nodes que estejam closed
 		- Só desenhar active nodes
@@ -175,7 +176,7 @@ Afazeres:
 		~~ Ajustar simulation stop
 		- (?) Modificar tamanho do node quando collapse estiver on (será que deve ficar no mínimo?)
 		- Quando cria um nódulo, conecta e tenta editar o link: erro (não reconhece id do link [na criação do link tem que atualizar o all_links])
-8		>> - Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
+9		>> - Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
 		- Impedir ação de clique no clique duplo
 		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
 		~~ - Linkar um node primário como target de uma ligação de dependência não afeta sua cor [contabilizar todas as conexões (tipos 1, 2 e 3) para usar como referência]
