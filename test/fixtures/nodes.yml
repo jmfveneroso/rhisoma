@@ -1,5 +1,3 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 node_one:
   node_group: one
   title: MyString
@@ -13,5 +11,19 @@ node_two:
   type: TaskNode
   start_date: <%= Time.zone.now %>
   end_date: <%= Time.zone.now %>
+  active: false
+  hidden: false
+
+node_three:
+  node_group: one
+  title: MyString
+  type: CategoryNode
+  active: false
+  hidden: false
+
+node_four:
+  node_group: three
+  title: MyString
+  type: CategoryNode
   active: false
   hidden: false
