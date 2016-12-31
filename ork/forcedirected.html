@@ -552,7 +552,7 @@ function mouseOutNode(d){
 }
 
 function clickNode(d){
-  if(gui.editionMode() != "nodedelete" && gui.editionMode() != "linkadd" && gui.editionMode() != "stateexplode" && gui.editionMode() != "statecontract"){
+  if(gui.editionMode() != "nodedelete" && gui.editionMode() != "linkadd" && gui.editionMode() != "stateexplode" && gui.editionMode() != "statecontract" && gui.editionMode() != "stateidle"){
     if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) != null){
       if(inside_node != current_node.id){
         if(current_node.type != "buraco"){
@@ -632,6 +632,11 @@ function clickNode(d){
   }
   else if(gui.editionMode() === "statecontract"){
     structure.closeNode(d.id);
+    gui.closeMenus();
+    restart();
+  }
+  else if(gui.editionMode() === "stateidle"){
+    structure.toggleNodeStandby(d);
     gui.closeMenus();
     restart();
   }

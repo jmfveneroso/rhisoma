@@ -1018,7 +1018,21 @@ function Rhizoma(){
 	}
 
 	this.toggleNodeStandby = function(node){
-
+		var index = undefined;
+		for(var i = 0; i < entire_graph.nodes.length; i++){
+			if(entire_graph.nodes[i].id === node.id){
+				index = i;
+			}
+		}
+		if(index != undefined){
+			if(entire_graph.nodes[index].standby === 0){
+				entire_graph.nodes[index].standby = 1;
+			}
+			else{
+				entire_graph.nodes[index].standby = 0;
+			}
+		}
+		master.updateGraph();
 	}
 
 }

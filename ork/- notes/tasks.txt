@@ -116,19 +116,20 @@ Afazeres:
 	OK - Links no control panel de node
 	OK - Seleção de link no control panel de node
 	OK - Remoção de link no control panel de link
-	OK- Edição de ambiente
+	OK - Edição de ambiente
 		OK - Estabilizar // guarda posições dos nódulos para o sistema ser desenhado de forma constante (OK só habilita na root)
 		OK - Parar simulação (melhora performance, Simulation.stop)
 		OK - Centralizar
 		OK - Trocar ícone quando estiver ativado e desativado
+	OK - Edição de estado
+		OK - Close // fecha children
+		OK - Collapse // abre children
+		OK - Stand-by // cinza
 		- Seleção de grupo no control panel do node
 		- Na tarefa, criar botão para indicar que ela foi concluída
 		- Date picker no control panel do node
-5		>> - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados
+2		>> - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados
 		- Barra de seleção de tempo (na base, da primeira data até a última)
-		OK - Close // fecha children
-		OK - Collapse // abre children
-3			>> - Stand-by // cinza
 		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
 
@@ -180,7 +181,7 @@ Afazeres:
 		~~ Ajustar simulation stop
 		- (?) Modificar tamanho do node quando collapse estiver on (será que deve ficar no mínimo?)
 		- Quando cria um nódulo, conecta e tenta editar o link: erro (não reconhece id do link [na criação do link tem que atualizar o all_links])
-4		>> - Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
+3		>> - Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
 		- Impedir ação de clique no clique duplo
 		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
 		~~ - Linkar um node primário como target de uma ligação de dependência não afeta sua cor [contabilizar todas as conexões (tipos 1, 2 e 3) para usar como referência]
