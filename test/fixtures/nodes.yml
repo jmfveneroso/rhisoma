@@ -1,29 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 node_one:
-  user: basic_user
+  node_group: one
   title: MyString
-  type: 
+  type: CategoryNode
   active: false
   hidden: false
 
 node_two:
-  user: basic_user
+  node_group: one
   title: MyString
-  type: 
-  active: false
-  hidden: false
-
-node_three:
-  user: basic_user
-  title: MyString
-  type: 
-  active: false
-  hidden: false
-
-node_four:
-  user: second_user
-  title: MyString
-  type: 
+  type: TaskNode
+  start_date: <%= Time.zone.now %>
+  end_date: <%= Time.zone.now %>
   active: false
   hidden: false

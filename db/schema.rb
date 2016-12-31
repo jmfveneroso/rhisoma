@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161223213134) do
+ActiveRecord::Schema.define(version: 20161231010133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,14 +28,29 @@ ActiveRecord::Schema.define(version: 20161223213134) do
     t.string  "category"
   end
 
+  create_table "node_groups", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.string   "name"
+    t.boolean  "public"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "nodes", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "title"
     t.string   "type"
     t.boolean  "active"
     t.boolean  "hidden"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "node_group_id", null: false
+    t.text     "description"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string   "location"
+    t.text     "text"
+    t.string   "link"
     t.index ["user_id"], name: "index_nodes_on_user_id", using: :btree
   end
 

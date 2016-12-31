@@ -1,0 +1,15 @@
+one:
+  user: basic_user
+  name: The Node Group
+  public: false
+
+two:
+  user: basic_user
+  name: The Node Group
+  public: true
+
+three:
+  user: other_user
+  name: The Node Group
+  public: false
+
