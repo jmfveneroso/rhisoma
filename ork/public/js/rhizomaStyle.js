@@ -20,7 +20,12 @@ function RhizomaStyle(){
 
 	this.linkStroke = function(d){
 	  if(d.type===1){
-	    return color(main_structure.getTargetGroup(d.source));
+	  	if(main_structure.getTargetGroup(d.source) != undefined){
+	  		return color(main_structure.getTargetGroup(d.source));
+	  	}
+	    else{
+	    	return "#c9c9c9";
+	    }
 	  }
 	  else if(d.type===2){
 	    return "black";
@@ -201,10 +206,20 @@ function RhizomaStyle(){
 
 	this.labelTextFill = function(d){
 	  if(d.type === "categoria" && d.parentConnections != 0){
-	    return color(d.group);
+	  	if(d.standby === 0){
+	  		return color(d.group);
+	  	}
+	    else{
+	    	return "#c9c9c9";
+	    }
 	  }
 	  else{
-	    return "black";
+	  	if(d.standby === 0){
+	  		return "black";
+	  	}
+	    else{
+	    	return "#c9c9c9";
+	    }
 	  }
 	}
 

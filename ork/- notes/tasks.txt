@@ -60,12 +60,13 @@ Afazeres:
 	OK - Data no control panel
 	OK - Estilo do node muda quando está closed (linha na cor do grupo, fill transparente)
 	OK - Estilo dos nodes em stand-by
+	OK - Embed Source Sans Pro
 		- Ajustar distâncias entre os nódulos
 		- Ajustar tamanhos do nódulo no nodeClose [mínimo]
 		~~ Controlar tamanho do label em função da hierarquia e qual aparece ou não, posicionamento do label no mouse_over & estilo dos labels (especialmente nos que ficam ocultos); outros comportamentos relacionados
 		- Estilo das linhas em função da urgência [hoje é preto e grosso?, datas no futuro são mais finas?]
 				!!!!! definir tipos de nódulo e formatos
-		~~ Detalhes de estilo [cores, desenho dos nódulos, etc]
+		% Detalhes de estilo [cores, desenho dos nódulos, etc]
 		% (?) Animações e transições
 
 		Navegação [molecular]
@@ -81,11 +82,12 @@ Afazeres:
 		OK - entradas e saídas funcionam com relações tipo 1 (pegando source); 3 é ignorada e 2 revela o mapa todo
 	OK - Quando entra ou sai de um nódulo: centralizar mapa no nódulo clicado e adaptar zoom para ser o mais próximo possível com todos os nodes sendo mostrados (se o zoom for negativo: considerar zoom = 1, tamanho natural, de modo que os labels fiquem legíveis)
 	OK - Implementar collapse
+	OK - Implementar stand-by
 		- Quando o zoom aproxima, revelar labels escondidos
-10		>> - Implementar stand-by, etc
 		- Ajustar collapse e close para funcionar dentro de nodes
 			- Impedir ligações em nodes que estejam closed
 		- Só desenhar active nodes
+		- Navegação por período
 		- Barra superior [de sistema] com infos da plataforma, do usuário, barra de busca, etc
 		- Busca por nódulo
 			- Autocomplete (busca pelo nome do nódulo)
@@ -122,11 +124,11 @@ Afazeres:
 		- Seleção de grupo no control panel do node
 		- Na tarefa, criar botão para indicar que ela foi concluída
 		- Date picker no control panel do node
-		- Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados
+5		>> - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 		OK - Close // fecha children
 		OK - Collapse // abre children
-			Stand-by // cinza
+3			>> - Stand-by // cinza
 		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
 
@@ -173,10 +175,12 @@ Afazeres:
 	OK - Bug quando liga link a um node que esteja com collapse 0
 	OK - Desaparecendo label no simulation.stop
 	OK - Impedir desenho de date_start e date_end no control panel quando não estão setadas no BD
+	OK - Novos nodes estão sendo inseridos como se estivessem closed
+		- No navigateExit sobram nódulos conectados por ligação tipo 2 de grupos que estão closed
 		~~ Ajustar simulation stop
 		- (?) Modificar tamanho do node quando collapse estiver on (será que deve ficar no mínimo?)
 		- Quando cria um nódulo, conecta e tenta editar o link: erro (não reconhece id do link [na criação do link tem que atualizar o all_links])
-9		>> - Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
+4		>> - Atualização de rect do label de categorias primárias (não está atualizando os rects nesse caso)
 		- Impedir ação de clique no clique duplo
 		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
 		~~ - Linkar um node primário como target de uma ligação de dependência não afeta sua cor [contabilizar todas as conexões (tipos 1, 2 e 3) para usar como referência]
@@ -190,7 +194,7 @@ Afazeres:
 		Estrutura do código
 	OK - Passar estilização do grafo no html para uma classe dedicada [rhizomaStyle.js]
 	OK - Transferir funções de atualização de label do index para o RhizomaStyle [updateLabel]
-		- Sintetizar rhizoma.js
+		- Sintetizar rhizoma.js > rhizomaNavigation.js
 
 	> login.html
 - Estilizar com base no arquivo de referência do John
@@ -214,10 +218,13 @@ Afazeres:
 
 	> MARKETING
 
+Design
+	- Logo
+
 Divulgação FB
 	OK - 01 | 20.12.2016 | Vem chegando o ano novo e, com ele, uma nova plataforma. Estamos preparando um incrível lançamento para as primeiras semanas de 2017! (Foto do protoboard)
 	OK - 02 | 22.12.2016 | (Close do orkhestra)
-	- 03 | 24.12.2016 | (Orkhestra inteiro)
+	OK 03 | 24.12.2016 | (Orkhestra inteiro)
 	- 04 | 26.12.2016 | (Navegação no orkhestra)
 	- 05 | 28.12.2016 | Inscreva-se no orkhestra para ...
 

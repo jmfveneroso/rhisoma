@@ -11,6 +11,9 @@ function Rhizoma(){
 
 	var block_node = []; // em caso de collapse false, coloca o nódulo e seus children na lista: checa quando vai criar o active_graph; se estiver bloqueado, não desenhar (só desenhar o parent)
 	var check_block = false;
+	var apply_standby = [];
+	var check_standby = false;
+	var add_nodes = [];
 
 	this.setJSON = function(data){
 		json = data;
@@ -52,6 +55,9 @@ function Rhizoma(){
 			if(json.nodes[i].collapse === 0){
 				check_block = true;
 			}
+			if(json.nodes[i].standby === 1){
+				check_standby = true;
+			}
 			entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id);
 			entire_graph.nodes[i].parentConnections = 0;
 			entire_graph.nodes[i].childConnections = 0;
@@ -68,7 +74,8 @@ function Rhizoma(){
 					}
 				}
 			}
-		}			
+		}	
+		// master.applyStandby(true);		
 			// conferir se a data do target é hoje; se sim, marcar em .urgent
 			// traçar caminho até a origem e atualizar o .urgent deles
 			// espessura é relativa ao número de children do node que são .urgent
@@ -114,12 +121,26 @@ function Rhizoma(){
 				inc++;
 			}
 		}
+
+		// check apply stand-by
+		// for(var i = 0; i < active_graph.nodes.length; i++){
+		// 	for(var j = 0; j < apply_standby.length; j++){
+		// 		if(active_graph.nodes[i].id === apply_standby[j]){
+		// 			active_graph.nodes[i].standby = 1;
+		// 		}
+		// 	}
+		// }
+		master.applyStandby(true);
 	}
 
 	this.updateGraph = function(){
+		apply_standby = [];
 		for(var i = 0; i < entire_graph.nodes.length; i++){
 			if(entire_graph.nodes[i].collapse === 0){
 				check_block = true;
+			}
+			if(entire_graph.nodes[i].standby === 1){
+				check_standby = true;
 			}
 			entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id); 
 			entire_graph.nodes[i].parentConnections = 0;
@@ -163,7 +184,7 @@ function Rhizoma(){
 			        active_graph.nodes[i][property] = current_node[property];
 			    }
 			}
-		}
+		}  master.applyStandby(true);
 	}
 
 	this.getTargetGroup = function(selected_node){
@@ -174,9 +195,14 @@ function Rhizoma(){
 		var edge_group = null;
 		var index = 0;
 		while(edge_group===null){
-			if(entire_graph.nodes[index] != null && entire_graph.nodes[index] != undefined){
-				if(entire_graph.nodes[index].id === selected_node){
-					edge_group = entire_graph.nodes[index].group;
+			if(active_graph.nodes[index] != null && active_graph.nodes[index] != undefined){
+				if(active_graph.nodes[index].id === selected_node){
+					if(active_graph.nodes[index].standby === 0){
+						edge_group = active_graph.nodes[index].group;
+					}
+					else{
+						edge_group = undefined;
+					}
 				}
 			}
 			else{
@@ -248,6 +274,17 @@ function Rhizoma(){
     	entire_graph.nodes[index].children = [];
     	if(processing_graph.length > 0){
     		for(var i = 0; i < processing_graph.length; i++){
+    			if(check_standby){
+    				var match_found = false;
+    				for(var j = 0; j < apply_standby.length; j++){
+    					if(apply_standby[j] === processing_graph[i]){
+    						match_found = true;
+    					}
+    				}
+    				if(!match_found){
+    					apply_standby.push(processing_graph[i]);
+    				}
+    			}
     			if(check_block === true && i > 0){
     				block_node.push(processing_graph[i]);
     			}
@@ -257,6 +294,7 @@ function Rhizoma(){
 	    	}
     	}
     	check_block = false;
+    	check_standby = false;
     	for(var i = 0; i < add_nodes.length; i++){
     		entire_graph.nodes[index].children.push(add_nodes[i]);
     	}
@@ -264,8 +302,6 @@ function Rhizoma(){
     	
       	return processing_graph.length;
 	}
-
-	var add_nodes = [];
 
 	this.crawlNode = function(this_nodes){
 		for(var i = 0; i < entire_graph.links.length; i++){
@@ -497,6 +533,8 @@ function Rhizoma(){
 		for(var i = 0; i < links.length; i++){
 			active_graph.links.push(links[i]);
 		}
+
+		master.applyStandby(true);
 	}
 
 	this.navigateRoot = function(){ // atualizar para ser coerente com collapse
@@ -539,6 +577,8 @@ function Rhizoma(){
 				inc++;
 			}
 		}
+
+		master.applyStandby(true);
 	}
 
 	this.updateNodeXY = function(selected_node){
@@ -596,7 +636,7 @@ function Rhizoma(){
 		new_node.childConnections = "0";
 		new_node.parentConnections = "1";
 		new_node.children = [];
-		new_node.collapse = "1";
+		new_node.collapse = 1;
 		new_node.date_end = "";
 		new_node.date_start = "";
 		new_node.description = "";
@@ -872,7 +912,6 @@ function Rhizoma(){
 		active_graph.nodes[master.getActiveNodeIndex(node)].collapse = 1;
 		block_node = [];
 		master.updateNodes();
-
 	}
 
 	this.closeNode = function(node){
@@ -944,6 +983,42 @@ function Rhizoma(){
 				inc++;
 			}
 		}
+
+		master.applyStandby(true);
+	}
+
+	this.applyStandby = function(standby_mode){
+		for(var i = 0; i < apply_standby.length; i++){
+			var found_match = false;
+			var index = undefined;
+			var inc = 0;
+			while(!found_match){
+				if(active_graph.nodes[inc].id === apply_standby[i]){
+					found_match = true;
+					index = inc;
+				}
+				else{
+					if(active_graph.nodes[inc+1] != null){
+						inc++;
+					}
+					else{
+						found_match = true;
+					}
+				}
+			}
+			if(index != undefined){
+				if(standby_mode){
+					active_graph.nodes[index].standby = 1;
+				}
+				else{
+					active_graph.nodes[index].standby = 0;
+				}
+			}
+		}	
+	}
+
+	this.toggleNodeStandby = function(node){
+
 	}
 
 }
