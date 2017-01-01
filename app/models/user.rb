@@ -8,8 +8,9 @@ class User < ApplicationRecord
   attr_accessor :remember_token, :activation_token, 
                 :reset_token, :email_reset_token
 
-  has_many :nodes, dependent: :destroy
-  has_many :edges, through: :nodes
+  has_many :node_groups, dependent: :destroy
+  has_many :nodes, through: :node_groups
+  has_many :edges, through: :node_groups
 
   # This regex is not 100% guaranteed because email addresses may contain 
   # all sorts of unusual characters but it is good enough for 99.9% of 

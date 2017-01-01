@@ -5,11 +5,10 @@ one:
 
 two:
   user: basic_user
-  name: The Node Group
+  name: The Public Node Group
   public: true
 
 three:
   user: other_user
   name: The Node Group
   public: false
-

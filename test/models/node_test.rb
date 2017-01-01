@@ -122,4 +122,12 @@ class NodeTest < ActiveSupport::TestCase
     assert_not @link_node.valid?
     @link_node.location = nil
   end
+
+  test "should delete node edges" do
+    @node = nodes(:node_one)
+
+    assert_difference 'Edge.count', -1 do
+      @node.destroy
+    end
+  end
 end

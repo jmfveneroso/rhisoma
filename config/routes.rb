@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     post 'delete_account',         to: 'users#delete_account'
   end
 
+  resources :node_groups
   resources :nodes
   resources :edges
 end
