@@ -26,15 +26,31 @@ class NodesController < ApplicationController
   # Shows an existing node.
   # @route GET /nodes/$(id)
   def show
-    render :json => @node 
+    attributes = [:id, :title, :type, :node_group_id]
+    case @node.type
+      when 'CategoryNode' 
+        attributes.concat([:description])
+      when 'TaskNode' 
+        attributes.concat([:description, :start_date, :end_date, :location])
+      when 'TextNode' 
+        attributes.concat([:text])
+      when 'LinkNode' 
+        attributes.concat([:link])
+    end
+
+    # The JSON parse is necessary to select the type column.
+    render :json => JSON.parse(@node.to_json(only: attributes))
   end
 
   # Updates a node.
-  # @route PATCH /nodes
+  # @route PATCH /nodes/$(id)
   # @route_param node [title]
   # @route_param node [type]
   def update
-    if @node.update_attributes(node_params)
+    @node.assign_attributes(node_params)
+    @node = @node.becomes(@node.type.constantize)
+    @node.erase_type_attributes
+    if @node.save
       render :json => @node 
     else
       render :status => 400, :json => { code: 400, errors: @node.errors }

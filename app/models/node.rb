@@ -16,6 +16,30 @@ class Node < ApplicationRecord
      :foreign_key => :target_id, :dependent => :destroy)
   has_many :nodes, :through => :edges, :source => :target
 
+  def erase_type_attributes
+    case self.type
+      when 'CategoryNode' 
+        self.start_date = nil
+        self.end_date = nil
+        self.location = nil
+        self.text = nil
+        self.link = nil
+      when 'TaskNode' 
+        self.text = nil
+        self.link = nil
+      when 'TextNode' 
+        self.description = nil
+        self.start_date = nil
+        self.end_date = nil
+        self.location = nil
+      when 'LinkNode' 
+        self.description = nil
+        self.start_date = nil
+        self.end_date = nil
+        self.location = nil
+    end
+  end
+
   private
 
     def validate_node_group_id

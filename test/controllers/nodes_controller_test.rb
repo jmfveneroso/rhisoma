@@ -75,7 +75,10 @@ class NodesControllerTest < ActionDispatch::IntegrationTest
   test "should show a node" do
     log_in_as(@user)
     get node_path(@node)
-    assert_equal @node.to_json, @response.body.to_str
+
+    data = JSON.parse @response.body.to_str
+    assert_equal 'MyString', data['title']
+    assert_equal 'CategoryNode', data['type']
   end
 
   test "should not update node if missing key parameters" do

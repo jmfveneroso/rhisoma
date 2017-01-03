@@ -24,4 +24,5 @@ Rails.application.routes.draw do
   resources :node_groups
   resources :nodes
   resources :edges
+  post '/node_groups/:id/clone', to: 'node_groups#clone'
 end

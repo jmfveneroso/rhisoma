@@ -12,7 +12,7 @@
     <![endif]-->
   </head>
 
-  <body>
+  <body style="background: #222;">
     <%= render 'layouts/header' %>
     <% flash.each do |message_type, message| %>
       <div class="alert alert-<%= message_type %> alert-dismissable">
@@ -24,10 +24,6 @@
     <% end %>
     <%= yield(:errors) %>
 
-    <div class="container main">
-      <%= yield %>
-
-      <!--<%= debug(params) if Rails.env.development? %>-->
-    </div>
+    <%= yield %>
   </body>
 </html>

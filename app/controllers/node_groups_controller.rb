@@ -1,7 +1,7 @@
 class NodeGroupsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user, only: [:update, :destroy]
-  before_action :correct_user_or_public, only: [:show]
+  before_action :correct_user_or_public, only: [:show, :clone]
 
   # Gets all nodes and edges that belong to a user.
   # @route GET /node-groups
@@ -9,7 +9,9 @@ class NodeGroupsController < ApplicationController
     @user = current_user
     render :json => {
       node_groups: @user.node_groups,
-      nodes: @user.nodes,
+      # The JSON parse is necessary to select the type column.
+      nodes: JSON.parse(@user.nodes.select("nodes.id, title, type, node_group_id")
+        .to_json(only: [:id, :title, :type, :node_group_id])),
       edges: @user.edges,
       templates: NodeGroup.where(:public => true)
     }
@@ -61,7 +63,60 @@ class NodeGroupsController < ApplicationController
     end
   end
 
+  # Clones a node group and all its relations.
+  # @route POST /node-groups/$(id)/clone
+  def clone
+    @new_node_group = NodeGroup.new(node_group_params)
+    @new_node_group.user = current_user 
+    if !@new_node_group.save
+      render :json => { errors: @new_node_group.errors }
+      return
+    end
+
+    nodes = @node_group.nodes
+    if nodes.count > 0
+      timestamp = Time.zone.now.getutc
+      values = nodes.map { |n| 
+        "(#{sqlize n.title},#{sqlize n.type},#{sqlize n.description}," + 
+        "#{sqlize n.start_date},#{sqlize n.end_date},#{sqlize n.location}," + 
+        "#{sqlize n.text},#{sqlize n.link},#{sqlize n.active}," + 
+        "#{sqlize n.hidden},#{@new_node_group.id}," +
+        "'#{timestamp}','#{timestamp}')" 
+      }.join(",")
+
+      fields = [:title, :type, :description, :start_date, 
+                :end_date, :location, :text, :link, :active, 
+                :hidden, :node_group_id, :created_at, :updated_at].join(",")
+
+      id_map = {}
+      res = ActiveRecord::Base.connection.execute("INSERT INTO nodes (#{fields}) VALUES #{values} RETURNING id")
+      for i in (0..res.num_tuples - 1)
+        id_map[nodes[i].id] = res[i]['id']
+      end
+    end
+
+    edges = @node_group.edges
+    if edges.count > 0
+      values = edges.map { |e| 
+        source_id = 
+        "(#{id_map[e.source_id]},#{id_map[e.target_id]},#{sqlize e.category})"
+      }.join(",")
+
+      fields = [:source_id, :target_id, :category].join(",")
+      ActiveRecord::Base.connection.execute("INSERT INTO edges (#{fields}) VALUES #{values} RETURNING id")
+    end
+
+    render :json => @new_node_group
+  end
+
   private
+  
+    # Transforms an attribute in SQL friendly text.
+    def sqlize(field)
+      text = field
+      text = field.getutc if field.is_a? ActiveSupport::TimeWithZone
+      field ? ("'#{text}'") : 'NULL'  
+    end
 
     # Allowed node group parameters in JSON requests.
     def node_group_params

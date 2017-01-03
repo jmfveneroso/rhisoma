@@ -25,6 +25,9 @@ class NodeGroupsControllerTest < ActionDispatch::IntegrationTest
 
     delete node_group_path(@node_group)
     assert_response 401
+
+    post "/node_groups/#{@node_group.id}/clone", params: { node_group: { name: 'NG' } }
+    assert_response 401
   end
 
   test "should return error when user does not have permission" do
@@ -36,6 +39,9 @@ class NodeGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_response 403
 
     delete node_group_path(@node_group)
+    assert_response 403
+
+    post "/node_groups/#{@node_group.id}/clone", params: { node_group: { name: 'NG' } }
     assert_response 403
   end
 
@@ -100,5 +106,28 @@ class NodeGroupsControllerTest < ActionDispatch::IntegrationTest
     delete node_group_path(@node_group)
     assert_response 200
     assert NodeGroup.where(id: @node_group.id).empty?
+  end
+
+  test "should clone node group" do
+    log_in_as(@user)
+
+    assert_difference 'NodeGroup.count', 1 do
+      post "/node_groups/#{@node_group.id}/clone", params: { node_group: { name: 'NG' } }
+    end
+
+    id = JSON.parse(@response.body)['id']
+    ng = NodeGroup.find id
+
+    assert_equal 'NG', ng['name']
+    assert_equal 3, ng.nodes.count
+    assert_equal 1, ng.edges.count
+  end
+
+  test "should clone public node group" do
+    log_in_as(@other_user)
+
+    assert_difference 'NodeGroup.count', 1 do
+      post "/node_groups/#{@public_node_group.id}/clone", params: { node_group: { name: 'NG' } }
+    end
   end
 end
