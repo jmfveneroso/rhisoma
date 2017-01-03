@@ -21,8 +21,8 @@ Rails.application.routes.draw do
     post 'delete_account',         to: 'users#delete_account'
   end
 
+  resources :node_groups
   resources :nodes
-  post   'nodes/:id/connect',               to: 'nodes#connect', as: :connect
-  get    'nodes/graph/show',                to: 'nodes#graph'
-  delete 'nodes/:id/disconnect',            to: 'nodes#disconnect', as: :disconnect
+  resources :edges
+  post '/node_groups/:id/clone', to: 'node_groups#clone'
 end

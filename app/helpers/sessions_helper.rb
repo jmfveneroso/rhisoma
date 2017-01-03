@@ -65,6 +65,12 @@ module SessionsHelper
     !current_user.nil?
   end
 
+  # Returns true if the user is an administrator, false otherwise.
+  # @return [Boolean]
+  def admin?
+    current_user && current_user.admin
+  end
+
   # Redirects to the stored location (or to default if there is 
   # no stored location).
   # @param default [String] the default location.

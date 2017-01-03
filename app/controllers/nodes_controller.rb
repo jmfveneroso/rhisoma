@@ -1,14 +1,21 @@
 class NodesController < ApplicationController
   before_action :logged_in_user
-  before_action :correct_user, except: [:create, :graph]
+  before_action :correct_user, except: [:create]
+  before_action :node_group_belongs_to_user, only: [:create, :update]
 
   # Creates a new node.
   # @route POST /nodes
   # @route_param node [title]
   # @route_param node [type]
+  # @route_param node [node_group_id]
   def create
-    node = Node.new(node_params)
-    node.user = current_user
+    unless Node.types.include? params[:node][:type]
+      render :status => 400, :json => { code: 400,  
+                                        errors: ['Invalid node type']}
+      return
+    end
+
+    node = params[:node][:type].constantize.new(node_params)
     if node.save
       render :json => node 
     else
@@ -16,64 +23,56 @@ class NodesController < ApplicationController
     end
   end
 
-  # Updates a new node.
-  # @route PATCH /nodes
+  # Shows an existing node.
+  # @route GET /nodes/$(id)
+  def show
+    attributes = [:id, :title, :type, :node_group_id]
+    case @node.type
+      when 'CategoryNode' 
+        attributes.concat([:description])
+      when 'TaskNode' 
+        attributes.concat([:description, :start_date, :end_date, :location])
+      when 'TextNode' 
+        attributes.concat([:text])
+      when 'LinkNode' 
+        attributes.concat([:link])
+    end
+
+    # The JSON parse is necessary to select the type column.
+    render :json => JSON.parse(@node.to_json(only: attributes))
+  end
+
+  # Updates a node.
+  # @route PATCH /nodes/$(id)
   # @route_param node [title]
   # @route_param node [type]
   def update
-    node = Node.find(params[:id])
-    if node.update_attributes(node_params)
-      render :json => node 
+    @node.assign_attributes(node_params)
+    @node = @node.becomes(@node.type.constantize)
+    @node.erase_type_attributes
+    if @node.save
+      render :json => @node 
     else
-      render :status => 400, :json => { code: 400, errors: node.errors }
+      render :status => 400, :json => { code: 400, errors: @node.errors }
     end
   end
 
   # Deletes a node.
   # @route DELETE /nodes/$(id)
   def destroy
-    node = Node.find(params[:id])
-    if node.destroy
-      render :json => node 
+    if @node.destroy
+      render :json => @node 
     else
-      render :json => { errors: node.errors }
+      render :json => { errors: @node.errors }
     end
-  end
-
-  # Creates a new edge connecting two nodes.
-  # @route POST /nodes/$(id)/connect
-  # @route_param edge [target_id]
-  def connect
-    node = Node.find(params[:id])
-    if edge = node.edges.create(target_id: params[:edge][:target_id])
-      render :json => edge
-    else
-      render :json => { errors: edge.errors }
-    end
-  end
-
-  # Updates an edge.
-  # @route DELETE /nodes/$(id)/disconnect
-  # @route_param edge [target_id]
-  def disconnect
-    node = Node.find(params[:id])
-    node.edges.where(target_id: params[:edge][:target_id]).destroy_all
-    render :json => { status: 'success' }
-  end
-
-  # Gets a user graph in the timestamp range specified or
-  # all nodes if no timestamp is specified.
-  # @route PATCH /nodes/edge/$(id)
-  # @route_param edge [category]
-  def graph
-    render :json => current_user.graph
   end
 
   private
 
-    # Allowed node params.
+    # Allowed node parameters in JSON requests.
     def node_params
-      params.require(:node).permit(:title, :type, :active, :hidden)
+      params.require(:node).permit(:title, :type, :node_group_id, :start_date, 
+        :end_date, :description, :location, :text, :link, :active, :hidden)
     end
 
     # Before filter that confirms a logged-in user.
@@ -88,8 +87,19 @@ class NodesController < ApplicationController
     # Before filter that confirms the current user has permission to alter the
     # requested node.
     def correct_user
-      node = Node.find(params[:id])
-      unless current_user?(node.user)
+      @node = Node.find(params[:id])
+      unless current_user?(@node.user)
+        render :status => 403, :json => { code: 403, errors: [ {
+          message: 'Unauthorized user' 
+        } ] }
+      end
+    end
+
+    # Before filter that confirms the current user has permission to assign
+    # a node to the requested node group.
+    def node_group_belongs_to_user
+      @node_group = NodeGroup.find_by(id: params[:node][:node_group_id])
+      unless !@node_group || current_user?(@node_group.user)
         render :status => 403, :json => { code: 403, errors: [ {
           message: 'Unauthorized user' 
         } ] }

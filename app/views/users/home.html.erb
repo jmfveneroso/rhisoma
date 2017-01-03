@@ -1,39 +1,164 @@
 <% provide(:page_title, "Home") %>
 
-<div class="col-md-9">
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <form class="form-inline" action="javascript:void(0);">
-        <div class="form-group">
-          <label for="node[id]">Id</label>
-          <input id= "node[id]" type="text" class="form-control" style="margin-bottom: 0;" />
+<div class="home-bg">
+
+  <!-- Side Menu --> 
+  <div class="left noselect">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="btn-group">
+        <button type="button" class="toolbar-btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li id="new_node_group"><a href="javascript:void(0)">Node Group</a></li>
+          <li id="new_node"><a href="javascript:void(0)">Node</a></li>
+          <li id="new_edge"><a href="javascript:void(0)">Edge</a></li>
+        </ul>
+      </div>
+      <button id="toolbar[refresh]" class="toolbar-btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+      <button id="toolbar[settings]" class="toolbar-btn"><i class="fa fa-cog" aria-hidden="true"></i></button>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="toolbar" style="padding: 0;">
+      <li id="tab[node_groups]" class="toolbar-tab">Node Groups</li>
+      <li id="tab[nodes]" class="toolbar-tab active" style="left: -4px;">Nodes</li>
+      <li id="tab[edges]" class="toolbar-tab" style="left: -8px;">Edges</li>
+      <li id="tab[templates]" class="toolbar-tab" style="left: -12px;">Templates</li>
+    </ul>
+    <div class="tab-content">
+      <ul id="tab[content]">
+        <li>Node 1</li>
+        <li>Node 2</li>
+        <li>Node 3</li>
+        <li>Node 4</li>
+      </ul>
+    </div>
+
+    <!-- Properties Section -->
+    <div class="properties">Properties</div>
+    <div id="properties[content]" class="properties-content">
+
+      <!-- Node Group -->
+      <div id="properties[node_group]">
+        <label>Name:</label>
+        <input id="properties[node_group][name]" type="text" />
+        <label>Public:</label>
+        <input id="properties[node_group][public]" type="checkbox" />
+        <br />
+        <div id="properties[node_group][template_container]">
+          <label>Template:</label>
+          <select id="properties[node_group][template]">
+          </select>
         </div>
-        <div class="form-group">
-          <label for="node[title]">Title</label>
-          <input id= "node[title]" type="text" class="form-control" style="margin-bottom: 0;" />
+        <div id="properties[node_group][nodes_container]">
+          <div class="separator"></div>
+          <label>Nodes:</label>
+          <ul id="properties[node_group][nodes]">
+            <li>Node 1</li>
+            <li>Node 2</li>
+            <li>Node 3</li>
+            <li>Node 4</li>
+          </ul>
         </div>
-        <button id="edit_node" class="btn btn-default">Edit</button>
-        <button id="delete_node" class="btn btn-default">Delete</button>
-      </form>
+      </div>
+
+      <!-- Node -->
+      <div id="properties[node]">
+        <label>Title:</label>
+        <input id="properties[node][title]" type="text" />
+        <label>Type:</label>
+        <select id="properties[node][type]" class="default-dropdown">
+          <option value="CategoryNode">Category</option>
+          <option value="TaskNode">Task</option>
+          <option value="TextNode">Text</option>
+          <option value="LinkNode">Link</option>
+        </select>
+        <label>Node Group:</label>
+        <select id="properties[node][node_group]">
+          <option>Node Group 1</option>
+          <option>Node Group 2</option>
+        </select>
+        <div id="properties[category_node]">
+          <label>Description:</label>
+          <input id="properties[category_node][description]" type="text" />
+        </div>
+        <div id="properties[task_node]">
+          <label>Description:</label>
+          <input id="properties[task_node][description]" type="text" />
+          <label>Start Date:</label>
+          <input id="properties[task_node][start_date]" type="text" />
+          <label>End Date:</label>
+          <input id="properties[task_node][end_date]" type="text" />
+          <label>Location:</label>
+          <input id="properties[task_node][location]" type="text" />
+        </div>
+        <div id="properties[text_node]">
+          <label>Text:</label>
+          <textarea id="properties[text_node][text]" rows="10" type="text"></textarea>
+        </div>
+        <div id="properties[link_node]">
+          <label>Link:</label>
+          <input id="properties[link_node][link]" type="text" />
+        </div>
+        <div id="properties[node][edges_container]">
+          <div class="separator"></div>
+          <label>Edges:</label>
+          <ul id="properties[node][edges]">
+            <li>Edge 1</li>
+            <li>Edge 2</li>
+            <li>Edge 3</li>
+            <li>Edge 4</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Edge -->
+      <div id="properties[edge]">
+        <label>Category:</label>
+        <select id="properties[edge][category]">
+          <option>Positioning</option>
+          <option>Relationship</option>
+          <option>Dependency</option>
+        </select>
+        <label>Source:</label>
+        <select id="properties[edge][source]">
+          <option>Node 1</option>
+          <option>Node 2</option>
+        </select>
+        <label>Target:</label>
+        <select id="properties[edge][target]">
+          <option>Node 1</option>
+          <option>Node 2</option>
+        </select>
+      </div>
+
+      <!-- Settings -->
+      <div id="properties[settings]">
+        <label>Elastic Coefficient:</label>
+        <input id="properties[settings][elastic]" type="text" />
+        <label>Electrostatic Coefficient:</label>
+        <input id="properties[settings][electrostatic]" type="text" />
+        <label>Friction Coefficient:</label>
+        <input id="properties[settings][friction]" type="text" />
+      </div>
+
+      <div class="separator"></div>
+      <button id="properties[cancel]" class="toolbar-btn" style="background: #333;">Cancel</button>
+      <button id="properties[delete]" class="toolbar-btn" style="background: #663333;">Delete</button>
+      <button id="properties[create]" class="toolbar-btn">Create</button>
+      <button id="properties[update]" class="toolbar-btn">Update</button>
     </div>
   </div>
-</div>
-
-<div class="col-md-3">
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <button id="refresh" class="btn btn-primary">Refresh</button>
-      <button id="create_node" class="btn btn-primary">Create</button>
-    </div>
+ 
+  <!-- Canvas --> 
+  <div class="right noselect">
+    <canvas id="main_canvas" width="800" height="400">
+    </canvas> 
   </div>
 </div>
-
-<div class="col-md-12">
-  <canvas id="main_canvas" width="800" height="600" style="border: 1px solid black;">
-  </canvas> 
-</div>
-
-<p></p>
 
 <form name="ignore_me">
   <input type="hidden" id="page_is_dirty" name="page_is_dirty" value="0" />
