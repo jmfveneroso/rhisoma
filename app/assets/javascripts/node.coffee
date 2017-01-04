@@ -633,6 +633,7 @@ class Ui
           edge.category = data.category
           edge.source.remove_edge edge
           edge.source = self.graph.get_nodes()[data.source_id]
+          edge.source.edges.push edge
           edge.target = self.graph.get_nodes()[data.target_id]
           self.select_element self.graph.get_edge(edge_id)
             
