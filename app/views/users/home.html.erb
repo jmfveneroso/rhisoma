@@ -29,12 +29,7 @@
       <li id="tab[templates]" class="toolbar-tab" style="left: -12px;">Templates</li>
     </ul>
     <div class="tab-content">
-      <ul id="tab[content]">
-        <li>Node 1</li>
-        <li>Node 2</li>
-        <li>Node 3</li>
-        <li>Node 4</li>
-      </ul>
+      <ul id="tab[content]"></ul>
     </div>
 
     <!-- Properties Section -->
@@ -56,12 +51,7 @@
         <div id="properties[node_group][nodes_container]">
           <div class="separator"></div>
           <label>Nodes:</label>
-          <ul id="properties[node_group][nodes]">
-            <li>Node 1</li>
-            <li>Node 2</li>
-            <li>Node 3</li>
-            <li>Node 4</li>
-          </ul>
+          <ul id="properties[node_group][nodes]"></ul>
         </div>
       </div>
 
@@ -77,10 +67,7 @@
           <option value="LinkNode">Link</option>
         </select>
         <label>Node Group:</label>
-        <select id="properties[node][node_group]">
-          <option>Node Group 1</option>
-          <option>Node Group 2</option>
-        </select>
+        <select id="properties[node][node_group]"></select>
         <div id="properties[category_node]">
           <label>Description:</label>
           <input id="properties[category_node][description]" type="text" />
@@ -106,12 +93,7 @@
         <div id="properties[node][edges_container]">
           <div class="separator"></div>
           <label>Edges:</label>
-          <ul id="properties[node][edges]">
-            <li>Edge 1</li>
-            <li>Edge 2</li>
-            <li>Edge 3</li>
-            <li>Edge 4</li>
-          </ul>
+          <ul id="properties[node][edges]"></ul>
         </div>
       </div>
 
@@ -166,6 +148,13 @@
 
 <script type="text/javascript">
   var dirty_bit = document.getElementById('page_is_dirty');
-  if (dirty_bit.value == '1') window.location.reload();
+  if (dirty_bit.value == '1') {
+    window.location.reload();
+  }
   dirty_bit.value = '1';
+
+  $(document).ready(function () {
+    app = new document.App()
+    app.run()
+  });
 </script>

@@ -307,9 +307,32 @@ class Graph
   get_templates: -> return templates
   set_ui: (ui) -> @ui = ui
 
+  remove_node: (node) ->
+    for key, edge of edges
+      if edge.source.id == node.id || edge.target.id == node.id
+        delete edges[edge.id]
+    delete nodes[node.id]
+
+  remove_node_group: (ng) ->
+    for key, node of nodes
+      if node.node_group.id == ng.id
+        this.remove_node node
+    delete node_groups[ng.id]
+
   limit_to_bounds: (node) ->
     node.pos.x = node.pos.x.clamp 1, this.canvas.view.width - 1
     node.pos.y = node.pos.y.clamp 1, this.canvas.view.height - 1
+
+  create_node_group: (ng) ->
+    new_ng = new NodeGroup(ng.id, ng.name, ng.public)
+    node_groups[ng.id] = new_ng
+
+  create_node: (node) ->
+    ng = node_groups[node.node_group_id]
+    node.node_group = ng
+    new_node = new Node(node, self.random_pos())
+    nodes[node.id] = new_node
+    ng.nodes.push new_node
 
   load: ->
     return Api.get_graph().done (data) ->
@@ -319,15 +342,10 @@ class Graph
       templates = {}
 
       for ng in data.node_groups
-        new_ng = new NodeGroup(ng.id, ng.name, ng.public)
-        node_groups[ng.id] = new_ng
+        self.create_node_group(ng)
 
       for node in data.nodes
-        ng = node_groups[node.node_group_id]
-        node.node_group = ng
-        new_node = new Node(node, self.random_pos())
-        nodes[node.id] = new_node
-        ng.nodes.push new_node
+        self.create_node(node)
 
       for edge in data.edges
         source = nodes[edge.source_id]
@@ -342,18 +360,17 @@ class Graph
 
   refresh_canvas: ->
     this.canvas.clear()
-    for key, node of nodes
-      for edge in node.edges
-        color = '#000000'
-        color = '#ee9999' if (this.ui.selected_element == edge)
+    for key, edge of edges
+      color = '#000000'
+      color = '#ee9999' if (this.ui.selected_element == edge)
 
-        type = 'normal'
-        switch edge.category
-          when 'Positioning' then type = 'dotted'
-          when 'Relationship' then type = 'dashed'
+      type = 'normal'
+      switch edge.category
+        when 'Positioning' then type = 'dotted'
+        when 'Relationship' then type = 'dashed'
 
-        this.canvas.draw_line node.pos.x, node.pos.y,
-        edge.target.pos.x, edge.target.pos.y, color, type
+      this.canvas.draw_line edge.source.pos.x, edge.source.pos.y,
+      edge.target.pos.x, edge.target.pos.y, color, type
 
     for key, node of nodes
       selected = this.ui.selected_element == node
@@ -544,17 +561,14 @@ class Ui
         name = @properties['node_group']['name'].val()
         is_public = @properties['node_group']['public'].prop('checked')
         template_id = @properties['node_group']['template'].val()
-        console.log template_id
 
         if Number(template_id) == -1
           Api.create_node_group(name, is_public).done (data) ->
-            node_group_id = data.id
-            self.graph.load().always (data) ->
-              self.creating = false
-              self.select_element self.graph.get_node_group(node_group_id)
+            self.graph.create_node_group(data)
+            self.creating = false
+            self.select_element self.graph.get_node_group(data.id)
         else
           Api.clone_node_group(template_id, name, is_public).done (data) ->
-            console.log data
             node_group_id = data.id
             self.graph.load().always (data) ->
               self.creating = false
@@ -562,9 +576,8 @@ class Ui
       when 'node'
         data = @get_node_data()
         Api.create_node(data).done (data) ->
-          id = data.id
-          self.graph.load().always (data) ->
-            self.select_element self.graph.get_node(id)
+          self.graph.create_node(data)
+          self.select_element self.graph.get_node(data.id)
       when 'edge'
         category = @properties['edge']['category'].val()
         source_id = @properties['edge']['source'].val()
@@ -579,16 +592,18 @@ class Ui
     switch @selected_element.constructor.name
       when 'NodeGroup'
         Api.delete_node_group(@selected_element.id).done (data) ->
-          self.graph.load().always (data) ->
-            self.select_tab 0
+          self.graph.remove_node_group self.selected_element
+          self.select_tab 0
       when 'Node'
         Api.delete_node(@selected_element.id).done (data) ->
-          self.graph.load().always (data) ->
-            self.select_tab 1
+          self.graph.remove_node self.selected_element
+          self.select_tab 1
       when 'Edge'
         Api.delete_edge(@selected_element.id).done (data) ->
-          self.graph.load().always (data) ->
-            self.select_tab 2
+          edge = self.selected_element
+          edge.source.remove_edge(edge)
+          delete self.graph.get_edges()[edge.id]
+          self.select_tab 2
 
   update_element: ->
     switch @selected_element.constructor.name
@@ -596,15 +611,16 @@ class Ui
         name = @properties['node_group']['name'].val()
         is_public = @properties['node_group']['public'].prop('checked')
         Api.update_node_group(@selected_element.id, name, is_public).done (data) ->
-          self.selected_element.name = data.name
+          self.selected_element.name = name
           self.selected_element.public = data.public
           self.select_element self.graph.get_node_group(data.id)
       when 'Node'
-        data = @get_node_data()
-        Api.update_node(@selected_element.id, data).done((data) ->
-          id = data.id
-          self.graph.load().always (data) ->
-            self.select_element self.graph.get_node(id)
+        node_data = @get_node_data()
+        Api.update_node(@selected_element.id, node_data).done((data) ->
+          self.selected_element.type = node_data['node[type]']
+          self.selected_element.title = data.title
+          self.selected_element.node_group = self.graph.get_node_group(data.node_group_id)
+          self.select_element self.graph.get_node(data.id)
         ).error (err) ->
           console.log err
       when 'Edge'
@@ -877,19 +893,22 @@ class Ui
     @settings = false
     @update()
 
-$(document).ready ->
-  graph = new Graph(new Canvas)
-  ui = new Ui(graph)
-  ui.init()
-  graph.set_ui ui
+class App
+  run: ->
+    graph = new Graph(new Canvas)
+    ui = new Ui(graph)
+    ui.init()
+    graph.set_ui ui
 
-  setInterval () ->
-    graph.update_position()
-  , 10
+    setInterval () ->
+      graph.update_position()
+    , 10
 
-  $('#create_node').on 'click': -> graph.create_node()
-  $('#edit_node').on   'click': -> graph.edit_selected_node()
-  $('#delete_node').on 'click': -> graph.delete_selected_node()
-  $('#refresh').on     'click': -> graph.load()
+    $('#create_node').on 'click': -> graph.create_node()
+    $('#edit_node').on   'click': -> graph.edit_selected_node()
+    $('#delete_node').on 'click': -> graph.delete_selected_node()
+    $('#refresh').on     'click': -> graph.load()
 
-  graph.load()
+    graph.load()
+
+document.App = App
