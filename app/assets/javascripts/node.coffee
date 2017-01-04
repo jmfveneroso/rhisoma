@@ -206,16 +206,13 @@ class Edge
   distance_to: (v) ->
     a = v.sub(@source.pos)
     b = @target.pos.sub(@source.pos)
-    scalar = a.dot_product(b) / Math.pow(b.norm(), 2)
-    distance = a.sub(b.multiply(scalar)).norm()
+    projection = b.multiply(a.dot_product(b) / Math.pow(b.norm(), 2))
 
-    dis_x = Math.abs(@source.pos.x - v.x + @target.pos.x - v.x)
-    dis_y = Math.abs(@source.pos.y - v.y + @target.pos.y - v.y)
- 
-    if dis_x > Math.abs(@source.pos.x - @target.pos.x) ||
-       dis_y > Math.abs(@source.pos.y - @target.pos.y)
-      distance = 100000
-    return distance
+    if projection.norm() > b.norm() ||
+       projection.normalize().sub(b.normalize()).norm() > 1
+      distance = 1000000
+    else
+      distance = a.sub(projection).norm()
 
 class Physics
   @repulsion_constant = 10
@@ -388,7 +385,7 @@ class Graph
 
     for key, edge of edges
       dist = edge.distance_to(new Vector(e.x, e.y))
-      if edge.distance_to(new Vector(e.x, e.y)) < 6
+      if edge.distance_to(new Vector(e.x, e.y)) < 10
         this.ui.select_element edge
         return
 
