@@ -629,8 +629,12 @@ class Ui
         target_id = @properties['edge']['target'].val()
         category = @properties['edge']['category'].val()
         Api.update_edge(edge_id, source_id, target_id, category).done (data) ->
-          self.graph.load().always (data) ->
-            self.select_element self.graph.get_edge(edge_id)
+          edge = self.selected_element
+          edge.category = data.category
+          edge.source.remove_edge edge
+          edge.source = self.graph.get_nodes()[data.source_id]
+          edge.target = self.graph.get_nodes()[data.target_id]
+          self.select_element self.graph.get_edge(edge_id)
             
       when 'Template' then @selected_tab_num = 3
 
