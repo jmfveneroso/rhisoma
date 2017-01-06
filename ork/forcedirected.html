@@ -125,7 +125,7 @@ var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 var simulation = d3.forceSimulation()
     .velocityDecay(0.1)
-    .force("link", d3.forceLink().id(function(d) { return d.id; })/*.strength(function(d){return 0.5 / Math.min(d.source.size, d.target.size);})/*.distance(function(d){return 200;})*/)
+    .force("link", d3.forceLink().id(function(d) { return d.id; })/*.strength(function(d){return 0.5 / Math.min(d.source.size, d.target.size);})*/.distance(function(d){return 40;}))
     .force("charge", d3.forceManyBody()/*.strength(function(d){return -200;})*/)
     .force("center", d3.forceCenter(width / 2, height / 2));
 
@@ -415,10 +415,15 @@ function environmentStabilize(){
     rst.updateLabel(this_id);
   }
   else if(gui.saveLink() != false){
+    var source_id = gui.saveLink().source;
+    var target_id = gui.saveLink().target;
     structure.updateLink(gui.saveLink());
     structure.updateGraph();
     gui.resetCurrentEditing();
     restart();
+    rst.setEnvironment(inside_node,structure);
+    rst.updateLabel(source_id);
+    rst.updateLabel(target_id);
   }
 
   if(gui.deleteLink() != undefined){

@@ -52,13 +52,17 @@ function Rhizoma(){
 
 	this.initialize = function(){
 		for(var i = 0; i < json.nodes.length; i++){
-			if(json.nodes[i].collapse === 0){
-				check_block = true;
-			}
 			if(json.nodes[i].standby === 1){
 				check_standby = true;
 			}
-			entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id);
+			if(json.nodes[i].collapse === 0){
+				check_block = true;
+				entire_graph.nodes[i].size = 1;
+				master.nodeStructure(entire_graph.nodes[i].id);
+			}
+			else{
+				entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id);
+			}
 			entire_graph.nodes[i].parentConnections = 0;
 			entire_graph.nodes[i].childConnections = 0;
 				// corrigir .size [o maior fica sendo uma tamanho máximo predefinido, o menor, o menor tamanho predefinido]
@@ -136,13 +140,17 @@ function Rhizoma(){
 	this.updateGraph = function(){
 		apply_standby = [];
 		for(var i = 0; i < entire_graph.nodes.length; i++){
-			if(entire_graph.nodes[i].collapse === 0){
-				check_block = true;
-			}
 			if(entire_graph.nodes[i].standby === 1){
 				check_standby = true;
 			}
-			entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id); 
+			if(entire_graph.nodes[i].collapse === 0){
+				check_block = true;
+				entire_graph.nodes[i].size = 1;
+				master.nodeStructure(entire_graph.nodes[i].id);
+			}
+			else{
+				entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id);
+			}
 			entire_graph.nodes[i].parentConnections = 0;
 			entire_graph.nodes[i].childConnections = 0;
 		}
@@ -290,6 +298,21 @@ function Rhizoma(){
     			}
     			else{
     				entire_graph.nodes[index].children.push(processing_graph[i]);
+    			}
+	    	}
+    	}
+    	if(add_nodes.length > 0){
+    		for(var i = 0; i < add_nodes.length; i++){
+    			if(check_standby){
+    				var match_found = false;
+    				for(var j = 0; j < apply_standby.length; j++){
+    					if(apply_standby[j] === add_nodes[i]){
+    						match_found = true;
+    					}
+    				}
+    				if(!match_found){
+    					apply_standby.push(add_nodes[i]);
+    				}
     			}
 	    	}
     	}
@@ -868,6 +891,12 @@ function Rhizoma(){
 			    }
 			}
 		}
+
+		for(var i = 0; i < apply_standby.length; i++){
+			if(active_graph.nodes[index].id === apply_standby[i]){
+				active_graph.nodes[index].standby = 1;
+			}
+		}
 	}
 
 	this.updateLink = function(in_link){
@@ -924,10 +953,17 @@ function Rhizoma(){
 	this.updateNodes = function(){
 		// atualizar para closeNode e collapseNode [tem que reconhecer o estado atual da rede]
 		for(var i = 0; i < entire_graph.nodes.length; i++){
+			if(entire_graph.nodes[i].standby === 1){
+				check_standby = true;
+			}
 			if(entire_graph.nodes[i].collapse === 0){
 				check_block = true;
+				entire_graph.nodes[i].size = 1;
+				master.nodeStructure(entire_graph.nodes[i].id);
 			}
-			entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id);
+			else{
+				entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id);
+			}
 			entire_graph.nodes[i].parentConnections = 0;
 			entire_graph.nodes[i].childConnections = 0;
 				// corrigir .size [o maior fica sendo uma tamanho máximo predefinido, o menor, o menor tamanho predefinido]
