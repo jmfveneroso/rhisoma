@@ -753,7 +753,8 @@ function Rhizoma(){
 		link.target = links.target.toString();
 		link.value = 1;
 		link.type = 1;
-		link.id = entire_graph.links.length + Math.floor(Math.random() * (900 - 1)) + 1;;
+		var link_id = entire_graph.links.length + Math.floor(Math.random() * (900 - 1)) + 1;
+		link.id = link_id.toString();
 		entire_graph.links.push(link);
 		active_graph.links.push(link);	
 		master.updateGraph();

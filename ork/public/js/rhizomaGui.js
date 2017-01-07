@@ -982,6 +982,21 @@ function RhizomaGui(gui){
 		return edit_item;
 	}
 
+	/* SELECT LINE */
+	// this.createSelectLine = function(){
+
+	// }
+
+	// this.updateSelectLine = function(){
+		
+	// }
+
+	this.removeSelectLine = function(){
+		if(document.getElementById("select-lines")!= null){
+			document.getElementById("select-lines").parentElement.removeChild(document.getElementById("select-lines"));
+		}
+	}
+
 	/* MOUSE BEHAVIOR */
 
 	this.toggleTypeDropDown = function(){

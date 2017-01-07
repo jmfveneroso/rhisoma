@@ -160,7 +160,8 @@ d3.json("public/json/test.json", function(error, in_graph) {
   .attr("width",window.innerWidth)
   .attr("height",window.innerHeight)
   .attr("fill","transparent")
-  .on("mousedown", mouseDownEnvironment);
+  .on("mousedown", mouseDownEnvironment)
+  .on("mousemove", environmentMove);
 
   /* LINKS */
 
@@ -298,7 +299,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
       }
       current_node = {};
     }
-    d3.selectAll("g").filter(".labels, .nodes, .links, .select-links").attr("transform", d3.event.transform);
+    d3.selectAll("g").filter(".labels, .nodes, .links, .select-links, .create-link").attr("transform", d3.event.transform);
   });
    
   svg.call(zoom);   
@@ -330,6 +331,17 @@ d3.json("public/json/test.json", function(error, in_graph) {
         var offset_y = d.y;
         return "translate(" + offset_x + "," + offset_y + ")";
       });
+
+    if(link_to_add.source != null){
+      if(document.getElementById("select-lines")!=null){
+        var source_node = svg.select("#node-"+link_to_add.source);
+        var source_node_transform = source_node.attr("transform");
+        var pass_translate = source_node_transform.substring(source_node_transform.indexOf("(")+1, source_node_transform.indexOf(")")).split(",");
+        var selecting_line = svg.selectAll("#select-line")
+        .attr("x1",pass_translate[0])
+        .attr("y1",pass_translate[1]);
+      }
+    }
   }
 });
 
@@ -344,6 +356,20 @@ function dragstarted(d) {
 }
 
 function dragged(d) {
+  if(link_to_add.source != null){
+    if(document.getElementById("select-lines")!=null){
+      var reference_element = d3.select("g").node();
+      var mouse_xy = d3.mouse(reference_element);
+      var source_node = svg.select("#node-"+link_to_add.source);
+      var source_node_transform = source_node.attr("transform");
+      var pass_translate = source_node_transform.substring(source_node_transform.indexOf("(")+1, source_node_transform.indexOf(")")).split(",");
+      var selecting_line = svg.selectAll("#select-line")
+      .attr("x1",pass_translate[0])
+      .attr("y1",pass_translate[1])
+      .attr("x2",mouse_xy[0])
+      .attr("y2",mouse_xy[1]);
+    }
+  }
   d.fx = d3.event.x;
   d.fy = d3.event.y;
 }
@@ -364,6 +390,57 @@ function dragended(d) {
   /* MOUSE BEHAVIOR > EDITING */
 
 document.body.addEventListener("click", environmentStabilize, true);
+
+function environmentMove(){
+  if(link_to_add.source != null){
+    if(document.getElementById("select-lines")!=null){
+      var reference_element = d3.select("g").node();
+      var mouse_xy = d3.mouse(reference_element);
+      var source_node = svg.select("#node-"+link_to_add.source);
+      var source_node_transform = source_node.attr("transform");
+      var pass_translate = source_node_transform.substring(source_node_transform.indexOf("(")+1, source_node_transform.indexOf(")")).split(",");
+      var selecting_line = svg.selectAll("#select-line")
+      .attr("x1",pass_translate[0])
+      .attr("y1",pass_translate[1])
+      .attr("x2",mouse_xy[0])
+      .attr("y2",mouse_xy[1]);
+    }
+    else{
+      var reference_element = d3.select("g").node();
+      var mouse_xy = d3.mouse(reference_element);
+      var reference_transform = svg.select(".nodes");
+      var pass_transform = "translate(0,0),scale(1)";
+      if(reference_transform.attr("transform") != null){
+        pass_transform = reference_transform.attr("transform");
+      }
+      var source_node = svg.select("#node-"+link_to_add.source);
+      var source_node_transform = source_node.attr("transform");
+      var pass_translate = source_node_transform.substring(source_node_transform.indexOf("(")+1, source_node_transform.indexOf(")")).split(",");
+      var init_data = [];
+      init_data[0] = {};
+
+      var selecting_line = svg.append("g")
+      .attr("class","create-link")
+      .attr("id","select-lines")
+      .attr("transform",pass_transform)
+      .selectAll("line")
+      .filter("#select-line")
+      .data(init_data)
+      .enter()
+      .append("line")
+      .attr("id","select-line")
+      .attr("stroke-width", "1")
+      .style("stroke-linecap", "round")
+      .style("stroke", "black");
+
+      var the_line = svg.select("#select-line")
+      .attr("x1",pass_translate[0])
+      .attr("y1",pass_translate[1])
+      .attr("x2",mouse_xy[0])
+      .attr("y2",mouse_xy[1]);
+    }
+  }
+}
 
 function centerEnvironment(){
   if(inside_node === undefined){
@@ -615,7 +692,6 @@ function clickNode(d){
   else if(gui.editionMode() === "linkadd"){
     if(link_to_add.source === null){
       link_to_add.source = d.id;
-      // show source
     }
     else if(link_to_add.source != null && link_to_add.source != d.id){
       link_to_add.target = d.id;
@@ -627,7 +703,7 @@ function clickNode(d){
       restart();
       rst.setEnvironment(inside_node,structure);
       rst.updateLabel(d.id);
-      // show target
+      gui.removeSelectLine();
     }
   }
   else if(gui.editionMode() === "stateexplode"){
@@ -793,11 +869,9 @@ function restart(e){
     .style("opacity",rst.labelTextOpacity)
     .text(rst.labelText);
 
-      // >>> go to center
-
   // Update and restart the simulation.
   simulation.nodes(graph.nodes); // + on tick?
-  simulation.force("link").links(graph.links); // graph.links
+  simulation.force("link").links(graph.links);
   if(run_translate){
     var transform = d3.select("g").node();
       var mouse_xy = d3.mouse(transform);

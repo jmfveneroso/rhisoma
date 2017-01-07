@@ -61,7 +61,7 @@ Afazeres:
 	OK - Estilo dos nodes em stand-by
 	OK - Embed Source Sans Pro
 	OK - Ajustar tamanhos do nódulo no nodeClose [mínimo]
-		- Ajustar distâncias entre os nódulos
+		~~ Ajustar distâncias entre os nódulos
 		- Ajustar estilo dos labels que ficam escondidos
 		- Estilo das linhas em função da urgência [hoje é preto e grosso?, datas no futuro são mais finas?]
 		% Detalhes de estilo [cores, desenho dos nódulos, etc]
@@ -82,8 +82,8 @@ Afazeres:
 	OK - Implementar collapse
 	OK - Implementar stand-by
 		- Quando o zoom aproxima, revelar labels escondidos
-		- Ajustar collapse e close para funcionar dentro de nodes
-			- Impedir ligações em nodes que estejam closed
+		- Ajustar collapse e close para funcionar dentro de nodes [não voltar para root quando o node for collapsed ou closed]
+		- Impedir ligações em nodes que estejam closed
 		- Só desenhar active nodes
 		- Navegação por período
 		- Barra superior [de sistema] com infos da plataforma, do usuário, barra de busca, etc
@@ -126,10 +126,10 @@ Afazeres:
 		OK - Close // fecha children
 		OK - Collapse // abre children
 		OK - Stand-by // cinza
+	OK - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados [linha que acompanha o mouse]
 		- Seleção de grupo no control panel do node
 		- Na tarefa, criar botão para indicar que ela foi concluída
-7		>> - Date picker no control panel do node
-6		>> - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados
+6		>> - Date picker no control panel do node
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
@@ -138,14 +138,6 @@ Afazeres:
 	OK - Esboço de classe que comunica com o back-end
 		- Implementar funções de atualização do BD a cada modificação no grafo
 		- Guardar x, y, vx, vy no BD
-
-		Outros
-		- XML para português e para inglês
-		- ajustar <head> com título, etc
-		- criar templates de territórios:
-			- agenda
-			- mapa mental
-			- bookmarks
 
 		Bugs e adendos
 	OK - Comportamento errático dos labels durante zoom e pan
@@ -182,8 +174,13 @@ Afazeres:
 	OK - Em espera, node fechado não fica na cor de standby
 	OK - Em espera, node fechado que é aberto não fica na cor de standby
 	OK - Ao adicionar node novo, linkar em grupo standby e trocar tipo de node, o node não fica cinza
+	OK - Traduzir zoom scale e position para a linha de seleção de link quando dentro de node ou no root
+	OK - Deletar link pela lixeira logo depois de criar está dando pau [problema na geração do id para o link; tinha que ser string era int]
+	OK - Limpar função de linha que mostra source e target no link_add; arrumar drag e ticked
+5		>> - Durante link_add: impedir seleção de linha e atualizar o x2 e y2 da selecting line para o node onde está o mouseover
+		- Não mostrar closed nodes que estejam dentro de closed nodes
 		- No navigateExit sobram nódulos conectados por ligação tipo 2 de grupos que estão closed
-		~~ Ajustar simulation stop
+		~~ Ajustar simulation stop [conversar com john: deve parar todos os nodes? a volta para movimento deve ser automática?]
 		- Quando cria um nódulo, conecta e tenta editar o link: erro (não reconhece id do link [na criação do link tem que atualizar o all_links])
 		- Impedir ação de clique no clique duplo
 		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
@@ -196,6 +193,14 @@ Afazeres:
 		% buraco negro não pode ser source
 
 		
+		Outros
+		- XML para português e para inglês
+		- ajustar <head> com título, etc
+		- criar templates de territórios:
+			- agenda
+			- mapa mental
+			- bookmarks
+
 		Estrutura do código
 	OK - Passar estilização do grafo no html para uma classe dedicada [rhizomaStyle.js]
 	OK - Transferir funções de atualização de label do index para o RhizomaStyle [updateLabel]
@@ -209,17 +214,6 @@ Afazeres:
 	> subscription.html
 - Estilizar com base no arquivo de referência do John
 
-		> pagamento
-	- Implementar integração com o PayPal, PagSeguro ou equivalente
-		Pagseguro: 3.99% + R$0,40 por transação & 5% uso internacional + 6.38% IOF
-		Paypal [solução melhor para internacional]: 4.99% + R$0,60 por transação no Brasil & 5.99% + tarifa por moeda por transação internacional
-
-	Modelo de negócio:
-			Grátis até 20 (?) nódulos ativos
-		Pago depois disso: R$20 por ano (?)
-
-		no futuro: Grátis para um usuário, nódulos ilimitados; pago para sincronizar rizomas entre mais de um usuário (R$40 por ano?)
-
 
 	> MARKETING
 
@@ -230,8 +224,9 @@ Divulgação FB
 	OK - 01 | 20.12.2016 | Vem chegando o ano novo e, com ele, uma nova plataforma. Estamos preparando um incrível lançamento para as primeiras semanas de 2017! (Foto do protoboard)
 	OK - 02 | 22.12.2016 | (Close do orkhestra)
 	OK 03 | 24.12.2016 | (Orkhestra inteiro)
-	- 04 | 26.12.2016 | (Navegação no orkhestra)
-	- 05 | 28.12.2016 | Inscreva-se no orkhestra para ...
+	- 04 | 07.01.2017 | (Navegação no orkhestra)
+	- 05 | 10.01.2017 | Inscreva-se no orkhestra para ...
+	- após lançamento | vídeo de divulgação (neems)
 
 - escrever texto do release
 - tirar screenshots para enviar no release
