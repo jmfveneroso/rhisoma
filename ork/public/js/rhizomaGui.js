@@ -1260,6 +1260,11 @@ function RhizomaGui(gui){
 			}
 		};
 		var mouseDownMain = function(){
+			if(edit_item === "linkadd"){
+				edit_item = "cancellink";
+				master.eventFire(document.body, 'click');
+				edit_item = "linkadd";
+			}
 			var current_id = this.id.split("-");
 			current_id = current_id[current_id.length-1];
 			// show link, node or state
@@ -1340,6 +1345,11 @@ function RhizomaGui(gui){
 			}	
 		};
 		var mouseDownSecondary = function(){
+			if(edit_item === "linkadd"){
+				edit_item = "cancellink";
+				master.eventFire(document.body, 'click');
+				edit_item = "linkadd";
+			}
 			var current_id = this.id.split("-");
 			current_id = current_id[current_id.length-1];
 			

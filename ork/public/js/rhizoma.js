@@ -717,7 +717,6 @@ function Rhizoma(){
 			sum++;
 		}
 		master.updateGraph();
-		// console.log(active_graph);
 		// quando um node é deletado, os children dele devem ser deletados? ou então: conectar os próximos na cadeia no source do deletado
 	}
 

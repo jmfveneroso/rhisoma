@@ -61,6 +61,8 @@ Afazeres:
 	OK - Embed Source Sans Pro
 	OK - Ajustar tamanhos do nódulo no nodeClose [mínimo]
 	OK - Ajustar estilo dos labels que ficam escondidos
+6		>> - Quando hidden labels estão visíveis: evidenciar com uppercase e bold no mouse over
+		- Evidenciar link selecionado
 		~~ Ajustar distâncias entre os nódulos
 		- Estilo das linhas em função da urgência [hoje é preto e grosso?, datas no futuro são mais finas?]
 		% Detalhes de estilo [cores, desenho dos nódulos, etc]
@@ -86,12 +88,13 @@ Afazeres:
 		- Só desenhar active nodes
 		- Navegação por período
 		- Barra superior [de sistema] com infos da plataforma, do usuário, barra de busca, etc
-			- Esboço
-			- Logo do rhisoma
-			- Diferença para usuário logado (nome, configurações, sair) ou não (login e cadastro)
-			- Barra de busca por nódulo
-				- Autocomplete (busca pelo nome do nódulo)
-				- Quando acha: evidencia no rizoma o nódulo encontrado
+&			- Esboço
+&			- Logo do rhisoma
+&			- Barra de busca
+&			- Diferença para usuário logado (nome, configurações, sair) ou não (login e cadastro)
+&			- Barra de busca por nódulo
+&				- Autocomplete (busca pelo nome do nódulo)
+&				- Quando acha: evidencia no rizoma o nódulo encontrado
 		% Calibrar centralização durante navegação nos nódulos
 		% Calibrar algoritmo de força do d3 (para espacializar melhor o mapa e promover interações mais fluidas)
 		% Modo para não perder nódulos desconectados [função para aproximar nódulos]
@@ -126,11 +129,11 @@ Afazeres:
 		OK - Collapse // abre children
 		OK - Stand-by // cinza
 	OK - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados [linha que acompanha o mouse]
-		- Seleção de grupo no control panel do node
-		- Na tarefa, criar botão para indicar que ela foi concluída
+7		>> - Seleção de grupo no control panel do node
+8		>> - Na tarefa, criar botão para indicar que ela foi concluída
 9		>> - Date picker no control panel do node
 		- Barra de seleção de tempo (na base, da primeira data até a última)
-		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
+&		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
 
 		BD %integração com John
@@ -177,8 +180,13 @@ Afazeres:
 	OK - Deletar link pela lixeira logo depois de criar está dando pau [problema na geração do id para o link; tinha que ser string era int]
 	OK - Limpar função de linha que mostra source e target no link_add; arrumar drag e ticked
 	OK - Atualizar rect da categoria principal no delete_link
-		- Atualizat estilo do rect no node delete [quando o node deletado tem uma ligação com node primário]
-8		>> - Durante link_add: impedir seleção de linha e atualizar o x2 e y2 da selecting line para o node onde está o mouseover
+	OK - Após restart, checar se reveal_labels está true ou false e recriar estilos com base nisso
+	OK - Atualizar estilo do rect no node delete [quando o node deletado tem uma ligação com o node primário]
+	OK - Durante link_add: impedir seleção de linha e atualizar o x2 e y2 da selecting line para o node onde está o mouseover
+	OK - Após clicar em um node closed: ao sair [clicar fora do nódulo ou em outro nódulo] o estilo não fica correto
+	OK - Ao selecionar link quando node está selecionado, limpar seleção de node e resetar estilo do node
+	OK - Cancelar processos de edição se o usuário clicar em qualquer outro botão do editing panel // no rhizomaGui, disparar evento
+		- Limpar node ou link do rhizomaGui nas seleções progressivas
 		- Não mostrar closed nodes que estejam dentro de closed nodes
 		- No navigateExit sobram nódulos conectados por ligação tipo 2 de grupos que estão closed
 		~~ Ajustar simulation stop [conversar com john: deve parar todos os nodes? a volta para movimento deve ser automática?]
@@ -187,7 +195,6 @@ Afazeres:
 		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
 		~~ - Linkar um node primário como target de uma ligação de dependência não afeta sua cor [contabilizar todas as conexões (tipos 1, 2 e 3) para usar como referência]
 		- Se o novo node, quando ligado, for o source, acontecem erros (posicao fx e fy permanecem fixas, seleção fica no target, etc)
-		- Cancelar ligação se o usuário clicar em qualquer outro botão do editing panel
 		% - (?) Node sem source que não seja categoria não deve mostrar label
 		% lentidão no primeiro drag do graph (e em momentos eventuais: fazer teste de benchmark quando estiver pronto para descobrir as funções que podem ser otimizadas)
 		% (?) iterar rect do label somente nos elementos sem sources (primários) de modo que não seja necessário desenhar todos os labels [integrar no init; colocar classe "primary" nos labels respectivos]
@@ -205,7 +212,8 @@ Afazeres:
 		Estrutura do código
 	OK - Passar estilização do grafo no html para uma classe dedicada [rhizomaStyle.js]
 	OK - Transferir funções de atualização de label do index para o RhizomaStyle [updateLabel]
-		- Sintetizar rhizoma.js > rhizomaNavigation.js
+		- Criar arquitetura de classes e melhor organização do código
+			Especialmente classes rhisoma
 
 	> login.html
 - Estilizar com base no arquivo de referência do John
