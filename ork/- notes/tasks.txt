@@ -37,7 +37,6 @@ Afazeres:
 
 
 
-
 		> index.html [prototipagem no forcedirected.html]
 
 		Processamento
@@ -61,8 +60,8 @@ Afazeres:
 	OK - Estilo dos nodes em stand-by
 	OK - Embed Source Sans Pro
 	OK - Ajustar tamanhos do nódulo no nodeClose [mínimo]
+	OK - Ajustar estilo dos labels que ficam escondidos
 		~~ Ajustar distâncias entre os nódulos
-		- Ajustar estilo dos labels que ficam escondidos
 		- Estilo das linhas em função da urgência [hoje é preto e grosso?, datas no futuro são mais finas?]
 		% Detalhes de estilo [cores, desenho dos nódulos, etc]
 		% (?) Animações e transições
@@ -81,7 +80,7 @@ Afazeres:
 	OK - Quando entra ou sai de um nódulo: centralizar mapa no nódulo clicado e adaptar zoom para ser o mais próximo possível com todos os nodes sendo mostrados (se o zoom for negativo: considerar zoom = 1, tamanho natural, de modo que os labels fiquem legíveis)
 	OK - Implementar collapse
 	OK - Implementar stand-by
-		- Quando o zoom aproxima, revelar labels escondidos
+	OK - Quando o zoom aproxima, revelar labels escondidos
 		- Ajustar collapse e close para funcionar dentro de nodes [não voltar para root quando o node for collapsed ou closed]
 		- Impedir ligações em nodes que estejam closed
 		- Só desenhar active nodes
@@ -129,7 +128,7 @@ Afazeres:
 	OK - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados [linha que acompanha o mouse]
 		- Seleção de grupo no control panel do node
 		- Na tarefa, criar botão para indicar que ela foi concluída
-6		>> - Date picker no control panel do node
+9		>> - Date picker no control panel do node
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
@@ -177,7 +176,9 @@ Afazeres:
 	OK - Traduzir zoom scale e position para a linha de seleção de link quando dentro de node ou no root
 	OK - Deletar link pela lixeira logo depois de criar está dando pau [problema na geração do id para o link; tinha que ser string era int]
 	OK - Limpar função de linha que mostra source e target no link_add; arrumar drag e ticked
-5		>> - Durante link_add: impedir seleção de linha e atualizar o x2 e y2 da selecting line para o node onde está o mouseover
+	OK - Atualizar rect da categoria principal no delete_link
+		- Atualizat estilo do rect no node delete [quando o node deletado tem uma ligação com node primário]
+8		>> - Durante link_add: impedir seleção de linha e atualizar o x2 e y2 da selecting line para o node onde está o mouseover
 		- Não mostrar closed nodes que estejam dentro de closed nodes
 		- No navigateExit sobram nódulos conectados por ligação tipo 2 de grupos que estão closed
 		~~ Ajustar simulation stop [conversar com john: deve parar todos os nodes? a volta para movimento deve ser automática?]

@@ -240,6 +240,100 @@ function RhizomaStyle(){
 	  return opacity;
 	}
 
+	this.labelTextZoomOpacity = function(d){
+	  var opacity = 1;
+	  if(d.parentConnections === 0 || d.type === "categoria"){ // + atividades que encerram hoje
+	    opacity = 0.8;
+	  }
+	  else if(d.standby === 1){
+	  	opacity = 0;
+	  }
+	  return opacity;
+	}
+
+	this.labelTextZoomFill = function(d){
+	  if(d.parentConnections === 0){
+	  	if(d.standby === 0){
+	  		return color(d.group);
+	  	}
+	    else{
+	    	return "#c9c9c9";
+	    }
+	  }
+	  else if(d.type === "categoria"){
+	  	if(d.standby === 0){
+	  		return color(d.group);
+	  	}
+	    else{
+	    	return "#c9c9c9";
+	    }
+	  }
+	  else{
+	  	if(d.standby === 0){
+	  		return "black";
+	  	}
+	    else{
+	    	return "#c9c9c9";
+	    }
+	  }
+	}
+
+	this.labelTextZoomTextAnchor = function(d){
+		if(d.type != "categoria" && d.parentConnections != 0){
+			return "left";
+		}
+		else{
+			return "middle";
+		}
+	}
+
+	this.labelTextZoomFontSize = function(d){
+	  var font_size = null;
+	  if(d.parentConnections === 0){
+	  	font_size = 12;
+	  }
+	  else if(d.type === "categoria"){
+	  	font_size = 10;
+	  }
+	  else{ // + atividades que encerram hoje
+	    font_size = 6;
+	  }
+	  return font_size;
+	}
+
+	this.labelTextZoomY = function(d){
+		if(d.parentConnections === 0){
+	   		return Math.sqrt((100*d.size)/Math.PI)+20;
+		  }
+		  else if(d.type === "categoria"){
+		    return Math.sqrt((100*d.size)/Math.PI)+18;
+		  }
+		  else{
+		  	// return Math.sqrt((100*d.size)/Math.PI)+6;
+		  	return 2;//Math.sqrt((100*d.size)/Math.PI)-3;
+		  }
+	}
+
+	this.labelTextZoomX = function(d){
+		var offset_x = 0;
+		if(d.parentConnections != 0 && d.type != "categoria"){
+			offset_x = Math.sqrt((100*d.size)/Math.PI)+4;//((document.getElementById("label-"+d.id).getBBox().width/2)+(d.size))+7;
+		}
+		
+		return offset_x;
+	}
+
+	this.labelRectZoomOpacity = function(d){
+	  var opacity = 0;
+	  if(d.parentConnections === 0 && d.childConnections > 0){
+	    opacity = 0.1;
+	  }
+	  else if(d.type === "categoria"){
+	    opacity = 0.1;
+	  }
+	  return opacity;
+	}
+
 	this.labelTextFontWeight = function(d){
 	  if(d.parentConnections === 0){
 	    return 800;
