@@ -212,6 +212,7 @@ Afazeres:
 		Estrutura do código
 	OK - Passar estilização do grafo no html para uma classe dedicada [rhizomaStyle.js]
 	OK - Transferir funções de atualização de label do index para o RhizomaStyle [updateLabel]
+	OK - Criação de rhisoma.css para incluir o estilo da página
 		- Criar arquitetura de classes e melhor organização do código
 			Especialmente classes rhisoma
 
@@ -227,7 +228,8 @@ Afazeres:
 	> MARKETING
 
 Design
-	- Logo
+	OK - Logo
+	~~ Fonte
 
 Divulgação FB
 	OK - 01 | 20.12.2016 | Vem chegando o ano novo e, com ele, uma nova plataforma. Estamos preparando um incrível lançamento para as primeiras semanas de 2017! (Foto do protoboard)
@@ -237,9 +239,9 @@ Divulgação FB
 	- 05 | 10.01.2017 | Inscreva-se no orkhestra para ...
 	- após lançamento | vídeo de divulgação (neems)
 
+OK - comprar domínio rhisoma.com
 - escrever texto do release
 - tirar screenshots para enviar no release
-- fazer lista de blogueiros e sites para divulgação
+~~ fazer lista de blogueiros e sites para divulgação
 - pré-divulgar [oferecer cadastro para beta] para os blogueiros antes do lançamento público [alpha online]
 - fazer página de informação no site do sumbioun
-- comprar domínio orkhestra

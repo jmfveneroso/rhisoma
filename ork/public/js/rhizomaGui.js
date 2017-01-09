@@ -1,6 +1,11 @@
 function RhizomaGui(gui){
 
 	var master = this;
+
+	// var rfn = new RhisomaGuiFunctions();
+	// rfn.prototype = RhisomaGui.prototype;
+	// rfn.prototype.constructor = rfn;
+
 	var current_node = undefined;
 	var the_node = undefined;
 	var current_link = undefined;
@@ -110,16 +115,6 @@ function RhizomaGui(gui){
 
 	this.closeNode = function(){
 		return close_node;
-	}
-
-	this.eventFire = function(el, etype){
-	  if (el.fireEvent) {
-	    el.fireEvent('on' + etype);
-	  } else {
-	    var evObj = document.createEvent('Events');
-	    evObj.initEvent(etype, true, false);
-	    el.dispatchEvent(evObj);
-	  }
 	}
 
 	/* CONTROL PANEL */
@@ -341,12 +336,6 @@ function RhizomaGui(gui){
 		}
 	}
 
-	this.removeElement = function(element){
-		if(document.getElementById("control-panel-"+element) != null){
-			document.getElementById("control-panel-"+element).parentElement.removeChild(document.getElementById("control-panel-"+element));
-		}
-	}
-
 	/* LOCK */
 
 	this.lockControlPanel = function(lock_mode){
@@ -429,30 +418,6 @@ function RhizomaGui(gui){
 		gui.addField(description,"control-panel");
 		gui.addText("control-panel-description",node.description);
 		offset_x += 120;
-	}
-
-	this.formatTimestamp = function(in_date){
-		var elements = in_date.split(" ");
-		var date = undefined;
-		var time = undefined;
-		if(elements[0] != null){
-			date = elements[0].split("-");
-		}
-		if(elements[1] != null){
-			time = elements[1].split(":");
-		}
-		var processed_timestamp = [];
-
-		if(date.length === 3 && time.length === 3){
-			processed_timestamp[0] = date[2] + "/" + date[1] + "/" + date[0];
-			processed_timestamp[1] = time[0] + "h" + time[1];
-		}
-		else{
-			processed_timestamp[0] = "-";
-			processed_timestamp[1] = "";
-		}
-
-		return processed_timestamp;
 	}
 
 	this.addDateStart = function(node){
@@ -1382,6 +1347,48 @@ function RhizomaGui(gui){
 		button.onmouseout =   mouseOutSecondary;
 		button.onmousedown = mouseDownSecondary;
 
+	}
+
+	/* FUNCTIONS */
+
+	this.formatTimestamp = function(in_date){
+		var elements = in_date.split(" ");
+		var date = undefined;
+		var time = undefined;
+		if(elements[0] != null){
+			date = elements[0].split("-");
+		}
+		if(elements[1] != null){
+			time = elements[1].split(":");
+		}
+		var processed_timestamp = [];
+
+		if(date.length === 3 && time.length === 3){
+			processed_timestamp[0] = date[2] + "/" + date[1] + "/" + date[0];
+			processed_timestamp[1] = time[0] + "h" + time[1];
+		}
+		else{
+			processed_timestamp[0] = "-";
+			processed_timestamp[1] = "";
+		}
+
+		return processed_timestamp;
+	}
+
+	this.eventFire = function(el, etype){
+	  if (el.fireEvent) {
+	    el.fireEvent('on' + etype);
+	  } else {
+	    var evObj = document.createEvent('Events');
+	    evObj.initEvent(etype, true, false);
+	    el.dispatchEvent(evObj);
+	  }
+	}
+
+	this.removeElement = function(element){
+		if(document.getElementById("control-panel-"+element) != null){
+			document.getElementById("control-panel-"+element).parentElement.removeChild(document.getElementById("control-panel-"+element));
+		}
 	}
 
 }

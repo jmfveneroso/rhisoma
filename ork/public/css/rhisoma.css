@@ -1,0 +1,83 @@
+@charset "UTF-8";
+
+body{
+  margin:0;
+  top:0;
+  left:0;
+  overflow:hidden;
+  /*background-color: #ededed;*/
+}
+
+input.edit-title{
+  width:260px;
+  color: blue;
+  border:none;
+  border-bottom: 1px black solid;
+  font-family: Source Sans Pro;
+  font-size: 16px;
+  font-weight:800;
+  text-transform: uppercase;
+  background-color: transparent;
+}
+
+input.edit-title:focus{
+  color: black;
+  outline: none;
+}
+
+textarea.edit-description{
+  color:black;
+  font-size:16px;
+  font-family: Source Sans Pro;
+  font-weight: 400;
+  background-color: white;
+  resize: vertical;
+}
+
+textarea.edit-description:focus{
+  border:1px black solid;
+  outline: none;
+}
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 1;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
+}
+
+.labels{
+  pointer-events: none;
+}
+
+.buttons {
+  background-image: url("../media/button-border.png");
+  background-size: 40px 40px;
+  background-color: rgba(255,255,255,0.9);
+}
+
+.secondary-buttons {
+ /* background-image: url("public/media/button-border.png");
+  background-size: 40px 40px;
+  background-color: rgba(255,255,255,0.7);*/
+  border: 1px dotted black;
+  background-color: rgba(255,255,255,0.9);
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+     -khtml-user-select: none; /* Konqueror */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  not supported by any browser */
+}

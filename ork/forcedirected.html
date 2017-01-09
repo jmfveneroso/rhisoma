@@ -1,95 +1,13 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
-
-body{
-  margin:0;
-  top:0;
-  left:0;
-  overflow:hidden;
-  /*background-color: #ededed;*/
-}
-
-input.edit-title{
-  width:260px;
-  color: blue;
-  border:none;
-  border-bottom: 1px black solid;
-  font-family: Source Sans Pro;
-  font-size: 16px;
-  font-weight:800;
-  text-transform: uppercase;
-  background-color: transparent;
-}
-
-input.edit-title:focus{
-  color: black;
-  outline: none;
-}
-
-textarea.edit-description{
-  color:black;
-  font-size:16px;
-  font-family: Source Sans Pro;
-  font-weight: 400;
-  background-color: white;
-  resize: vertical;
-}
-
-textarea.edit-description:focus{
-  border:1px black solid;
-  outline: none;
-}
-
-.links line {
-  stroke: #999;
-  stroke-opacity: 1;
-}
-
-.nodes circle {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-
-.node text {
-  pointer-events: none;
-  font: 10px sans-serif;
-}
-
-.labels{
-  pointer-events: none;
-}
-
-.buttons {
-  background-image: url("public/media/button-border.png");
-  background-size: 40px 40px;
-  background-color: rgba(255,255,255,0.9);
-}
-
-.secondary-buttons {
- /* background-image: url("public/media/button-border.png");
-  background-size: 40px 40px;
-  background-color: rgba(255,255,255,0.7);*/
-  border: 1px dotted black;
-  background-color: rgba(255,255,255,0.9);
-}
-
-.noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Chrome/Safari/Opera */
-     -khtml-user-select: none; /* Konqueror */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  not supported by any browser */
-}
-
-</style>
+<link rel="stylesheet" type="text/css" href="public/css/rhisoma.css?v=0.0.1">
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
 <script src="public/js/rhizoma.js"></script>
 <script src="public/js/rhizomaGui.js"></script>
+<script src="public/js/rhisomaGuiFunctions.js"></script>
+<script src="public/js/rhisomaGuiElements.js"></script>
 <script src="public/js/rhizomaStyle.js"></script>
 <script src="public/js/rhizomaCommunicator.js"></script>
 <script src="public/js/gui.js"></script>
