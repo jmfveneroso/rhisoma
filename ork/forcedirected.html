@@ -8,6 +8,7 @@
 <script src="public/js/rhizomaGui.js"></script>
 <script src="public/js/rhisomaGuiFunctions.js"></script>
 <script src="public/js/rhisomaGuiElements.js"></script>
+<script src="public/js/rhisomaGuiCalendar.js"></script>
 <script src="public/js/rhizomaStyle.js"></script>
 <script src="public/js/rhizomaCommunicator.js"></script>
 <script src="public/js/gui.js"></script>
@@ -93,6 +94,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
     .data(graph.links)
     .enter().append("line")
     .attr("id",function(d){return "the-line-"+d.id;})
+    .attr("class","link")
     // .style("marker-end",  "url(#suit)")
     .attr("stroke-width", rst.linkStrokeWidth)
     .attr("stroke-dasharray", rst.linkStrokeDash)
@@ -466,7 +468,7 @@ function environmentStabilize(){
   if(gui.editionMode() != undefined && inside_node === undefined){
     if(gui.editionMode() === "environmentstabilize"){
       var update_nodes = svg.selectAll("g").filter(".node").each(function(d){structure.updateNodeXY(d);});
-      var update_links = svg.selectAll("line").each(function(d){structure.updateLinkXY(d);});
+      var update_links = svg.selectAll("line").filter(".link").each(function(d){structure.updateLinkXY(d);});
       gui.closeMenus();
     }
     else if(gui.editionMode() === "environmentstop"){
@@ -860,6 +862,8 @@ function mouseDoubleClick(d){
   /* UPDATE GRAPH FUNCTIONS */
 
 function restart(e){
+  var update_nodes = svg.selectAll("g").filter(".node").each(function(d){structure.updateNodeXY(d);});
+  var update_links = svg.selectAll("line").filter(".link").each(function(d){structure.updateLinkXY(d);});
   graph = structure.getGraph();
 
   rst.setEnvironment(inside_node,structure);
@@ -898,6 +902,7 @@ function restart(e){
   link = link.enter()
     .append("line")
     .attr("id",function(d){return "the-line-"+d.id;})
+    .attr("class","link")
     .attr("stroke-width", rst.linkStrokeWidth)
     .attr("stroke-dasharray", rst.linkStrokeDash)
     .style("stroke-linecap", "round")
