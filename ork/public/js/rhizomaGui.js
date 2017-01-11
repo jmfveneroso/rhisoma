@@ -639,8 +639,7 @@ function RhizomaGui(gui){
 	}
 
 	this.addEditTaskCompleted = function(node){
-		var current_date = master.formatTimestamp(node.date_end);
-		var field = {id:"control-panel-date-end",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
+		var field = {id:"control-panel-task-completed",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
 		gui.addField(field,"control-panel");
 
 		var field_label = {id:"control-panel-date-end-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
@@ -650,7 +649,19 @@ function RhizomaGui(gui){
 		var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
 		gui.addField(field_date_end,"control-panel-date-end");
 		gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
-		offset_x += 40;
+		offset_x += 20;
+	}
+
+	this.addEditGroup = function(node){
+		// no clique: dropdown
+		var field = {id:"control-panel-group",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
+		gui.addField(field_label,"control-panel");
+		gui.addText("control-panel-group","Fim");
+
+		var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
+		gui.addField(field_date_end,"control-panel-date-end");
+		gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
+		offset_x += 20;
 	}
 
 	this.addEditLinks = function(node){

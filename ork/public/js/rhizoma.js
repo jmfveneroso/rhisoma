@@ -722,6 +722,7 @@ function Rhizoma(){
 
 	this.addLink = function(links){
 		var link_match = master.linkExists(links);
+		var link_update = false;
 		if(!link_match.exists){
 			var index_target = null;
 			var index_source = null;
@@ -751,13 +752,17 @@ function Rhizoma(){
 			entire_graph.links.push(link);
 			active_graph.links.push(link);	
 			master.updateGraph();
+			link_update = true;
 		}
 		else if(link_match.exists && link_match.change_type != undefined && entire_graph.links[link_match.change_type].type != 3){
 			entire_graph.links[link_match.change_type].type = 2;
 			var active_link_index = master.getActiveLinkIndex(entire_graph.links[link_match.change_type].id);
 			active_graph.links[active_link_index].type = 2;
 			master.updateGraph();
+			link_update = true;
 		}
+
+		return link_update;
 	}
 
 	this.linkExists = function(links){
