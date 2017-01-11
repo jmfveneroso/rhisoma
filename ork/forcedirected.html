@@ -408,6 +408,7 @@ function environmentMove(){
         pass_transform = reference_transform.attr("transform");
       }
       var source_node = svg.select("#node-"+link_to_add.source);
+      var current_node_index = structure.getActiveNodeIndex(link_to_add.source);
       var source_node_transform = source_node.attr("transform");
       var pass_translate = source_node_transform.substring(source_node_transform.indexOf("(")+1, source_node_transform.indexOf(")")).split(",");
       var init_data = [];
@@ -425,7 +426,15 @@ function environmentMove(){
       .attr("id","select-line")
       .attr("stroke-width", "1")
       .style("stroke-linecap", "round")
-      .style("stroke", "black")
+      .style("stroke", function(){
+        if(graph.nodes[current_node_index].standby === 0){
+          var color_line = graph.nodes[current_node_index].group;
+          return color(color_line);
+        }
+        else{
+          return "#c9c9c9";
+        }
+      })
       .style("pointer-events","none");
 
       var the_line = svg.select("#select-line")
@@ -575,9 +584,14 @@ function mouseDownLink(d){
     current_node = {};
   }
   if(gui.editionMode() === "linkdelete"){
+    var link_source = d.source.id;
+    var link_target = d.target.id;
     structure.deleteLink(d.id);
     gui.closeMenus();
     restart();
+    rst.setEnvironment(inside_node,structure);
+    rst.updateLabel(link_source);
+    rst.updateLabel(link_target);
   }
   else{
     if(current_link.id != d.id && document.getElementById("the-line-"+current_link.id) != null){
@@ -790,11 +804,11 @@ function clickNode(d){
       link_to_add.source = null;
       link_to_add.target = null;
       gui.closeMenus();
-      gui.updateControlPanel(structure.getNode(d), "NODE", true);
       restart();
       rst.setEnvironment(inside_node,structure);
       rst.updateLabel(d.id);
       gui.removeSelectLine();
+      // gui.updateControlPanel(structure.getNode(d), "NODE", true);
     }
   }
   else if(gui.editionMode() === "stateexplode"){

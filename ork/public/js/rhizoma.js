@@ -721,17 +721,10 @@ function Rhizoma(){
 	}
 
 	this.addLink = function(links){
-		// ANALIZE check if link already exists
-		var link_match = false;
-		for(var i = 0; i < entire_graph.links.length; i++){
-			if(entire_graph.links[i].target === links.target){// && entire_graph.links[i].type != 3){
-				link_match = true;
-			}
-		}
-
-		var index_target = null;
-		var index_source = null;
-		if(!link_match){
+		var link_match = master.linkExists(links);
+		if(!link_match.exists){
+			var index_target = null;
+			var index_source = null;
 			for(var i = 0; i < entire_graph.nodes.length; i++){
 				if(entire_graph.nodes[i].id === links.target){
 					index_target = i;
@@ -740,23 +733,56 @@ function Rhizoma(){
 					index_source = i;
 				}
 			}
-			if(entire_graph.nodes[index_target].size<=1){
+			if(link_match.new_target){
 				entire_graph.nodes[index_target].group = entire_graph.nodes[index_source].group;
-				entire_graph.nodes[index_target].fx = null;
-				entire_graph.nodes[index_target].fy = null;
+			}
+			entire_graph.nodes[index_target].fx = null;
+			entire_graph.nodes[index_target].fy = null;
+			entire_graph.nodes[index_source].fx = null;
+			entire_graph.nodes[index_source].fy = null;
+
+			var link = {}; // pegar id do BD
+			link.source = links.source.toString();
+			link.target = links.target.toString();
+			link.value = 1;
+			link.type = 1;
+			var link_id = entire_graph.links.length + Math.floor(Math.random() * (900 - 1)) + 1;
+			link.id = link_id.toString();
+			entire_graph.links.push(link);
+			active_graph.links.push(link);	
+			master.updateGraph();
+		}
+		else if(link_match.exists && link_match.change_type != undefined && entire_graph.links[link_match.change_type].type != 3){
+			entire_graph.links[link_match.change_type].type = 2;
+			var active_link_index = master.getActiveLinkIndex(entire_graph.links[link_match.change_type].id);
+			active_graph.links[active_link_index].type = 2;
+			master.updateGraph();
+		}
+	}
+
+	this.linkExists = function(links){
+		/* Checks if link already exists */
+		var link_match = {};
+		link_match.new_target = true;
+		link_match.new_source = true;
+		link_match.exists = false;
+		link_match.change_type = undefined;
+		for(var i = 0; i < entire_graph.links.length; i++){
+			if(entire_graph.links[i].target === links.target && entire_graph.links[i].source === links.source){
+				link_match.exists = true;
+			}
+			else if(entire_graph.links[i].source === links.target && entire_graph.links[i].target === links.source){
+				link_match.exists = true;
+				link_match.change_type = i;
+			}
+			if(entire_graph.links[i].source === links.target || entire_graph.links[i].target === links.target){
+				link_match.new_target = false;
+			}
+			if(entire_graph.links[i].source === links.source || entire_graph.links[i].target === links.source){
+				link_match.new_source = false;
 			}
 		}
-
-		var link = {}; // pegar id do BD
-		link.source = links.source.toString();
-		link.target = links.target.toString();
-		link.value = 1;
-		link.type = 1;
-		var link_id = entire_graph.links.length + Math.floor(Math.random() * (900 - 1)) + 1;
-		link.id = link_id.toString();
-		entire_graph.links.push(link);
-		active_graph.links.push(link);	
-		master.updateGraph();
+		return link_match;
 	}
 
 	this.deleteLink = function(this_link){
@@ -811,6 +837,21 @@ function Rhizoma(){
 		var this_node = undefined;
 		while(!found_match){
 			if(node_id === active_graph.nodes[index].id){
+				found_match = true;
+			}
+			else{
+				index++;	
+			}
+		}
+		return index;
+	}
+
+	this.getActiveLinkIndex = function(link_id){
+		var found_match = false;
+		var index = 0;
+		var this_link = undefined;
+		while(!found_match){
+			if(link_id === active_graph.links[index].id){
 				found_match = true;
 			}
 			else{
