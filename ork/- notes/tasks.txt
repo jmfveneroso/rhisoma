@@ -1,4 +1,4 @@
-Afazeres:
+Afazeres p/ 0.1 Beta:
 
 
 
@@ -62,8 +62,8 @@ Afazeres:
 	OK - Ajustar tamanhos do nódulo no nodeClose [mínimo]
 	OK - Ajustar estilo dos labels que ficam escondidos
 	OK - Linha do linkadd fica na cor do source node
-12		>> - Quando hidden labels estão visíveis: evidenciar com uppercase e bold no mouse over
-11		>> - Evidenciar link selecionado
+14		>> - Quando hidden labels estão visíveis: evidenciar com uppercase e bold no mouse over
+13		>> - Evidenciar link selecionado
 		- Estilo das linhas em função da urgência [hoje é preto e grosso?, datas no futuro são mais finas?]
 		% Ajustar distâncias entre os nódulos
 		% Detalhes de estilo [cores, desenho dos nódulos, etc]
@@ -84,8 +84,8 @@ Afazeres:
 	OK - Implementar collapse
 	OK - Implementar stand-by
 	OK - Quando o zoom aproxima, revelar labels escondidos
+	OK - Impedir ligações em nodes que estejam closed
 		- Ajustar collapse e close para funcionar dentro de nodes [não voltar para root quando o node for collapsed ou closed]
-		- Impedir ligações em nodes que estejam closed
 		- Só desenhar active nodes
 		- Navegação por período
 		- Barra superior [de sistema] com infos da plataforma, do usuário, barra de busca, etc
@@ -130,14 +130,15 @@ Afazeres:
 		OK - Collapse // abre children
 		OK - Stand-by // cinza
 	OK - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados [linha que acompanha o mouse]
-9		>> - Seleção de grupo no control panel do node
-10		>> - Na tarefa, criar botão para indicar que ela foi concluída
+11		>> - Seleção de grupo no control panel do node
+12		>> - Na tarefa, criar botão para indicar que ela foi concluída
 			no BD: completed && completion_date
-13		>> - Date picker no control panel do node
+15		>> - Date picker no control panel do node
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 &		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
 		- No adicionar node novo: clique sobre um node existente já cria uma ligação
+		- Possibilitar inversão de dependência no control panel de link
 
 		BD %integração com John
 	OK - Esboço de classe que comunica com o back-end
@@ -196,13 +197,14 @@ Afazeres:
 	OK	- Checar se link já existe ao criar link novo
 	OK	- Ao linkar nodes, reconhecer nodes novos e atribuir cores em função da relação de dependência
 	OK - Ao linkar um link com source e target de modo invertido (target e source), mudar tipo de ligação para tipo 3
+	OK - Prevenir double click no node quando em modo de edição [especialmente no linkadd]
 		- Limpar node ou link do rhizomaGui nas seleções progressivas
 		- Não mostrar closed nodes que estejam dentro de closed nodes
 		- No navigateExit sobram nódulos conectados por ligação tipo 2 de grupos que estão closed
 		~~ Ajustar simulation stop [conversar com john: deve parar todos os nodes? a volta para movimento deve ser automática?]
 		- Impedir ação de clique no clique duplo
 		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
-		- Se o novo node, quando ligado, for o source, acontecem erros (posicao fx e fy permanecem fixas, seleção fica no target, etc)
+		- Ao mandar expandir nódulo, checar se nódulo já esta expandido para confirmar se há necessidade de atualizar o grafo
 		% - (?) Node sem source que não seja categoria não deve mostrar label
 		% lentidão no primeiro drag do graph (e em momentos eventuais: fazer teste de benchmark quando estiver pronto para descobrir as funções que podem ser otimizadas)
 		% (?) iterar rect do label somente nos elementos sem sources (primários) de modo que não seja necessário desenhar todos os labels [integrar no init; colocar classe "primary" nos labels respectivos]

@@ -795,20 +795,24 @@ function clickNode(d){
   }
   else if(gui.editionMode() === "linkadd"){
     if(link_to_add.source === null){
-      link_to_add.source = d.id;
-      toggleLinkSelection(false);
+      if(d.collapse != 0){
+        link_to_add.source = d.id;
+        toggleLinkSelection(false);
+      }
     }
     else if(link_to_add.source != null && link_to_add.source != d.id){
-      link_to_add.target = d.id;
-      structure.addLink(link_to_add);
-      link_to_add.source = null;
-      link_to_add.target = null;
-      gui.closeMenus();
-      restart();
-      rst.setEnvironment(inside_node,structure);
-      rst.updateLabel(d.id);
-      gui.removeSelectLine();
-      // gui.updateControlPanel(structure.getNode(d), "NODE", true);
+      if(d.collapse != 0){
+        link_to_add.target = d.id;
+        structure.addLink(link_to_add);
+        link_to_add.source = null;
+        link_to_add.target = null;
+        gui.closeMenus();
+        restart();
+        rst.setEnvironment(inside_node,structure);
+        rst.updateLabel(d.id);
+        gui.removeSelectLine(); 
+        // gui.updateControlPanel(structure.getNode(d), "NODE", true);
+      }    
     }
   }
   else if(gui.editionMode() === "stateexplode"){
@@ -838,38 +842,40 @@ function toggleLinkSelection(check_link_selection){
 }
 
 function mouseDoubleClick(d){
-  run_translate = true;
-  if(d.id != inside_node){       // increase one level on navigation (enter node)
-    structure.navigateRhizomaEnter(d.id);
-    inside_node = d.id;
-    drift[drift.length] = d.id;
-    restart(d); 
-  }
-  else if(d.id === inside_node){ // decreases one level on navigation (exit node [click on inside_node])
-    if(d.parentConnections > 0){
-      structure.navigateRhizomaExitCheck(drift[drift.length-2]);
-      drift.pop();
-      inside_node = drift[drift.length-1];
-      if(drift.length === 0){
+  if(gui.editionMode() != "linkadd" && gui.editionMode() != "nodeadd"){
+    run_translate = true;
+    if(d.id != inside_node){       // increase one level on navigation (enter node)
+      structure.navigateRhizomaEnter(d.id);
+      inside_node = d.id;
+      drift[drift.length] = d.id;
+      restart(d); 
+    }
+    else if(d.id === inside_node){ // decreases one level on navigation (exit node [click on inside_node])
+      if(d.parentConnections > 0){
+        structure.navigateRhizomaExitCheck(drift[drift.length-2]);
+        drift.pop();
+        inside_node = drift[drift.length-1];
+        if(drift.length === 0){
+          go_to_center = true;
+        }
+      }
+      else{ // back to root if level-1 = primary
+        structure.navigateRoot();
+        drift = [];//.pop();
+        inside_node = undefined;
         go_to_center = true;
       }
+      // drift.pop();
+      // inside_node = drift[drift.length-1];
+      restart(d);
     }
-    else{ // back to root if level-1 = primary
+    else{                          // back to root if there is an error
       structure.navigateRoot();
       drift = [];//.pop();
       inside_node = undefined;
       go_to_center = true;
+      restart(d);
     }
-    // drift.pop();
-    // inside_node = drift[drift.length-1];
-    restart(d);
-  }
-  else{                          // back to root if there is an error
-    structure.navigateRoot();
-    drift = [];//.pop();
-    inside_node = undefined;
-    go_to_center = true;
-    restart(d);
   }
 }
 
