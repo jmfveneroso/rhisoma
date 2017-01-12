@@ -672,6 +672,7 @@ function Rhizoma(){
 		entire_graph.nodes.push(new_node);
 		active_graph.nodes.push(new_node);
 		master.updateGraph();
+		return new_node.id;
 	}
 
 	this.deleteNode = function(this_node){	

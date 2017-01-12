@@ -32,14 +32,14 @@ Afazeres p/ 0.1 Beta:
 
 			- Revisar esquema de cores e modo como as cores são atribuídas
 
+			{CONFERIR INDEX E ID, ESPECIALMENTE NO ACTIVE_GRAPH.NODES}
+				!!!!! CONFERIR INDEXES E IDS NOS NODES; importante pegar sempre os ids para integrar com bd
+
 		*** JOHN
 
 			- Só desenhar active nodes [que não estão deletados] {John só deve me passar os active nodes}
 			- John deve guardar x, y, vx e vy de cada node
-
-
-			{CONFERIR INDEX E ID, ESPECIALMENTE NO ACTIVE_GRAPH.NODES}
-				!!!!! CONFERIR INDEXES E IDS NOS NODES; importante pegar sempre os ids para integrar com bd
+			- Função para convidar os amigos [enviar email de convite: deve fornecer email do amigo]
 
 
 
@@ -136,6 +136,7 @@ Afazeres p/ 0.1 Beta:
 		OK - Stand-by // cinza
 	OK - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados [linha que acompanha o mouse]
 	OK - Possibilitar inversão de dependência no control panel de link
+	OK  - No adicionar node novo: clique sobre um node existente já cria uma ligação
 2		>> - Seleção de grupo no control panel do node
 3		>> - Na tarefa, criar botão para indicar que ela foi concluída
 			no BD: completed && completion_date
@@ -143,7 +144,6 @@ Afazeres p/ 0.1 Beta:
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 &		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
-1		>> - No adicionar node novo: clique sobre um node existente já cria uma ligação
 
 		BD %integração com John
 	OK - Esboço de classe que comunica com o back-end

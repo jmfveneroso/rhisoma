@@ -755,7 +755,7 @@ function clickNode(d){
     document.getElementById("the-line-"+current_link.id).style.strokeWidth = "1px";
     current_link = {};
   }
-  if(gui.editionMode() != "nodedelete" && gui.editionMode() != "linkadd" && gui.editionMode() != "stateexplode" && gui.editionMode() != "statecontract" && gui.editionMode() != "stateidle"){
+  if(gui.editionMode() != "nodedelete" && gui.editionMode() != "nodeadd" && gui.editionMode() != "linkadd" && gui.editionMode() != "stateexplode" && gui.editionMode() != "statecontract" && gui.editionMode() != "stateidle"){
     if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) != null){
       if(inside_node != current_node.id){
         if(current_node.type != "buraco"){
@@ -832,6 +832,24 @@ function clickNode(d){
     rst.setEnvironment(inside_node,structure);
     for(var i = 0; i < update_nodes.length; i++){
       rst.updateLabel(update_nodes[i]);
+    }
+  }
+  else if(gui.editionMode() === "nodeadd"){
+    var transform = d3.select("g").node();
+    var mouse_xy = d3.mouse(transform);
+    var node_x = mouse_xy[0];
+    var node_y = mouse_xy[1];
+    var node_id = structure.addNode(node_x,node_y);
+    link_to_add.source = d.id;
+    link_to_add.target = node_id;
+    var link_update = structure.addLink(link_to_add);
+    link_to_add.source = null;
+    link_to_add.target = null;
+    gui.closeMenus();
+    if(link_update){
+      restart();
+      rst.setEnvironment(inside_node,structure);
+      rst.updateLabel(d.id);
     }
   }
   else if(gui.editionMode() === "linkadd"){
