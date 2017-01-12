@@ -207,7 +207,7 @@ Afazeres p/ 0.1 Beta:
 	OK - Limpar node ou link do rhizomaGui nas seleções progressivas {resolvido com código do destaque de link na seleção do link}
 	OK - Remover dropdown-type no lock se ele estiver aberto e cancelar dropdown-type no lock
 	OK - Após unlock o control panel, se sair do link cancelar as edições
-		- Após edição de link o estado é cancelado mesmo que o control panel não seja fechado; ocorre também ao inverter dependência [também não atualiza o rhizomaGui]
+	OK - Após edição de link o estado é cancelado mesmo que o control panel não seja fechado; ocorre também ao inverter dependência [também não atualiza o rhizomaGui]
 		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
 		- Não mostrar closed nodes que estejam dentro de closed nodes
 		- No navigateExit sobram nódulos conectados por ligação tipo 2 de grupos que estão closed

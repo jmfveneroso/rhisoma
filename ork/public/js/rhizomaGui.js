@@ -101,6 +101,7 @@ function RhizomaGui(gui){
 	}
 
 	this.resetLink = function(){
+		current_link = undefined;
 		delete_link = undefined;
 		invert_dependency_link = undefined;
 	}
@@ -702,7 +703,6 @@ function RhizomaGui(gui){
 	}
 
 	this.addInvertDependency = function(link){
-		console.log(offset_x);
 		var field = {id: "control-panel-invert-dependency",height:40,width:40,position:"absolute",top:offset_x-54};
 		gui.addField(field,"control-panel");
 
@@ -711,7 +711,6 @@ function RhizomaGui(gui){
 		gui.addText("control-panel-invert-dependency-"+link.id,'<i class="fa fa-refresh" aria-hidden="true"></i>');
 
 		master.invertDependencyLinkMouseBehavior(link);
-		// offset_x += 40;
 	}
 
 	this.addEditSource = function(link){

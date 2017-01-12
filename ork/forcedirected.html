@@ -539,6 +539,7 @@ function environmentStabilize(){
     rst.setEnvironment(inside_node,structure);
     rst.updateLabel(source_id);
     rst.updateLabel(target_id);
+    current_link = {};
   }
 
   if(gui.invertDependencyLink() != undefined){
@@ -563,6 +564,7 @@ function environmentStabilize(){
     rst.setEnvironment(inside_node,structure);
     rst.updateLabel(updated_link.source);
     rst.updateLabel(updated_link.target);
+    current_link = {};
   }
 }
 
