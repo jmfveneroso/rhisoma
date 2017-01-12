@@ -252,6 +252,7 @@ function RhizomaGui(gui){
 			master.addEditTitle(the_node);
 			master.addEditDateStart(the_node);
 			master.addEditDateEnd(the_node);
+			master.addEditTaskCompleted(the_node);
 			master.addEditDescription(the_node);
 		}
 		else if(the_node.type === "texto"){
@@ -346,7 +347,7 @@ function RhizomaGui(gui){
 
 	this.clearControlPanel = function(){
 		offset_x = 10;
-		var check_all_elements = ["title","description","date-start","date-end","type","link-type","source-label","source","target-label","target","links","remove","invert-dependency"];
+		var check_all_elements = ["title","description","date-start","date-end","type","link-type","source-label","source","target-label","target","links","remove","invert-dependency","task-completed"];
 		for(var i = 0; i < check_all_elements.length; i++){
 			master.removeElement(check_all_elements[i]);
 		}
@@ -659,14 +660,24 @@ function RhizomaGui(gui){
 		var field = {id:"control-panel-task-completed",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
 		gui.addField(field,"control-panel");
 
-		var field_label = {id:"control-panel-date-end-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
-		gui.addField(field_label,"control-panel-date-end");
-		gui.addText("control-panel-date-end-label","Fim");
+		var field_label = {id:"control-panel-task-completed-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
+		gui.addField(field_label,"control-panel-task-completed");
+		gui.addText("control-panel-task-completed-label","FINALIZADA");
 
-		var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
-		gui.addField(field_date_end,"control-panel-date-end");
-		gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
-		offset_x += 20;
+		var field_offset_x = document.getElementById("control-panel-task-completed-label").clientWidth + 10;
+		var current_icon = undefined;
+		if(node.completed){
+			current_icon = 'fa-check-square';
+		}
+		else{
+			current_icon = 'fa-minus-square';
+		}
+		var field_checkbox = {id:"control-panel-task-completed-checkbox",top:-2,left:field_offset_x,width:14,height:14,fontsize:14,fontweight:600,texttransform:"uppercase"};
+		gui.addField(field_checkbox,"control-panel-task-completed");
+		gui.addText("control-panel-task-completed-checkbox",'<i class="fa '+current_icon+'" aria-hidden="true"></i>');
+		offset_x += 30;
+
+		master.toggleTaskCompletedMouseBehavior(node);
 	}
 
 	this.addEditGroup = function(node){
@@ -727,7 +738,6 @@ function RhizomaGui(gui){
 
 		var link_one = {id:"control-panel-link-type-1",textalign: "CENTER",top:0,height:40,width:40,left:0,border:"1px black dotted"};
 		gui.addField(link_one,"control-panel-link-type");
-		// gui.addText("control-panel-link-type-one","-----------");
 
 		var link_one_show = {id:"control-panel-link-type-1-show",top:19,height:1,width:32,left:4,bordertop:"2px black solid"};
 		gui.addField(link_one_show,"control-panel-link-type-1");
@@ -750,16 +760,9 @@ function RhizomaGui(gui){
 			gui.$border("control-panel-link-type-3","1px black solid");
 		}
 
-		// gui.addText("control-panel-link-type",node.date_start);
-		// if(link.type != 1){
-			master.selectLinkTypeMouseBehavior("control-panel-link-type-1");
-		// }
-		// if(link.type != 2){
-			master.selectLinkTypeMouseBehavior("control-panel-link-type-2");
-		// }
-		// if(link.type != 3){
-			master.selectLinkTypeMouseBehavior("control-panel-link-type-3");
-		// }
+		master.selectLinkTypeMouseBehavior("control-panel-link-type-1");
+		master.selectLinkTypeMouseBehavior("control-panel-link-type-2");
+		master.selectLinkTypeMouseBehavior("control-panel-link-type-3");
 
 		offset_x += 50;
 	}
@@ -1175,6 +1178,10 @@ function RhizomaGui(gui){
 						the_node.type = current_editing.type;
 						found_node_match = true;
 					}
+					if(current_editing.completed != the_node.completed){
+						the_node.completed = current_editing.completed;
+						found_node_match = true;
+					}
 				}
 				else if(editing_mode === "LINK"){
 					if(current_editing.type != the_link.type){
@@ -1252,6 +1259,30 @@ function RhizomaGui(gui){
 		button.onmouseover = mouseOverLink;
 		button.onmouseout =   mouseOutLink;
 		button.onmousedown = mouseDownLink;
+	}
+
+	this.toggleTaskCompletedMouseBehavior = function(node){
+		var button = document.getElementById("control-panel-task-completed-checkbox");
+		var mouseOverCompleted = function(){
+			this.style.cursor = "pointer";
+			this.style.color = color(node.group);
+		}
+		var mouseOutCompleted = function(){
+			this.style.color = "black";
+		}
+		var mouseDownCompleted = function(){
+			if(node.completed === 1){
+				current_editing.completed = 0;
+				document.getElementById("control-panel-task-completed-checkbox").innerHTML = '<i class="fa fa-minus-square" aria-hidden="true"></i>';
+			}
+			else{
+				current_editing.completed = 1;
+				document.getElementById("control-panel-task-completed-checkbox").innerHTML = '<i class="fa fa-check-square" aria-hidden="true"></i>';
+			}
+		}
+		button.onmouseover = mouseOverCompleted;
+		button.onmouseout =   mouseOutCompleted;
+		button.onmousedown = mouseDownCompleted;
 	}
 
 	this.invertDependencyLinkMouseBehavior = function(link){

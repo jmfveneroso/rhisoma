@@ -137,10 +137,10 @@ Afazeres p/ 0.1 Beta:
 	OK - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados [linha que acompanha o mouse]
 	OK - Possibilitar inversão de dependência no control panel de link
 	OK  - No adicionar node novo: clique sobre um node existente já cria uma ligação
-2		>> - Seleção de grupo no control panel do node
-3		>> - Na tarefa, criar botão para indicar que ela foi concluída
+	OK  - Na tarefa, criar botão para indicar que ela foi concluída
+5		>> - Seleção de grupo no control panel do node
 			no BD: completed && completion_date
-4		>> - Date picker no control panel do node
+6		>> - Date picker no control panel do node
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 &		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
@@ -208,6 +208,8 @@ Afazeres p/ 0.1 Beta:
 	OK - Remover dropdown-type no lock se ele estiver aberto e cancelar dropdown-type no lock
 	OK - Após unlock o control panel, se sair do link cancelar as edições
 	OK - Após edição de link o estado é cancelado mesmo que o control panel não seja fechado; ocorre também ao inverter dependência [também não atualiza o rhizomaGui]
+	OK - Prevenir nodeadd com link automático se usuário clicar em closed node
+	OK	- Duplo clique em closed node o expande
 		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
 		- Não mostrar closed nodes que estejam dentro de closed nodes
 		- No navigateExit sobram nódulos conectados por ligação tipo 2 de grupos que estão closed

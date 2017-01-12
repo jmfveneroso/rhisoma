@@ -835,21 +835,23 @@ function clickNode(d){
     }
   }
   else if(gui.editionMode() === "nodeadd"){
-    var transform = d3.select("g").node();
-    var mouse_xy = d3.mouse(transform);
-    var node_x = mouse_xy[0];
-    var node_y = mouse_xy[1];
-    var node_id = structure.addNode(node_x,node_y);
-    link_to_add.source = d.id;
-    link_to_add.target = node_id;
-    var link_update = structure.addLink(link_to_add);
-    link_to_add.source = null;
-    link_to_add.target = null;
-    gui.closeMenus();
-    if(link_update){
-      restart();
-      rst.setEnvironment(inside_node,structure);
-      rst.updateLabel(d.id);
+    if(d.collapse != 0){
+      var transform = d3.select("g").node();
+      var mouse_xy = d3.mouse(transform);
+      var node_x = mouse_xy[0];
+      var node_y = mouse_xy[1];
+      var node_id = structure.addNode(node_x,node_y);
+      link_to_add.source = d.id;
+      link_to_add.target = node_id;
+      var link_update = structure.addLink(link_to_add);
+      link_to_add.source = null;
+      link_to_add.target = null;
+      gui.closeMenus();
+      if(link_update){
+        restart();
+        rst.setEnvironment(inside_node,structure);
+        rst.updateLabel(d.id);
+      }
     }
   }
   else if(gui.editionMode() === "linkadd"){
@@ -907,6 +909,11 @@ function toggleLinkSelection(check_link_selection){
 }
 
 function mouseDoubleClick(d){
+  if(d.collapse != 1){
+    structure.collapseNode(d.id);
+    gui.closeMenus();
+    restart();
+  }
   if(gui.editionMode() != "linkadd" && gui.editionMode() != "nodeadd"){
     run_translate = true;
     if(d.id != inside_node){       // increase one level on navigation (enter node)

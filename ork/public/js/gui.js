@@ -53,7 +53,14 @@ function Gui(){
 
 	this.addInput = function(style,placeholder,container_id,value){
 		var element = document.getElementById(container_id);
-		element.innerHTML += '<input id="' + style.id + '" class="'+style.class+'" type="text" placeholder="' + placeholder + '" value="'+value+'">';
+		var input_type = null;
+		if(style.type === null || style.type === undefined){
+			input_type = "text";
+		}
+		else{
+			input_type = style.type;
+		}
+		element.innerHTML += '<input id="' + style.id + '" class="'+style.class+'" type="'+input_type+'" placeholder="' + placeholder + '" value="'+value+'">';
 
 		master.$styleElement(style);
 
