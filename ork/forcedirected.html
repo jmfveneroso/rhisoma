@@ -540,6 +540,30 @@ function environmentStabilize(){
     rst.updateLabel(source_id);
     rst.updateLabel(target_id);
   }
+
+  if(gui.invertDependencyLink() != undefined){
+    var current_index = undefined;
+    var updated_link = {};
+    for(var i = 0; i < graph.links.length;i++){
+      if(graph.links[i].id === gui.invertDependencyLink()){
+        current_index = i;
+      }
+    }
+    for (var property in graph.links[current_index]) {
+        if (graph.links[current_index].hasOwnProperty(property)) {
+            updated_link[property] = graph.links[current_index][property];
+        }
+    }
+    updated_link.source = graph.links[current_index].target.id;
+    updated_link.target = graph.links[current_index].source.id;
+    structure.updateLink(updated_link);
+    gui.resetLink();
+    gui.closeMenus();
+    restart();
+    rst.setEnvironment(inside_node,structure);
+    rst.updateLabel(updated_link.source);
+    rst.updateLabel(updated_link.target);
+  }
 }
 
 function mouseDownEnvironment(){

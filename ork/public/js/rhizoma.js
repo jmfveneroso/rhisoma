@@ -953,6 +953,7 @@ function Rhizoma(){
 			if(entire_graph.links[inc].id === in_link.id){
 				index = inc;
 				found_match = true;
+				console.log(entire_graph.links[inc]);
 			}
 			inc++;
 		}
@@ -980,6 +981,7 @@ function Rhizoma(){
 			    }
 			}
 		}
+		master.updateGraph();
 	}
 
 	this.collapseNode = function(node){

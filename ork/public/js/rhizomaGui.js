@@ -21,6 +21,7 @@ function RhizomaGui(gui){
 	var save_link_edition = false;
 	var editing_mode = undefined;
 	var delete_link = undefined;
+	var invert_dependency_link = undefined;
 	var collapse_node = undefined;
 	var close_node = undefined;
 	var stop_simulation = false;
@@ -95,8 +96,13 @@ function RhizomaGui(gui){
 		return delete_link;
 	}
 
+	this.invertDependencyLink = function(){
+		return invert_dependency_link;
+	}
+
 	this.resetLink = function(){
 		delete_link = undefined;
+		invert_dependency_link = undefined;
 	}
 
 	this.setAllLinks = function(in_links){
@@ -119,7 +125,7 @@ function RhizomaGui(gui){
 
 	/* CONTROL PANEL */
 
-	this.updateControlPanel = function(element, type, new_element){ // + node || link
+	this.updateControlPanel = function(element, type, new_element){ 
 		var border_color;
 		current_type = undefined;
 		// current_editing = undefined;
@@ -160,6 +166,10 @@ function RhizomaGui(gui){
 			else if(current_node === element.id && lock === false && hidden_control_panel === false){
 				master.drawNodeEditControl();
 			}
+			else if(current_node != element.id && lock === false && hidden_control_panel === false){
+				master.lockControlPanel();
+				master.updateControlPanel(element, "NODE", false);
+			}
 			else if(current_node === element.id && hidden_control_panel === true){
 				master.showControlPanel();
 			}
@@ -184,6 +194,10 @@ function RhizomaGui(gui){
 			}
 			else if(current_link === element.id && lock === false && hidden_control_panel === false){
 				master.drawLinkEditControl();
+			}
+			else if(current_link != element.id && lock === false && hidden_control_panel === false){
+				master.lockControlPanel();
+				master.updateControlPanel(element, "LINK", false);
 			}
 			else if(current_link === element.id && hidden_control_panel === true){
 				master.showControlPanel();
@@ -281,6 +295,7 @@ function RhizomaGui(gui){
 		master.addEditLinkType(the_link);
 		master.addSource(the_link);
 		master.addTarget(the_link);
+		master.addInvertDependency(the_link);
 		master.addRemoveLink(the_link);
 	}
 
@@ -330,7 +345,7 @@ function RhizomaGui(gui){
 
 	this.clearControlPanel = function(){
 		offset_x = 10;
-		var check_all_elements = ["title","description","date-start","date-end","type","link-type","source-label","source","target-label","target","links","remove"];
+		var check_all_elements = ["title","description","date-start","date-end","type","link-type","source-label","source","target-label","target","links","remove","invert-dependency"];
 		for(var i = 0; i < check_all_elements.length; i++){
 			master.removeElement(check_all_elements[i]);
 		}
@@ -346,6 +361,7 @@ function RhizomaGui(gui){
 		else if(lock_mode === "LINK"){
 			master.updateControlPanel(the_link, "LINK", false);
 		}
+		master.removeTypeDropDown();
 		document.getElementById("control-panel-lock").innerHTML = '<i class="fa fa-lock" aria-hidden="true"></i>';
 	}
 
@@ -683,6 +699,19 @@ function RhizomaGui(gui){
 				master.linksMouseBehavior(all_links[i].id,node.group);
 			}
 		}
+	}
+
+	this.addInvertDependency = function(link){
+		console.log(offset_x);
+		var field = {id: "control-panel-invert-dependency",height:40,width:40,position:"absolute",top:offset_x-54};
+		gui.addField(field,"control-panel");
+
+		var invert_field = {id:"control-panel-invert-dependency-"+link.id,textalign:"RIGHT",top:0,left:260,fontsize:28,height:40,width:40,font:"Font Awesome"};
+		gui.addField(invert_field,"control-panel-invert-dependency");
+		gui.addText("control-panel-invert-dependency-"+link.id,'<i class="fa fa-refresh" aria-hidden="true"></i>');
+
+		master.invertDependencyLinkMouseBehavior(link);
+		// offset_x += 40;
 	}
 
 	this.addEditSource = function(link){
@@ -1035,6 +1064,7 @@ function RhizomaGui(gui){
 	}
 
 	this.removeTypeDropDown = function(){
+		type_dropdown = false;
 		if(document.getElementById("dropdown-type")!=null){
 			document.getElementById("dropdown-type").parentElement.removeChild(document.getElementById("dropdown-type"));
 		}
@@ -1217,6 +1247,27 @@ function RhizomaGui(gui){
 			var current_id = this.id.split("-");
 			current_id = current_id[current_id.length-1];
 			delete_link = current_id;
+			master.hideControlPanel();
+			master.eventFire(document.body, 'click');
+		}
+		button.onmouseover = mouseOverLink;
+		button.onmouseout =   mouseOutLink;
+		button.onmousedown = mouseDownLink;
+	}
+
+	this.invertDependencyLinkMouseBehavior = function(link){
+		var button = document.getElementById("control-panel-invert-dependency-"+link.id);
+		var mouseOverLink = function(){
+			this.style.cursor = "pointer";
+			this.style.color = "#c9c9c9";
+		}
+		var mouseOutLink = function(){
+			this.style.color = "black";
+		}
+		var mouseDownLink = function(){
+			var current_id = this.id.split("-");
+			current_id = current_id[current_id.length-1];
+			invert_dependency_link = current_id;
 			master.hideControlPanel();
 			master.eventFire(document.body, 'click');
 		}

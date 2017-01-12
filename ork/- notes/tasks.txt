@@ -32,6 +32,12 @@ Afazeres p/ 0.1 Beta:
 
 			- Revisar esquema de cores e modo como as cores são atribuídas
 
+		*** JOHN
+
+			- Só desenhar active nodes [que não estão deletados] {John só deve me passar os active nodes}
+			- John deve guardar x, y, vx e vy de cada node
+
+
 			{CONFERIR INDEX E ID, ESPECIALMENTE NO ACTIVE_GRAPH.NODES}
 				!!!!! CONFERIR INDEXES E IDS NOS NODES; importante pegar sempre os ids para integrar com bd
 
@@ -63,10 +69,10 @@ Afazeres p/ 0.1 Beta:
 	OK - Ajustar estilo dos labels que ficam escondidos
 	OK - Linha do linkadd fica na cor do source node
 	OK - Evidenciar link selecionado
-7		>> - Quando hidden labels estão visíveis: evidenciar com uppercase e bold no mouse over
 		- Estilo das linhas em função da urgência [hoje é preto e grosso?, datas no futuro são mais finas?]
 		% Ajustar distâncias entre os nódulos
 		% Detalhes de estilo [cores, desenho dos nódulos, etc]
+		% (?) Quando hidden labels estão visíveis: evidenciar com uppercase e bold no mouse over
 		% (?) Animações e transições
 
 		Navegação [molecular]
@@ -86,7 +92,6 @@ Afazeres p/ 0.1 Beta:
 	OK - Quando o zoom aproxima, revelar labels escondidos
 	OK - Impedir ligações em nodes que estejam closed
 		- Ajustar collapse e close para funcionar dentro de nodes [não voltar para root quando o node for collapsed ou closed]
-		- Só desenhar active nodes
 		- Navegação por período
 		- Barra superior [de sistema] com infos da plataforma, do usuário, barra de busca, etc
 &			- Esboço
@@ -130,20 +135,19 @@ Afazeres p/ 0.1 Beta:
 		OK - Collapse // abre children
 		OK - Stand-by // cinza
 	OK - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados [linha que acompanha o mouse]
-5		>> - Seleção de grupo no control panel do node
-6		>> - Na tarefa, criar botão para indicar que ela foi concluída
+	OK - Possibilitar inversão de dependência no control panel de link
+2		>> - Seleção de grupo no control panel do node
+3		>> - Na tarefa, criar botão para indicar que ela foi concluída
 			no BD: completed && completion_date
-8		>> - Date picker no control panel do node
+4		>> - Date picker no control panel do node
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 &		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
-		- No adicionar node novo: clique sobre um node existente já cria uma ligação
-		- Possibilitar inversão de dependência no control panel de link
+1		>> - No adicionar node novo: clique sobre um node existente já cria uma ligação
 
 		BD %integração com John
 	OK - Esboço de classe que comunica com o back-end
-		- Implementar funções de atualização do BD a cada modificação no grafo
-		- Guardar x, y, vx, vy no BD
+		- Integração front e back: implementar funções de atualização do BD a cada modificação no grafo
 
 		Bugs e adendos
 	OK - Comportamento errático dos labels durante zoom e pan
@@ -201,6 +205,10 @@ Afazeres p/ 0.1 Beta:
 	OK - Ao mandar expandir ou contrair nódulo, checar se nódulo está expandido para confirmar se há necessidade de atualizar o grafo
 	OK - Ao adicionar link, se ele estiver repetido não atualizar grafo
 	OK - Limpar node ou link do rhizomaGui nas seleções progressivas {resolvido com código do destaque de link na seleção do link}
+	OK - Remover dropdown-type no lock se ele estiver aberto e cancelar dropdown-type no lock
+	OK - Após unlock o control panel, se sair do link cancelar as edições
+		- Após edição de link o estado é cancelado mesmo que o control panel não seja fechado; ocorre também ao inverter dependência [também não atualiza o rhizomaGui]
+		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
 		- Não mostrar closed nodes que estejam dentro de closed nodes
 		- No navigateExit sobram nódulos conectados por ligação tipo 2 de grupos que estão closed
 		~~ Ajustar simulation stop [conversar com john: deve parar todos os nodes? a volta para movimento deve ser automática?]
@@ -248,8 +256,10 @@ Divulgação FB
 	OK - 02 | 22.12.2016 | (Close do orkhestra)
 	OK - 03 | 24.12.2016 | (Orkhestra inteiro)
 	OK - 04 | 10.01.2017 | (Navegação no Rhisoma)
-	- 05 | 10.01.2017 | Inscreva-se no Rhisoma para ...
-	- após lançamento (15-29/02) | vídeo de divulgação (neems)
+	- 05 | 14.01.2017 | Inscreva-se no Rhisoma para ...
+	-    | 26.01.2017 | Walkthrough [mostra as ferramentas básicas em um vídeo de 5 minutos]
+	- após lançamento (15-29/02) | vídeo de divulgação (neems) [descoberta e exploração]
+	- após lançamento (15-30/03) | vídeo de divulgação (?) [linha de raciocínio / de pensamento]
 
 OK - comprar domínio rhisoma.com
 - escrever texto do release
