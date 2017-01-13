@@ -1,6 +1,6 @@
 {
   "nodes": [
-    {"id": "0",  "name": "Sumbioun",                    "group": 1, "type": "categoria", "description": "Tecnologias para viver junto.", "date_start": "2016-12-13 23:59:59", "date_end": "","date_complete": "","collapse":1,"standby":0,"active":1,"completed":0},
+    {"id": "0",  "name": "Sumbioun",                    "group": 1, "type": "categoria", "description": "Tecnologias para viver junto.", "date_start": "2016-12-13 23:59:59", "date_end": "","date_complete": "","collapse":0,"standby":0,"active":1,"completed":0},
     {"id": "1",  "name": "Uranyo",                      "group": 2, "type": "categoria", "description": "b", "date_start": "2016-12-13 23:59:59", "date_end": ""                            ,"date_complete": "","collapse":1,"standby":1,"active":1,"completed":0},
     {"id": "2",  "name": "Casa",                        "group": 3, "type": "categoria", "description": "c", "date_start": "2016-12-13 23:59:59", "date_end": ""                            ,"date_complete": "","collapse":1,"standby":0,"active":1,"completed":0},
     {"id": "3",  "name": "Arte",                        "group": 4, "type": "categoria", "description": "d", "date_start": "2016-12-13 23:59:59", "date_end": ""                            ,"date_complete": "","collapse":1,"standby":0,"active":1,"completed":0},
