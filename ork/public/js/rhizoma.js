@@ -50,34 +50,7 @@ function Rhizoma(){
 	}
 
 	this.initialize = function(){
-		for(var i = 0; i < json.nodes.length; i++){
-			if(json.nodes[i].standby === 1){
-				check_standby = true;
-			}
-			if(json.nodes[i].collapse === 0){
-				check_block = true;
-				entire_graph.nodes[i].size = 1;
-				master.nodeStructure(entire_graph.nodes[i].id);
-			}
-			else{
-				entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id);
-			}
-			entire_graph.nodes[i].parentConnections = 0;
-			entire_graph.nodes[i].childConnections = 0;
-				// corrigir .size [o maior fica sendo uma tamanho máximo predefinido, o menor, o menor tamanho predefinido]
-		}
-		for(var i = 0; i < json.links.length; i++){
-			if(entire_graph.links[i].type != 3){
-				for(var j = 0; j < entire_graph.nodes.length; j++){
-					if(entire_graph.links[i].target === entire_graph.nodes[j].id){
-						entire_graph.nodes[j].parentConnections++;
-					}
-					if(entire_graph.links[i].source === entire_graph.nodes[j].id){
-						entire_graph.nodes[j].childConnections++;
-					}
-				}
-			}
-		}			
+		master.processEntireGraph();			
 			// conferir se a data do target é hoje; se sim, marcar em .urgent
 			// traçar caminho até a origem e atualizar o .urgent deles
 			// espessura é relativa ao número de children do node que são .urgent
@@ -129,33 +102,7 @@ function Rhizoma(){
 
 	this.updateGraph = function(){
 		apply_standby = [];
-		for(var i = 0; i < entire_graph.nodes.length; i++){
-			if(entire_graph.nodes[i].standby === 1){
-				check_standby = true;
-			}
-			if(entire_graph.nodes[i].collapse === 0){
-				check_block = true;
-				entire_graph.nodes[i].size = 1;
-				master.nodeStructure(entire_graph.nodes[i].id);
-			}
-			else{
-				entire_graph.nodes[i].size = master.nodeStructure(entire_graph.nodes[i].id);
-			}
-			entire_graph.nodes[i].parentConnections = 0;
-			entire_graph.nodes[i].childConnections = 0;
-		}
-		for(var i = 0; i < entire_graph.links.length; i++){
-			if(entire_graph.links[i].type != 3){
-				for(var j = 0; j < entire_graph.nodes.length; j++){
-					if(entire_graph.links[i].target === entire_graph.nodes[j].id){
-						entire_graph.nodes[j].parentConnections++;
-					}
-					if(entire_graph.links[i].source === entire_graph.nodes[j].id){
-						entire_graph.nodes[j].childConnections++;
-					}
-				}
-			}
-		}	
+		master.processEntireGraph();	
 			// conferir se a data do target é hoje; se sim, marcar em .urgent
 			// traçar caminho até a origem e atualizar o .urgent deles
 			// espessura é relativa ao número de children do node que são .urgent
@@ -182,7 +129,8 @@ function Rhizoma(){
 			        active_graph.nodes[i][property] = current_node[property];
 			    }
 			}
-		}  master.applyStandby(true);
+		}
+		master.applyStandby(true);
 	}
 
 	this.getTargetGroup = function(selected_node){
@@ -356,7 +304,9 @@ function Rhizoma(){
 			var increment = 0;
 			while(!included && increment < entire_graph.nodes[index].children.length){
 				if(active_graph.nodes[i].id === entire_graph.nodes[index].children[increment]){
-					included = true;
+					// if(entire_graph.nodes[master.getNodeIndex(entire_graph.nodes[index].children[increment])].collapse === 1){
+						included = true;
+					// }
 				}
 				increment++;
 			}
@@ -380,13 +330,11 @@ function Rhizoma(){
 					// this is the one we want to keep
 					keep[keep.length] = active_graph.links[j];
 				}
-				else if(active_graph.links[j].source === active_graph.nodes[i].id && active_graph.links[j].type === 2){
-					// this is the one we want to keep
-					keep[keep.length] = active_graph.links[j];
-				}
-				else if(active_graph.links[j].target === active_graph.nodes[i].id && active_graph.links[j].type === 2){
-					// this is the one we want to keep
-					keep[keep.length] = active_graph.links[j];
+				else if(active_graph.links[j].type === 2){
+					if(active_graph.links[j].source === active_graph.nodes[i].id || active_graph.links[j].target === active_graph.nodes[i].id){
+						// this is the one we want to keep
+						keep[keep.length] = active_graph.links[j];
+					}
 				}
 			}
 		}
@@ -399,6 +347,11 @@ function Rhizoma(){
 			    }
 			}
 		}
+
+		/**
+		 * TODO: crawlToPrimary para descobrir se algum node fechado está conectado em um filho do node ativo ou de algum node da rede
+		 * 		 aplicar também em navigateExit
+		 */
 	}
 
 	this.navigateRhizomaExitCheck = function(this_node){
@@ -442,7 +395,9 @@ function Rhizoma(){
 					}
 				}
 				if(!found_match){
-					include[include.length] = entire_graph.nodes[index].children[i];
+					// if(entire_graph.nodes[master.getNodeIndex(entire_graph.nodes[index].children[i])].collapse === 1){
+						include[include.length] = entire_graph.nodes[index].children[i];
+					// }
 				}
 			}
 		}
@@ -482,61 +437,37 @@ function Rhizoma(){
 					}
 					if(!match_found){
 						var current_id = master.getNodeIndex(entire_graph.links[j].source);
-						if(entire_graph.nodes[current_id].collapse != 0){
-							var construct_link = {};
-							for (var property in entire_graph.links[j]) {
-							    if (entire_graph.links[j].hasOwnProperty(property)) {
-							        construct_link[property] = entire_graph.links[j][property];
-							    }
-							}
-							links[links.length] = construct_link;//entire_graph.links[j];
-						}
+						// if(entire_graph.nodes[current_id].collapse != 0){
+							links[links.length] = entire_graph.links[j];
+						// }
 					}
 				}
-				else if(include[i] === entire_graph.links[j].source && entire_graph.links[j].type === 2){
-					match_found = false;
-					for(var m = 0; m < block_node.length;m++){
-						if(entire_graph.links[j].target === block_node[m]){
-							match_found = true;
-						}
-					}
-					if(!match_found){
-						var current_id = master.getNodeIndex(entire_graph.links[j].source);
-						if(entire_graph.nodes[current_id].collapse != 0){
-							var construct_link = {};
-							for (var property in entire_graph.links[j]) {
-							    if (entire_graph.links[j].hasOwnProperty(property)) {
-							        construct_link[property] = entire_graph.links[j][property];
-							    }
+				else if(entire_graph.links[j].type === 2){
+					if(include[i] === entire_graph.links[j].source || include[i] === entire_graph.links[j].target){
+						match_found = false;
+						for(var m = 0; m < block_node.length;m++){
+							if(entire_graph.links[j].target === block_node[m]){
+								match_found = true;
 							}
-							links[links.length] = construct_link;//entire_graph.links[j];
 						}
-					}
-				}
-				else if(include[i] === entire_graph.links[j].target && entire_graph.links[j].type === 2){
-					match_found = false;
-					for(var m = 0; m < block_node.length;m++){
-						if(entire_graph.links[j].source === block_node[m]){
-							match_found = true;
-						}
-					}
-					if(!match_found){
-						var current_id = master.getNodeIndex(entire_graph.links[j].target);
-						if(entire_graph.nodes[current_id].collapse != 0){
-							var construct_link = {};
-							for (var property in entire_graph.links[j]) {
-							    if (entire_graph.links[j].hasOwnProperty(property)) {
-							        construct_link[property] = entire_graph.links[j][property];
-							    }
-							}
-							links[links.length] = construct_link;//entire_graph.links[j];
+						if(!match_found){
+							var current_id = master.getNodeIndex(entire_graph.links[j].source);
+							// if(entire_graph.nodes[current_id].collapse != 0){
+								links[links.length] = entire_graph.links[j];
+							// }
 						}
 					}
 				}
 			}
 		}
 		for(var i = 0; i < links.length; i++){
-			active_graph.links.push(links[i]);
+			var construct_link = {};
+			for (var property in links[i]) {
+			    if (links[i].hasOwnProperty(property)) {
+			        construct_link[property] = links[i][property];
+			    }
+			}
+			active_graph.links.push(construct_link);
 		}
 
 		master.applyStandby(true);
@@ -808,30 +739,32 @@ function Rhizoma(){
 		var found_match = false;
 		var index = 0;
 		var this_node = undefined;
-		while(!found_match){
+		while(!found_match && entire_graph.nodes[index] != null){
 			if(node_id === entire_graph.nodes[index].id){
 				found_match = true;
+				this_node = index;
 			}
 			else{
 				index++;	
 			}
 		}
-		return index;
+		return this_node;
 	}
 
 	this.getActiveNodeIndex = function(node_id){
 		var found_match = false;
 		var index = 0;
 		var this_node = undefined;
-		while(!found_match){
+		while(!found_match && active_graph.nodes[index] != null){
 			if(node_id === active_graph.nodes[index].id){
 				found_match = true;
+				this_node = index;
 			}
 			else{
 				index++;	
 			}
 		}
-		return index;
+		return this_node;
 	}
 
 	this.getActiveLinkIndex = function(link_id){
@@ -967,21 +900,22 @@ function Rhizoma(){
 	}
 
 	this.collapseNode = function(node){
+		check_block = false;
 		entire_graph.nodes[master.getNodeIndex(node)].collapse = 1;
 		active_graph.nodes[master.getActiveNodeIndex(node)].collapse = 1;
 		block_node = [];
-		master.updateNodes();
+		master.updateCollapseNodes(node);
 	}
 
 	this.closeNode = function(node){
+		check_block = false;
 		entire_graph.nodes[master.getNodeIndex(node)].collapse = 0;
 		active_graph.nodes[master.getActiveNodeIndex(node)].collapse = 0;
 		block_node = [];
-		master.updateNodes();
+		master.updateCloseNodes(node);
 	}
 
-	this.updateNodes = function(){
-		// atualizar para closeNode e collapseNode [tem que reconhecer o estado atual da rede]
+	this.processEntireGraph = function(){
 		for(var i = 0; i < entire_graph.nodes.length; i++){
 			if(entire_graph.nodes[i].standby === 1){
 				check_standby = true;
@@ -996,7 +930,6 @@ function Rhizoma(){
 			}
 			entire_graph.nodes[i].parentConnections = 0;
 			entire_graph.nodes[i].childConnections = 0;
-				// corrigir .size [o maior fica sendo uma tamanho máximo predefinido, o menor, o menor tamanho predefinido]
 		}
 		for(var i = 0; i < entire_graph.links.length; i++){
 			if(entire_graph.links[i].type != 3){
@@ -1009,46 +942,199 @@ function Rhizoma(){
 					}
 				}
 			}
-		}		
-		active_graph = {};
-		active_graph.nodes = [];
+		}	
+	}
+
+	this.updateCloseNodes = function(node){
+		var current_children = active_graph.nodes[master.getActiveNodeIndex(node)].children;
+		master.processEntireGraph();
+		master.updateGraph();
+		var index = master.getNodeIndex(node);
+
+		var splice = [];
+		for(var i = 0; i < current_children.length; i++){
+			if(current_children[i] != node){
+				if(master.getActiveNodeIndex(current_children[i])!=undefined){
+					active_graph.nodes.splice(master.getActiveNodeIndex(current_children[i]),1);
+				}
+			}
+		}
+
+		var keep = [];
+		for(var i = 0; i < active_graph.links.length; i++){
+			var source_node_found = false;
+			var target_node_found = false;
+			for(var j = 0; j < active_graph.nodes.length; j++){
+				if(active_graph.links[i].source === active_graph.nodes[j].id){
+					source_node_found = true;
+				}
+				if(active_graph.links[i].target === active_graph.nodes[j].id){
+					target_node_found = true;
+				}
+			}
+			if(source_node_found && target_node_found){
+				keep[keep.length] = active_graph.links[i];
+			}
+		}
 		active_graph.links = [];
-		var inc = 0;
-		for(var i = 0; i < entire_graph.nodes.length; i++){
-			var found_match = false;
-			for(var j = 0; j < block_node.length; j++){
-				if(entire_graph.nodes[i].id === block_node[j]){
-					found_match = true;
-				}
-			}
-			if(!found_match){
-				active_graph.nodes[inc] = {};
-				for (var property in entire_graph.nodes[i]) {
-				    if (entire_graph.nodes[i].hasOwnProperty(property)) {
-				        active_graph.nodes[inc][property] = entire_graph.nodes[i][property];
-				    }
-				}
-				inc++;
+		for(var i = 0; i < keep.length; i++){
+			active_graph.links[i] = {};
+			for (var property in keep[i]) {
+			    if (keep[i].hasOwnProperty(property)) {
+			        active_graph.links[i][property] = keep[i][property];
+			    }
 			}
 		}
-		inc = 0;
-		for(var i = 0; i < entire_graph.links.length; i++){
-			var found_match = false;
-			for(var j = 0; j < block_node.length; j++){
-				if(entire_graph.links[i].source === block_node[j] || entire_graph.links[i].target === block_node[j]){
-					found_match = true;
+	}
+
+	this.updateCollapseNodes = function(node){
+		master.processEntireGraph();
+
+		var node_index = master.getNodeIndex(node);
+		var include = [];
+		for(var i = 0; i < entire_graph.nodes[node_index].children.length; i++){
+			var process_node_index = master.getNodeIndex(entire_graph.nodes[node_index].children[i]);
+			if(entire_graph.nodes[node_index].children[i] != node){
+				var found_node_match = false;
+				for(var j = 0; j < block_node.length; j++){
+					if(entire_graph.nodes[process_node_index].id === block_node[j]){
+						found_node_match = true;
+					}
+				}
+				if(!found_node_match){
+					include[include.length] = entire_graph.nodes[process_node_index].id;
 				}
 			}
-			if(!found_match){
-				active_graph.links[inc] = {};
-				for (var property in entire_graph.links[i]) {
-				    if (entire_graph.links[i].hasOwnProperty(property)) {
-				        active_graph.links[inc][property] = entire_graph.links[i][property];
+			else{
+				var active_node_index = master.getActiveNodeIndex(entire_graph.nodes[process_node_index].id);
+				for (var property in entire_graph.nodes[process_node_index]) {
+				    if (entire_graph.nodes[process_node_index].hasOwnProperty(property)) {
+				        active_graph.nodes[active_node_index][property] = entire_graph.nodes[process_node_index][property];
 				    }
 				}
-				inc++;
+			}
+		}	
+
+		for(var i = 0; i < include.length; i++){
+			var found_match = false;
+			var increment = 0;
+			var include_index;
+			while(!found_match && increment < entire_graph.nodes.length){
+				if(include[i] === entire_graph.nodes[increment].id){
+					found_match = true;
+					include_index = increment;
+				}
+				increment++;
+			}
+			if(found_match){
+				var construct_node = {};
+				for (var property in entire_graph.nodes[include_index]) {
+				    if (entire_graph.nodes[include_index].hasOwnProperty(property)) {
+				        construct_node[property] = entire_graph.nodes[include_index][property];
+				    }
+				}
+				active_graph.nodes.push(construct_node);
 			}
 		}
+
+		var links = [];
+		for(var i = 0; i < include.length; i++){
+			for(var j = 0; j < entire_graph.links.length; j++){
+				if(include[i] === entire_graph.links[j].target && entire_graph.links[j].type === 1){
+					match_found = false;
+					var node_exists = false;
+					for(var m = 0; m < block_node.length;m++){
+						if(entire_graph.links[j].target === block_node[m]){
+							match_found = true;
+						}
+					}
+					for(var m = 0; m < active_graph.nodes.length; m++){
+						if(active_graph.nodes[m].id === entire_graph.links[j].source){
+							node_exists = true;
+						}
+					}
+					if(!match_found && node_exists){
+						var current_id = master.getNodeIndex(entire_graph.links[j].source);
+						links[links.length] = entire_graph.links[j];
+					}
+				}
+				else if(include[i] === entire_graph.links[j].source && entire_graph.links[j].type === 2){
+					match_found = false;
+					for(var m = 0; m < block_node.length;m++){
+						if(entire_graph.links[j].target === block_node[m]){
+							match_found = true;
+						}
+					}
+					if(!match_found){
+						var current_id = master.getNodeIndex(entire_graph.links[j].source);
+						links[links.length] = entire_graph.links[j];
+					}
+				}
+				else if(include[i] === entire_graph.links[j].target && entire_graph.links[j].type === 2){
+					match_found = false;
+					for(var m = 0; m < block_node.length;m++){
+						if(entire_graph.links[j].source === block_node[m]){
+							match_found = true;
+						}
+					}
+					if(!match_found){
+						var current_id = master.getNodeIndex(entire_graph.links[j].target);
+						links[links.length] = entire_graph.links[j];
+					}
+				}
+			}
+		}
+		for(var i = 0; i < links.length; i++){
+			var construct_link = {};
+			for (var property in links[i]) {
+			    if (links[i].hasOwnProperty(property)) {
+			        construct_link[property] = links[i][property];
+			    }
+			}
+			active_graph.links.push(construct_link);
+		}
+
+
+		// active_graph = {};
+		// active_graph.nodes = [];
+		// active_graph.links = [];
+		// var inc = 0;
+		// for(var i = 0; i < entire_graph.nodes.length; i++){
+		// 	var found_match = false;
+		// 	for(var j = 0; j < block_node.length; j++){
+		// 		if(entire_graph.nodes[i].id === block_node[j]){
+		// 			found_match = true;
+		// 		}
+		// 	}
+		// 	if(!found_match){
+		// 		active_graph.nodes[inc] = {};
+		// 		for (var property in entire_graph.nodes[i]) {
+		// 		    if (entire_graph.nodes[i].hasOwnProperty(property)) {
+		// 		        active_graph.nodes[inc][property] = entire_graph.nodes[i][property];
+		// 		    }
+		// 		}
+		// 		inc++;
+		// 	}
+		// }
+		// inc = 0;
+		// var inc = 0;
+		// for(var i = 0; i < entire_graph.links.length; i++){
+		// 	var found_match = false;
+		// 	for(var j = 0; j < block_node.length; j++){
+		// 		if(entire_graph.links[i].source === block_node[j] || entire_graph.links[i].target === block_node[j]){
+		// 			found_match = true;
+		// 		}
+		// 	}
+		// 	if(!found_match){
+		// 		active_graph.links[inc] = {};
+		// 		for (var property in entire_graph.links[i]) {
+		// 		    if (entire_graph.links[i].hasOwnProperty(property)) {
+		// 		        active_graph.links[inc][property] = entire_graph.links[i][property];
+		// 		    }
+		// 		}
+		// 		inc++;
+		// 	}
+		// }
 
 		master.applyStandby(true);
 	}

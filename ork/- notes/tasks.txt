@@ -91,7 +91,7 @@ Afazeres p/ 0.1 Beta:
 	OK - Implementar stand-by
 	OK - Quando o zoom aproxima, revelar labels escondidos
 	OK - Impedir ligações em nodes que estejam closed
-		- Ajustar collapse e close para funcionar dentro de nodes [não voltar para root quando o node for collapsed ou closed]
+	OK - Ajustar collapse e close para funcionar dentro de nodes [não voltar para root quando o node for collapsed ou closed]
 		- Navegação por período
 		- Barra superior [de sistema] com infos da plataforma, do usuário, barra de busca, etc
 &			- Esboço
@@ -138,9 +138,9 @@ Afazeres p/ 0.1 Beta:
 	OK - Possibilitar inversão de dependência no control panel de link
 	OK  - No adicionar node novo: clique sobre um node existente já cria uma ligação
 	OK  - Na tarefa, criar botão para indicar que ela foi concluída
-7		>> - Seleção de grupo no control panel do node
+6		>> - Seleção de grupo no control panel do node
 			no BD: completed && completion_date
-8		>> - Date picker no control panel do node
+7		>> - Date picker no control panel do node
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 &		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
@@ -212,7 +212,11 @@ Afazeres p/ 0.1 Beta:
 	OK	- Duplo clique em closed node o expande
 	OK - Não mostrar closed nodes que estejam dentro de closed nodes {solucionado; no rhizoma.js: tudo relativo ao add_node foi deletado}
 	OK - No navigateExit sobram nódulos conectados de grupos que estão closed
-		- Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
+	OK  - Após ativar node no control panel e contrair o node ativado ou colocá-lo em standby, ao mover o estilo fica errado; 
+	OK	- Estilo de node buraco negro fica errado no mouse out
+	OK  - Ao expandir closed node com duplo clique: não entra no nódulo expandido: expande no nível atual
+		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
+		- (?) Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
 		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
 		~~ Ajustar simulation stop [conversar com john: deve parar todos os nodes? a volta para movimento deve ser automática?]
 		- Impedir ação de clique no clique duplo
