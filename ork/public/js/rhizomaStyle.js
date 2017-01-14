@@ -20,8 +20,8 @@ function RhizomaStyle(){
 
 	this.linkStroke = function(d){
 	  if(d.type===1){
-	  	if(main_structure.getTargetGroup(d.source) != undefined){
-	  		return color(main_structure.getTargetGroup(d.source));
+	  	if(main_structure.getTargetColor(d.source) != undefined){
+	  		return main_structure.getTargetColor(d.source);
 	  	}
 	    else{
 	    	return "#c9c9c9";
@@ -84,7 +84,7 @@ function RhizomaStyle(){
   		if(d.collapse === 1){
 	  		if(d.type != "buraco"){
 	  			if(d.standby === 0){
-	  				return color(d.group);
+	  				return d.color;//color(d.group);
 	  			}
 	  			else{
 			  		return "#c9c9c9";
@@ -101,7 +101,7 @@ function RhizomaStyle(){
 	  else{
 	  	if(d.collapse === 1){
 	  		if(d.standby === 0){
-	  			return d3.rgb(color(d.group)).brighter(0.5);
+	  			return d3.rgb(d.color/*color(d.group)*/).brighter(0.5);
 	  		}
 	  		else{
 	  			return d3.rgb("#c9c9c9").brighter(0.5);
@@ -121,7 +121,7 @@ function RhizomaStyle(){
 		    }
 		    else{
 		    	if(d.standby === 0){
-		    		return color(d.group);
+		    		return d.color;//color(d.group);
 		    	}
 		    	else{
 		    		return "#c9c9c9";
@@ -130,7 +130,7 @@ function RhizomaStyle(){
 		}
 		else{
 			if(d.standby === 0){
-	    		return color(d.group);
+	    		return d.color;//color(d.group);
 	    	}
 	    	else{
 	    		return "#c9c9c9";
@@ -139,7 +139,7 @@ function RhizomaStyle(){
 	  }
 	  else{
 	  	if(d.standby === 0){
-	  		return d3.rgb(color(d.group)).darker(2.5);
+	  		return d3.rgb(d.color/*color(d.group)*/).darker(2.5);
 	  	}
 	    else{
 	    	return d3.rgb("#c9c9c9").darker(2.5);
@@ -207,7 +207,7 @@ function RhizomaStyle(){
 	this.labelTextFill = function(d){
 	  if(d.type === "categoria" && d.parentConnections != 0){
 	  	if(d.standby === 0){
-	  		return color(d.group);
+	  		return d.color;//color(d.group);
 	  	}
 	    else{
 	    	return "#c9c9c9";
@@ -254,7 +254,7 @@ function RhizomaStyle(){
 	this.labelTextZoomFill = function(d){
 	  if(d.parentConnections === 0){
 	  	if(d.standby === 0){
-	  		return color(d.group);
+	  		return d.color;//color(d.group);
 	  	}
 	    else{
 	    	return "#c9c9c9";
@@ -262,7 +262,7 @@ function RhizomaStyle(){
 	  }
 	  else if(d.type === "categoria"){
 	  	if(d.standby === 0){
-	  		return color(d.group);
+	  		return d.color;//color(d.group);
 	  	}
 	    else{
 	    	return "#c9c9c9";
@@ -364,7 +364,7 @@ function RhizomaStyle(){
 
 	this.labelRectStroke = function(d){
 		if(d.standby === 0){
-			return color(d.group);
+			return d.color;//color(d.group);
 		}
 		else{
 			return "#c9c9c9";

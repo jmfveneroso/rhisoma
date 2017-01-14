@@ -219,7 +219,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
           }
           else{
             if(current_node.standby === 0){
-              document.getElementById("node-symbol-"+current_node.id).style.stroke = color(current_node.group);
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
               document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
             }
             else{
@@ -229,7 +229,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
           }
         }
         else{
-          document.getElementById("node-symbol-"+current_node.id).style.stroke = color(current_node.group);
+          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
           document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
         }
       }
@@ -438,8 +438,8 @@ function environmentMove(){
       .style("stroke-linecap", "round")
       .style("stroke", function(){
         if(graph.nodes[current_node_index].standby === 0){
-          var color_line = graph.nodes[current_node_index].group;
-          return color(color_line);
+          var color_line = graph.nodes[current_node_index].color;//.group;
+          return color_line;//color(color_line);
         }
         else{
           return "#c9c9c9";
@@ -613,12 +613,12 @@ function mouseDownLink(d){
           document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
         }
         else{
-          document.getElementById("node-symbol-"+current_node.id).style.stroke = color(current_node.group);
+          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
           document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
         }
       }
       else{
-        document.getElementById("node-symbol-"+current_node.id).style.stroke = color(current_node.group);
+        document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
         document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
       }
     }
@@ -675,7 +675,7 @@ function mouseOverNode(d){
   if(inside_node != d.id){
     if(d.collapse === 1){
       if(d.standby === 0){
-        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color/*color(d.group)*/).darker(1);
         document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
       }
       else{
@@ -685,7 +685,7 @@ function mouseOverNode(d){
     }
     else{
       if(d.standby === 0){
-        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color/*color(d.group)*/).darker(1);
         document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
       }
       else{
@@ -733,7 +733,7 @@ function mouseOutNode(d){
         }
         else{
           if(d.standby === 0){
-            document.getElementById("node-symbol-"+d.id).style.stroke = color(d.group);
+            document.getElementById("node-symbol-"+d.id).style.stroke = d.color;//color(d.group);
             document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
           }
           else{
@@ -744,7 +744,7 @@ function mouseOutNode(d){
       }
       else{
         if(d.standby === 0){
-          document.getElementById("node-symbol-"+d.id).style.stroke = color(d.group);
+          document.getElementById("node-symbol-"+d.id).style.stroke = d.color;//color(d.group);
           document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
         }
         else{
@@ -773,17 +773,18 @@ function clickNode(d){
             document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
           }
           else{
-            document.getElementById("node-symbol-"+current_node.id).style.stroke = color(current_node.group);
+            document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
             document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
           }
         }
         else{
-          document.getElementById("node-symbol-"+current_node.id).style.stroke = color(current_node.group);
+          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
           document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
         }
       }
       current_node.id = d.id;
       current_node.group = d.group;
+      current_node.color = d.color;
       current_node.type = d.type;
       current_node.collapse = d.collapse;
       current_node.standby = d.standby;
@@ -791,8 +792,10 @@ function clickNode(d){
       for(var i = 0; i < in_links.length; i++){
         for(var j = 0; j < graph.links.length; j++){
           if(in_links[i].id === graph.links[j].id){
-            in_links[i].source.group = graph.links[j].source.group;
-            in_links[i].target.group = graph.links[j].target.group;
+            // in_links[i].source.group = graph.links[j].source.group;
+            // in_links[i].target.group = graph.links[j].target.group;
+            in_links[i].source.color = graph.links[j].source.color;
+            in_links[i].target.color = graph.links[j].target.color;
           }
         }
       }
@@ -802,6 +805,7 @@ function clickNode(d){
     else if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) === null){
       current_node.id = d.id;
       current_node.group = d.group;
+      current_node.color = d.color;
       current_node.type = d.type;
       current_node.collapse = d.collapse;
       current_node.standby = d.standby;
@@ -809,8 +813,10 @@ function clickNode(d){
       for(var i = 0; i < in_links.length; i++){
         for(var j = 0; j < graph.links.length; j++){
           if(in_links[i].id === graph.links[j].id){
-            in_links[i].source.group = graph.links[j].source.group;
-            in_links[i].target.group = graph.links[j].target.group;
+            // in_links[i].source.group = graph.links[j].source.group;
+            // in_links[i].target.group = graph.links[j].target.group;
+            in_links[i].source.color = graph.links[j].source.color;
+            in_links[i].target.color = graph.links[j].target.color;
           }
         }
       }
@@ -894,7 +900,7 @@ function clickNode(d){
       restart();
       if(d.id === current_node.id){
         if(d.standby === 0){
-          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
+          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color/*color(d.group)*/).darker(1);
           document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
         }
         else{
@@ -912,7 +918,7 @@ function clickNode(d){
       restart();
       if(d.id === current_node.id){
         if(d.standby === 0){
-          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
+          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color/*color(d.group)*/).darker(1);
           document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
         }
         else{
@@ -929,7 +935,7 @@ function clickNode(d){
     restart();
     if(d.id === current_node.id && current_node.id != inside_node){
       if(d.standby === 1){
-        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(color(d.group)).darker(1);
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color/*color(d.group)*/).darker(1);
         document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
       }
       else{

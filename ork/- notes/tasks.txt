@@ -26,11 +26,11 @@ Afazeres p/ 0.1 Beta:
 			OK - atualizar entire_graph toda vez que algo for modificado
 			OK - Implementar simulation.stop() como opção para melhoria de performance
 			OK - formas de propagação de estilo no stand-by
+			OK - Revisar esquema de cores e modo como as cores são atribuídas
+				OK - cor no add node, link node
 
 			~~ considerar territórios [criar, acessar, nódulo buraco negro 
 				- (abrir a página novamente chamando novo json), processo do john
-
-			- Revisar esquema de cores e modo como as cores são atribuídas
 
 			{CONFERIR INDEX E ID, ESPECIALMENTE NO ACTIVE_GRAPH.NODES}
 				!!!!! CONFERIR INDEXES E IDS NOS NODES; importante pegar sempre os ids para integrar com bd
@@ -138,9 +138,10 @@ Afazeres p/ 0.1 Beta:
 	OK - Possibilitar inversão de dependência no control panel de link
 	OK  - No adicionar node novo: clique sobre um node existente já cria uma ligação
 	OK  - Na tarefa, criar botão para indicar que ela foi concluída
-6		>> - Seleção de grupo no control panel do node
+7		>> - Seleção de grupo no control panel do node
 			no BD: completed && completion_date
-7		>> - Date picker no control panel do node
+8		>> - Date picker no control panel do node
+		- Color picker no control panel do node
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 &		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
@@ -215,6 +216,7 @@ Afazeres p/ 0.1 Beta:
 	OK  - Após ativar node no control panel e contrair o node ativado ou colocá-lo em standby, ao mover o estilo fica errado; 
 	OK	- Estilo de node buraco negro fica errado no mouse out
 	OK  - Ao expandir closed node com duplo clique: não entra no nódulo expandido: expande no nível atual
+	OK	- Trocar atribuição de cor através de grupo do node por property color que vem no json
 		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
 		- (?) Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
 		- Nas edições do grafo: fechar control panel e resetar current_link e current_node

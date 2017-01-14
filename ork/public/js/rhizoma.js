@@ -5,6 +5,7 @@ function Rhizoma(){
 	var processing_graph = [];
 	var entire_graph = {};
 	var active_graph = {};
+	var groups = {};
 	var current_crawl = 0;
 	var primary = undefined;
 	var communicator = new RhizomaCommunicator();
@@ -16,7 +17,20 @@ function Rhizoma(){
 
 	this.setJSON = function(data){
 		json = data;
-		entire_graph = json; // referência do gráfico completo [substitui json como ref para o programa]
+		entire_graph = {};
+		entire_graph.nodes = json.nodes; // referência do gráfico completo [substitui json como ref para o programa]
+		entire_graph.links = json.links;
+		for(var i = 0; i < json.groups.length; i++){
+			groups[json.groups[i].id] = json.groups[i].color;
+		}
+		for(var i = 0; i < entire_graph.nodes.length; i++){
+			if(groups[entire_graph.nodes[i].group] != undefined){
+				entire_graph.nodes[i].color = groups[entire_graph.nodes[i].group];
+			}
+			else{
+				entire_graph.nodes[i].color = "#000000";
+			}
+		}
 		active_graph.nodes = [];
 		active_graph.links = [];
 		master.initialize();
@@ -96,7 +110,6 @@ function Rhizoma(){
 				inc++;
 			}
 		}
-
 		master.applyStandby(true);
 	}
 
@@ -158,6 +171,33 @@ function Rhizoma(){
 			index++;
 		}
 		return edge_group;
+	}
+
+	this.getTargetColor = function(selected_node){
+		/*
+		Descobre e passa o grupo do nódulo alvo
+		--- Otimimzar: informação constará no array de nódulos ativos
+		*/
+		var edge_color = null;
+		var index = 0;
+		while(edge_color===null){
+			if(active_graph.nodes[index] != null && active_graph.nodes[index] != undefined){
+				if(active_graph.nodes[index].id === selected_node){
+					if(active_graph.nodes[index].standby === 0){
+						edge_color = active_graph.nodes[index].color;
+					}
+					else{
+						edge_color = undefined;
+					}
+				}
+			}
+			else{
+				return null;
+				break;
+			}
+			index++;
+		}
+		return edge_color;
 	}
 
 	// this.distanceToPrimary = function(selected_node){
@@ -576,7 +616,9 @@ function Rhizoma(){
 		new_node.date_end = "";
 		new_node.date_start = "";
 		new_node.description = "";
-		new_node.group = 0; // colocar GROUP = NULL [função para gerar automaticamente]
+		var new_color = "#000000";
+		new_node.group = undefined;
+		new_node.color = new_color;
 		new_node.size = 1;
 		new_node.standby = 0;
 		new_node.type = "categoria";
@@ -586,6 +628,18 @@ function Rhizoma(){
 		active_graph.nodes.push(new_node);
 		master.updateGraph();
 		return new_node.id;
+	}
+
+	this.addGroup = function(){
+		/** 
+		 *  TODO comunicar com BD para pegar novo id e nova cor de grupo
+		 */
+		var new_color = {};
+		new_color.color = color(Object.keys(groups).length+1);
+		new_color.id = Object.keys(groups).length+1;
+		groups[new_color.id] = new_color.color;
+		return new_color;
+
 	}
 
 	this.deleteNode = function(this_node){	
@@ -650,6 +704,7 @@ function Rhizoma(){
 			}
 			if(link_match.new_target){
 				entire_graph.nodes[index_target].group = entire_graph.nodes[index_source].group;
+				entire_graph.nodes[index_target].color = entire_graph.nodes[index_source].color;
 			}
 			entire_graph.nodes[index_target].fx = null;
 			entire_graph.nodes[index_target].fy = null;
@@ -1093,48 +1148,6 @@ function Rhizoma(){
 			}
 			active_graph.links.push(construct_link);
 		}
-
-
-		// active_graph = {};
-		// active_graph.nodes = [];
-		// active_graph.links = [];
-		// var inc = 0;
-		// for(var i = 0; i < entire_graph.nodes.length; i++){
-		// 	var found_match = false;
-		// 	for(var j = 0; j < block_node.length; j++){
-		// 		if(entire_graph.nodes[i].id === block_node[j]){
-		// 			found_match = true;
-		// 		}
-		// 	}
-		// 	if(!found_match){
-		// 		active_graph.nodes[inc] = {};
-		// 		for (var property in entire_graph.nodes[i]) {
-		// 		    if (entire_graph.nodes[i].hasOwnProperty(property)) {
-		// 		        active_graph.nodes[inc][property] = entire_graph.nodes[i][property];
-		// 		    }
-		// 		}
-		// 		inc++;
-		// 	}
-		// }
-		// inc = 0;
-		// var inc = 0;
-		// for(var i = 0; i < entire_graph.links.length; i++){
-		// 	var found_match = false;
-		// 	for(var j = 0; j < block_node.length; j++){
-		// 		if(entire_graph.links[i].source === block_node[j] || entire_graph.links[i].target === block_node[j]){
-		// 			found_match = true;
-		// 		}
-		// 	}
-		// 	if(!found_match){
-		// 		active_graph.links[inc] = {};
-		// 		for (var property in entire_graph.links[i]) {
-		// 		    if (entire_graph.links[i].hasOwnProperty(property)) {
-		// 		        active_graph.links[inc][property] = entire_graph.links[i][property];
-		// 		    }
-		// 		}
-		// 		inc++;
-		// 	}
-		// }
 
 		master.applyStandby(true);
 	}

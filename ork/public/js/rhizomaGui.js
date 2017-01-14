@@ -130,8 +130,8 @@ function RhizomaGui(gui){
 		var border_color;
 		current_type = undefined;
 		// current_editing = undefined;
-		if(element != undefined && element.group != null && element.group != undefined){
-			border_color = color(element.group);
+		if(element != undefined && element.color != null && element.color != undefined){
+			border_color = element.color;//color(element.group);
 		}
 		else{
 			border_color = "black";
@@ -425,7 +425,7 @@ function RhizomaGui(gui){
 	}
 
 	this.addTitle = function(node){
-		var field = {id:"control-panel-title",top:offset_x,height:24,width:300,texttransform:"uppercase",fontweight:800,color:color(node.group)};
+		var field = {id:"control-panel-title",top:offset_x,height:24,width:300,texttransform:"uppercase",fontweight:800,color:node.color/*color(node.group)*/};
 		gui.addField(field,"control-panel");
 		gui.addText("control-panel-title",node.name);
 		offset_x += 24;
@@ -478,10 +478,10 @@ function RhizomaGui(gui){
 				var this_link = {id:"control-panel-links-"+i,position:"absolute",texttransform:"uppercase",top:offset_link_x,height:16,width:300,fontsize:12,fontweight:400,color:"black"};
 				gui.addField(this_link,"control-panel-links");
 				if(all_links[i].source.id === node.id){
-					gui.addText("control-panel-links-"+i,'<div style="position:absolute;width:12px;left:0px;top:2px;height:12px;border-radius:6px;background-color:'+color(node.group)+'"></div>'+master.getLinkLine(all_links[i].type,"RIGHT")+'<div style="position:absolute;text-align:left;width:248px;left:52px">'+all_links[i].target.name+'</div>');
+					gui.addText("control-panel-links-"+i,'<div style="position:absolute;width:12px;left:0px;top:2px;height:12px;border-radius:6px;background-color:'+node.color/*color(node.group)*/+'"></div>'+master.getLinkLine(all_links[i].type,"RIGHT")+'<div style="position:absolute;text-align:left;width:248px;left:52px">'+all_links[i].target.name+'</div>');
 				}
 				else{
-					gui.addText("control-panel-links-"+i,'<div style="position:absolute;width:248px;text-align:right;left:0px">'+all_links[i].source.name+'</div>'+master.getLinkLine(all_links[i].type,"LEFT")+'<div style="position:absolute;left:288px;top:2px;width:12px;height:12px;border-radius:6px;background-color:'+color(node.group)+'"></div>');
+					gui.addText("control-panel-links-"+i,'<div style="position:absolute;width:248px;text-align:right;left:0px">'+all_links[i].source.name+'</div>'+master.getLinkLine(all_links[i].type,"LEFT")+'<div style="position:absolute;left:288px;top:2px;width:12px;height:12px;border-radius:6px;background-color:'+node.color/*color(node.group)*/+'"></div>');
 				}
 				offset_link_x += 18;
 			}
@@ -513,7 +513,7 @@ function RhizomaGui(gui){
 		gui.addField(source_label,"control-panel");
 		gui.addText("control-panel-source-label","ORIGEM");
 
-		var source_field = {id:"control-panel-source",top:offset_x+14,height:24,width:300,texttransform:"uppercase",fontweight:800,color:color(link.source.group)};
+		var source_field = {id:"control-panel-source",top:offset_x+14,height:24,width:300,texttransform:"uppercase",fontweight:800,color:link.source.color/*color(link.source.group)*/};
 		gui.addField(source_field,"control-panel");
 		gui.addText("control-panel-source",link.source.name);
 
@@ -525,7 +525,7 @@ function RhizomaGui(gui){
 		gui.addField(target_label,"control-panel");
 		gui.addText("control-panel-target-label","DESTINO");
 
-		var target_field = {id:"control-panel-target",top:offset_x+14,height:24,width:300,texttransform:"uppercase",fontweight:800,color:color(link.target.group)};
+		var target_field = {id:"control-panel-target",top:offset_x+14,height:24,width:300,texttransform:"uppercase",fontweight:800,color:link.target.color/*color(link.target.group)*/};
 		gui.addField(target_field,"control-panel");
 		gui.addText("control-panel-target",link.target.name);
 
@@ -608,12 +608,12 @@ function RhizomaGui(gui){
 	}
 
 	this.addEditTitle = function(node){
-		var field = {id:"control-panel-title",top:offset_x,height:24,width:300,texttransform:"uppercase",fontweight:800,color:color(node.group)};
+		var field = {id:"control-panel-title",top:offset_x,height:24,width:300,texttransform:"uppercase",fontweight:800,color:node.color/*color(node.group)*/};
 		gui.addField(field,"control-panel");
 		var input_title = {class:"edit-title",id:"control-panel-edit-title",width:299.33};
 		gui.addInput(input_title,"","control-panel-title",node.name);
-		document.getElementById("control-panel-edit-title").style.color = color(node.group);
-		document.getElementById("control-panel-edit-title").style.borderBottom = "1px "+color(node.group)+" solid";
+		document.getElementById("control-panel-edit-title").style.color = node.color;//color(node.group);
+		document.getElementById("control-panel-edit-title").style.borderBottom = "1px "+node.color/*color(node.group)*/+" solid";
 		offset_x += 32;
 	}
 
@@ -622,7 +622,7 @@ function RhizomaGui(gui){
 		gui.addField(description,"control-panel");
 		var text_area_description = {class: "edit-description",id: "control-panel-edit-description",cols:39,rows:8,padding:4};
 		gui.addTextArea(text_area_description,"","control-panel-description",node.description);
-		document.getElementById("control-panel-edit-description").style.border = "1px "+color(node.group)+" solid";
+		document.getElementById("control-panel-edit-description").style.border = "1px "+node.color/*color(node.group)*/+" solid";
 		offset_x += 190;
 	}
 
@@ -702,13 +702,13 @@ function RhizomaGui(gui){
 				var this_link = {id:"control-panel-links-"+all_links[i].id,position:"absolute",texttransform:"uppercase",top:offset_link_x,height:16,width:300,fontsize:12,fontweight:400,color:"black",bordertop:"1px solid transparent",borderbottom:"1px solid transparent"};
 				gui.addField(this_link,"control-panel-links");
 				if(all_links[i].source.id === node.id){
-					gui.addText("control-panel-links-"+all_links[i].id,'<div style="position:absolute;width:12px;left:0px;top:2px;height:12px;border-radius:6px;background-color:'+color(node.group)+'"></div>'+master.getLinkLine(all_links[i].type,"RIGHT")+'<div style="position:absolute;text-align:left;width:248px;left:52px">'+all_links[i].target.name+'</div>');
+					gui.addText("control-panel-links-"+all_links[i].id,'<div style="position:absolute;width:12px;left:0px;top:2px;height:12px;border-radius:6px;background-color:'+node.color/*color(node.group)*/+'"></div>'+master.getLinkLine(all_links[i].type,"RIGHT")+'<div style="position:absolute;text-align:left;width:248px;left:52px">'+all_links[i].target.name+'</div>');
 				}
 				else{
-					gui.addText("control-panel-links-"+all_links[i].id,'<div style="position:absolute;width:248px;text-align:right;left:0px">'+all_links[i].source.name+'</div>'+master.getLinkLine(all_links[i].type,"LEFT")+'<div style="position:absolute;left:288px;top:2px;width:12px;height:12px;border-radius:6px;background-color:'+color(node.group)+'"></div>');
+					gui.addText("control-panel-links-"+all_links[i].id,'<div style="position:absolute;width:248px;text-align:right;left:0px">'+all_links[i].source.name+'</div>'+master.getLinkLine(all_links[i].type,"LEFT")+'<div style="position:absolute;left:288px;top:2px;width:12px;height:12px;border-radius:6px;background-color:'+node.color/*color(node.group)*/+'"></div>');
 				}
 				offset_link_x += 18;
-				master.linksMouseBehavior(all_links[i].id,node.group);
+				master.linksMouseBehavior(all_links[i].id,node.color/*node.group*/);
 			}
 		}
 	}
@@ -1050,11 +1050,11 @@ function RhizomaGui(gui){
 				}
 			}
 			if(i === 0){
-				bordertop = "1px "+color(the_node.group)+" dotted"
-				borderbottom = "1px "+color(the_node.group)+" dotted";
+				bordertop = "1px "+the_node.color/*color(the_node.group)*/+" dotted"
+				borderbottom = "1px "+the_node.color/*color(the_node.group)*/+" dotted";
 			}
 			else{
-				borderbottom = "1px "+color(the_node.group)+" dotted";
+				borderbottom = "1px "+the_node.color/*color(the_node.group)*/+" dotted";
 			}
 			var field = {id:"dropdown-type-"+node_types[i].type,top:offset_item_x,paddingtop:3,height:17,fontweight:fontweight,width:100,bordertop:bordertop,borderbottom:borderbottom};
 			gui.addField(field,"dropdown-type");
@@ -1209,12 +1209,12 @@ function RhizomaGui(gui){
 		button.onmousedown = mouseDownLock;
 	}
 
-	this.linksMouseBehavior = function(id,group){
+	this.linksMouseBehavior = function(id,the_color){
 		var button = document.getElementById("control-panel-links-"+id);
 		var mouseOverLink = function(){
 			this.style.cursor = "pointer";
-			this.style.borderTop = "1px solid "+color(group);
-			this.style.borderBottom = "1px solid "+color(group);
+			this.style.borderTop = "1px solid "+the_color;
+			this.style.borderBottom = "1px solid "+the_color;
 		}
 		var mouseOutLink = function(){
 			this.style.borderTop = "1px solid transparent";
@@ -1265,7 +1265,7 @@ function RhizomaGui(gui){
 		var button = document.getElementById("control-panel-task-completed-checkbox");
 		var mouseOverCompleted = function(){
 			this.style.cursor = "pointer";
-			this.style.color = color(node.group);
+			this.style.color = node.color;//color(node.group);
 		}
 		var mouseOutCompleted = function(){
 			this.style.color = "black";
