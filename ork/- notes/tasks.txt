@@ -22,6 +22,8 @@ Afazeres p/ 0.1 Beta:
 
 			- Atribuir pesos individuais diferentes para os nódulos [para afatar e aproximar]
 
+			- Permitir que usuário modifique variáveis de ambiente [proximidade dos nódulos, força dos links, etc]
+
 		***	ANALISAR
 			OK - atualizar entire_graph toda vez que algo for modificado
 			OK - Implementar simulation.stop() como opção para melhoria de performance
@@ -137,14 +139,16 @@ Afazeres p/ 0.1 Beta:
 	OK - Ao adicionar link, criar modo de evidenciar o source e o target, quando selecionados [linha que acompanha o mouse]
 	OK - Possibilitar inversão de dependência no control panel de link
 	OK  - No adicionar node novo: clique sobre um node existente já cria uma ligação
-	OK  - Na tarefa, criar botão para indicar que ela foi concluída
-7		>> - Seleção de grupo no control panel do node
-			no BD: completed && completion_date
-8		>> - Date picker no control panel do node
-		- Color picker no control panel do node
+	OK  - Na tarefa, criar botão para indicar que ela foi concluída (no BD: completed && completion_date)
+	OK	- Seleção de grupo no control panel do node 
+3		>> - Date picker no control panel do node
 		- Barra de seleção de tempo (na base, da primeira data até a última)
-&		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
+		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
+		- Botões gerais de edição:
+			- Criar novo grupo
+			- Selecionar cor para grupo (Color picker)
+			- Dar nome para grupo
 
 		BD %integração com John
 	OK - Esboço de classe que comunica com o back-end
@@ -217,10 +221,11 @@ Afazeres p/ 0.1 Beta:
 	OK	- Estilo de node buraco negro fica errado no mouse out
 	OK  - Ao expandir closed node com duplo clique: não entra no nódulo expandido: expande no nível atual
 	OK	- Trocar atribuição de cor através de grupo do node por property color que vem no json
+	OK - Toggle no type e group dropdown funcionavam só uma vez
+		- Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
 		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
 		- (?) Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
 		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
-		~~ Ajustar simulation stop [conversar com john: deve parar todos os nodes? a volta para movimento deve ser automática?]
 		- Impedir ação de clique no clique duplo
 		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
 		% Expandir a partir da posição do nódulo sendo expandido (para evitar saltos no grafo)
@@ -229,6 +234,7 @@ Afazeres p/ 0.1 Beta:
 		% (?) iterar rect do label somente nos elementos sem sources (primários) de modo que não seja necessário desenhar todos os labels [integrar no init; colocar classe "primary" nos labels respectivos]
 		% buraco negro não pode ser source
 		% botão fixar agora - após o fixar automático - é obsoleto?
+		% Ajustar simulation stop [conversar com john: deve parar todos os nodes? a volta para movimento deve ser automática?]
 		
 		Outros
 		- XML para português e para inglês
@@ -265,7 +271,9 @@ Divulgação FB
 	OK - 02 | 22.12.2016 | (Close do orkhestra)
 	OK - 03 | 24.12.2016 | (Orkhestra inteiro)
 	OK - 04 | 10.01.2017 | (Navegação no Rhisoma)
-	- 05 | 14.01.2017 | Inscreva-se no Rhisoma para ...
+	- 05 | 16.01.2017 | (Navegação 2: close, collapse, adicionar nódulos, nomear nódulo, trocar categoria de nódulo, adicionar ligações)
+	- 06 | 18.01.2017 | (Solta logo c/ slogan)
+	- 07 | 22.01.2017 | Inscreva-se no Rhisoma para ...
 	-    | 26.01.2017 | Walkthrough [mostra as ferramentas básicas em um vídeo de 5 minutos]
 	- após lançamento (15-29/02) | vídeo de divulgação (neems) [descoberta e exploração]
 	- após lançamento (15-30/03) | vídeo de divulgação (?) [linha de raciocínio / de pensamento]

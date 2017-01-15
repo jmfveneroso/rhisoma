@@ -63,6 +63,10 @@ function Rhizoma(){
 		return graph;
 	}
 
+	this.getGroups = function(){
+		return groups;
+	}
+
 	this.initialize = function(){
 		master.processEntireGraph();			
 			// conferir se a data do target é hoje; se sim, marcar em .urgent

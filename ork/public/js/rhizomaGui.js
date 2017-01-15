@@ -16,6 +16,8 @@ function RhizomaGui(gui){
 	var running = false;
 	var type_dropdown = false;
 	var current_type = undefined;
+	var group_dropdown = false;
+	var current_group = undefined;
 	var current_editing = undefined;
 	var save_node_edition = false;
 	var save_link_edition = false;
@@ -25,6 +27,7 @@ function RhizomaGui(gui){
 	var collapse_node = undefined;
 	var close_node = undefined;
 	var stop_simulation = false;
+	var groups = undefined;
 
 	var tooltips = {};
 	tooltips.node = {text:"Nódulo",fa:"fa-bullseye"};
@@ -124,11 +127,16 @@ function RhizomaGui(gui){
 		return close_node;
 	}
 
+	this.setGroups = function(in_groups){
+		groups = in_groups;
+	}
+
 	/* CONTROL PANEL */
 
 	this.updateControlPanel = function(element, type, new_element){ 
 		var border_color;
 		current_type = undefined;
+		current_group = undefined;
 		// current_editing = undefined;
 		if(element != undefined && element.color != null && element.color != undefined){
 			border_color = element.color;//color(element.group);
@@ -246,6 +254,7 @@ function RhizomaGui(gui){
 			master.addEditType(the_node);
 			master.addEditTitle(the_node);
 			master.addEditDescription(the_node);
+			master.addEditGroup(the_node);
 		}
 		else if(the_node.type === "tarefa"){
 			master.addEditType(the_node);
@@ -254,21 +263,25 @@ function RhizomaGui(gui){
 			master.addEditDateEnd(the_node);
 			master.addEditTaskCompleted(the_node);
 			master.addEditDescription(the_node);
+			master.addEditGroup(the_node);
 		}
 		else if(the_node.type === "texto"){
 			master.addEditType(the_node);
 			master.addEditTitle(the_node);
 			master.addEditDescription(the_node);
+			master.addEditGroup(the_node);
 		}
 		else if(the_node.type === "link"){
 			master.addEditType(the_node);
 			master.addEditTitle(the_node);
 			master.addEditDescription(the_node);
+			master.addEditGroup(the_node);
 		}
 		else if(the_node.type === "buraco"){
 			master.addEditType(the_node);
 			master.addEditTitle(the_node);
 			master.addEditDescription(the_node);
+			master.addEditGroup(the_node);
 		}
 		if(all_links != undefined){
 			master.addEditLinks(the_node);
@@ -347,7 +360,7 @@ function RhizomaGui(gui){
 
 	this.clearControlPanel = function(){
 		offset_x = 10;
-		var check_all_elements = ["title","description","date-start","date-end","type","link-type","source-label","source","target-label","target","links","remove","invert-dependency","task-completed"];
+		var check_all_elements = ["title","description","date-start","date-end","type","link-type","source-label","source","target-label","target","links","remove","invert-dependency","task-completed","group"];
 		for(var i = 0; i < check_all_elements.length; i++){
 			master.removeElement(check_all_elements[i]);
 		}
@@ -364,6 +377,11 @@ function RhizomaGui(gui){
 			master.updateControlPanel(the_link, "LINK", false);
 		}
 		master.removeTypeDropDown();
+		master.removeGroupDropDown();
+		current_type = undefined;
+		current_group = undefined;
+		group_dropdown = false;
+		type_dropdown = false;
 		document.getElementById("control-panel-lock").innerHTML = '<i class="fa fa-lock" aria-hidden="true"></i>';
 	}
 
@@ -601,10 +619,6 @@ function RhizomaGui(gui){
 		offset_x += 15;
 
 		master.editTypeMouseBehavior();
-		// var mouseOverTest = function(){
-		// 	this.style.color = "blue";
-		// };
-		// document.getElementById("control-panel-type-dropdown").onmouseover = mouseOverTest;
 	}
 
 	this.addEditTitle = function(node){
@@ -682,14 +696,19 @@ function RhizomaGui(gui){
 
 	this.addEditGroup = function(node){
 		// no clique: dropdown
-		var field = {id:"control-panel-group",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
-		gui.addField(field_label,"control-panel");
-		gui.addText("control-panel-group","Fim");
+		var field = {id:"control-panel-group",top:offset_x,fontsize:12,height:12,width:300,texttransform:"uppercase",fontweight:200,color:"#9c9c9c"};
+		gui.addField(field,"control-panel");
 
-		var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
-		gui.addField(field_date_end,"control-panel-date-end");
-		gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
-		offset_x += 20;
+		var color_field = {id:"control-panel-group-dropdown",top:0,left:0,width:30,height:15,backgroundColor:node.color};
+		gui.addField(color_field,"control-panel-group");
+
+		var color_label = {id:"control-panel-group-label",top:0,left:40,width:260,height:15,font:'Source Sans Pro',fontsize:12,color:node.color,fontweight:600};
+		gui.addField(color_label,"control-panel-group");
+		gui.addText("control-panel-group-label",'GRUPO '+node.group);
+
+		offset_x += 30;
+
+		master.editGroupMouseBehavior();
 	}
 
 	this.addEditLinks = function(node){
@@ -1022,13 +1041,23 @@ function RhizomaGui(gui){
 	/* MOUSE BEHAVIOR */
 
 	this.toggleTypeDropDown = function(){
-		if(!type_dropdown){
+		type_dropdown = !type_dropdown;
+		if(type_dropdown){
 			master.drawTypeDropDown();
 		}
 		else{
 			master.removeTypeDropDown();
 		}
-		type_dropdown = !type_dropdown;
+	}
+
+	this.toggleGroupDropDown = function(){
+		group_dropdown = !group_dropdown;
+		if(group_dropdown){
+			master.drawGroupDropDown();
+		}
+		else{
+			master.removeGroupDropDown();
+		}
 	}
 
 	this.drawTypeDropDown = function(){
@@ -1050,11 +1079,11 @@ function RhizomaGui(gui){
 				}
 			}
 			if(i === 0){
-				bordertop = "1px "+the_node.color/*color(the_node.group)*/+" dotted"
-				borderbottom = "1px "+the_node.color/*color(the_node.group)*/+" dotted";
+				bordertop = "1px "+the_node.color+" dotted"
+				borderbottom = "1px "+the_node.color+" dotted";
 			}
 			else{
-				borderbottom = "1px "+the_node.color/*color(the_node.group)*/+" dotted";
+				borderbottom = "1px "+the_node.color+" dotted";
 			}
 			var field = {id:"dropdown-type-"+node_types[i].type,top:offset_item_x,paddingtop:3,height:17,fontweight:fontweight,width:100,bordertop:bordertop,borderbottom:borderbottom};
 			gui.addField(field,"dropdown-type");
@@ -1065,11 +1094,95 @@ function RhizomaGui(gui){
 		node_types[0] = {type:"categoria",name:"categoria"};
 	}
 
+	this.drawGroupDropDown = function(){
+		var container_height = Object.keys(groups).length*20;
+		var offset_top = document.getElementById("control-panel-group").offsetTop + 24;
+		var container = {id:"dropdown-group",left:10,top:offset_top,width:200,height: container_height,backgroundColor:"white",font:"Source Sans Pro",fontsize:12};
+		var offset_item_x = 0;
+		gui.addContainer(container);
+		var inc = 0;
+		for(group in groups){
+			var fontweight = 400;
+			var bordertop = null;
+			var borderbottom = null;
+			if(current_group === undefined){
+				if(groups[group] === the_node.color){
+					fontweight = 800;
+				}
+			}
+			else{
+				if(group === current_group){
+					fontweight = 800;
+				}
+			}
+			if(inc === 0){
+				bordertop = "1px "+the_node.color+" dotted"
+				borderbottom = "1px "+the_node.color+" dotted";
+			}
+			else{
+				borderbottom = "1px "+the_node.color+" dotted";
+			}
+			var field = {id:"dropdown-color-"+group,top:offset_item_x+3,height:15,fontweight:fontweight,width:30,backgroundColor:groups[group]};
+			gui.addField(field,"dropdown-group");
+
+			var field = {id:"dropdown-group-"+group,top:offset_item_x,paddingleft:40,paddingtop:3,height:17,fontweight:fontweight,width:160,bordertop:bordertop,borderbottom:borderbottom,color:"black"};
+			gui.addField(field,"dropdown-group");
+			gui.addText("dropdown-group-"+group,"GRUPO "+group);
+			master.selectGroupMouseBehavior("dropdown-group-"+group);
+			offset_item_x += 20;
+			inc++;
+		}
+		// node_types[0] = {type:"categoria",name:"categoria"};
+	}
+
 	this.removeTypeDropDown = function(){
-		type_dropdown = false;
+		// type_dropdown = false;
 		if(document.getElementById("dropdown-type")!=null){
 			document.getElementById("dropdown-type").parentElement.removeChild(document.getElementById("dropdown-type"));
 		}
+	}
+
+	this.removeGroupDropDown = function(){
+		// group_dropdown = false;
+		if(document.getElementById("dropdown-group")!=null){
+			document.getElementById("dropdown-group").parentElement.removeChild(document.getElementById("dropdown-group"));
+		}
+	}
+
+	this.selectGroupMouseBehavior = function(id){
+		var button = document.getElementById(id);
+		var mouseOverGroup = function(){
+			var current_id = this.id.split("-");
+			current_id = current_id[current_id.length-1];
+			this.style.cursor = "pointer";
+			this.style.color = "rgb(156,156,156)";
+			document.getElementById("dropdown-color-"+current_id).style.backgroundColor = "black";
+		}
+		var mouseOutGroup = function(){
+			var current_id = this.id.split("-");
+			current_id = current_id[current_id.length-1];
+			this.style.color = "black";
+			document.getElementById("dropdown-color-"+current_id).style.backgroundColor = groups[current_id];
+		}
+		var mouseDownGroup = function(){
+			var current_id = this.id.split("-");
+			current_id = current_id[current_id.length-1];
+			current_group = current_id;
+			current_editing.group = current_id;
+			current_editing.color = groups[current_id];
+			document.getElementById("control-panel-group").innerHTML = "";
+			var color_field = {id:"control-panel-group-dropdown",top:0,left:0,width:30,height:15,backgroundColor:current_editing.color};
+			gui.addField(color_field,"control-panel-group");
+
+			var color_label = {id:"control-panel-group-label",top:0,left:40,width:260,height:15,font:'Source Sans Pro',fontsize:12,color:current_editing.color,fontweight:600};
+			gui.addField(color_label,"control-panel-group");
+			gui.addText("control-panel-group-label",'GRUPO '+current_editing.group);
+			master.editGroupMouseBehavior();
+			master.toggleGroupDropDown();
+		}
+		button.onmouseover = mouseOverGroup;
+		button.onmouseout = mouseOutGroup;
+		button.onmousedown = mouseDownGroup;
 	}
 
 	this.selectTypeMouseBehavior = function(id){
@@ -1147,6 +1260,24 @@ function RhizomaGui(gui){
 		button.onmousedown = mouseDownType;
 	}
 
+	this.editGroupMouseBehavior = function(){
+		var button = document.getElementById("control-panel-group-dropdown");
+		var mouseOverGroup = function(){
+			this.style.cursor = "pointer";
+			this.style.backgroundColor = "black";
+		}
+		var mouseOutGroup = function(){
+			this.style.backgroundColor = current_editing.color;
+		}
+		var mouseDownGroup = function(){
+			master.toggleGroupDropDown();
+			// toggle drop down
+		}
+		button.onmouseover = mouseOverGroup;
+		button.onmouseout = mouseOutGroup;
+		button.onmousedown = mouseDownGroup;
+	}
+
 	this.lockMouseBehavior = function(){
 		var button = document.getElementById("control-panel-lock");
 		var mouseOverLock = function(){
@@ -1176,6 +1307,11 @@ function RhizomaGui(gui){
 					}
 					if(current_editing.type != the_node.type){
 						the_node.type = current_editing.type;
+						found_node_match = true;
+					}
+					if(current_editing.group != the_node.group){
+						the_node.group = current_editing.group;
+						the_node.color = current_editing.color;
 						found_node_match = true;
 					}
 					if(current_editing.completed != the_node.completed){

@@ -75,6 +75,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
 
   structure.setJSON(in_graph);
   graph = structure.getGraph();
+  gui.setGroups(structure.getGroups());
 
   map = svg.append("rect")
   .attr("class", "map")
@@ -1141,9 +1142,9 @@ function restart(e){
   simulation.force("link").links(graph.links);
   if(run_translate){
     var transform = d3.select("g").node();
-      var mouse_xy = d3.mouse(transform);
-      var node_x = mouse_xy[0];
-      var node_y = mouse_xy[1];
+    var mouse_xy = d3.mouse(transform);
+    var node_x = mouse_xy[0];
+    var node_y = mouse_xy[1];
     if(go_to_center){
       simulation.force("center", d3.forceCenter(width/2,height/2));
       go_to_center = false;
@@ -1151,7 +1152,7 @@ function restart(e){
     }
     else{
       simulation.force("center", d3.forceCenter(node_x,node_y));
-        zoomUpdate(node_x,node_y);
+      zoomUpdate(node_x,node_y);
     }
     run_translate = false;
   }
@@ -1165,6 +1166,8 @@ function restart(e){
 function zoomUpdate(node_x,node_y){
   var dx = document.getElementById("all-nodes").getBBox().height;
   var dy = document.getElementById("all-nodes").getBBox().width;
+
+  // console.log(dx + " x " + dy);
 
   // guardar no drift o bounding box?
   scale = Math.max(1, Math.min(4, 0.8 / Math.max(dx / width, dy / height)));
