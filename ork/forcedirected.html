@@ -11,6 +11,7 @@
 <script src="public/js/rhisomaGuiCalendar.js"></script>
 <script src="public/js/rhizomaStyle.js"></script>
 <script src="public/js/rhizomaCommunicator.js"></script>
+<script src="public/js/systemGui.js"></script>
 <script src="public/js/gui.js"></script>
 <body>
 <svg id="rhizoma" width="960" height="600" style="position:absolute;top:0px"></svg>
@@ -25,6 +26,8 @@ var $ = new Gui();
 var gui = new RhizomaGui($);
 var structure = new Rhizoma();
 var rst = new RhizomaStyle();
+var top_menu = new SystemGui();
+top_menu.drawSystemMenu();
 
 var current_node = {};
 var current_link = {};

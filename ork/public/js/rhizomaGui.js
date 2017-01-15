@@ -145,7 +145,7 @@ function RhizomaGui(gui){
 			border_color = "black";
 		}
 		if(document.getElementById("control-panel") === null){
-			var container = {id:"control-panel", display: "inline",width:300, height:window.innerHeight,pointerevents:"none",left:-300,top:0, backgroundColor:"rgba(255,255,255,0.9)", font:"Source Sans Pro", padding:10, borderright: "1px "+border_color+" dashed"};
+			var container = {id:"control-panel", display: "inline",width:300, height:window.innerHeight-40,pointerevents:"none",left:-300,top:40, backgroundColor:"rgba(255,255,255,0.9)", font:"Source Sans Pro", padding:10, borderright: "1px "+border_color+" dashed"};
 			gui.addContainer(container);
 		}
 		if(document.getElementById("control-panel-lock") === null){

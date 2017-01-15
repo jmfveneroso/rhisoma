@@ -25,6 +25,23 @@ input.edit-title:focus{
   outline: none;
 }
 
+input.search-field{
+  width:300px;
+  color: black;
+  border:none;
+  border-bottom: 1px black solid;
+  font-family: Source Sans Pro;
+  font-size: 16px;
+  font-weight:200;
+  /*text-transform: uppercase;*/
+  background-color: transparent;
+}
+
+input.search-field:focus{
+  color: black;
+  outline: none;
+}
+
 textarea.edit-description{
   color:black;
   font-size:16px;
