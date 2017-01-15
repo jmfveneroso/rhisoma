@@ -3,6 +3,7 @@ function RhizomaStyle(){
 	  /* LINK STYLING */
 
 	var inside_node = undefined;
+	var current_node = undefined;
 	var main_structure = undefined;
 
 	this.setInsideNode = function(in_inside){
@@ -13,8 +14,9 @@ function RhizomaStyle(){
 		main_structure = in_structure;
 	}
 
-	this.setEnvironment = function(in_inside,in_structure){
+	this.setEnvironment = function(in_inside,in_current,in_structure){
 		inside_node = in_inside;
+		current_node = in_current;
 		main_structure = in_structure;
 	}
 
@@ -84,7 +86,7 @@ function RhizomaStyle(){
   		if(d.collapse === 1){
 	  		if(d.type != "buraco"){
 	  			if(d.standby === 0){
-	  				return d.color;//color(d.group);
+	  				return d.color;
 	  			}
 	  			else{
 			  		return "#c9c9c9";
@@ -101,7 +103,7 @@ function RhizomaStyle(){
 	  else{
 	  	if(d.collapse === 1){
 	  		if(d.standby === 0){
-	  			return d3.rgb(d.color/*color(d.group)*/).brighter(0.5);
+	  			return d3.rgb(d.color).brighter(0.5);
 	  		}
 	  		else{
 	  			return d3.rgb("#c9c9c9").brighter(0.5);
@@ -117,11 +119,21 @@ function RhizomaStyle(){
 	  if(inside_node != d.id){
   		if(d.collapse === 1){
 		    if(d.type != "buraco"){
-		      return "transparent";
+		    	if(current_node === d.id){
+		    		if(d.standby === 0){
+		    			return d3.rgb(d.color).darker(1);
+		    		}
+		    		else{
+		    			return d3.rgb("#c9c9c9").darker(1);
+		    		}	
+		    	}
+		    	else{
+		    		return "transparent";
+		    	}
 		    }
 		    else{
 		    	if(d.standby === 0){
-		    		return d.color;//color(d.group);
+		    		return d.color;
 		    	}
 		    	else{
 		    		return "#c9c9c9";
@@ -129,17 +141,27 @@ function RhizomaStyle(){
 		    }
 		}
 		else{
-			if(d.standby === 0){
-	    		return d.color;//color(d.group);
-	    	}
-	    	else{
-	    		return "#c9c9c9";
-	    	}
+			if(current_node === d.id){
+				if(d.standby === 0){
+		    		return d3.rgb(d.color).darker(1);
+		    	}
+		    	else{
+		    		return d3.rgb("#c9c9c9").darker(1);
+		    	}
+			}
+			else{
+				if(d.standby === 0){
+		    		return d.color;
+		    	}
+		    	else{
+		    		return "#c9c9c9";
+		    	}
+		    }
 		}
 	  }
 	  else{
 	  	if(d.standby === 0){
-	  		return d3.rgb(d.color/*color(d.group)*/).darker(2.5);
+	  		return d3.rgb(d.color).darker(2.5);
 	  	}
 	    else{
 	    	return d3.rgb("#c9c9c9").darker(2.5);
@@ -151,14 +173,24 @@ function RhizomaStyle(){
 	  if(inside_node != d.id){
 	  	if(d.collapse === 1){
 	  		if(d.type != "buraco"){
-		      return 0;
+	  			if(current_node === d.id){
+	  				return 2;
+	  			}
+	  			else{
+	  				return 0;
+	  			}
 		    }
 		    else{
 		      return 2;
 		    }
 	  	}
 	    else{
-	    	return 2;
+	    	if(current_node === d.id){
+	    		return 4;
+	    	}
+	    	else{
+	    		return 2;
+	    	}
 	    }
 	  }
 	  else{
@@ -207,7 +239,7 @@ function RhizomaStyle(){
 	this.labelTextFill = function(d){
 	  if(d.type === "categoria" && d.parentConnections != 0){
 	  	if(d.standby === 0){
-	  		return d.color;//color(d.group);
+	  		return d.color;
 	  	}
 	    else{
 	    	return "#c9c9c9";
@@ -254,7 +286,7 @@ function RhizomaStyle(){
 	this.labelTextZoomFill = function(d){
 	  if(d.parentConnections === 0){
 	  	if(d.standby === 0){
-	  		return d.color;//color(d.group);
+	  		return d.color;
 	  	}
 	    else{
 	    	return "#c9c9c9";
@@ -262,7 +294,7 @@ function RhizomaStyle(){
 	  }
 	  else if(d.type === "categoria"){
 	  	if(d.standby === 0){
-	  		return d.color;//color(d.group);
+	  		return d.color;
 	  	}
 	    else{
 	    	return "#c9c9c9";
@@ -364,7 +396,7 @@ function RhizomaStyle(){
 
 	this.labelRectStroke = function(d){
 		if(d.standby === 0){
-			return d.color;//color(d.group);
+			return d.color;
 		}
 		else{
 			return "#c9c9c9";

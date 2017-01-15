@@ -101,11 +101,11 @@ Afazeres p/ 0.1 Beta:
 			OK - Diferença para usuário logado (nome, configurações, sair) ou não (login e cadastro)
 			- Barra de busca por nódulo
 				OK - Esboço
-6				- Botão para enviar a query
-7				- Autocomplete (busca pelo nome do nódulo)
-8				- Quando acha: evidencia no rizoma o nódulo encontrado
+7				- Botão para enviar a query
+8				- Autocomplete (busca pelo nome do nódulo)
+9				- Quando acha: evidencia no rizoma o nódulo encontrado
 			OK - Tooltips
-9			- Usuário logado clica na logo para revelar o menu; usuário sem estar logado fica com o menu sempre visível
+10			- Usuário logado clica na logo para revelar o menu; usuário sem estar logado fica com o menu sempre visível
 		% Calibrar centralização durante navegação nos nódulos
 		% Calibrar algoritmo de força do d3 (para espacializar melhor o mapa e promover interações mais fluidas)
 		% Modo para não perder nódulos desconectados [função para aproximar nódulos]
@@ -144,14 +144,14 @@ Afazeres p/ 0.1 Beta:
 	OK  - No adicionar node novo: clique sobre um node existente já cria uma ligação
 	OK  - Na tarefa, criar botão para indicar que ela foi concluída (no BD: completed && completion_date)
 	OK	- Seleção de grupo no control panel do node 
-10		>> - Date picker no control panel do node
+11		>> - Date picker no control panel do node
 		- Barra de seleção de tempo (na base, da primeira data até a última)
-		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
-		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
+&1		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
+&5		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
 		- Botões gerais de edição:
-			- Criar novo grupo
-			- Selecionar cor para grupo (Color picker)
-			- Dar nome para grupo
+&2			- Criar novo grupo
+&3			- Selecionar cor para grupo (Color picker)
+&4			- Dar nome para grupo
 
 		BD %integração com John
 	OK - Esboço de classe que comunica com o back-end
@@ -225,7 +225,8 @@ Afazeres p/ 0.1 Beta:
 	OK  - Ao expandir closed node com duplo clique: não entra no nódulo expandido: expande no nível atual
 	OK	- Trocar atribuição de cor através de grupo do node por property color que vem no json
 	OK - Toggle no type e group dropdown funcionavam só uma vez
-		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
+	OK - Quanto termina edição de nódulo e bloqueia: nódulo perde estilo de selecionado
+&6		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
 		- Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
 		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
 		- (?) Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
@@ -252,6 +253,7 @@ Afazeres p/ 0.1 Beta:
 	OK - Passar estilização do grafo no html para uma classe dedicada [rhizomaStyle.js]
 	OK - Transferir funções de atualização de label do index para o RhizomaStyle [updateLabel]
 	OK - Criação de rhisoma.css para incluir o estilo da página
+		- Container para criar instâncias das classes com as dependências necessárias
 		- Criar arquitetura de classes e melhor organização do código
 			Especialmente classes rhisoma
 

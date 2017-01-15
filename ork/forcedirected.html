@@ -91,7 +91,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
 
   /* LINKS */
 
-  rst.setEnvironment(inside_node,structure);
+  rst.setEnvironment(inside_node,current_node.id,structure);
   link = svg.append("g")
     .attr("class", "links")
     .selectAll("line")
@@ -223,7 +223,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
           }
           else{
             if(current_node.standby === 0){
-              document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
               document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
             }
             else{
@@ -233,7 +233,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
           }
         }
         else{
-          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
+          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
           document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
         }
       }
@@ -243,7 +243,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
       document.getElementById("the-line-"+current_link.id).style.strokeWidth = "1px";
       current_link = {};
     }
-    var reference_element = svg.select(".nodes").attr("transform");//d3.select("g").node();
+    var reference_element = svg.select(".nodes").attr("transform");
     var reference_transform = null;
     var scale = null;
     if(reference_element != null){
@@ -442,8 +442,8 @@ function environmentMove(){
       .style("stroke-linecap", "round")
       .style("stroke", function(){
         if(graph.nodes[current_node_index].standby === 0){
-          var color_line = graph.nodes[current_node_index].color;//.group;
-          return color_line;//color(color_line);
+          var color_line = graph.nodes[current_node_index].color;
+          return color_line;
         }
         else{
           return "#c9c9c9";
@@ -518,7 +518,7 @@ function environmentStabilize(){
     var this_id = gui.saveNode().id;
     gui.resetCurrentEditing();
     restart();
-    rst.setEnvironment(inside_node,structure);
+    rst.setEnvironment(inside_node,current_node.id,structure);
     rst.updateLabel(this_id);
   }
   else if(gui.saveLink() != false){
@@ -528,7 +528,7 @@ function environmentStabilize(){
     structure.updateGraph();
     gui.resetCurrentEditing();
     restart();
-    rst.setEnvironment(inside_node,structure);
+    rst.setEnvironment(inside_node,current_node.id,structure);
     rst.updateLabel(source_id);
     rst.updateLabel(target_id);
   }
@@ -546,7 +546,7 @@ function environmentStabilize(){
     gui.resetLink();
     gui.closeMenus();
     restart();
-    rst.setEnvironment(inside_node,structure);
+    rst.setEnvironment(inside_node,current_node.id,structure);
     rst.updateLabel(source_id);
     rst.updateLabel(target_id);
     current_link = {};
@@ -571,7 +571,7 @@ function environmentStabilize(){
     gui.resetLink();
     gui.closeMenus();
     restart();
-    rst.setEnvironment(inside_node,structure);
+    rst.setEnvironment(inside_node,current_node.id,structure);
     rst.updateLabel(updated_link.source);
     rst.updateLabel(updated_link.target);
     current_link = {};
@@ -617,12 +617,12 @@ function mouseDownLink(d){
           document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
         }
         else{
-          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
+          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
           document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
         }
       }
       else{
-        document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
+        document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
         document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
       }
     }
@@ -635,7 +635,7 @@ function mouseDownLink(d){
     structure.deleteLink(d.id);
     gui.closeMenus();
     restart();
-    rst.setEnvironment(inside_node,structure);
+    rst.setEnvironment(inside_node,current_node.id,structure);
     rst.updateLabel(link_source);
     rst.updateLabel(link_target);
   }
@@ -679,7 +679,7 @@ function mouseOverNode(d){
   if(inside_node != d.id){
     if(d.collapse === 1){
       if(d.standby === 0){
-        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color/*color(d.group)*/).darker(1);
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
         document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
       }
       else{
@@ -689,7 +689,7 @@ function mouseOverNode(d){
     }
     else{
       if(d.standby === 0){
-        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color/*color(d.group)*/).darker(1);
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
         document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
       }
       else{
@@ -737,7 +737,7 @@ function mouseOutNode(d){
         }
         else{
           if(d.standby === 0){
-            document.getElementById("node-symbol-"+d.id).style.stroke = d.color;//color(d.group);
+            document.getElementById("node-symbol-"+d.id).style.stroke = d.color;
             document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
           }
           else{
@@ -748,7 +748,7 @@ function mouseOutNode(d){
       }
       else{
         if(d.standby === 0){
-          document.getElementById("node-symbol-"+d.id).style.stroke = d.color;//color(d.group);
+          document.getElementById("node-symbol-"+d.id).style.stroke = d.color;
           document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
         }
         else{
@@ -777,12 +777,18 @@ function clickNode(d){
             document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
           }
           else{
-            document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
-            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+            if(current_node.standby === 0){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+            }
+            else{
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+            }
           }
         }
         else{
-          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;//color(current_node.group);
+          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
           document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
         }
       }
@@ -796,8 +802,6 @@ function clickNode(d){
       for(var i = 0; i < in_links.length; i++){
         for(var j = 0; j < graph.links.length; j++){
           if(in_links[i].id === graph.links[j].id){
-            // in_links[i].source.group = graph.links[j].source.group;
-            // in_links[i].target.group = graph.links[j].target.group;
             in_links[i].source.color = graph.links[j].source.color;
             in_links[i].target.color = graph.links[j].target.color;
           }
@@ -817,8 +821,6 @@ function clickNode(d){
       for(var i = 0; i < in_links.length; i++){
         for(var j = 0; j < graph.links.length; j++){
           if(in_links[i].id === graph.links[j].id){
-            // in_links[i].source.group = graph.links[j].source.group;
-            // in_links[i].target.group = graph.links[j].target.group;
             in_links[i].source.color = graph.links[j].source.color;
             in_links[i].target.color = graph.links[j].target.color;
           }
@@ -848,7 +850,7 @@ function clickNode(d){
     structure.deleteNode(d.id);
     gui.closeMenus();
     restart();
-    rst.setEnvironment(inside_node,structure);
+    rst.setEnvironment(inside_node,current_node.id,structure);
     for(var i = 0; i < update_nodes.length; i++){
       rst.updateLabel(update_nodes[i]);
     }
@@ -868,7 +870,7 @@ function clickNode(d){
       gui.closeMenus();
       if(link_update){
         restart();
-        rst.setEnvironment(inside_node,structure);
+        rst.setEnvironment(inside_node,current_node.id,structure);
         rst.updateLabel(d.id);
       }
     }
@@ -889,7 +891,7 @@ function clickNode(d){
         gui.closeMenus();
         if(link_update){
           restart();
-          rst.setEnvironment(inside_node,structure);
+          rst.setEnvironment(inside_node,current_node.id,structure);
           rst.updateLabel(d.id);
         }
         gui.removeSelectLine(); 
@@ -904,7 +906,7 @@ function clickNode(d){
       restart();
       if(d.id === current_node.id){
         if(d.standby === 0){
-          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color/*color(d.group)*/).darker(1);
+          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
           document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
         }
         else{
@@ -922,7 +924,7 @@ function clickNode(d){
       restart();
       if(d.id === current_node.id){
         if(d.standby === 0){
-          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color/*color(d.group)*/).darker(1);
+          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
           document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
         }
         else{
@@ -939,7 +941,7 @@ function clickNode(d){
     restart();
     if(d.id === current_node.id && current_node.id != inside_node){
       if(d.standby === 1){
-        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color/*color(d.group)*/).darker(1);
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
         document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
       }
       else{
@@ -1017,7 +1019,7 @@ function restart(e){
   var update_links = svg.selectAll("line").filter(".link").each(function(d){structure.updateLinkXY(d);});
   graph = structure.getGraph();
 
-  rst.setEnvironment(inside_node,structure);
+  rst.setEnvironment(inside_node,current_node.id,structure);
   node = node.data(graph.nodes, function(d){return d.id});
   node.selectAll("path").remove();
   node.exit().remove();
