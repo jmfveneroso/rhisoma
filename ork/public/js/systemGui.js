@@ -6,6 +6,7 @@ function SystemGui(){
 	var node_names = undefined;
 	var query_results = [];
 	var update_zoom = undefined;
+	var current_query = -1;
 
 	var buttons = {
 		"system-menu-user-avatar":"Usuário",
@@ -228,8 +229,34 @@ function SystemGui(){
 
 	this.searchWriteBehavior = function(){
 		var search_field = document.getElementById("system-menu-search");
-		var searchUp= function(){
-			master.findSearch();
+		var searchUp = function(){
+			if(window.event.keyCode === 40){
+				if(current_query+1 < query_results.length){
+					if(current_query >= 0){
+						master.eventFire(document.getElementById("system-menu-autocomplete-"+query_results[current_query].id),"mouseout");
+					}
+					current_query++;
+					master.eventFire(document.getElementById("system-menu-autocomplete-"+query_results[current_query].id),"mouseover");
+				}
+			}
+			else if(window.event.keyCode === 38){
+				if(current_query-1 >= 0 && query_results.length > 0){
+					master.eventFire(document.getElementById("system-menu-autocomplete-"+query_results[current_query].id),"mouseout");
+					current_query--;
+					if(current_query >= 0){
+						master.eventFire(document.getElementById("system-menu-autocomplete-"+query_results[current_query].id),"mouseover");
+					}
+				}
+			}
+			else if(window.event.keyCode === 13){
+				if(query_results.length > 0){
+					master.eventFire(document.getElementById("system-menu-autocomplete-"+query_results[current_query].id),"mousedown");
+				}
+			}
+			else{
+				current_query = -1;
+				master.findSearch();
+			}
 		};
 
 		search_field.onkeyup = searchUp;
@@ -239,6 +266,7 @@ function SystemGui(){
 		var query = document.getElementById("system-menu-search").value;
 		if(query != "" && node_names != undefined){
 			query_results = [];
+			current_query = -1;
 			for(var i = 0; i < node_names.length; i++){
 				var expr= query.toUpperCase();
 				var check = node_names[i].name.toUpperCase();
