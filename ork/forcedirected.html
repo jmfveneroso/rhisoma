@@ -70,8 +70,24 @@ var map;
 
 var inside_node = undefined;
 var drift = [];
+var prevent_changes = false;
 
 gui.menu();
+
+function setSearchGraph(){
+  var node_names = [];
+  for(var i = 0; i < graph.nodes.length; i++){
+    node_names[i] = {};
+    node_names[i].name = graph.nodes[i].name;
+    node_names[i].id = graph.nodes[i].id;
+  }
+  node_names.sort(function(a, b) {
+    var textA = a.name.toUpperCase();
+    var textB = b.name.toUpperCase();
+    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+  });
+  top_menu.setCurrentGraph(node_names);
+}
 
 d3.json("public/json/test.json", function(error, in_graph) {
   if (error) throw error;
@@ -79,6 +95,8 @@ d3.json("public/json/test.json", function(error, in_graph) {
   structure.setJSON(in_graph);
   graph = structure.getGraph();
   gui.setGroups(structure.getGroups());
+
+  setSearchGraph();
 
   map = svg.append("rect")
   .attr("class", "map")
@@ -213,35 +231,37 @@ d3.json("public/json/test.json", function(error, in_graph) {
   /* ZOOM */
 
   zoom.filter(function() { return !event.button && event.type !== 'dblclick'; }).on("zoom", function() {
-    gui.hideControlPanel();
-    if(document.getElementById("node-symbol-"+current_node.id) != null){
-      if(inside_node != current_node.id){
-        if(current_node.type != "buraco"){
-          if(current_node.collapse != 0){
-            document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
-            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
-          }
-          else{
-            if(current_node.standby === 0){
-              document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
-              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+    if(!prevent_changes){
+      gui.hideControlPanel();
+      if(document.getElementById("node-symbol-"+current_node.id) != null){
+        if(inside_node != current_node.id){
+          if(current_node.type != "buraco"){
+            if(current_node.collapse != 0){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
             }
             else{
-              document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
-              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              if(current_node.standby === 0){
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+              else{
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
             }
           }
+          else{
+            document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+          }
         }
-        else{
-          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
-          document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
-        }
+        current_node = {};
       }
-      current_node = {};
-    }
-    if(document.getElementById("the-line-"+current_link.id) != null){
-      document.getElementById("the-line-"+current_link.id).style.strokeWidth = "1px";
-      current_link = {};
+      if(document.getElementById("the-line-"+current_link.id) != null){
+        document.getElementById("the-line-"+current_link.id).style.strokeWidth = "1px";
+        current_link = {};
+      }
     }
     var reference_element = svg.select(".nodes").attr("transform");
     var reference_transform = null;
@@ -764,10 +784,35 @@ function mouseOutNode(d){
 }
 
 function clickNode(d){
+  var current_id = top_menu.getUpdateZoom();
+  if(current_id != undefined){
+    prevent_changes = true;
+    var reference_element = svg.select("#node-"+current_id).attr("transform");
+    var reference_transform = null;
+    if(reference_element != null){
+      var temp_element = reference_element.split(" ");
+      var temp_transform = temp_element[0].substring(temp_element[0].indexOf("(")+1, temp_element[0].indexOf(")"));
+      reference_transform = temp_transform.split(",");
+    }
+    var dx = document.getElementById("node-symbol-"+current_id).getBBox().height;
+    var dy = document.getElementById("node-symbol-"+current_id).getBBox().width;
+    var node_x = reference_transform[0];
+    var node_y = reference_transform[1];
+
+    scale = Math.max(1, Math.min(2, 0.8 / Math.max(dx / width, dy / height)));
+    translate = [width / 2 - scale * node_x, height / 2 - scale * node_y];
+
+    svg.transition()
+        .duration(750)
+        .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) )
+        .on("end", function(){prevent_changes = false;});
+  }
+
   if(document.getElementById("the-line-"+current_link.id) != null){
     document.getElementById("the-line-"+current_link.id).style.strokeWidth = "1px";
     current_link = {};
   }
+
   if(gui.editionMode() != "nodedelete" && gui.editionMode() != "nodeadd" && gui.editionMode() != "linkadd" && gui.editionMode() != "stateexplode" && gui.editionMode() != "statecontract" && gui.editionMode() != "stateidle"){
     if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) != null){
       if(inside_node != current_node.id){
@@ -1019,6 +1064,8 @@ function restart(e){
   var update_links = svg.selectAll("line").filter(".link").each(function(d){structure.updateLinkXY(d);});
   graph = structure.getGraph();
 
+  setSearchGraph();
+
   rst.setEnvironment(inside_node,current_node.id,structure);
   node = node.data(graph.nodes, function(d){return d.id});
   node.selectAll("path").remove();
@@ -1171,8 +1218,6 @@ function restart(e){
 function zoomUpdate(node_x,node_y){
   var dx = document.getElementById("all-nodes").getBBox().height;
   var dy = document.getElementById("all-nodes").getBBox().width;
-
-  // console.log(dx + " x " + dy);
 
   // guardar no drift o bounding box?
   scale = Math.max(1, Math.min(4, 0.8 / Math.max(dx / width, dy / height)));

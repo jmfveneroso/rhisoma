@@ -99,11 +99,11 @@ Afazeres p/ 0.1 Beta:
 			OK - Esboço
 			OK - Logo do rhisoma
 			OK - Diferença para usuário logado (nome, configurações, sair) ou não (login e cadastro)
-			- Barra de busca por nódulo
+			OK - Barra de busca por nódulo
 				OK - Esboço
-7				- Botão para enviar a query
-8				- Autocomplete (busca pelo nome do nódulo)
-9				- Quando acha: evidencia no rizoma o nódulo encontrado
+				OK - Botão para enviar a query
+				OK - Autocomplete (busca pelo nome do nódulo)
+				OK - Quando acha: evidencia no rizoma o nódulo encontrado
 			OK - Tooltips
 10			- Usuário logado clica na logo para revelar o menu; usuário sem estar logado fica com o menu sempre visível
 		% Calibrar centralização durante navegação nos nódulos

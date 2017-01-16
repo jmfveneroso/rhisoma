@@ -3,14 +3,28 @@ function SystemGui(){
 	var master = this;
 	var gui = new Gui();
 	var logged = true;
+	var node_names = undefined;
+	var query_results = [];
+	var update_zoom = undefined;
 
 	var buttons = {
 		"system-menu-user-avatar":"Usuário",
 		"system-menu-settings":"Configurações",
 		"system-menu-signout":"Sair",
 		"system-menu-login":"Entrar",
-		"system-menu-signup":"Cadastrar"
+		"system-menu-signup":"Cadastrar",
+		"system-menu-search-button":"Buscar"
 	};
+
+	this.setCurrentGraph = function(in_nodes){
+		node_names = in_nodes;
+	}
+
+	this.getUpdateZoom = function(){
+		var temp_zoom = update_zoom;
+		update_zoom = undefined;
+		return temp_zoom;
+	}
 
 	this.drawSystemMenu = function(logged_in){
 		var container = {id:"system-menu",top:0,position:"absolute",left:0,height:39,width:window.innerWidth,backgroundColor:"rgba(243,243,243,0.85)",borderbottom:"1px solid #aeaeae"};
@@ -20,8 +34,16 @@ function SystemGui(){
 		gui.addField(logo_field,"system-menu");
 		gui.addText("system-menu-logo",'<img src="./public/media/logo.png" width="40px" height="40px" />');
 
-		var search_field = {id:"system-menu-search",class:"search-field",height:20,width:300,position:"absolute",top:9,left:((window.innerWidth-300)/2),padding:5};
-		gui.addInput(search_field,"BUSCA","system-menu","");
+		var search_offset_x = 300 + ((window.innerWidth-700)/2);
+		var search_field = {id:"system-menu-search",class:"search-field",height:14,position:"absolute",top:10,left:search_offset_x};
+		gui.addInput(search_field,"Busca","system-menu","");
+
+		var search_button = {id:"system-menu-search-button",height:30,width:40,position:"absolute",top:0,paddingtop:10,left:search_offset_x+260,textalign:"center",font:'Font Awesome',fontsize:18,color:"#000000"}
+		gui.addField(search_button,"system-menu");
+		gui.addText("system-menu-search-button",'<i class="fa fa-search" aria-hidden="true"></i>');
+
+		master.searchMouseBehavior();
+		master.searchWriteBehavior();
 
 		if(logged){
 			master.drawLoggedInMenu();
@@ -32,7 +54,7 @@ function SystemGui(){
 	}
 
 	this.drawLoggedInMenu = function(){
-		var logged_in_field = {id:"system-menu-user",top:0,left:window.innerWidth-160,width:120,height:39,font:'Font Awesome',texttransform:'uppercase',fontsize:18,color:'black'};
+		var logged_in_field = {id:"system-menu-user",top:0,left:window.innerWidth-160,width:124,height:39,font:'Font Awesome',texttransform:'uppercase',fontsize:18,color:'black'};
 		gui.addField(logged_in_field,"system-menu");
 
 		var user_field = {id:"system-menu-user-avatar",width:40,height:30,paddingtop:10,textalign:"CENTER",borderleft:"1px solid #aeaeae"};
@@ -169,7 +191,122 @@ function SystemGui(){
 	}
 
 	this.searchMouseBehavior = function(){
+		var button = document.getElementById("system-menu-search-button");
+		var mouseOver = function(){
+			this.style.color = "#aeaeae";
+			this.style.cursor = "pointer";
+		};
+		var mouseOut = function(){
+			this.style.color = "#000000";
+			this.style.textDecoration = "none";
+		};
+		var mouseDown = function(){
+			// var query = document.getElementById("system-menu-search").value;
+			// if(query != "" && node_names != undefined){
+			// 	var query_results = [];
+			// 	for(var i = 0; i < node_names.length; i++){
+   //  				var expr= query.toUpperCase();
+   //  				var check = node_names[i].name.toUpperCase();
+   //  				if(check.includes(expr)){
+   //  					query_results.push(node_names[i]);
+   //  					if(check === expr){
+   //  						query_results[query_results.length-1].exactMatch = true;
+   //  					}
+   //  					else{
+   //  						query_results[query_results.length-1].exactMatch = false;
+   //  					}
+   //  				}
+			// 	}
+			// 	console.log(query_results);
+			// 	document.getElementById("system-menu-search").value = "";
+			// }
+		};
+		button.onmouseover = mouseOver;
+		button.onmouseout = mouseOut;
+		button.onmousedown = mouseDown;
+	}
 
+	this.searchWriteBehavior = function(){
+		var search_field = document.getElementById("system-menu-search");
+		var searchUp= function(){
+			master.findSearch();
+		};
+
+		search_field.onkeyup = searchUp;
+	}
+
+	this.findSearch = function(){
+		var query = document.getElementById("system-menu-search").value;
+		if(query != "" && node_names != undefined){
+			query_results = [];
+			for(var i = 0; i < node_names.length; i++){
+				var expr= query.toUpperCase();
+				var check = node_names[i].name.toUpperCase();
+				if(check.includes(expr)){
+					query_results.push(node_names[i]);
+					if(check === expr){
+						query_results[query_results.length-1].exactMatch = true;
+					}
+					else{
+						query_results[query_results.length-1].exactMatch = false;
+					}
+				}
+			}
+			master.autocompleteDropDown();
+		}
+		else{
+			master.removeElement("system-menu-autocomplete");
+		}
+	}
+
+	this.autocompleteDropDown = function(){
+		var element = document.getElementById("system-menu-autocomplete");
+		if(element === null){
+			var offset_x = document.getElementById("system-menu-search").offsetLeft;
+			var autocomplete_field = {id:"system-menu-autocomplete",top:40,left:offset_x,width:250,height:20,font:'Source Sans Pro',fontsize:14,backgroundColor:"rgba(243,243,243,0.8)"};
+			gui.addField(autocomplete_field,"system-menu");
+		}
+		else{
+			element.innerHTML = "";
+		}
+		var offset_entry_y = 0;
+		for(var i = 0; i < query_results.length; i++){
+			var current_entry = {id:"system-menu-autocomplete-"+query_results[i].id,height:16,width:240,top:offset_entry_y,padding:4,borderbottom:"1px solid #aeaeae",borderleft:"1px solid #aeaeae",borderright:"1px solid #aeaeae"};
+			gui.addField(current_entry,"system-menu-autocomplete");
+			gui.addText("system-menu-autocomplete-"+query_results[i].id,query_results[i].name);
+			offset_entry_y += 25;
+			master.selectSearchResultMouseBehavior(query_results[i].id);
+		}
+		document.getElementById("system-menu-autocomplete").style.height = offset_entry_y+"px";
+	}
+
+	this.selectSearchResultMouseBehavior = function(id){
+		var button = document.getElementById("system-menu-autocomplete-"+id);
+		var mouseOver = function(){
+			var current_id = this.id.split("-");
+			current_id = current_id[current_id.length-1];
+			this.style.cursor = "pointer";
+			document.getElementById("system-menu-autocomplete-"+current_id).style.backgroundColor = "white";
+		};
+		var mouseOut = function(){
+			var current_id = this.id.split("-");
+			current_id = current_id[current_id.length-1];
+			document.getElementById("system-menu-autocomplete-"+current_id).style.backgroundColor = "rgba(243,243,243,0.8)";
+		};
+		var mouseDown = function(){
+			var current_id = this.id.split("-");
+			current_id = current_id[current_id.length-1];
+			document.getElementById("system-menu-search").value = "";
+			master.removeElement("system-menu-autocomplete");
+			if(document.getElementById("node-symbol-"+current_id)!=null){
+				update_zoom = current_id;
+				master.eventFire(document.getElementById("node-symbol-"+current_id),"mouseover");
+				master.eventFire(document.getElementById("node-symbol-"+current_id),"click");
+			}
+		};
+		button.onmouseover = mouseOver;
+		button.onmouseout = mouseOut;
+		button.onmousedown = mouseDown;
 	}
 
 	this.drawTooltip = function(element){
@@ -177,7 +314,7 @@ function SystemGui(){
 		var reference_x = reference_element.offsetLeft;
 		var reference_width = reference_element.offsetWidth;
 
-		var tooltip_field = {id:"system-tooltip",top:44,textalign:"CENTER",font:'Source Sans Pro',fontsize:10,texttransform:"uppercase"};
+		var tooltip_field = {id:"system-tooltip",top:48,textalign:"CENTER",font:'Source Sans Pro',fontsize:10,texttransform:"uppercase"};
 		gui.addField(tooltip_field,"system-menu-user");
 		gui.addText("system-tooltip",buttons[element]);
 
@@ -190,6 +327,16 @@ function SystemGui(){
 		if(document.getElementById(element) != null){
 			document.getElementById(element).parentElement.removeChild(document.getElementById(element));
 		}
+	}
+
+	this.eventFire = function(el, etype){
+	  if (el.fireEvent) {
+	    el.fireEvent('on' + etype);
+	  } else {
+	    var evObj = document.createEvent('Events');
+	    evObj.initEvent(etype, true, false);
+	    el.dispatchEvent(evObj);
+	  }
 	}
 
 }

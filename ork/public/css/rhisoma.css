@@ -26,15 +26,15 @@ input.edit-title:focus{
 }
 
 input.search-field{
-  width:300px;
+  width:240px;
   color: black;
   border:none;
-  border-bottom: 1px black solid;
+  border-bottom: 1px #aeaeae solid;
   font-family: Source Sans Pro;
   font-size: 16px;
   font-weight:200;
-  /*text-transform: uppercase;*/
   background-color: transparent;
+  padding: 5px 5px 2px 5px;
 }
 
 input.search-field:focus{
