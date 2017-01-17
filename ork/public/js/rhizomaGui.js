@@ -335,7 +335,6 @@ function RhizomaGui(gui){
 			editing_mode = undefined;
 			all_links = undefined;
 		}
-		
 	}
 
 	this.showControlPanel = function(){

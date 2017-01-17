@@ -94,18 +94,18 @@ Afazeres p/ 0.1 Beta:
 	OK - Quando o zoom aproxima, revelar labels escondidos
 	OK - Impedir ligações em nodes que estejam closed
 	OK - Ajustar collapse e close para funcionar dentro de nodes [não voltar para root quando o node for collapsed ou closed]
-		- Navegação por período
-		- Barra superior [de sistema] com infos da plataforma, do usuário, barra de busca, etc
+	OK - Barra superior [de sistema] com infos da plataforma, do usuário, barra de busca, etc
+		OK - Esboço
+		OK - Logo do rhisoma
+		OK - Diferença para usuário logado (nome, configurações, sair) ou não (login e cadastro)
+		OK - Barra de busca por nódulo
 			OK - Esboço
-			OK - Logo do rhisoma
-			OK - Diferença para usuário logado (nome, configurações, sair) ou não (login e cadastro)
-			OK - Barra de busca por nódulo
-				OK - Esboço
-				OK - Botão para enviar a query
-				OK - Autocomplete (busca pelo nome do nódulo)
-				OK - Quando acha: evidencia no rizoma o nódulo encontrado
-			OK - Tooltips
-11			- Usuário logado clica na logo para revelar o menu; usuário sem estar logado fica com o menu sempre visível
+			OK - Botão para enviar a query
+			OK - Autocomplete (busca pelo nome do nódulo)
+			OK - Quando acha: evidencia no rizoma o nódulo encontrado
+		OK - Tooltips
+		OK - Usuário logado clica na logo para revelar o menu; usuário sem estar logado fica com o menu sempre visível
+		- Navegação por período
 		% Calibrar centralização durante navegação nos nódulos
 		% Calibrar algoritmo de força do d3 (para espacializar melhor o mapa e promover interações mais fluidas)
 		% Modo para não perder nódulos desconectados [função para aproximar nódulos]
@@ -144,7 +144,7 @@ Afazeres p/ 0.1 Beta:
 	OK  - No adicionar node novo: clique sobre um node existente já cria uma ligação
 	OK  - Na tarefa, criar botão para indicar que ela foi concluída (no BD: completed && completion_date)
 	OK	- Seleção de grupo no control panel do node 
-12		>> - Date picker no control panel do node
+6		>> - Date picker no control panel do node
 		- Barra de seleção de tempo (na base, da primeira data até a última)
 &1		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 &5		- Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
@@ -227,8 +227,11 @@ Afazeres p/ 0.1 Beta:
 	OK - Toggle no type e group dropdown funcionavam só uma vez
 	OK - Quanto termina edição de nódulo e bloqueia: nódulo perde estilo de selecionado
 	OK - Navegar nas queries de busca por nódulo com setas para cima, para baixo e enter
+	OK - Integração de eventos de teclado e mouse na navegação pelos resultados de busca por nódulo
+	OK - Resetar dados de busca quando esconder o system menu
+	OK - Colocar exact match na busca como primeiro resultado
+5		- Mostrar só 10 resultados de query e habilitar scroll down e up [liberar navegação com setas também nesse caso]
 &6		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
-		- Mostrar só 10 resultados de query e habilitar scroll down e up [liberar navegação com setas também nesse caso]
 		- Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
 		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
 		- (?) Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)

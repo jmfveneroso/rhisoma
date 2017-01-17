@@ -7,6 +7,9 @@ function SystemGui(){
 	var query_results = [];
 	var update_zoom = undefined;
 	var current_query = -1;
+	var animation_running = false;
+	var hidden_system_menu = false;
+	var lock_system_menu = true;
 
 	var buttons = {
 		"system-menu-user-avatar":"Usuário",
@@ -32,7 +35,7 @@ function SystemGui(){
 		gui.addContainer(container);
 
 		var logo_field = {id:"system-menu-logo",height:39,width:39,position:"absolute",top:0,left:300};
-		gui.addField(logo_field,"system-menu");
+		gui.addField(logo_field);
 		gui.addText("system-menu-logo",'<img src="./public/media/logo.png" width="40px" height="40px" />');
 
 		var search_offset_x = 300 + ((window.innerWidth-700)/2);
@@ -43,15 +46,20 @@ function SystemGui(){
 		gui.addField(search_button,"system-menu");
 		gui.addText("system-menu-search-button",'<i class="fa fa-search" aria-hidden="true"></i>');
 
-		master.searchMouseBehavior();
-		master.searchWriteBehavior();
-
 		if(logged){
 			master.drawLoggedInMenu();
+			lock_system_menu = false;
 		}
 		else{
 			master.drawLoggedOutMenu();
+			lock_system_menu = true;
 		}
+
+		if(!lock_system_menu){
+			master.logoMouseBehavior();
+		}
+		master.searchMouseBehavior();
+		master.searchWriteBehavior();
 	}
 
 	this.drawLoggedInMenu = function(){
@@ -89,6 +97,71 @@ function SystemGui(){
 
 		master.signinMouseBehavior();
 		master.signupMouseBehavior();
+	}
+
+	this.logoMouseBehavior = function(){
+		var button = document.getElementById("system-menu-logo");
+		var mouseOver = function(){
+			this.style.cursor = "pointer";
+		};
+		var mouseOut = function(){
+
+		};
+		var mouseDown = function(){
+			if(hidden_system_menu){
+				master.showSystemMenu();
+			}
+			else{
+				master.hideSystemMenu();
+			}
+		};
+		button.onmouseover = mouseOver;
+		button.onmouseout = mouseOut;
+		button.onmousedown = mouseDown;
+	}
+
+	this.hideSystemMenu = function(){
+		if(!animation_running && document.getElementById("system-menu") != null){
+			animation_running = true;
+			var id = setInterval(frame, 5);
+			var position_y = 0;
+
+			function frame() {
+			    if (position_y >= 39) {
+			        clearInterval(id);
+			        document.getElementById("system-menu").style.display = "none";
+			        animation_running = false;
+			    } else {
+			    	position_y += 1;
+			    	document.getElementById("system-menu").style.top = -position_y + "px"; 
+			    }
+			}
+			hidden_system_menu = true;
+			master.removeElement("system-menu-autocomplete");
+			document.getElementById("system-menu-search").value = "";
+			current_query = -1;
+			query_results = [];
+		}
+	}
+
+	this.showSystemMenu = function(){
+		if(!animation_running && document.getElementById("system-menu") != null){
+			animation_running = true;
+			var id = setInterval(frame, 5);
+			var position_y = 39;
+			document.getElementById("system-menu").style.display = "inline";
+
+			function frame() {
+			    if (position_y <= 0) {
+			        clearInterval(id);
+			        animation_running = false;
+			    } else {
+			    	position_y -= 1;
+			    	document.getElementById("system-menu").style.top = -position_y + "px";
+			    }
+			}
+			hidden_system_menu = false;
+		}
 	}
 
 	this.signinMouseBehavior = function(){
@@ -233,27 +306,28 @@ function SystemGui(){
 			if(window.event.keyCode === 40){
 				if(current_query+1 < query_results.length){
 					if(current_query >= 0){
-						master.eventFire(document.getElementById("system-menu-autocomplete-"+query_results[current_query].id),"mouseout");
+						document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "rgba(243,243,243,0.8)";
+
 					}
 					current_query++;
-					master.eventFire(document.getElementById("system-menu-autocomplete-"+query_results[current_query].id),"mouseover");
+					document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "white";
 				}
 			}
 			else if(window.event.keyCode === 38){
 				if(current_query-1 >= 0 && query_results.length > 0){
-					master.eventFire(document.getElementById("system-menu-autocomplete-"+query_results[current_query].id),"mouseout");
+					document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "rgba(243,243,243,0.8)";
 					current_query--;
 					if(current_query >= 0){
-						master.eventFire(document.getElementById("system-menu-autocomplete-"+query_results[current_query].id),"mouseover");
+						document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "white";
 					}
 				}
 			}
 			else if(window.event.keyCode === 13){
 				if(query_results.length > 0){
-					master.eventFire(document.getElementById("system-menu-autocomplete-"+query_results[current_query].id),"mousedown");
+					master.sendQuery(query_results[current_query].id);
 				}
 			}
-			else{
+			else if(window.event.keyCode != 37 && window.event.keyCode != 39){
 				current_query = -1;
 				master.findSearch();
 			}
@@ -262,22 +336,43 @@ function SystemGui(){
 		search_field.onkeyup = searchUp;
 	}
 
+	this.sendQuery = function(query_id){
+		document.getElementById("system-menu-search").value = "";
+		master.removeElement("system-menu-autocomplete");
+		if(document.getElementById("node-symbol-"+query_id)!=null){
+			update_zoom = query_id;
+			master.eventFire(document.getElementById("node-symbol-"+query_id),"mouseover");
+			master.eventFire(document.getElementById("node-symbol-"+query_id),"click");
+		}
+	}
+
 	this.findSearch = function(){
 		var query = document.getElementById("system-menu-search").value;
 		if(query != "" && node_names != undefined){
 			query_results = [];
 			current_query = -1;
+			var exact_match = [];
+			var temp_query_results = [];
 			for(var i = 0; i < node_names.length; i++){
 				var expr= query.toUpperCase();
 				var check = node_names[i].name.toUpperCase();
 				if(check.includes(expr)){
-					query_results.push(node_names[i]);
 					if(check === expr){
-						query_results[query_results.length-1].exactMatch = true;
+						exact_match.push(node_names[i]);
 					}
 					else{
-						query_results[query_results.length-1].exactMatch = false;
+						temp_query_results.push(node_names[i]);
 					}
+				}
+			}
+			if(exact_match.length > 0){
+				for(var i = 0; i < exact_match.length; i++){
+					query_results.push(exact_match[i]);
+				}
+			}
+			if(temp_query_results.length > 0){
+				for(var i = 0; i < temp_query_results.length; i++){
+					query_results.push(temp_query_results[i]);
 				}
 			}
 			master.autocompleteDropDown();
@@ -313,24 +408,36 @@ function SystemGui(){
 		var mouseOver = function(){
 			var current_id = this.id.split("-");
 			current_id = current_id[current_id.length-1];
+			if(current_query >= 0 && current_query < query_results.length){
+				document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "rgba(243,243,243,0.8)";
+			}
+			var found_match = false;
+			var query_index = -1;
+			while(found_match === false && query_index < query_results.length){
+				query_index++;
+				if(query_results[query_index].id === current_id){
+					found_match = true;
+				}
+			}
+			if(found_match){
+				current_query = query_index;
+			}
+			document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "white";
 			this.style.cursor = "pointer";
-			document.getElementById("system-menu-autocomplete-"+current_id).style.backgroundColor = "white";
 		};
 		var mouseOut = function(){
 			var current_id = this.id.split("-");
 			current_id = current_id[current_id.length-1];
+			if(current_query >= 0 && current_query < query_results.length){
+				document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "rgba(243,243,243,0.8)";
+			}
+			current_query = -1;
 			document.getElementById("system-menu-autocomplete-"+current_id).style.backgroundColor = "rgba(243,243,243,0.8)";
 		};
 		var mouseDown = function(){
 			var current_id = this.id.split("-");
 			current_id = current_id[current_id.length-1];
-			document.getElementById("system-menu-search").value = "";
-			master.removeElement("system-menu-autocomplete");
-			if(document.getElementById("node-symbol-"+current_id)!=null){
-				update_zoom = current_id;
-				master.eventFire(document.getElementById("node-symbol-"+current_id),"mouseover");
-				master.eventFire(document.getElementById("node-symbol-"+current_id),"click");
-			}
+			master.sendQuery(current_id);
 		};
 		button.onmouseover = mouseOver;
 		button.onmouseout = mouseOut;
