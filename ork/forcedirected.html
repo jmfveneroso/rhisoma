@@ -514,6 +514,13 @@ function cancelEdit(){
   }
 
 function environmentStabilize(){
+  if(structure.checkUpdateGroups()){
+    gui.setGroups(structure.getGroups());
+    gui.resetCurrentEditing();
+    gui.updateControlPanel(structure.getNode(current_node),"NODE", false);
+    restart();
+  }
+
   if(gui.editionMode() != undefined && inside_node === undefined){
     if(gui.editionMode() === "environmentstop"){
       stop_simulation = !stop_simulation;
@@ -525,9 +532,7 @@ function environmentStabilize(){
       gui.closeMenus();
     }
     else if(gui.editionMode() === "groupadd"){
-      console.log("groupadd");
       structure.updateGroups();
-      // open clean group edit
       gui.closeMenus();
     }
     else if(gui.editionMode() === "cancellink"){

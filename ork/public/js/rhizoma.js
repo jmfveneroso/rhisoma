@@ -15,6 +15,8 @@ function Rhizoma(){
 	var apply_standby = [];
 	var check_standby = false;
 
+	var update_groups = false;
+
 	var gui = new Gui();
 
 	this.setJSON = function(data){
@@ -1215,8 +1217,8 @@ function Rhizoma(){
 			var container = {id:"system-message-popup",width:window.innerWidth,height:window.innerHeight,top:0,left:0,backgroundColor:"rgba(255,255,255,0.8)",zindex:0};
 			gui.addContainer(container);
 
-			var groups_edit = {id:"system-groups-edit",width:290,height:330,top:(window.innerHeight-350)/2,left:(window.innerWidth-330)/2,backgroundColor:"white",padding:20,border:"1px solid #aeaeae"};
-			gui.addField(groups_edit,"system-message-popup");
+			var groups_edit = {id:"system-groups-edit",width:290,height:350,top:(window.innerHeight-370)/2,left:(window.innerWidth-330)/2,backgroundColor:"white",padding:20,border:"1px solid #aeaeae"};
+			gui.addContainer(groups_edit);
 
 			var name_field = {id:"system-groups-edit-name",class:"edit-group"};
 			gui.addInput(name_field,"Nome do grupo","system-groups-edit","");
@@ -1226,6 +1228,14 @@ function Rhizoma(){
 
 			var preview_field = {id:"system-groups-edit-preview",width:48,height:48,left:260, top:20, backgroundColor:"#000000",border:"1px #aeaeae solid"};
 			gui.addField(preview_field,"system-groups-edit");
+
+			var close_button = {id:"system-groups-edit-close",width:164,height:34,top:349,left:-1,border:"1px solid #aeaeae",font:"Font Awesome",fontsize:24,textalign:"center",paddingtop:6,color:"#aeaeae"};
+			gui.addField(close_button,"system-groups-edit");
+			gui.addText("system-groups-edit-close",'<i class="fa fa-close" aria-hidden="true"></i>');
+
+			var send_button = {id:"system-groups-edit-send",width:165,height:34,top:349,left:164,border:"1px solid #aeaeae",font:"Font Awesome",fontsize:24,textalign:"center",paddingtop:6,color:"#aeaeae"};
+			gui.addField(send_button,"system-groups-edit");
+			gui.addText("system-groups-edit-send",'<i class="fa fa-check" aria-hidden="true"></i>');
 		}
 		if(node != undefined){
 			document.getElementById("system-groups-edit-name").value = groups[node.group].name;
@@ -1265,6 +1275,8 @@ function Rhizoma(){
 			});
 		}
 		master.systemMessagePopupMouseBehavior();
+		master.closeGroupsMouseBehavior();
+		master.sendGroupsMouseBehavior(node);
 	}
 
 	this.systemMessagePopupMouseBehavior = function(){
@@ -1272,11 +1284,16 @@ function Rhizoma(){
 		var mouseOver = function(){
 			this.style.cursor = "pointer";
 		}
+		var mouseOut = function(){
+			
+		}
 		var mouseDown = function(){
 			master.removeElement("system-message-popup");
+			master.removeElement("system-groups-edit");
 			master.removeElementClass("ui-colorpicker");
 		}
 		container.onmouseover = mouseOver;
+		container.onmouseout = mouseOut;
 		container.onmousedown = mouseDown;
 	}
 
@@ -1290,6 +1307,112 @@ function Rhizoma(){
 		if(document.getElementsByClassName(element)[0] != null){
 			document.getElementsByClassName(element)[0].parentElement.removeChild(document.getElementsByClassName(element)[0]);
 		}
+	}
+
+	this.closeGroupsMouseBehavior = function(){
+		var button = document.getElementById("system-groups-edit-close");
+		var mouseOver = function(){
+			this.style.cursor = "pointer";
+			this.style.color = "black";
+		}
+		var mouseOut = function(){
+			this.style.color = "#aeaeae";
+		}
+		var mouseDown = function(){
+			master.removeElement("system-message-popup");
+			master.removeElement("system-groups-edit");
+			master.removeElementClass("ui-colorpicker");
+		}
+		button.onmouseover = mouseOver;
+		button.onmouseout = mouseOut;
+		button.onmousedown = mouseDown;
+	}
+
+	this.sendGroupsMouseBehavior = function(node){
+		var button = document.getElementById("system-groups-edit-send");
+		var mouseOver = function(){
+			this.style.cursor = "pointer";
+			this.style.color = "black";
+		}
+		var mouseOut = function(){
+			this.style.color = "#aeaeae";
+		}
+		var mouseDown = function(){
+			var edit_name = document.getElementById("system-groups-edit-name").value;
+			var edit_color = document.getElementById("system-groups-edit-color").value;
+			var check_update = false;
+			if(node != undefined){
+				if(edit_name != groups[node.group].name){
+					groups[node.group].name = edit_name;
+					check_update = true;
+				}
+				if(edit_color != groups[node.group].color){
+					groups[node.group].color = "#"+edit_color;
+					check_update = true;
+				}
+				if(check_update){
+					update_groups = true;
+					master.updateGraphGroups();
+					master.eventFire(document.body, 'click');
+					master.removeElement("system-message-popup");
+					master.removeElement("system-groups-edit");
+					master.removeElementClass("ui-colorpicker");
+				}
+			}
+			else{
+				if(edit_name != ""){
+					var element = document.getElementById("system-groups-edit-name");
+					element.style.borderBottom = "1px solid #aeaeae";
+					var generate_id = entire_graph.nodes.length + Math.floor(Math.random() * (900 - 1)) + 1;
+					var group_id = generate_id.toString();
+					groups[group_id] = {};
+					groups[group_id].name = edit_name;
+					groups[group_id].color = "#"+edit_color;
+					update_groups = true;
+					master.eventFire(document.body, 'click');
+					master.removeElement("system-message-popup");
+					master.removeElement("system-groups-edit");
+					master.removeElementClass("ui-colorpicker");
+				}
+				else{
+					var element = document.getElementById("system-groups-edit-name");
+					element.style.borderBottom = "1px solid red";
+				}
+			}
+		}
+		button.onmouseover = mouseOver;
+		button.onmouseout = mouseOut;
+		button.onmousedown = mouseDown;
+	}
+
+	this.updateGraphGroups = function(){
+		for(var i = 0; i < entire_graph.nodes.length; i++){
+			entire_graph.nodes[i].color = groups[entire_graph.nodes[i].group].color;
+		}
+
+		for(var i = 0; i < active_graph.nodes.length; i++){
+			active_graph.nodes[i].color = groups[active_graph.nodes[i].group].color;
+		}
+	}
+
+	this.checkUpdateGroups = function(){
+		if(update_groups){
+			update_groups = false;
+			return true;
+		}
+		else{
+			return update_groups;
+		}
+	}
+
+	this.eventFire = function(el, etype){
+	  if (el.fireEvent) {
+	    el.fireEvent('on' + etype);
+	  } else {
+	    var evObj = document.createEvent('Events');
+	    evObj.initEvent(etype, true, false);
+	    el.dispatchEvent(evObj);
+	  }
 	}
 
 }
