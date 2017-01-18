@@ -15,17 +15,21 @@ function Rhizoma(){
 	var apply_standby = [];
 	var check_standby = false;
 
+	var gui = new Gui();
+
 	this.setJSON = function(data){
 		json = data;
 		entire_graph = {};
 		entire_graph.nodes = json.nodes; // referência do gráfico completo [substitui json como ref para o programa]
 		entire_graph.links = json.links;
 		for(var i = 0; i < json.groups.length; i++){
-			groups[json.groups[i].id] = json.groups[i].color;
+			groups[json.groups[i].id] = {};
+			groups[json.groups[i].id].color = json.groups[i].color;
+			groups[json.groups[i].id].name = json.groups[i].name;
 		}
 		for(var i = 0; i < entire_graph.nodes.length; i++){
 			if(groups[entire_graph.nodes[i].group] != undefined){
-				entire_graph.nodes[i].color = groups[entire_graph.nodes[i].group];
+				entire_graph.nodes[i].color = groups[entire_graph.nodes[i].group].color;
 			}
 			else{
 				entire_graph.nodes[i].color = "#000000";
@@ -1202,6 +1206,90 @@ function Rhizoma(){
 			}
 		}
 		master.updateGraph();
+	}
+
+	/* GROUPS */
+
+	this.updateGroups = function(node){
+		if(document.getElementById("system-groups-edit") === null){
+			var container = {id:"system-message-popup",width:window.innerWidth,height:window.innerHeight,top:0,left:0,backgroundColor:"rgba(255,255,255,0.8)",zindex:0};
+			gui.addContainer(container);
+
+			var groups_edit = {id:"system-groups-edit",width:290,height:330,top:(window.innerHeight-350)/2,left:(window.innerWidth-330)/2,backgroundColor:"white",padding:20,border:"1px solid #aeaeae"};
+			gui.addField(groups_edit,"system-message-popup");
+
+			var name_field = {id:"system-groups-edit-name",class:"edit-group"};
+			gui.addInput(name_field,"Nome do grupo","system-groups-edit","");
+
+			var color_field = {id:"system-groups-edit-color",class:"edit-group",position:"absolute",top:48,left:20};
+			gui.addInput(color_field,"Cor do grupo","system-groups-edit","#000000");
+
+			var preview_field = {id:"system-groups-edit-preview",width:48,height:48,left:260, top:20, backgroundColor:"#000000",border:"1px #aeaeae solid"};
+			gui.addField(preview_field,"system-groups-edit");
+		}
+		if(node != undefined){
+			document.getElementById("system-groups-edit-name").value = groups[node.group].name;
+			document.getElementById("system-groups-edit-color").value = groups[node.group].color;
+			document.getElementById("system-groups-edit-preview").style.backgroundColor = groups[node.group].color;
+			$(function() {
+			    $('#system-groups-edit-color').colorpicker({
+			    	altField: '#system-groups-edit-preview',
+					altProperties: 'background-color',
+			        parts:  ['map', 'bar'],
+			        closeOnOutside: false,
+			        color: groups[node.group].color,
+			        alpha:  false,
+			        autoOpen: true,
+			        layout: {
+			            map:        [0, 0, 3, 1],
+			            bar:        [4, 0, 1, 4]
+			        }
+			    });
+			});
+		}
+		else{
+			$(function() {
+			    $('#system-groups-edit-color').colorpicker({
+			    	altField: '#system-groups-edit-preview',
+					altProperties: 'background-color',
+			        parts:  ['map', 'bar'],
+			        closeOnOutside: false,
+			        color: "#000000",
+			        alpha:  false,
+			        autoOpen: true,
+			        layout: {
+			            map:        [0, 0, 3, 1],
+			            bar:        [4, 0, 1, 4]
+			        }
+			    });
+			});
+		}
+		master.systemMessagePopupMouseBehavior();
+	}
+
+	this.systemMessagePopupMouseBehavior = function(){
+		var container = document.getElementById("system-message-popup");
+		var mouseOver = function(){
+			this.style.cursor = "pointer";
+		}
+		var mouseDown = function(){
+			master.removeElement("system-message-popup");
+			master.removeElementClass("ui-colorpicker");
+		}
+		container.onmouseover = mouseOver;
+		container.onmousedown = mouseDown;
+	}
+
+	this.removeElement = function(element){
+		if(document.getElementById(element) != null){
+			document.getElementById(element).parentElement.removeChild(document.getElementById(element));
+		}
+	}
+
+	this.removeElementClass = function(element){
+		if(document.getElementsByClassName(element)[0] != null){
+			document.getElementsByClassName(element)[0].parentElement.removeChild(document.getElementsByClassName(element)[0]);
+		}
 	}
 
 }

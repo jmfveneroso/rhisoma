@@ -179,13 +179,13 @@
     {"id": "90", "source": "48", "target": "84", "value": 1, "type": 1}
   ],
   "groups": [
-    {"id": "1", "color":"#1f77b4"},
-    {"id": "2", "color":"#98df8a"},
-    {"id": "3", "color":"#ff7f0e"},
-    {"id": "4", "color":"#ffbb78"},
-    {"id": "5", "color":"#d62728"},
-    {"id": "6", "color":"#2ca02c"},
-    {"id": "7", "color":"#ff9896"},
-    {"id": "8", "color":"#aec7e8"}
+    {"id": "1", "color":"#1f77b4", "name":"Grupo A"},
+    {"id": "2", "color":"#98df8a", "name":"Grupo B"},
+    {"id": "3", "color":"#ff7f0e", "name":"Grupo C"},
+    {"id": "4", "color":"#ffbb78", "name":"Grupo D"},
+    {"id": "5", "color":"#d62728", "name":"Grupo E"},
+    {"id": "6", "color":"#2ca02c", "name":"Grupo F"},
+    {"id": "7", "color":"#ff9896", "name":"Grupo G"},
+    {"id": "8", "color":"#aec7e8", "name":"Grupo H"}
   ]
 }

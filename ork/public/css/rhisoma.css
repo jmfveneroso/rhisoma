@@ -25,6 +25,22 @@ input.edit-title:focus{
   outline: none;
 }
 
+input.edit-group{
+  width:220px;
+  color: black;
+  border:none;
+  border-bottom: 1px #aeaeae solid;
+  font-family: Source Sans Pro;
+  font-size: 14px;
+  font-weight:400;
+  background-color: transparent;
+}
+
+input.edit-group:focus{
+  border-bottom: 1px #000000 solid;
+  outline: none;
+}
+
 input.search-field{
   width:240px;
   color: black;

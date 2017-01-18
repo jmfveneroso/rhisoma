@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="public/css/rhisoma.css?v=0.0.1">
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script> -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
 <script src="public/js/rhizoma.js"></script>
@@ -13,6 +13,12 @@
 <script src="public/js/rhizomaCommunicator.js"></script>
 <script src="public/js/systemGui.js"></script>
 <script src="public/js/gui.js"></script>
+<!-- Vendor -->
+<link rel="stylesheet" href="vendor/jquery-ui-1.12.1/jquery-ui.css">
+ <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="vendor/jquery-ui-1.12.1/jquery-ui.js"></script>
+<script src="vendor/colorpicker-master/jquery.colorpicker.js"></script>
+<link href="vendor/colorpicker-master/jquery.colorpicker.css" rel="stylesheet" type="text/css"/>
 <body>
 <svg id="rhizoma" width="960" height="600" style="position:absolute;top:0px"></svg>
 </body>
@@ -22,13 +28,13 @@
 
   /* INIT */
 
-var $ = new Gui();
-var gui = new RhizomaGui($);
+var main_gui = new Gui();
+var gui = new RhizomaGui(main_gui);
 var structure = new Rhizoma();
 var rst = new RhizomaStyle();
 var top_menu = new SystemGui();
 top_menu.drawSystemMenu();
-
+  
 var current_node = {};
 var current_link = {};
 var link_to_add = {};
@@ -509,18 +515,19 @@ function cancelEdit(){
 
 function environmentStabilize(){
   if(gui.editionMode() != undefined && inside_node === undefined){
-    if(gui.editionMode() === "environmentstabilize"){
-      var update_nodes = svg.selectAll("g").filter(".node").each(function(d){structure.updateNodeXY(d);});
-      var update_links = svg.selectAll("line").filter(".link").each(function(d){structure.updateLinkXY(d);});
-      gui.closeMenus();
-    }
-    else if(gui.editionMode() === "environmentstop"){
+    if(gui.editionMode() === "environmentstop"){
       stop_simulation = !stop_simulation;
       simulation.stop();
       gui.closeMenus();
     }
     else if(gui.editionMode() === "environmentcenter"){
       centerEnvironment();
+      gui.closeMenus();
+    }
+    else if(gui.editionMode() === "groupadd"){
+      console.log("groupadd");
+      structure.updateGroups();
+      // open clean group edit
       gui.closeMenus();
     }
     else if(gui.editionMode() === "cancellink"){
@@ -813,7 +820,7 @@ function clickNode(d){
     current_link = {};
   }
 
-  if(gui.editionMode() != "nodedelete" && gui.editionMode() != "nodeadd" && gui.editionMode() != "linkadd" && gui.editionMode() != "stateexplode" && gui.editionMode() != "statecontract" && gui.editionMode() != "stateidle"){
+  if(gui.editionMode() != "nodedelete" && gui.editionMode() != "nodeadd" && gui.editionMode() != "linkadd" && gui.editionMode() != "stateexplode" && gui.editionMode() != "statecontract" && gui.editionMode() != "stateidle" && gui.editionMode() != "groupedit"){
     if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) != null){
       if(inside_node != current_node.id){
         if(current_node.type != "buraco"){
@@ -1001,6 +1008,12 @@ function clickNode(d){
       }
     }
   }
+  else if(gui.editionMode() === "groupedit"){
+      console.log("groupedit");
+      structure.updateGroups(d);
+      // open group edit with current node's group info
+      gui.closeMenus();
+    }
 }
 
 function toggleLinkSelection(check_link_selection){

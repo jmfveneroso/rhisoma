@@ -11,7 +11,7 @@ function RhizomaGui(gui){
 	var current_link = undefined;
 	var the_link = undefined;
 	var all_links = undefined;
-	var offset_x = 10;
+	var offset_x = 50;
 	var hidden_control_panel = true;
 	var running = false;
 	var type_dropdown = false;
@@ -34,6 +34,7 @@ function RhizomaGui(gui){
 	tooltips.link = {text:"Conexão",fa:"fa-code-fork"};
 	tooltips.state = {text:"Estado",fa:"fa-leaf"};
 	tooltips.environment = {text:"Mapa",fa:"fa-map"};
+	tooltips.group = {text:"Grupo",fa:"fa-object-group"};
 	tooltips.nodeadd = {text:"Novo",fa:"fa-plus"};
 	tooltips.nodedelete = {text:"Remover",fa:"fa-minus"};
 	tooltips.linkadd = {text:"Nova",fa:"fa-plus"};
@@ -41,16 +42,18 @@ function RhizomaGui(gui){
 	tooltips.stateidle = {text:"Espera",fa:"fa-hourglass-2"};
 	tooltips.stateexplode = {text:"Expandir",fa:"fa-folder-open"};
 	tooltips.statecontract = {text:"Contrair",fa:"fa-folder"};
-	tooltips.environmentstabilize = {text:"Fixar",fa:"fa-anchor"};
 	tooltips.environmentstop = {text:"Parar",fa:"fa-hand-stop-o"};
 	tooltips.environmentcontinue = {text:"Retomar",fa:"fa-hand-pointer-o"};
 	tooltips.environmentcenter = {text:"Centro",fa:"fa-certificate"};
+	tooltips.groupadd = {text:"Novo",fa:"fa-plus"};
+	tooltips.groupedit = {text:"Editar",fa:"fa-edit"};
 
 	var togglemenus = {};
 	togglemenus.node = false;
 	togglemenus.link = false;
 	togglemenus.state = false;
 	togglemenus.environment = false;
+	togglemenus.group = false;
 
 	var editing = {};
 	editing.nodeadd =    	 		false;
@@ -60,9 +63,10 @@ function RhizomaGui(gui){
 	editing.stateidle =  	 		false;
 	editing.stateexplode =   		false;
 	editing.statecontract =  		false;
-	editing.environmentstabilize =  false;
 	editing.environmentcenter = 	false;
 	editing.environmentstop = 		false;
+	editing.groupadd = 				false;
+	editing.groupedit = 			false;
 
 	var node_types = [];
 	node_types[0] = {type:"categoria",name:"categoria"};
@@ -145,11 +149,11 @@ function RhizomaGui(gui){
 			border_color = "black";
 		}
 		if(document.getElementById("control-panel") === null){
-			var container = {id:"control-panel", display: "inline",width:300, height:window.innerHeight-40,pointerevents:"none",left:-300,top:40, backgroundColor:"rgba(255,255,255,0.9)", font:"Source Sans Pro", padding:10, borderright: "1px "+border_color+" dashed"};
+			var container = {id:"control-panel", display: "inline",width:300, height:window.innerHeight,pointerevents:"none",left:-300,top:0, backgroundColor:"rgba(255,255,255,0.9)", font:"Source Sans Pro", padding:10, borderright: "1px "+border_color+" dashed"};
 			gui.addContainer(container);
 		}
 		if(document.getElementById("control-panel-lock") === null){
-			var button = {id:"control-panel-lock", pointerevents:"all",zindex:2,height:40,width:20,fontsize:18,left:290,textalign:"right",font:"Font Awesome",text:'<i class="fa fa-lock" aria-hidden="true"></i>'};
+			var button = {id:"control-panel-lock", pointerevents:"all",zindex:2,height:20,width:20,top:50,fontsize:18,left:290,textalign:"right",font:"Font Awesome",text:'<i class="fa fa-lock" aria-hidden="true"></i>'};
 			gui.addButton(button,"control-panel");
 			master.lockMouseBehavior();
 		}
@@ -215,7 +219,7 @@ function RhizomaGui(gui){
 	}
 
 	this.drawNodeControl = function(){
-		offset_x = 10;
+		offset_x = 50;
 		master.clearControlPanel();
 		gui.$pointerevents("control-panel","none");
 
@@ -246,7 +250,7 @@ function RhizomaGui(gui){
 	}
 
 	this.drawNodeEditControl = function(){
-		offset_x = 0;
+		offset_x = 40;
 		master.clearControlPanel();
 		gui.$pointerevents("control-panel","all");
 
@@ -289,7 +293,7 @@ function RhizomaGui(gui){
 	}
 
 	this.drawLinkControl = function(){
-		offset_x = 10;
+		offset_x = 50;
 		master.clearControlPanel();
 		gui.$pointerevents("control-panel","none");
 
@@ -303,7 +307,7 @@ function RhizomaGui(gui){
 	}
 
 	this.drawLinkEditControl = function(){
-		offset_x = 0;
+		offset_x = 40;
 		master.clearControlPanel();
 		gui.$pointerevents("control-panel","all");
 
@@ -358,7 +362,7 @@ function RhizomaGui(gui){
 	}
 
 	this.clearControlPanel = function(){
-		offset_x = 10;
+		offset_x = 50;
 		var check_all_elements = ["title","description","date-start","date-end","type","link-type","source-label","source","target-label","target","links","remove","invert-dependency","task-completed","group"];
 		for(var i = 0; i < check_all_elements.length; i++){
 			master.removeElement(check_all_elements[i]);
@@ -442,17 +446,30 @@ function RhizomaGui(gui){
 	}
 
 	this.addTitle = function(node){
-		var field = {id:"control-panel-title",top:offset_x,height:24,width:300,texttransform:"uppercase",fontweight:800,color:node.color/*color(node.group)*/};
+		var field = {id:"control-panel-title",top:offset_x,height:"auto",width:300,texttransform:"uppercase",fontweight:800,color:node.color/*color(node.group)*/};
 		gui.addField(field,"control-panel");
 		gui.addText("control-panel-title",node.name);
-		offset_x += 24;
+
+		var title_offset_y = document.getElementById("control-panel-title").offsetHeight;
+		if(title_offset_y < 24){
+			title_offset_y = 24;
+		}
+		offset_x += title_offset_y;
 	}
 
 	this.addDescription = function(node){
-		var description = {id:"control-panel-description",top:offset_x,height:120,width:300};
+		var description = {id:"control-panel-description",top:offset_x,height:"auto",width:300};
 		gui.addField(description,"control-panel");
 		gui.addText("control-panel-description",node.description);
-		offset_x += 120;
+
+		var description_height = document.getElementById("control-panel-description").offsetHeight;
+		if(description_height <= 120){
+			description_height = 120;
+		}
+		else{
+			description_height += 10;
+		}
+		offset_x += description_height;
 	}
 
 	this.addDateStart = function(node){
@@ -703,7 +720,7 @@ function RhizomaGui(gui){
 
 		var color_label = {id:"control-panel-group-label",top:0,left:40,width:260,height:15,font:'Source Sans Pro',fontsize:12,color:node.color,fontweight:600};
 		gui.addField(color_label,"control-panel-group");
-		gui.addText("control-panel-group-label",'GRUPO '+node.group);
+		gui.addText("control-panel-group-label",groups[node.group].name);
 
 		offset_x += 30;
 
@@ -740,14 +757,6 @@ function RhizomaGui(gui){
 		gui.addText("control-panel-invert-dependency-"+link.id,'<i class="fa fa-refresh" aria-hidden="true"></i>');
 
 		master.invertDependencyLinkMouseBehavior(link);
-	}
-
-	this.addEditSource = function(link){
-
-	}
-
-	this.addEditTarget = function(link){
-
 	}
 
 	this.addEditLinkType = function(link){
@@ -800,7 +809,7 @@ function RhizomaGui(gui){
 	/* EDITING PANEL */
 
 	this.menu = function(){
-		var container = {id:"edit-panel", class:"noselect", display: "inline",height:190,width:40, pointerevents:"none",left:(window.innerWidth-50),top:((window.innerHeight-190)/2), backgroundColor:"transparent", font:"Source Sans Pro"};
+		var container = {id:"edit-panel", class:"noselect", display: "inline",height:240,width:40, pointerevents:"none",left:(window.innerWidth-50),top:((window.innerHeight-240)/2), backgroundColor:"transparent", font:"Source Sans Pro"};
 		gui.addContainer(container);
 
 		var node_button = {id:"edit-panel-node", class:"buttons", paddingtop: 6, display: "inline",height:34, width:40, pointerevents:"all",left:0,top:0, font:"Font Awesome", fontsize:24, textalign: "CENTER"};
@@ -815,14 +824,19 @@ function RhizomaGui(gui){
 		gui.addField(state_button,"edit-panel");
 		gui.addText("edit-panel-state",'<i class="fa fa-leaf" aria-hidden="true"></i>');
 
-		var environment_button = {id:"edit-panel-environment", class:"buttons", paddingtop: 6, display: "inline",height:34, width:40, pointerevents:"all",left:0,top:150, font:"Font Awesome", fontsize:24, textalign: "CENTER"};
+		var environment_button = {id:"edit-panel-environment", class:"buttons", paddingtop: 6, display: "inline",height:34, width:40, pointerevents:"all",left:0,top:200, font:"Font Awesome", fontsize:24, textalign: "CENTER"};
 		gui.addField(environment_button,"edit-panel");
 		gui.addText("edit-panel-environment",'<i class="fa fa-map" aria-hidden="true"></i>');
+
+		var group_button = {id:"edit-panel-group", class:"buttons", paddingtop: 6, display: "inline",height:34, width:40, pointerevents:"all",left:0,top:150, font:"Font Awesome", fontsize:24, textalign: "CENTER"};
+		gui.addField(group_button,"edit-panel");
+		gui.addText("edit-panel-group",'<i class="fa fa-object-group" aria-hidden="true"></i>');
 
 		master.mainMouseBehavior("edit-panel-node");
 		master.mainMouseBehavior("edit-panel-link");
 		master.mainMouseBehavior("edit-panel-state");
 		master.mainMouseBehavior("edit-panel-environment");
+		master.mainMouseBehavior("edit-panel-group");
 		
 	}
 
@@ -886,8 +900,23 @@ function RhizomaGui(gui){
 		}
 	}
 
+	this.toggleGroupsMenu = function(){
+		if(togglemenus.group === false && document.getElementById("edit-panel-groups") != null){
+			document.getElementById("edit-panel-groups").style.display = "inline";
+			togglemenus.group = true;
+		}
+		else if(togglemenus.group === false && document.getElementById("edit-panel-groups") === null){
+			master.groupsMenu();
+			togglemenus.group = true;
+		}
+		else{
+			document.getElementById("edit-panel-groups").style.display = "none";
+			togglemenus.group = false;
+		}
+	}
+
 	this.nodesMenu = function(){
-		var container = {id:"edit-panel-nodes", class:"noselect", position: "absolute", backgroundColor: "black",display: "inline",height:40,width:90, pointerevents:"none",left:(window.innerWidth-150),top:((window.innerHeight-190)/2), backgroundColor:"transparent", font:"Source Sans Pro"};
+		var container = {id:"edit-panel-nodes", class:"noselect", position: "absolute", backgroundColor: "black",display: "inline",height:40,width:90, pointerevents:"none",left:(window.innerWidth-150),top:((window.innerHeight-240)/2), backgroundColor:"transparent", font:"Source Sans Pro"};
 		gui.addContainer(container);
 
 		var nodeadd_button = {id:"edit-panel-nodeadd", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:0,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
@@ -903,7 +932,7 @@ function RhizomaGui(gui){
 	}
 
 	this.linksMenu = function(){
-		var container = {id:"edit-panel-links", class:"noselect", position: "absolute", backgroundColor: "black",display: "inline",height:40,width:90, pointerevents:"none",left:(window.innerWidth-150),top:(((window.innerHeight-190)/2)+50), backgroundColor:"transparent", font:"Source Sans Pro"};
+		var container = {id:"edit-panel-links", class:"noselect", position: "absolute", backgroundColor: "black",display: "inline",height:40,width:90, pointerevents:"none",left:(window.innerWidth-150),top:(((window.innerHeight-240)/2)+50), backgroundColor:"transparent", font:"Source Sans Pro"};
 		gui.addContainer(container);
 
 		var linkadd_button = {id:"edit-panel-linkadd", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:0,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
@@ -919,7 +948,7 @@ function RhizomaGui(gui){
 	}
 
 	this.statesMenu = function(){
-		var container = {id:"edit-panel-states", class:"noselect", position: "absolute", backgroundColor: "black",display: "inline",height:40,width:140, pointerevents:"none",left:(window.innerWidth-200),top:(((window.innerHeight-190)/2)+100), backgroundColor:"transparent", font:"Source Sans Pro"};
+		var container = {id:"edit-panel-states", class:"noselect", position: "absolute", backgroundColor: "black",display: "inline",height:40,width:140, pointerevents:"none",left:(window.innerWidth-200),top:(((window.innerHeight-240)/2)+100), backgroundColor:"transparent", font:"Source Sans Pro"};
 		gui.addContainer(container);
 
 		var stateidle_button = {id:"edit-panel-stateidle", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:0,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
@@ -940,24 +969,35 @@ function RhizomaGui(gui){
 	}
 
 	this.environmentsMenu = function(){
-		var container = {id:"edit-panel-environments", class:"noselect", position: "absolute", backgroundColor: "black",display: "inline",height:40,width:140, pointerevents:"none",left:(window.innerWidth-200),top:(((window.innerHeight-190)/2)+150), backgroundColor:"transparent", font:"Source Sans Pro"};
+		var container = {id:"edit-panel-environments", class:"noselect", position: "absolute", backgroundColor: "black",display: "inline",height:40,width:90, pointerevents:"none",left:(window.innerWidth-150),top:(((window.innerHeight-240)/2)+200), backgroundColor:"transparent", font:"Source Sans Pro"};
 		gui.addContainer(container);
 
-		var environmentstabilize_button = {id:"edit-panel-environmentstabilize", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:0,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
-		gui.addField(environmentstabilize_button,"edit-panel-environments");
-		gui.addText("edit-panel-environmentstabilize",'<i class="fa fa-anchor" aria-hidden="true"></i>');
-
-		var environmentstop_button = {id:"edit-panel-environmentstop", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:50,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
+		var environmentstop_button = {id:"edit-panel-environmentstop", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:0,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
 		gui.addField(environmentstop_button,"edit-panel-environments");
 		gui.addText("edit-panel-environmentstop",'<i class="fa fa-hand-stop-o" aria-hidden="true"></i>');
 
-		var environmentcenter_button = {id:"edit-panel-environmentcenter", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:100,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
+		var environmentcenter_button = {id:"edit-panel-environmentcenter", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:50,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
 		gui.addField(environmentcenter_button,"edit-panel-environments");
 		gui.addText("edit-panel-environmentcenter",'<i class="fa fa-certificate" aria-hidden="true"></i>');
 
-		master.secondaryMouseBehavior("edit-panel-environmentstabilize");
 		master.secondaryMouseBehavior("edit-panel-environmentstop");
 		master.secondaryMouseBehavior("edit-panel-environmentcenter");
+	}
+
+	this.groupsMenu = function(){
+		var container = {id:"edit-panel-groups", class:"noselect", position: "absolute", backgroundColor: "black",display: "inline",height:40,width:90, pointerevents:"none",left:(window.innerWidth-150),top:(((window.innerHeight-240)/2)+150), backgroundColor:"transparent", font:"Source Sans Pro"};
+		gui.addContainer(container);
+
+		var groupadd_button = {id:"edit-panel-groupadd", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:0,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
+		gui.addField(groupadd_button,"edit-panel-groups");
+		gui.addText("edit-panel-groupadd",'<i class="fa fa-plus" aria-hidden="true"></i>');
+
+		var groupedit_button = {id:"edit-panel-groupedit", class:"secondary-buttons", paddingtop: 10, display: "inline",height:28, width:38, pointerevents:"all",left:50,top:0, font:"Font Awesome", fontsize:20, textalign: "CENTER"};
+		gui.addField(groupedit_button,"edit-panel-groups");
+		gui.addText("edit-panel-groupedit",'<i class="fa fa-edit" aria-hidden="true"></i>');
+
+		master.secondaryMouseBehavior("edit-panel-groupadd");
+		master.secondaryMouseBehavior("edit-panel-groupedit");
 	}
 
 	this.closeMenus = function(){
@@ -1016,6 +1056,17 @@ function RhizomaGui(gui){
 			element.style.texttransform = "none";
 			togglemenus.environment = false;
 		}
+		if(togglemenus.group){
+			master.toggleGroupsMenu();
+			var element = document.getElementById("edit-panel-group");
+			element.style.fontFamily = "Font Awesome";
+			element.innerHTML = '<i class="fa '+tooltips["group"].fa+'" aria-hidden="true"></i>';
+			element.style.fontSize = "24px";
+			element.style.height = "34px";
+			element.style.paddingTop = "6px";
+			element.style.texttransform = "none";
+			togglemenus.group = false;
+		}
 	}
 
 	this.editionMode = function(){
@@ -1060,7 +1111,7 @@ function RhizomaGui(gui){
 	}
 
 	this.drawTypeDropDown = function(){
-		var container = {id:"dropdown-type",left:10,top:30,width:100,height: node_types.length*20,backgroundColor:"white",font:"Source Sans Pro",fontsize:12};
+		var container = {id:"dropdown-type",left:10,top:70,width:100,height: node_types.length*20,backgroundColor:"white",font:"Source Sans Pro",fontsize:12};
 		var offset_item_x = 0;
 		gui.addContainer(container);
 		for(var i = 0; i < node_types.length; i++){
@@ -1105,7 +1156,7 @@ function RhizomaGui(gui){
 			var bordertop = null;
 			var borderbottom = null;
 			if(current_group === undefined){
-				if(groups[group] === the_node.color){
+				if(groups[group].color === the_node.color){
 					fontweight = 800;
 				}
 			}
@@ -1121,28 +1172,25 @@ function RhizomaGui(gui){
 			else{
 				borderbottom = "1px "+the_node.color+" dotted";
 			}
-			var field = {id:"dropdown-color-"+group,top:offset_item_x+3,height:15,fontweight:fontweight,width:30,backgroundColor:groups[group]};
+			var field = {id:"dropdown-color-"+group,top:offset_item_x+3,height:15,fontweight:fontweight,width:30,backgroundColor:groups[group].color};
 			gui.addField(field,"dropdown-group");
 
 			var field = {id:"dropdown-group-"+group,top:offset_item_x,paddingleft:40,paddingtop:3,height:17,fontweight:fontweight,width:160,bordertop:bordertop,borderbottom:borderbottom,color:"black"};
 			gui.addField(field,"dropdown-group");
-			gui.addText("dropdown-group-"+group,"GRUPO "+group);
+			gui.addText("dropdown-group-"+group,groups[group].name);
 			master.selectGroupMouseBehavior("dropdown-group-"+group);
 			offset_item_x += 20;
 			inc++;
 		}
-		// node_types[0] = {type:"categoria",name:"categoria"};
 	}
 
 	this.removeTypeDropDown = function(){
-		// type_dropdown = false;
 		if(document.getElementById("dropdown-type")!=null){
 			document.getElementById("dropdown-type").parentElement.removeChild(document.getElementById("dropdown-type"));
 		}
 	}
 
 	this.removeGroupDropDown = function(){
-		// group_dropdown = false;
 		if(document.getElementById("dropdown-group")!=null){
 			document.getElementById("dropdown-group").parentElement.removeChild(document.getElementById("dropdown-group"));
 		}
@@ -1161,21 +1209,21 @@ function RhizomaGui(gui){
 			var current_id = this.id.split("-");
 			current_id = current_id[current_id.length-1];
 			this.style.color = "black";
-			document.getElementById("dropdown-color-"+current_id).style.backgroundColor = groups[current_id];
+			document.getElementById("dropdown-color-"+current_id).style.backgroundColor = groups[current_id].color;
 		}
 		var mouseDownGroup = function(){
 			var current_id = this.id.split("-");
 			current_id = current_id[current_id.length-1];
 			current_group = current_id;
 			current_editing.group = current_id;
-			current_editing.color = groups[current_id];
+			current_editing.color = groups[current_id].color;
 			document.getElementById("control-panel-group").innerHTML = "";
 			var color_field = {id:"control-panel-group-dropdown",top:0,left:0,width:30,height:15,backgroundColor:current_editing.color};
 			gui.addField(color_field,"control-panel-group");
 
 			var color_label = {id:"control-panel-group-label",top:0,left:40,width:260,height:15,font:'Source Sans Pro',fontsize:12,color:current_editing.color,fontweight:600};
 			gui.addField(color_label,"control-panel-group");
-			gui.addText("control-panel-group-label",'GRUPO '+current_editing.group);
+			gui.addText("control-panel-group-label",groups[current_editing.group].name);
 			master.editGroupMouseBehavior();
 			master.toggleGroupDropDown();
 		}
@@ -1230,9 +1278,7 @@ function RhizomaGui(gui){
 			var current_id = this.id.split("-");
 			current_id = current_id[current_id.length-1];
 			if(current_id != current_editing.type){
-				// console.log(current_editing);
 				document.getElementById("control-panel-link-type-"+current_editing.type).style.border = "1px dotted black";
-				// the_link.type = parseInt(current_id);
 				current_editing.type = parseInt(current_id);
 			}
 		}
@@ -1252,7 +1298,6 @@ function RhizomaGui(gui){
 		}
 		var mouseDownType = function(){
 			master.toggleTypeDropDown();
-			// toggle drop down
 		}
 		button.onmouseover = mouseOverType;
 		button.onmouseout = mouseOutType;
@@ -1270,7 +1315,6 @@ function RhizomaGui(gui){
 		}
 		var mouseDownGroup = function(){
 			master.toggleGroupDropDown();
-			// toggle drop down
 		}
 		button.onmouseover = mouseOverGroup;
 		button.onmouseout = mouseOutGroup;
@@ -1486,6 +1530,9 @@ function RhizomaGui(gui){
 			}
 			else if(current_id === "environment"){
 				master.toggleEnvironmentMenu();
+			}
+			else if(current_id === "group"){
+				master.toggleGroupsMenu();
 			}
 
 			if(edit_item != undefined){

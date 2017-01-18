@@ -5,8 +5,9 @@ function SystemGui(){
 	var logged = true;
 	var node_names = undefined;
 	var query_results = [];
-	var update_zoom = undefined;
 	var current_query = -1;
+	var current_query_group = 0;
+	var update_zoom = undefined;
 	var animation_running = false;
 	var hidden_system_menu = false;
 	var lock_system_menu = true;
@@ -31,12 +32,12 @@ function SystemGui(){
 	}
 
 	this.drawSystemMenu = function(logged_in){
-		var container = {id:"system-menu",top:0,position:"absolute",left:0,height:39,width:window.innerWidth,backgroundColor:"rgba(243,243,243,0.85)",borderbottom:"1px solid #aeaeae"};
+		var container = {id:"system-menu",top:0,position:"absolute",left:0,height:39,width:window.innerWidth,backgroundColor:"rgba(243,243,243,0.85)",borderbottom:"1px solid #aeaeae",zindex:9};
 		gui.addContainer(container);
 
-		var logo_field = {id:"system-menu-logo",height:39,width:39,position:"absolute",top:0,left:300};
+		var logo_field = {id:"system-menu-logo",height:39,width:39,position:"absolute",top:0,left:300,zindex:10};
 		gui.addField(logo_field);
-		gui.addText("system-menu-logo",'<img src="./public/media/logo.png" width="40px" height="40px" />');
+		gui.addText("system-menu-logo",'<img id="rhisoma-logo" src="./public/media/logo.png" width="40px" height="40px" />');
 
 		var search_offset_x = 300 + ((window.innerWidth-700)/2);
 		var search_field = {id:"system-menu-search",class:"search-field",height:14,position:"absolute",top:10,left:search_offset_x};
@@ -125,13 +126,18 @@ function SystemGui(){
 			animation_running = true;
 			var id = setInterval(frame, 5);
 			var position_y = 0;
+			var rotate_logo = 0;
+			var rotate_increment = 90/39;
 
 			function frame() {
 			    if (position_y >= 39) {
 			        clearInterval(id);
 			        document.getElementById("system-menu").style.display = "none";
+			        document.getElementById("rhisoma-logo").style.transform = 'rotate('+90+'deg)';
 			        animation_running = false;
 			    } else {
+			    	rotate_logo += rotate_increment;
+			    	document.getElementById("rhisoma-logo").style.transform = 'rotate('+rotate_logo+'deg)';
 			    	position_y += 1;
 			    	document.getElementById("system-menu").style.top = -position_y + "px"; 
 			    }
@@ -149,13 +155,18 @@ function SystemGui(){
 			animation_running = true;
 			var id = setInterval(frame, 5);
 			var position_y = 39;
+			var rotate_logo = 90;
+			var rotate_increment = 90/39;
 			document.getElementById("system-menu").style.display = "inline";
 
 			function frame() {
 			    if (position_y <= 0) {
 			        clearInterval(id);
+			        document.getElementById("rhisoma-logo").style.transform = 'rotate('+0+'deg)';
 			        animation_running = false;
 			    } else {
+			    	rotate_logo -= rotate_increment;
+			    	document.getElementById("rhisoma-logo").style.transform = 'rotate('+rotate_logo+'deg)';
 			    	position_y -= 1;
 			    	document.getElementById("system-menu").style.top = -position_y + "px";
 			    }

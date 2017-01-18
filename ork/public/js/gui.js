@@ -212,7 +212,36 @@ function Gui(){
 		if(style.zindex != undefined){
 			master.$zindex(style.id, style.zindex);
 		}
+		if(style.margintop != undefined){
+			master.$margintop(style.id, style.margintop);
+		}
+		if(style.marginleft != undefined){
+			master.$marginleft(style.id, style.marginleft);
+		}
+		if(style.marginbottom != undefined){
+			master.$marginbottom(style.id, style.marginbottom);
+		}
+		if(style.marginright != undefined){
+			master.$marginright(style.id, style.marginright);
+		}
 
+
+	}
+
+	this.$margintop = function(id, margintop){
+		document.getElementById(id).style.marginTop = this_margintop + "px";
+	}
+
+	this.$marginleft = function(id, marginleft){
+		document.getElementById(id).style.marginLeft = marginleft + "px";
+	}
+
+	this.$marginbottom = function(id, marginbottom){
+		document.getElementById(id).style.marginBottom = marginbottom + "px";
+	}
+
+	this.$marginright = function(id, marginright){
+		document.getElementById(id).style.marginRight = marginright + "px";
 	}
 
 	this.$class = function(id, this_class){
