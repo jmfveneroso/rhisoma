@@ -517,7 +517,9 @@ function environmentStabilize(){
   if(structure.checkUpdateGroups()){
     gui.setGroups(structure.getGroups());
     gui.resetCurrentEditing();
-    gui.updateControlPanel(structure.getNode(current_node),"NODE", false);
+    if(current_node.id != undefined){
+      gui.updateControlPanel(structure.getNode(current_node),"NODE", false);
+    }
     restart();
   }
 
