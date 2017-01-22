@@ -1,3 +1,16 @@
+!!! --- Utilizados:
+
+Colorpicker: http://vanderlee.github.io/colorpicker/
+	+ JQuery
+	+ JQuery UI
+Datepicker:
+Moment with locales (conversão de tempo):
+D3 (forceatlas, etc):
+
+
+/* - - - - - - - - - */
+
+
 >> D3 FORCES
 
 

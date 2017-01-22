@@ -1,4 +1,4 @@
-Afazeres p/ 0.1 Beta:
+Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 
 
 
@@ -12,17 +12,57 @@ Afazeres p/ 0.1 Beta:
 		/ 		!!!!! importante checar
 
 		*** AVANÇOS
-			- no init processar grupos e criar ligacoes tipo 3 com base em conexoes compartilhadas entre os grupos
+			? - (?) no init processar grupos e criar ligacoes tipo 3 com base em conexoes compartilhadas entre os grupos
 			[atualiza links]
 
-			- nódulo do tipo data associado a um nódulo básico com ligação de tipo específico para definir datas
+			- (?) nódulo do tipo data associado a um nódulo básico com ligação de tipo específico para definir datas
 				forma um módulo
 
-			- Ctrl+C Ctrl+V para modificações no mapa (?)
+			/*** 0.1.1 beta ***/
 
-			- Atribuir pesos individuais diferentes para os nódulos [para afatar e aproximar]
+				- Organização do código 
 
-			- Permitir que usuário modifique variáveis de ambiente [proximidade dos nódulos, força dos links, etc]
+			/*** 0.2 beta ***/
+
+				- Salvar imagens do grafo [e compartilhar em redes sociais]	
+
+				- Rede de amigos
+
+				- Módulos de texto, imagem, links, etc (mostram o conteúdo no grafo)
+
+				- Permitir que usuário modifique variáveis de ambiente [proximidade dos nódulos, força dos links, etc]
+
+				- Funções de data:
+					- Alarme
+					- Recorrência
+					- Período (diário, semanal, mensal, custom [por dias na semana, por dias no mês, por dias no ano {feriados…}])
+					- Prazo final
+
+				- Responsive design
+
+				- Preparar uma versão mobile 
+
+			/*** 0.3 beta ***/
+
+				- Ctrl+C Ctrl+V para modificações no mapa (log de ações)
+
+				- Backup do grafo
+
+				- Export de PDF e CSV
+
+			/*** 0.4 beta ***/
+
+				- Atribuir pesos individuais diferentes para os nódulos [para afatar e aproximar]
+
+			/*** 0.5 beta ***/
+
+				- Nódulos com diferentes privacidades
+
+			/*** 0.6 beta ++++ ***/
+
+				- Visualização detalhada de textos, imagens, etc {caminho do scape}
+
+
 
 		***	ANALISAR
 			OK - atualizar entire_graph toda vez que algo for modificado
@@ -31,17 +71,24 @@ Afazeres p/ 0.1 Beta:
 			OK - Revisar esquema de cores e modo como as cores são atribuídas
 				OK - cor no add node, link node
 
-			~~ considerar territórios [criar, acessar, nódulo buraco negro 
+			% considerar territórios [criar, acessar, nódulo buraco negro 
 				- (abrir a página novamente chamando novo json), processo do john
+				- checar na integração
 
 			{CONFERIR INDEX E ID, ESPECIALMENTE NO ACTIVE_GRAPH.NODES}
 				!!!!! CONFERIR INDEXES E IDS NOS NODES; importante pegar sempre os ids para integrar com bd
+				- Checar antes da integração (trocando ids no json)
+
+
 
 		*** JOHN
 
-			- Só desenhar active nodes [que não estão deletados] {John só deve me passar os active nodes}
-			- John deve guardar x, y, vx e vy de cada node
-			- Função para convidar os amigos [enviar email de convite: deve fornecer email do amigo]
+			% Só desenhar active nodes [que não estão deletados] {John só deve me passar os active nodes}
+			% John deve guardar x, y, vx e vy de cada node
+			% Função para convidar os amigos [enviar email de convite: deve fornecer email do amigo]
+			- John deve passar configurações de usuário no JSON
+				[língua escolhida pelo usuário {otherwise pega o padrão do browser}]
+				[GMT]
 
 
 
@@ -58,6 +105,7 @@ Afazeres p/ 0.1 Beta:
 				. stand-by, ativo, datas; reconhecer e processar tudo
 		- Ferramenta de apresentação do mapa por período [default = ontem,hoje,amanhã {visão simultânea de 3 dias}]
 				!!!!! necessário definir modelo padrão de data para programar o interpretador
+1		>> - Reconhecer locale e pegar o JSON respectivo [PT ou EN (default)]
 
 		Estilo
 	OK - Nódulos com formas diferentes para diferentes categorias [círculo para categoria, quadrado para tarefa, triângulo para comentário, etc] {solução com svg:path e, no futuro, custom symbols {ver link no .txt}}
@@ -72,7 +120,8 @@ Afazeres p/ 0.1 Beta:
 	OK - Linha do linkadd fica na cor do source node
 	OK - Evidenciar link selecionado
 	OK - Anima rotação da logo do rhisoma ao esconder ou revelar system menu
-		- Estilo das linhas em função da urgência [hoje é preto e grosso?, datas no futuro são mais finas?]
+	OK - Estilo do popup para editar e criar grupo (box-shadow)
+		- (? >> pensar sobre) Estilo das linhas em função da urgência [hoje é preto e grosso?, datas no futuro são mais finas?]
 		% Ajustar distâncias entre os nódulos
 		% Detalhes de estilo [cores, desenho dos nódulos, etc]
 		% (?) Quando hidden labels estão visíveis: evidenciar com uppercase e bold no mouse over
@@ -152,14 +201,18 @@ Afazeres p/ 0.1 Beta:
 			OK - Editar grupo
 				OK - Selecionar cor para grupo (Color picker)
 				OK - Dar nome para grupo
-11		>> - Date picker no control panel do node
-		- Barra de seleção de tempo (na base, da primeira data até a última)
-&1		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
-10		>> - Ao adicionar link para node sem ligações, se ele for source criar um grupo novo
+3		>> - Date picker no control panel do node
+&&4		- Barra de seleção de tempo (na base, da primeira data até a última)
+			- Esboço [pensar em layout que já caminhe para uma barra de filtragem mais geral, não somente data]
+			- Seleção de período
+			- Funcionalidade de edição do grafo segundo o período selecionado
+4		>> - Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
+			- Utilizar função de busca [busca pode merecer uma classe específica desde o início]
+		% (?) Ao adicionar link a partir de node sem ligações, se ele for source criar um grupo novo
 
 		BD %integração com John
 	OK - Esboço de classe que comunica com o back-end
-		- Integração front e back: implementar funções de atualização do BD a cada modificação no grafo
+		[~26/01] - Integração front e back: implementar funções de atualização do BD a cada modificação no grafo
 
 		Bugs e adendos
 	OK - Comportamento errático dos labels durante zoom e pan
@@ -239,15 +292,19 @@ Afazeres p/ 0.1 Beta:
 	OK - Aumenta altura do control panel e abaixa todos os fields
 	OK - Botão fixar agora - após o fixar automático - é obsoleto [Removido]
 	OK - Quando um node está selecionado e o grupo desse node é editado: não atualiza cores no control panel
-12		>> - Mostrar só 10 resultados de query e habilitar scroll down e up [liberar navegação com setas também nesse caso]
+	OK - Estilo da linha do group-name quando usuário tenta inserir grupo novo sem nome
+&1		>> - Mostrar só 10 resultados de query e habilitar scroll down e up [liberar navegação com setas também nesse caso]
 &2		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
 &3		- Ligações tipo 3 não estão aparecendo depois de close e collapse um node
-		- Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
-&4		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
-		- (?) Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
-		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
+&4		- Ligações tipo 3 de nodes que devem ser exibidos no navigationEnter ou Exit não estão aparencendo (mostrar ligações tipo 3 em nível superior ao root quando ambos os nodes estiverem dentro do grupo mostrado)
+&&1		- Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
+&5		- Se node estiver sendo editado no control panel quando tentar editar ou adicionar grupo: bloquear e fechar edição
+&6		- Ao começar edição de grupo e fechar janela: comportamentos do mouse não funcionam no grafo
+&7		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
+&&2		- (?) Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
+&&3		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
 		- Impedir ação de clique no clique duplo
-		- Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
+		- (?) Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
 		% Expandir a partir da posição do nódulo sendo expandido (para evitar saltos no grafo)
 		% - (?) Node sem source que não seja categoria não deve mostrar label
 		% lentidão no primeiro drag do graph (e em momentos eventuais: fazer teste de benchmark quando estiver pronto para descobrir as funções que podem ser otimizadas)
@@ -256,20 +313,36 @@ Afazeres p/ 0.1 Beta:
 		% Ajustar simulation stop [conversar com john: deve parar todos os nodes? a volta para movimento deve ser automática?]
 		
 		Outros
-		- XML para português e para inglês
-		- ajustar <head> com título, etc
+	OK - JSON para português e para inglês (ver referências)
+2		>> - ajustar <head> com título, etc
 		- criar templates de territórios:
 			- agenda
 			- mapa mental
 			- bookmarks
+		% Mouse shortcuts para ações básicas
+			- Setas para navegação
+			- C > center map
+			- X > fix map
+			- N > new node
+			- B > remove node
+			- J > new link
+			- H > remove link
+			- A > collapse
+			- S > close
+			- W > wait
+			- G > new group
+			- F > remove group
+			- Z > select search field
+			- Enter on node > enter node
+			- Enter on closed node > collapse
 
 		Estrutura do código
 	OK - Passar estilização do grafo no html para uma classe dedicada [rhizomaStyle.js]
 	OK - Transferir funções de atualização de label do index para o RhizomaStyle [updateLabel]
 	OK - Criação de rhisoma.css para incluir o estilo da página
-		- Container para criar instâncias das classes com as dependências necessárias
-		- Criar arquitetura de classes e melhor organização do código
-			Especialmente classes rhisoma
+		%> - Container para criar instâncias das classes com as dependências necessárias
+		%> - Criar arquitetura de classes e melhor organização do código
+			%> Especialmente classes rhisoma
 
 	> login.html
 - Estilizar com base no arquivo de referência do John
@@ -292,15 +365,20 @@ Divulgação FB
 	OK - 03 | 24.12.2016 | (Orkhestra inteiro)
 	OK - 04 | 10.01.2017 | (Navegação no Rhisoma)
 	OK - 05 | 17.01.2017 | (Navegação 2: close, collapse, adicionar nódulos, nomear nódulo, trocar categoria de nódulo, adicionar ligações)
-	- 06 | 19.01.2017 | (Solta logo c/ slogan)
-	- 07 | 22.01.2017 | Inscreva-se no Rhisoma para ...
-	-    | 26.01.2017 | Walkthrough [mostra as ferramentas básicas em um vídeo de 5 minutos]
+	- 06 | 23.01.2017 | (Solta logo c/ slogan)
+	- 07 | 26.01.2017 | Inscreva-se no Rhisoma para ...
+	-    | 30.01.2017 | Walkthrough [mostra as ferramentas básicas em um vídeo de 5 minutos]
+	! Lançamento entre dia 26 e dia 31 
+		- Conversar com Leandro Araújo
 	- após lançamento (15-29/02) | vídeo de divulgação (neems) [descoberta e exploração]
 	- após lançamento (15-30/03) | vídeo de divulgação (?) [linha de raciocínio / de pensamento]
 
 OK - comprar domínio rhisoma.com
-- escrever texto do release
+~~ escrever texto do release
 - tirar screenshots para enviar no release
 ~~ fazer lista de blogueiros e sites para divulgação
 - pré-divulgar [oferecer cadastro para beta] para os blogueiros antes do lançamento público [alpha online]
 - fazer página de informação no site do sumbioun
+
+
+

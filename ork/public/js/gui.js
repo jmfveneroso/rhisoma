@@ -224,8 +224,15 @@ function Gui(){
 		if(style.marginright != undefined){
 			master.$marginright(style.id, style.marginright);
 		}
+		if(style.boxshadow != undefined){
+			master.$boxshadow(style.id, style.boxshadow);
+		}
 
 
+	}
+
+	this.$boxshadow = function(id, boxshadow){
+		document.getElementById(id).style.boxShadow = boxshadow;
 	}
 
 	this.$margintop = function(id, margintop){

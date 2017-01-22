@@ -1,4 +1,4 @@
-function RhizomaStyle(){
+function RhisomaStyle(){
 
 	  /* LINK STYLING */
 

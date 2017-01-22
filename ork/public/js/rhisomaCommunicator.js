@@ -1,4 +1,4 @@
-function RhizomaCommunicator(){
+function RhisomaCommunicator(){
 
 	var master = this;
 

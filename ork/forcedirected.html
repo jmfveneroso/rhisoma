@@ -4,23 +4,23 @@
 <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script> -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
-<script src="public/js/rhizoma.js"></script>
-<script src="public/js/rhizomaGui.js"></script>
+<script src="public/js/rhisoma.js"></script>
+<script src="public/js/rhisomaGui.js"></script>
 <script src="public/js/rhisomaGuiFunctions.js"></script>
 <script src="public/js/rhisomaGuiElements.js"></script>
 <script src="public/js/rhisomaGuiCalendar.js"></script>
-<script src="public/js/rhizomaStyle.js"></script>
-<script src="public/js/rhizomaCommunicator.js"></script>
+<script src="public/js/rhisomaStyle.js"></script>
+<script src="public/js/rhisomaCommunicator.js"></script>
 <script src="public/js/systemGui.js"></script>
 <script src="public/js/gui.js"></script>
 <!-- Vendor -->
 <link rel="stylesheet" href="vendor/jquery-ui-1.12.1/jquery-ui.css">
- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="vendor/jquery-ui-1.12.1/jquery-ui.js"></script>
 <script src="vendor/colorpicker-master/jquery.colorpicker.js"></script>
 <link href="vendor/colorpicker-master/jquery.colorpicker.css" rel="stylesheet" type="text/css"/>
 <body>
-<svg id="rhizoma" width="960" height="600" style="position:absolute;top:0px"></svg>
+<svg id="rhisoma" width="960" height="600" style="position:absolute;top:0px"></svg>
 </body>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <!-- <script src="https://d3js.org/d3.v4.js"></script> -->
@@ -29,9 +29,9 @@
   /* INIT */
 
 var main_gui = new Gui();
-var gui = new RhizomaGui(main_gui);
-var structure = new Rhizoma();
-var rst = new RhizomaStyle();
+var gui = new RhisomaGui(main_gui);
+var structure = new Rhisoma();
+var rst = new RhisomaStyle();
 var top_menu = new SystemGui();
 top_menu.drawSystemMenu();
   
@@ -41,7 +41,7 @@ var link_to_add = {};
     link_to_add.source = null;
     link_to_add.target = null;
 
-var element =  document.getElementById("rhizoma"); 
+var element =  document.getElementById("rhisoma"); 
     element.setAttribute("width", window.innerWidth);
     element.setAttribute("height", window.innerHeight);
 
@@ -510,7 +510,6 @@ function cancelEdit(){
       gui.removeSelectLine();
       toggleLinkSelection(true);
     }
-    // gui.closeMenus();
   }
 
 function environmentStabilize(){
@@ -1042,7 +1041,7 @@ function mouseDoubleClick(d){
     run_translate = true;
     // increase one level on navigation (enter node)
     if(d.id != inside_node){
-      structure.navigateRhizomaEnter(d.id);
+      structure.navigateRhisomaEnter(d.id);
       inside_node = d.id;
       drift[drift.length] = d.id;
       restart(d); 
@@ -1050,7 +1049,7 @@ function mouseDoubleClick(d){
     // decreases one level on navigation (exit node [click on inside_node])
     else if(d.id === inside_node){
       if(d.parentConnections > 0){
-        structure.navigateRhizomaExitCheck(drift[drift.length-2]);
+        structure.navigateRhisomaExitCheck(drift[drift.length-2]);
         drift.pop();
         inside_node = drift[drift.length-1];
         if(drift.length === 0){

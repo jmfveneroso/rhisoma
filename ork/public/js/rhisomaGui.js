@@ -1,4 +1,4 @@
-function RhizomaGui(gui){
+function RhisomaGui(gui){
 
 	var master = this;
 
@@ -1370,7 +1370,7 @@ function RhizomaGui(gui){
 				}
 
 				master.lockControlPanel(editing_mode);
-				// if things changed, fire update to rhizoma
+				// if things changed, fire update to rhisoma
 				if(found_node_match){
 					save_node_edition = true;
 					master.eventFire(document.body, 'click');

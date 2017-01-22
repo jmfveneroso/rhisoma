@@ -1,0 +1,44 @@
+{
+  "PT": [
+    {"id": "system-menu-search-placeholder", "contents": "Busca"},
+    {"id": "system-menu-user-avatar", "contents": "Usuário"},
+    {"id": "system-menu-settings", "contents": "Configurações"},
+    {"id": "system-menu-signout", "contents": "Sair"},
+    {"id": "system-menu-signin", "contents": "Entrar"},
+    {"id": "system-menu-signup", "contents": "Cadastrar"},
+
+    {"id": "dropdown-type-categoria-principal", "contents": "Categoria principal"},
+    {"id": "dropdown-type-categoria", "contents": "Categoria"},
+    {"id": "dropdown-type-tarefa", "contents": "Tarefa"},
+    {"id": "dropdown-type-texto", "contents": "Texto"},
+    {"id": "dropdown-type-link", "contents": "Link"},
+    {"id": "dropdown-type-buraco", "contents": "Buraco negro"},
+
+    {"id": "control-panel-date-start", "contents": "Início"},
+    {"id": "control-panel-date-end", "contents": "Fim"},
+    {"id": "control-panel-task-completed", "contents": "Finalizada"},
+
+    {"id": "system-groups-edit-name-placeholder", "contents": "Nome do grupo"},
+    {"id": "system-groups-edit-color-placeholder", "contents": "Cor do grupo"},
+
+    {"id": "edit-panel-node", "contents":"Nódulo"},
+    {"id": "edit-panel-link", "contents":"Conexão"},
+    {"id": "edit-panel-state", "contents":"Estado"},
+    {"id": "edit-panel-group", "contents":"Grupo"},
+    {"id": "edit-panel-environment", "contents":"Mapa"},
+
+    {"id": "edit-panel-nodeadd", "contents":"Novo"},
+    {"id": "edit-panel-nodedelete", "contents":"Remover"},
+    {"id": "edit-panel-linkadd", "contents":"Nova"},
+    {"id": "edit-panel-linkdelete", "contents":"Remover"},
+    {"id": "edit-panel-stateidle", "contents":"Espera"},
+    {"id": "edit-panel-stateexplode", "contents":"Expandir"},
+    {"id": "edit-panel-statecontract", "contents":"Contrair"},
+    {"id": "edit-panel-groupadd", "contents":"Novo"},
+    {"id": "edit-panel-groupedit", "contents":"Editar"},
+    {"id": "edit-panel-environmentstop", "contents":"Parar"},
+    {"id": "edit-panel-environmentcenter", "contents":"Centro"},
+
+    {"id": "default-node-name", "contents":"Sem nome"}
+  ]
+}

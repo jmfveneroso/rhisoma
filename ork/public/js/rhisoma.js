@@ -1,4 +1,4 @@
-function Rhizoma(){
+function Rhisoma(){
 
 	var master = this;
 	var json = null;
@@ -8,7 +8,7 @@ function Rhizoma(){
 	var groups = {};
 	var current_crawl = 0;
 	var primary = undefined;
-	var communicator = new RhizomaCommunicator();
+	var communicator = new RhisomaCommunicator();
 
 	var block_node = []; // em caso de collapse false, coloca o nódulo e seus children na lista: checa quando vai criar o active_graph; se estiver bloqueado, não desenhar (só desenhar o parent)
 	var check_block = false;
@@ -334,7 +334,7 @@ function Rhizoma(){
 		}
 	}
 
-	this.navigateRhizomaEnter = function(selected_node){ // contracts rhizoma
+	this.navigateRhisomaEnter = function(selected_node){ // contracts rhisoma
 		var increment = 0;
 		var found_match = false;
 		var index = undefined;
@@ -404,16 +404,16 @@ function Rhizoma(){
 		 */
 	}
 
-	this.navigateRhizomaExitCheck = function(this_node){
+	this.navigateRhisomaExitCheck = function(this_node){
 		if(this_node != undefined){
-			master.navigateRhizomaExit(this_node);
+			master.navigateRhisomaExit(this_node);
 		}
 		else{
 			master.navigateRoot();
 		}
 	}
 
-	this.navigateRhizomaExit = function(selected_node){ // expands rhizoma
+	this.navigateRhisomaExit = function(selected_node){ // expands rhisoma
 		var increment = 0;
 		var found_match = false;
 		var index = undefined;
@@ -1217,7 +1217,7 @@ function Rhizoma(){
 			var container = {id:"system-message-popup",width:window.innerWidth,height:window.innerHeight,top:0,left:0,backgroundColor:"rgba(255,255,255,0.8)",zindex:0};
 			gui.addContainer(container);
 
-			var groups_edit = {id:"system-groups-edit",width:290,height:350,top:(window.innerHeight-370)/2,left:(window.innerWidth-330)/2,backgroundColor:"white",padding:20,border:"1px solid #aeaeae"};
+			var groups_edit = {id:"system-groups-edit",width:290,height:350,top:(window.innerHeight-370)/2,left:(window.innerWidth-330)/2,backgroundColor:"white",padding:20,border:"1px solid #aeaeae",boxshadow:"-5px 5px rgba(243,243,243,0.6)"};
 			gui.addContainer(groups_edit);
 
 			var name_field = {id:"system-groups-edit-name",class:"edit-group"};
@@ -1236,6 +1236,11 @@ function Rhizoma(){
 			var send_button = {id:"system-groups-edit-send",width:165,height:34,top:349,left:164,border:"1px solid #aeaeae",font:"Font Awesome",fontsize:24,textalign:"center",paddingtop:6,color:"#aeaeae"};
 			gui.addField(send_button,"system-groups-edit");
 			gui.addText("system-groups-edit-send",'<i class="fa fa-check" aria-hidden="true"></i>');
+
+			var selectField = function(){
+				this.style.borderBottom = "1px solid #aeaeae";
+			}
+			document.getElementById("system-groups-edit-name").onfocus = selectField;
 		}
 		if(node != undefined){
 			document.getElementById("system-groups-edit-name").value = groups[node.group].name;
@@ -1376,7 +1381,7 @@ function Rhizoma(){
 				}
 				else{
 					var element = document.getElementById("system-groups-edit-name");
-					element.style.borderBottom = "1px solid red";
+					element.style.borderBottom = "1px dashed red";
 				}
 			}
 		}

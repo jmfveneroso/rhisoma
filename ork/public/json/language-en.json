@@ -1,0 +1,44 @@
+{
+  "EN": [
+    {"id": "system-menu-search-placeholder", "contents": "Search"},
+    {"id": "system-menu-user-avatar", "contents": "User"},
+    {"id": "system-menu-settings", "contents": "Settings"},
+    {"id": "system-menu-signout", "contents": "Sign out"},
+    {"id": "system-menu-signin", "contents": "Sign in"},
+    {"id": "system-menu-signup", "contents": "Sign up"},
+
+    {"id": "dropdown-type-categoria-principal", "contents": "Main category"},
+    {"id": "dropdown-type-categoria", "contents": "Category"},
+    {"id": "dropdown-type-tarefa", "contents": "Task"},
+    {"id": "dropdown-type-texto", "contents": "Text"},
+    {"id": "dropdown-type-link", "contents": "Link"},
+    {"id": "dropdown-type-buraco", "contents": "Wormhole"},
+
+    {"id": "control-panel-date-start", "contents": "Start"},
+    {"id": "control-panel-date-end", "contents": "End"},
+    {"id": "control-panel-task-completed", "contents": "Completed"},
+
+    {"id": "system-groups-edit-name-placeholder", "contents": "Group's name"},
+    {"id": "system-groups-edit-color-placeholder", "contents": "Group's color"},
+
+    {"id": "edit-panel-node", "contents":"Node"},
+    {"id": "edit-panel-link", "contents":"Link"},
+    {"id": "edit-panel-state", "contents":"State"},
+    {"id": "edit-panel-group", "contents":"Group"},
+    {"id": "edit-panel-environment", "contents":"Map"},
+
+    {"id": "edit-panel-nodeadd", "contents":"New"},
+    {"id": "edit-panel-nodedelete", "contents":"Remove"},
+    {"id": "edit-panel-linkadd", "contents":"New"},
+    {"id": "edit-panel-linkdelete", "contents":"Remove"},
+    {"id": "edit-panel-stateidle", "contents":"Wait"},
+    {"id": "edit-panel-stateexplode", "contents":"Expand"},
+    {"id": "edit-panel-statecontract", "contents":"Contract"},
+    {"id": "edit-panel-groupadd", "contents":"New"},
+    {"id": "edit-panel-groupedit", "contents":"Edit"},
+    {"id": "edit-panel-environmentstop", "contents":"Stop"},
+    {"id": "edit-panel-environmentcenter", "contents":"Center"},
+
+    {"id": "default-node-name", "contents":"Untitled"}
+  ]
+}
