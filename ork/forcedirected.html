@@ -30,6 +30,7 @@
   <script src="public/js/rhisomaStyle.js"></script>
   <script src="public/js/rhisomaCommunicator.js"></script>
   <script src="public/js/rhisomaSearch.js"></script>
+  <script src="public/js/rhisomaLocales.js"></script>
 
   <!-- Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -62,14 +63,41 @@
 
 <script>
 
+/* LOCALES | Atualizar com container */
+
+$.ajax({
+    url: "../ork/public/json/language-en.json",
+    type: "POST",
+    contentType: 'application/json; charset=utf-8',
+    success: function (resultData) {
+        var locales_data = $.parseJSON(resultData);
+        main(locales_data);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+    },
+    timeout: 120000,
+});
+
+function main(locales_data){
+
   /* INIT */
 
 var main_gui = new Gui();
 var gui = new RhisomaGui(main_gui);
+gui.setLocales(locales_data);
+
 var structure = new Rhisoma();
 var rst = new RhisomaStyle();
 var top_menu = new SystemGui();
+top_menu.setLocales(locales_data);
 top_menu.drawSystemMenu();
+if(locales_data.language === "PT"){
+  moment.locale('pt');
+}
+else{
+  moment.locale('en');
+}
+
   
 var current_node = {};
 var current_link = {};
@@ -569,6 +597,38 @@ function environmentStabilize(){
       gui.closeMenus();
     }
     else if(gui.editionMode() === "groupadd"){
+      if(current_node.id != null){
+        if(document.getElementById("node-symbol-"+current_node.id) != null){
+          if(current_node.collapse === 1){
+            if(current_node.type != "buraco"){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
+            }
+            else{
+              if(current_node.standby === 0){
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+              else{
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+            }
+          }
+          else{
+            if(current_node.standby === 0){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+            }
+            else{
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+            }
+          }
+        }
+        current_node = {};
+      }
+      gui.hideControlPanel();
       structure.updateGroups();
       gui.closeMenus();
     }
@@ -1051,8 +1111,39 @@ function clickNode(d){
     }
   }
   else if(gui.editionMode() === "groupedit"){
+      if(current_node.id != null){
+        if(document.getElementById("node-symbol-"+current_node.id) != null){
+          if(current_node.collapse === 1){
+            if(current_node.type != "buraco"){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
+            }
+            else{
+              if(current_node.standby === 0){
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+              else{
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+            }
+          }
+          else{
+            if(current_node.standby === 0){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+            }
+            else{
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+            }
+          }
+        }
+        current_node = {};
+      }
+      gui.hideControlPanel();
       structure.updateGroups(d);
-      // open group edit with current node's group info
       gui.closeMenus();
     }
 }
@@ -1286,6 +1377,18 @@ function zoomReset(){
   svg.transition()
       .duration(750)
       .call( zoom.transform, d3.zoomIdentity );
+}
+
+function eventFire(el, etype){
+  if (el.fireEvent) {
+    el.fireEvent('on' + etype);
+  } else {
+    var evObj = document.createEvent('Events');
+    evObj.initEvent(etype, true, false);
+    el.dispatchEvent(evObj);
+  }
+}
+
 }
 
 </script>

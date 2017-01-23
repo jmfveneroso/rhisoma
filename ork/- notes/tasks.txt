@@ -86,6 +86,7 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 			% Só desenhar active nodes [que não estão deletados] {John só deve me passar os active nodes}
 			% John deve guardar x, y, vx e vy de cada node
 			% Função para convidar os amigos [enviar email de convite: deve fornecer email do amigo]
+			- John deve passar o JSON relativo ao idioma do site
 			- John deve passar configurações de usuário no JSON
 				[língua escolhida pelo usuário {otherwise pega o padrão do browser}]
 				[GMT]
@@ -101,10 +102,10 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 	OK - Inicialização ocupa o array processado [active_graph]
 	OK - Pegar array processado [active_graph] como referência para o d3 [substitui o json]
 	OK - Substituir json por entire_graph como referência [mudanças são processadas no entire_graph e propagadas para o active_graph por meio de update]
+	OK - Reconhecer locale e pegar o JSON respectivo [PT ou EN (default)]
 		- Inicialização processa informações relativas à navegação no grafo [hierarquia, tamanho, etc]
 				. stand-by, ativo, datas; reconhecer e processar tudo
 		- Ferramenta de apresentação do mapa por período [default = ontem,hoje,amanhã {visão simultânea de 3 dias}]
-7		>> - Reconhecer locale e pegar o JSON respectivo [PT ou EN (default)]
 
 		Estilo
 	OK - Nódulos com formas diferentes para diferentes categorias [círculo para categoria, quadrado para tarefa, triângulo para comentário, etc] {solução com svg:path e, no futuro, custom symbols {ver link no .txt}}
@@ -201,7 +202,7 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 				OK - Selecionar cor para grupo (Color picker)
 				OK - Dar nome para grupo
 5		>> - Date/time picker no control panel do node
-&&4		- Barra de seleção de tempo (na base, da primeira data até a última)
+&&3		- Barra de seleção de tempo (na base, da primeira data até a última)
 			- Esboço [pensar em layout que já caminhe para uma barra de filtragem mais geral, não somente data]
 			- Seleção de período
 			- Funcionalidade de edição do grafo segundo o período selecionado
@@ -296,17 +297,19 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 	OK - Ligações tipo 3 de nodes que devem ser exibidos no navigationEnter ou Exit não estão aparencendo (mostrar ligações tipo 3 em nível superior ao root quando ambos os nodes estiverem dentro do grupo mostrado)
 	OK - Ligações tipo 3 não estão aparecendo depois de close e collapse um node
 	OK - Toggle de tarefa finalizada no control panel não está funcionando [fixa depois de mudar]
+	OK - Habilitar saltar linha na textarea
+	OK - Se node estiver sendo editado no control panel quando tentar editar ou adicionar grupo: bloquear e fechar edição
+	OK - Correção no rhizomaStyle updateLabel [não havia sido traduzido para a classe]
+		- Nódulos estão se aproximando ao expandir um nódulo fechado (só corrige depois de entrar e sair de algum nódulo)
 		- Adaptações para mudança de conexão quando dentro de um nódulo (exemplo: trocar conexão tipo 2 por tipo 3 não está atualizando)
-		- Habilitar saltar linha na textarea
 		- Habilitar scroll no control panel [tanto para edição como para visualização]
 &1		>> - Mostrar só 10 resultados de query e habilitar scroll down e up [liberar navegação com setas também nesse caso]
 &2		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
-&&1		- Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
-&3		- Se node estiver sendo editado no control panel quando tentar editar ou adicionar grupo: bloquear e fechar edição
-&4		- Ao começar edição de grupo e fechar janela: comportamentos do mouse não funcionam no grafo
-&5		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
-&&2		- (?) Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
-&&3		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
+7		- Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
+&3		- Ao começar edição de grupo e fechar janela: comportamentos do mouse não funcionam no grafo
+&4		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
+&&1		- (?) Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
+&&2		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
 		- Impedir ação de clique no clique duplo
 		- (?) Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
 		% Expandir a partir da posição do nódulo sendo expandido (para evitar saltos no grafo)

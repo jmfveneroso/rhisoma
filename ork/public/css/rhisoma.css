@@ -25,6 +25,21 @@ input.edit-title:focus{
   outline: none;
 }
 
+input.edit-date{
+  border:none;
+  border-bottom: 1px black solid;
+  font-family: Source Sans Pro;
+  font-size: 12px;
+  font-weight:400;
+  text-transform: none;
+  background-color: transparent;
+}
+
+input.edit-date:focus{
+  color: black;
+  outline: none;
+}
+
 input.edit-group{
   width:220px;
   color: black;

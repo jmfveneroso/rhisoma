@@ -11,18 +11,22 @@ function SystemGui(){
 	var animation_running = false;
 	var hidden_system_menu = false;
 	var lock_system_menu = true;
+	var locales = undefined;
 
-	var buttons = {
-		"system-menu-user-avatar":"Usuário",
-		"system-menu-settings":"Configurações",
-		"system-menu-signout":"Sair",
-		"system-menu-login":"Entrar",
-		"system-menu-signup":"Cadastrar",
-		"system-menu-search-button":"Buscar"
-	};
+	var buttons = {};
 
 	this.setCurrentGraph = function(in_nodes){
 		node_names = in_nodes;
+	}
+
+	this.setLocales = function(in_locales){
+		locales = in_locales;
+		buttons["system-menu-user-avatar"] = locales["system-menu-user-avatar"];
+		buttons["system-menu-settings"] = locales["system-menu-settings"];
+		buttons["system-menu-signout"] = locales["system-menu-signout"];
+		buttons["system-menu-signin"] = locales["system-menu-signin"];
+		buttons["system-menu-signup"] = locales["system-menu-signup"];
+		buttons["system-menu-search-button"] = locales["system-menu-search-button"];
 	}
 
 	this.getUpdateZoom = function(){
@@ -41,9 +45,9 @@ function SystemGui(){
 
 		var search_offset_x = 300 + ((window.innerWidth-700)/2);
 		var search_field = {id:"system-menu-search",class:"search-field",height:14,position:"absolute",top:10,left:search_offset_x};
-		gui.addInput(search_field,"Busca","system-menu","");
+		gui.addInput(search_field,locales['system-menu-search-placeholder'],"system-menu","");
 
-		var search_button = {id:"system-menu-search-button",height:30,width:40,position:"absolute",top:0,paddingtop:10,left:search_offset_x+260,textalign:"center",font:'Font Awesome',fontsize:18,color:"#000000"}
+		var search_button = {id:"system-menu-search-button",height:30,width:40,position:"absolute",top:0,paddingtop:10,left:search_offset_x+260,textalign:"center",font:'Font Awesome',fontsize:18,color:"#aeaeae"}
 		gui.addField(search_button,"system-menu");
 		gui.addText("system-menu-search-button",'<i class="fa fa-search" aria-hidden="true"></i>');
 
@@ -59,7 +63,7 @@ function SystemGui(){
 		if(!lock_system_menu){
 			master.logoMouseBehavior();
 		}
-		master.searchMouseBehavior();
+		// master.searchMouseBehavior();
 		master.searchWriteBehavior();
 	}
 
@@ -88,9 +92,9 @@ function SystemGui(){
 		var logged_out_field = {id:"system-menu-user",top:0,left:window.innerWidth-200,width:160,height:39,font:'Source Sans Pro',texttransform:'uppercase',fontsize:12,color:'black'};
 		gui.addField(logged_out_field,"system-menu");
 
-		var login_field = {id:"system-menu-login",width:80,height:28,paddingtop:12,textalign:"CENTER",borderleft:"1px solid #aeaeae"};
+		var login_field = {id:"system-menu-signin",width:80,height:28,paddingtop:12,textalign:"CENTER",borderleft:"1px solid #aeaeae"};
 		gui.addField(login_field,"system-menu-user");
-		gui.addText("system-menu-login",buttons["system-menu-login"]);
+		gui.addText("system-menu-signin",buttons["system-menu-signin"]);
 
 		var signup_field = {id:"system-menu-signup",width:80,height:28,paddingtop:12,left:81,textalign:"CENTER",borderleft:"1px solid #aeaeae",borderright:"1px solid #aeaeae"};
 		gui.addField(signup_field,"system-menu-user");
@@ -176,7 +180,7 @@ function SystemGui(){
 	}
 
 	this.signinMouseBehavior = function(){
-		var button = document.getElementById("system-menu-login");
+		var button = document.getElementById("system-menu-signin");
 		var mouseOver = function(){
 			// master.drawTooltip(this.id);
 			this.style.backgroundColor = "#ffffff";
@@ -275,41 +279,41 @@ function SystemGui(){
 		button.onmousedown = mouseDown;
 	}
 
-	this.searchMouseBehavior = function(){
-		var button = document.getElementById("system-menu-search-button");
-		var mouseOver = function(){
-			this.style.color = "#aeaeae";
-			this.style.cursor = "pointer";
-		};
-		var mouseOut = function(){
-			this.style.color = "#000000";
-			this.style.textDecoration = "none";
-		};
-		var mouseDown = function(){
-			// var query = document.getElementById("system-menu-search").value;
-			// if(query != "" && node_names != undefined){
-			// 	var query_results = [];
-			// 	for(var i = 0; i < node_names.length; i++){
-   //  				var expr= query.toUpperCase();
-   //  				var check = node_names[i].name.toUpperCase();
-   //  				if(check.includes(expr)){
-   //  					query_results.push(node_names[i]);
-   //  					if(check === expr){
-   //  						query_results[query_results.length-1].exactMatch = true;
-   //  					}
-   //  					else{
-   //  						query_results[query_results.length-1].exactMatch = false;
-   //  					}
-   //  				}
-			// 	}
-			// 	console.log(query_results);
-			// 	document.getElementById("system-menu-search").value = "";
-			// }
-		};
-		button.onmouseover = mouseOver;
-		button.onmouseout = mouseOut;
-		button.onmousedown = mouseDown;
-	}
+	// this.searchMouseBehavior = function(){
+	// 	var button = document.getElementById("system-menu-search-button");
+	// 	var mouseOver = function(){
+	// 		this.style.color = "#aeaeae";
+	// 		this.style.cursor = "pointer";
+	// 	};
+	// 	var mouseOut = function(){
+	// 		this.style.color = "#000000";
+	// 		this.style.textDecoration = "none";
+	// 	};
+	// 	var mouseDown = function(){
+	// 		// var query = document.getElementById("system-menu-search").value;
+	// 		// if(query != "" && node_names != undefined){
+	// 		// 	var query_results = [];
+	// 		// 	for(var i = 0; i < node_names.length; i++){
+ //   //  				var expr= query.toUpperCase();
+ //   //  				var check = node_names[i].name.toUpperCase();
+ //   //  				if(check.includes(expr)){
+ //   //  					query_results.push(node_names[i]);
+ //   //  					if(check === expr){
+ //   //  						query_results[query_results.length-1].exactMatch = true;
+ //   //  					}
+ //   //  					else{
+ //   //  						query_results[query_results.length-1].exactMatch = false;
+ //   //  					}
+ //   //  				}
+	// 		// 	}
+	// 		// 	console.log(query_results);
+	// 		// 	document.getElementById("system-menu-search").value = "";
+	// 		// }
+	// 	};
+	// 	button.onmouseover = mouseOver;
+	// 	button.onmouseout = mouseOut;
+	// 	button.onmousedown = mouseDown;
+	// }
 
 	this.searchWriteBehavior = function(){
 		var search_field = document.getElementById("system-menu-search");

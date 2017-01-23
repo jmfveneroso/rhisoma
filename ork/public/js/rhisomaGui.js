@@ -6,6 +6,8 @@ function RhisomaGui(gui){
 	// rfn.prototype = RhisomaGui.prototype;
 	// rfn.prototype.constructor = rfn;
 
+	var locales = undefined;
+
 	var current_node = undefined;
 	var the_node = undefined;
 	var current_link = undefined;
@@ -30,23 +32,6 @@ function RhisomaGui(gui){
 	var groups = undefined;
 
 	var tooltips = {};
-	tooltips.node = {text:"Nódulo",fa:"fa-bullseye"};
-	tooltips.link = {text:"Conexão",fa:"fa-code-fork"};
-	tooltips.state = {text:"Estado",fa:"fa-leaf"};
-	tooltips.environment = {text:"Mapa",fa:"fa-map"};
-	tooltips.group = {text:"Grupo",fa:"fa-object-group"};
-	tooltips.nodeadd = {text:"Novo",fa:"fa-plus"};
-	tooltips.nodedelete = {text:"Remover",fa:"fa-minus"};
-	tooltips.linkadd = {text:"Nova",fa:"fa-plus"};
-	tooltips.linkdelete = {text:"Remover",fa:"fa-minus"};
-	tooltips.stateidle = {text:"Espera",fa:"fa-hourglass-2"};
-	tooltips.stateexplode = {text:"Expandir",fa:"fa-folder-open"};
-	tooltips.statecontract = {text:"Contrair",fa:"fa-folder"};
-	tooltips.environmentstop = {text:"Parar",fa:"fa-hand-stop-o"};
-	tooltips.environmentcontinue = {text:"Retomar",fa:"fa-hand-pointer-o"};
-	tooltips.environmentcenter = {text:"Centro",fa:"fa-certificate"};
-	tooltips.groupadd = {text:"Novo",fa:"fa-plus"};
-	tooltips.groupedit = {text:"Editar",fa:"fa-edit"};
 
 	var togglemenus = {};
 	togglemenus.node = false;
@@ -69,11 +54,6 @@ function RhisomaGui(gui){
 	editing.groupedit = 			false;
 
 	var node_types = [];
-	node_types[0] = {type:"categoria",name:"categoria"};
-	node_types[1] = {type:"tarefa",name:"tarefa"};
-	node_types[2] = {type:"texto",name:"texto"};
-	node_types[3] = {type:"link",name:"link"};
-	node_types[4] = {type:"buraco",name:"buraco negro"};
 
 	var edit_item = undefined;
 	var lock = true;
@@ -117,6 +97,33 @@ function RhisomaGui(gui){
 		all_links = in_links;
 	}
 
+	this.setLocales = function(in_locales){
+		locales = in_locales;
+		tooltips.node = {text:locales['edit-panel-node'],fa:"fa-bullseye"};
+		tooltips.link = {text:locales['edit-panel-link'],fa:"fa-code-fork"};
+		tooltips.state = {text:locales['edit-panel-state'],fa:"fa-leaf"};
+		tooltips.environment = {text:locales['edit-panel-environment'],fa:"fa-map"};
+		tooltips.group = {text:locales['edit-panel-group'],fa:"fa-object-group"};
+		tooltips.nodeadd = {text:locales['edit-panel-nodeadd'],fa:"fa-plus"};
+		tooltips.nodedelete = {text:locales['edit-panel-nodedelete'],fa:"fa-minus"};
+		tooltips.linkadd = {text:locales['edit-panel-linkadd'],fa:"fa-plus"};
+		tooltips.linkdelete = {text:locales['edit-panel-linkdelete'],fa:"fa-minus"};
+		tooltips.stateidle = {text:locales['edit-panel-stateidle'],fa:"fa-hourglass-2"};
+		tooltips.stateexplode = {text:locales['edit-panel-stateexplode'],fa:"fa-folder-open"};
+		tooltips.statecontract = {text:locales['edit-panel-statecontract'],fa:"fa-folder"};
+		tooltips.environmentstop = {text:locales['edit-panel-environmentstop'],fa:"fa-hand-stop-o"};
+		tooltips.environmentcontinue = {text:locales['edit-panel-environmentcontinue'],fa:"fa-hand-pointer-o"};
+		tooltips.environmentcenter = {text:locales['edit-panel-environmentcenter'],fa:"fa-certificate"};
+		tooltips.groupadd = {text:locales['edit-panel-groupadd'],fa:"fa-plus"};
+		tooltips.groupedit = {text:locales['edit-panel-groupedit'],fa:"fa-edit"};
+
+		node_types[0] = {type:"categoria",name:locales['node-type-category']};
+		node_types[1] = {type:"tarefa",name:locales['node-type-task']};
+		node_types[2] = {type:"texto",name:locales['node-type-text']};
+		node_types[3] = {type:"link",name:locales['node-type-link']};
+		node_types[4] = {type:"buraco",name:locales['node-type-wormhole']};
+	}
+
 	this.resetCurrentEditing = function(){
 		save_node_edition = false;
 		save_link_edition = false;
@@ -141,9 +148,8 @@ function RhisomaGui(gui){
 		var border_color;
 		current_type = undefined;
 		current_group = undefined;
-		// current_editing = undefined;
 		if(element != undefined && element.color != null && element.color != undefined){
-			border_color = groups[element.group].color;//element.color;//color(element.group);
+			border_color = groups[element.group].color;
 		}
 		else{
 			border_color = "black";
@@ -418,27 +424,27 @@ function RhisomaGui(gui){
 		gui.addField(field,"control-panel");
 		var text;
 		if(node.type === "categoria" && node.parentConnections != 0){
-			text = "categoria";
+			text = locales['node-type-category'];
 			text.toUpperCase();
 		}
 		else if(node.type === "categoria" && node.parentConnections === 0){
-			text = "categoria principal";
+			text = locales['node-type-main-category'];
 			text.toUpperCase();
 		}
 		else if(node.type === "tarefa"){
-			text = "tarefa";
+			text = locales['node-type-task'];
 			text.toUpperCase();
 		}
 		else if(node.type === "texto"){
-			text = "texto";
+			text = locales['node-type-text'];
 			text.toUpperCase();
 		}
 		else if(node.type === "link"){
-			text = "link";
+			text = locales['node-type-link'];
 			text.toUpperCase();
 		}
 		else if(node.type === "buraco"){
-			text = "buraco negro";
+			text = locales['node-type-wormhole'];
 			text.toUpperCase();
 		}
 		gui.addText("control-panel-type",text);
@@ -446,7 +452,7 @@ function RhisomaGui(gui){
 	}
 
 	this.addTitle = function(node){
-		var field = {id:"control-panel-title",top:offset_x,height:"auto",width:300,texttransform:"uppercase",fontweight:800,color:groups[node.group].color/*color(node.group)*/};
+		var field = {id:"control-panel-title",top:offset_x,height:"auto",width:300,texttransform:"uppercase",fontweight:800,color:groups[node.group].color};
 		gui.addField(field,"control-panel");
 		gui.addText("control-panel-title",node.name);
 
@@ -460,7 +466,9 @@ function RhisomaGui(gui){
 	this.addDescription = function(node){
 		var description = {id:"control-panel-description",top:offset_x,height:"auto",width:300};
 		gui.addField(description,"control-panel");
-		gui.addText("control-panel-description",node.description);
+		var process_value = node.description;
+		process_value = process_value.replace(/\r?\n/g, '<br />');
+		gui.addText("control-panel-description",process_value);
 
 		var description_height = document.getElementById("control-panel-description").offsetHeight;
 		if(description_height <= 120){
@@ -473,22 +481,25 @@ function RhisomaGui(gui){
 	}
 
 	this.addDateStart = function(node){
-		var current_date = master.formatTimestamp(node.date_start);
+		var current_date = [];
+		if(node.date_start != ""){
+			current_date[0] = moment(node.date_start).format("L");
+			current_date[1] = moment(node.date_start).format("h:mm A");
+		}
 		var field = {id:"control-panel-date-start",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
 		gui.addField(field,"control-panel");
 
 		var field_label = {id:"control-panel-date-start-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
 		gui.addField(field_label,"control-panel-date-start");
-		gui.addText("control-panel-date-start-label","Início");
+		gui.addText("control-panel-date-start-label",locales['control-panel-date-start']);
 
 		var field_date_start = {id:"control-panel-date-start-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
 		gui.addField(field_date_start,"control-panel-date-start");
 		gui.addText("control-panel-date-start-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
 
 		if(node.date_start != ""){
-			moment.locale('pt');
 			var from_now = moment(node.date_start).fromNow();
-			var field_from_now = {id:"control-panel-date-start-fromnow",top:14,left:140,fontsize:12,fontweight:200,texttransform:"none"};
+			var field_from_now = {id:"control-panel-date-start-fromnow",top:14,left:150,fontsize:12,fontweight:200,texttransform:"none"};
 			gui.addField(field_from_now,"control-panel-date-start");
 			gui.addText("control-panel-date-start-fromnow",'( ' + from_now + ' )');
 		}
@@ -497,22 +508,25 @@ function RhisomaGui(gui){
 	}
 
 	this.addDateEnd = function(node){
-		var current_date = master.formatTimestamp(node.date_end);
+		var current_date = [];
+		if(node.date_end != ""){
+			current_date[0] = moment(node.date_end).format("L");
+			current_date[1] = moment(node.date_end).format("h:mm A");
+		}
 		var field = {id:"control-panel-date-end",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
 		gui.addField(field,"control-panel");
 
 		var field_label = {id:"control-panel-date-end-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
 		gui.addField(field_label,"control-panel-date-end");
-		gui.addText("control-panel-date-end-label","Fim");
+		gui.addText("control-panel-date-end-label",locales['control-panel-date-end']);
 
 		var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
 		gui.addField(field_date_end,"control-panel-date-end");
 		gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
 		
 		if(node.date_end != ""){
-			moment.locale('pt');
 			var from_now = moment(node.date_end).fromNow();
-			var field_from_now = {id:"control-panel-date-end-fromnow",top:14,left:140,fontsize:12,fontweight:200,texttransform:"none"};
+			var field_from_now = {id:"control-panel-date-end-fromnow",top:14,left:150,fontsize:12,fontweight:200,texttransform:"none"};
 			gui.addField(field_from_now,"control-panel-date-end");
 			gui.addText("control-panel-date-end-fromnow",'( ' + from_now + ' )');
 		}
@@ -563,9 +577,9 @@ function RhisomaGui(gui){
 	this.addSource = function(link){
 		var source_label = {id:"control-panel-source-label",top:offset_x,fontsize:12,height:12,width:300,texttransform:"uppercase",fontweight:200,color:"#9c9c9c"};
 		gui.addField(source_label,"control-panel");
-		gui.addText("control-panel-source-label","ORIGEM");
+		gui.addText("control-panel-source-label",locales['control-panel-source-label']);
 
-		var source_field = {id:"control-panel-source",top:offset_x+14,height:24,width:300,texttransform:"uppercase",fontweight:800,color:link.source.color/*color(link.source.group)*/};
+		var source_field = {id:"control-panel-source",top:offset_x+14,height:24,width:300,texttransform:"uppercase",fontweight:800,color:link.source.color};
 		gui.addField(source_field,"control-panel");
 		gui.addText("control-panel-source",link.source.name);
 
@@ -575,9 +589,9 @@ function RhisomaGui(gui){
 	this.addTarget = function(link){
 		var target_label = {id:"control-panel-target-label",top:offset_x,fontsize:12,height:12,width:300,texttransform:"uppercase",fontweight:200,color:"#9c9c9c"};
 		gui.addField(target_label,"control-panel");
-		gui.addText("control-panel-target-label","DESTINO");
+		gui.addText("control-panel-target-label",locales['control-panel-target-label']);
 
-		var target_field = {id:"control-panel-target",top:offset_x+14,height:24,width:300,texttransform:"uppercase",fontweight:800,color:link.target.color/*color(link.target.group)*/};
+		var target_field = {id:"control-panel-target",top:offset_x+14,height:24,width:300,texttransform:"uppercase",fontweight:800,color:link.target.color};
 		gui.addField(target_field,"control-panel");
 		gui.addText("control-panel-target",link.target.name);
 
@@ -626,27 +640,27 @@ function RhisomaGui(gui){
 		gui.addField(field,"control-panel");
 		var text;
 		if(node.type === "categoria" && node.parentConnections != 0){
-			text = node_types[0].name;
+			text = locales['node-type-category'];
 			text.toUpperCase();
 		}
 		else if(node.type === "categoria" && node.parentConnections === 0){
-			text = node_types[0].name+" principal";
+			text = locales['node-type-main-category'];
 			text.toUpperCase();
 		}
 		else if(node.type === "tarefa"){
-			text = node_types[1].name;
+			text = locales['node-type-task'];
 			text.toUpperCase();
 		}
 		else if(node.type === "texto"){
-			text = node_types[2].name;
+			text = locales['node-type-text'];
 			text.toUpperCase();
 		}
 		else if(node.type === "link"){
-			text = node_types[3].name;
+			text = locales['node-type-link'];
 			text.toUpperCase();
 		}
 		else if(node.type === "buraco"){
-			text = node_types[4].name;
+			text = locales['node-type-wormhole'];
 			text.toUpperCase();
 		}
 		gui.addText("control-panel-type",text + ' <span id="control-panel-type-dropdown" style="margin-left:10px;font-size:12px;color:black"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>');
@@ -669,38 +683,46 @@ function RhisomaGui(gui){
 		var description = {id:"control-panel-description",top:offset_x,height:120,width:300};
 		gui.addField(description,"control-panel");
 		var text_area_description = {class: "edit-description",id: "control-panel-edit-description",cols:39,rows:8,padding:4};
-		gui.addTextArea(text_area_description,"Descrição","control-panel-description",node.description);
+		gui.addTextArea(text_area_description,locales['control-panel-description-placeholder'],"control-panel-description",node.description);
 		document.getElementById("control-panel-edit-description").style.border = "1px "+groups[node.group].color+" solid";
 		offset_x += 190;
 	}
 
 	this.addEditDateStart = function(node){
-		var current_date = master.formatTimestamp(node.date_start);
 		var field = {id:"control-panel-date-start",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
 		gui.addField(field,"control-panel");
 
 		var field_label = {id:"control-panel-date-start-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
 		gui.addField(field_label,"control-panel-date-start");
-		gui.addText("control-panel-date-start-label","Início");
+		gui.addText("control-panel-date-start-label",locales['control-panel-date-start']);
 
-		var field_date_start = {id:"control-panel-date-start-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
-		gui.addField(field_date_start,"control-panel-date-start");
-		gui.addText("control-panel-date-start-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
+		// var field_date_start = {id:"control-panel-date-start-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
+		// gui.addField(field_date_start,"control-panel-date-start");
+		// gui.addText("control-panel-date-start-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
+		var input_date_start = {class:"edit-date",id:"control-panel-edit-date-start",width:"auto",margintop:14};
+		gui.addInput(input_date_start,"","control-panel-date-start",node.date_start);
+		document.getElementById("control-panel-edit-date-start").style.color = groups[node.group].color;
+		document.getElementById("control-panel-edit-date-start").style.borderBottom = "1px "+groups[node.group].color+" solid";
+
 		offset_x += 40;
 	}
 
 	this.addEditDateEnd = function(node){
-		var current_date = master.formatTimestamp(node.date_end);
 		var field = {id:"control-panel-date-end",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
 		gui.addField(field,"control-panel");
 
 		var field_label = {id:"control-panel-date-end-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
 		gui.addField(field_label,"control-panel-date-end");
-		gui.addText("control-panel-date-end-label","Fim");
+		gui.addText("control-panel-date-end-label",locales['control-panel-date-end']);
 
-		var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
-		gui.addField(field_date_end,"control-panel-date-end");
-		gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
+		// var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
+		// gui.addField(field_date_end,"control-panel-date-end");
+		// gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
+		var input_date_end = {class:"edit-date",id:"control-panel-edit-date-end",width:"auto",margintop:14};
+		gui.addInput(input_date_end,"","control-panel-date-end",node.date_end);
+		document.getElementById("control-panel-edit-date-end").style.color = groups[node.group].color;
+		document.getElementById("control-panel-edit-date-end").style.borderBottom = "1px "+groups[node.group].color+" solid";
+
 		offset_x += 40;
 	}
 
@@ -710,7 +732,7 @@ function RhisomaGui(gui){
 
 		var field_label = {id:"control-panel-task-completed-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
 		gui.addField(field_label,"control-panel-task-completed");
-		gui.addText("control-panel-task-completed-label","FINALIZADA");
+		gui.addText("control-panel-task-completed-label",locales['control-panel-task-completed']);
 
 		var field_offset_x = document.getElementById("control-panel-task-completed-label").clientWidth + 10;
 		var current_icon = undefined;
@@ -1159,7 +1181,7 @@ function RhisomaGui(gui){
 			master.selectTypeMouseBehavior("dropdown-type-"+node_types[i].type);
 			offset_item_x += 20;
 		}
-		node_types[0] = {type:"categoria",name:"categoria"};
+		// node_types[0] = {type:"categoria",name:"categoria"};
 	}
 
 	this.drawGroupDropDown = function(){
@@ -1309,7 +1331,7 @@ function RhisomaGui(gui){
 		var button = document.getElementById("control-panel-type-dropdown");
 		var mouseOverType = function(){
 			this.style.cursor = "pointer";
-			this.style.color = "blue";
+			this.style.color = "#aeaeae";
 		}
 		var mouseOutType = function(){
 			this.style.color = "black";
@@ -1657,30 +1679,6 @@ function RhisomaGui(gui){
 	}
 
 	/* FUNCTIONS */
-
-	this.formatTimestamp = function(in_date){
-		var elements = in_date.split(" ");
-		var date = undefined;
-		var time = undefined;
-		if(elements[0] != null){
-			date = elements[0].split("-");
-		}
-		if(elements[1] != null){
-			time = elements[1].split(":");
-		}
-		var processed_timestamp = [];
-
-		if(date.length === 3 && time.length === 3){
-			processed_timestamp[0] = date[2] + "/" + date[1] + "/" + date[0];
-			processed_timestamp[1] = time[0] + "h" + time[1];
-		}
-		else{
-			processed_timestamp[0] = "-";
-			processed_timestamp[1] = "";
-		}
-
-		return processed_timestamp;
-	}
 
 	this.eventFire = function(el, etype){
 	  if (el.fireEvent) {

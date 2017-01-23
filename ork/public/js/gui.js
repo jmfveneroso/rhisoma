@@ -236,7 +236,7 @@ function Gui(){
 	}
 
 	this.$margintop = function(id, margintop){
-		document.getElementById(id).style.marginTop = this_margintop + "px";
+		document.getElementById(id).style.marginTop = margintop + "px";
 	}
 
 	this.$marginleft = function(id, marginleft){

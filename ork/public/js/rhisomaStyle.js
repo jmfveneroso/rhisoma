@@ -2,9 +2,11 @@ function RhisomaStyle(){
 
 	  /* LINK STYLING */
 
+	var master = this;
 	var inside_node = undefined;
 	var current_node = undefined;
 	var main_structure = undefined;
+	var svg = d3.select("svg");
 
 	this.setInsideNode = function(in_inside){
 		inside_node = in_inside;
@@ -214,8 +216,8 @@ function RhisomaStyle(){
 	  	.filter("#rect-"+in_id)
 	      .style("width",function(d){return document.getElementById("label-"+d.id).getBBox().width+10;})
 	      .style("height",function(d){return document.getElementById("label-"+d.id).getBBox().height+6;})
-	      .attr("x", rst.labelRectX)
-	      .attr("y", rst.labelRectY);
+	      .attr("x", master.labelRectX)
+	      .attr("y", master.labelRectY);
 	}
 
 	this.labelTextY = function(d){
