@@ -104,8 +104,7 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 		- Inicialização processa informações relativas à navegação no grafo [hierarquia, tamanho, etc]
 				. stand-by, ativo, datas; reconhecer e processar tudo
 		- Ferramenta de apresentação do mapa por período [default = ontem,hoje,amanhã {visão simultânea de 3 dias}]
-				!!!!! necessário definir modelo padrão de data para programar o interpretador
-1		>> - Reconhecer locale e pegar o JSON respectivo [PT ou EN (default)]
+7		>> - Reconhecer locale e pegar o JSON respectivo [PT ou EN (default)]
 
 		Estilo
 	OK - Nódulos com formas diferentes para diferentes categorias [círculo para categoria, quadrado para tarefa, triângulo para comentário, etc] {solução com svg:path e, no futuro, custom symbols {ver link no .txt}}
@@ -201,12 +200,12 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 			OK - Editar grupo
 				OK - Selecionar cor para grupo (Color picker)
 				OK - Dar nome para grupo
-3		>> - Date picker no control panel do node
+5		>> - Date/time picker no control panel do node
 &&4		- Barra de seleção de tempo (na base, da primeira data até a última)
 			- Esboço [pensar em layout que já caminhe para uma barra de filtragem mais geral, não somente data]
 			- Seleção de período
 			- Funcionalidade de edição do grafo segundo o período selecionado
-4		>> - Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
+6		>> - Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 			- Utilizar função de busca [busca pode merecer uma classe específica desde o início]
 		% (?) Ao adicionar link a partir de node sem ligações, se ele for source criar um grupo novo
 
@@ -293,14 +292,19 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 	OK - Botão fixar agora - após o fixar automático - é obsoleto [Removido]
 	OK - Quando um node está selecionado e o grupo desse node é editado: não atualiza cores no control panel
 	OK - Estilo da linha do group-name quando usuário tenta inserir grupo novo sem nome
+	OK - Indicação de distância de tempo entre date_start/date_end e o momento atual (em 5 dias, há um mês, etc)
+	OK - Ligações tipo 3 de nodes que devem ser exibidos no navigationEnter ou Exit não estão aparencendo (mostrar ligações tipo 3 em nível superior ao root quando ambos os nodes estiverem dentro do grupo mostrado)
+	OK - Ligações tipo 3 não estão aparecendo depois de close e collapse um node
+	OK - Toggle de tarefa finalizada no control panel não está funcionando [fixa depois de mudar]
+		- Adaptações para mudança de conexão quando dentro de um nódulo (exemplo: trocar conexão tipo 2 por tipo 3 não está atualizando)
+		- Habilitar saltar linha na textarea
+		- Habilitar scroll no control panel [tanto para edição como para visualização]
 &1		>> - Mostrar só 10 resultados de query e habilitar scroll down e up [liberar navegação com setas também nesse caso]
 &2		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
-&3		- Ligações tipo 3 não estão aparecendo depois de close e collapse um node
-&4		- Ligações tipo 3 de nodes que devem ser exibidos no navigationEnter ou Exit não estão aparencendo (mostrar ligações tipo 3 em nível superior ao root quando ambos os nodes estiverem dentro do grupo mostrado)
 &&1		- Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
-&5		- Se node estiver sendo editado no control panel quando tentar editar ou adicionar grupo: bloquear e fechar edição
-&6		- Ao começar edição de grupo e fechar janela: comportamentos do mouse não funcionam no grafo
-&7		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
+&3		- Se node estiver sendo editado no control panel quando tentar editar ou adicionar grupo: bloquear e fechar edição
+&4		- Ao começar edição de grupo e fechar janela: comportamentos do mouse não funcionam no grafo
+&5		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
 &&2		- (?) Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
 &&3		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
 		- Impedir ação de clique no clique duplo
@@ -314,7 +318,7 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 		
 		Outros
 	OK - JSON para português e para inglês (ver referências)
-2		>> - ajustar <head> com título, etc
+	~~ ajustar <head> com título, etc [esboço OK; adicionar descrição, imagem, etc]
 		- criar templates de territórios:
 			- agenda
 			- mapa mental

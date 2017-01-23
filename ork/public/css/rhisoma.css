@@ -64,7 +64,8 @@ textarea.edit-description{
   font-family: Source Sans Pro;
   font-weight: 400;
   background-color: white;
-  resize: vertical;
+  resize: none;
+  /*resize: vertical;*/
 }
 
 textarea.edit-description:focus{

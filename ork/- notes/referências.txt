@@ -3,8 +3,8 @@
 Colorpicker: http://vanderlee.github.io/colorpicker/
 	+ JQuery
 	+ JQuery UI
-Datepicker:
-Moment with locales (conversão de tempo):
+Datepicker: http://mugifly.github.io/jquery-simple-datetimepicker/
+Moment with locales (conversão de tempo): http://momentjs.com/
 D3 (forceatlas, etc):
 
 

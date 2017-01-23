@@ -1,4 +1,5 @@
 <html>
+<meta charset="utf-8">
 <head>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -6,24 +7,43 @@
 <script src="vendor/colorpicker-master/jquery.colorpicker.js"></script>
 <link href="vendor/colorpicker-master/jquery.colorpicker.css" rel="stylesheet" type="text/css"/>
 
+<script type="text/javascript" src="vendor/jquery-simple-datetimepicker-1.12.0/jquery.simple-dtpicker.js"></script>
+<link type="text/css" href="vendor/jquery-simple-datetimepicker-1.12.0/jquery.simple-dtpicker.css" rel="stylesheet" />
+
 </head>
 <body>
-<input type="text" id="colorpicker-popup" value="fe9810">
+<!-- <input type="text" name="date5" value=""> -->
+<div id="datepicker"></div>
+<!-- <input type="text" id="colorpicker-popup" value="fe9810"> -->
 <script>
 // checar session; se usuário não estiver logado, enviar para página de login e cadastro
-$(function() {
-    $('#colorpicker-popup').colorpicker({
-        parts:  [    'map', 'bar'
-                ],
-                 closeOnOutside: false,
-        alpha:  false,
-        autoOpen: true,
-        layout: {
-            map:        [0, 0, 3, 1],
-            bar:        [4, 0, 1, 4]
-        }
-    });
-});
+// $(function() {
+//     $('#colorpicker-popup').colorpicker({
+//         parts:  [    'map', 'bar'
+//                 ],
+//                  closeOnOutside: false,
+//         alpha:  false,
+//         autoOpen: true,
+//         layout: {
+//             map:        [0, 0, 3, 1],
+//             bar:        [4, 0, 1, 4]
+//         }
+//     });
+// });
+
+$(function(){
+                $('#datepicker').appendDtpicker({
+                    "inline": true,
+                    "locale": "pt",
+                    "minuteInterval": 15,
+                    "calendarMouseScroll": false,
+                    "dateFormat": "DD/MM/YYYY h:m"
+                });
+            });
+
+// Current date ("current": "2012-3-4 12:30")
+// dateFormat ("dateFormat": "YY/MM/DD h:m")
+// Only allow future datetimes ("futureOnly": true)
 </script>
 </body>
 </html>

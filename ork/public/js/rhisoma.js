@@ -386,6 +386,21 @@ function Rhisoma(){
 						keep[keep.length] = active_graph.links[j];
 					}
 				}
+				else if(active_graph.links[j].type === 3){ // mostra ligação tipo 3 quando os dois nodes estão no grupo a ser mostrado
+					var match_source = false;
+					var match_target = false;
+					for(var h = 0; h < active_graph.nodes.length; h++){
+						if(active_graph.nodes[h].id === active_graph.links[j].source){
+							match_source = true;
+						}
+						if(active_graph.nodes[h].id === active_graph.links[j].target){
+							match_target = true;
+						}
+					}
+					if(match_source && match_target){
+						keep[keep.length] = active_graph.links[j];
+					}
+				}
 			}
 		}
 		active_graph.links = [];
@@ -506,6 +521,29 @@ function Rhisoma(){
 								links[links.length] = entire_graph.links[j];
 							// }
 						}
+					}
+				}
+				else if(entire_graph.links[j].type === 3){
+					var match_source = false;
+					var match_target = false;
+					for(var h = 0; h < include.length; h++){
+						if(include[h] === entire_graph.links[j].source){
+							match_source = true;
+						}
+						if(include[h] === entire_graph.links[j].target){
+							match_target = true;
+						}
+					}
+					for(var h = 0; h < active_graph.nodes.length; h++){
+						if(active_graph.nodes[h].id === entire_graph.links[j].source){
+							match_source = true;
+						}
+						if(active_graph.nodes[h].id === entire_graph.links[j].target){
+							match_target = true;
+						}
+					}
+					if(match_source && match_target){
+						links[links.length] = entire_graph.links[j];
 					}
 				}
 			}
@@ -696,6 +734,11 @@ function Rhisoma(){
 		}
 		master.updateGraph();
 		// quando um node é deletado, os children dele devem ser deletados? ou então: conectar os próximos na cadeia no source do deletado
+	}
+
+	this.deleteNodeChildren = function(this_node){
+		// chamar quando for para deletar children {depois de mensagem de confirmação dizendo que serão deletados todos os children do node que está closed}
+		// deleta nódulos [pegar nodes[x].children] e links relacionados ao nódulos deletados do entire graph
 	}
 
 	this.addLink = function(links){
@@ -1144,6 +1187,29 @@ function Rhisoma(){
 					}
 					if(!match_found){
 						var current_id = master.getNodeIndex(entire_graph.links[j].target);
+						links[links.length] = entire_graph.links[j];
+					}
+				}
+				else if(entire_graph.links[j].type === 3){
+					var match_source = false;
+					var match_target = false;
+					for(var h = 0; h < include.length; h++){
+						if(include[h] === entire_graph.links[j].source){
+							match_source = true;
+						}
+						if(include[h] === entire_graph.links[j].target){
+							match_target = true;
+						}
+					}
+					for(var h = 0; h < active_graph.nodes.length; h++){
+						if(active_graph.nodes[h].id === entire_graph.links[j].source){
+							match_source = true;
+						}
+						if(active_graph.nodes[h].id === entire_graph.links[j].target){
+							match_target = true;
+						}
+					}
+					if(match_source && match_target){
 						links[links.length] = entire_graph.links[j];
 					}
 				}

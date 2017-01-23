@@ -484,7 +484,16 @@ function RhisomaGui(gui){
 		var field_date_start = {id:"control-panel-date-start-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
 		gui.addField(field_date_start,"control-panel-date-start");
 		gui.addText("control-panel-date-start-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
-		offset_x += 30;
+
+		if(node.date_start != ""){
+			moment.locale('pt');
+			var from_now = moment(node.date_start).fromNow();
+			var field_from_now = {id:"control-panel-date-start-fromnow",top:14,left:140,fontsize:12,fontweight:200,texttransform:"none"};
+			gui.addField(field_from_now,"control-panel-date-start");
+			gui.addText("control-panel-date-start-fromnow",'( ' + from_now + ' )');
+		}
+
+		offset_x += 34;
 	}
 
 	this.addDateEnd = function(node){
@@ -499,7 +508,16 @@ function RhisomaGui(gui){
 		var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
 		gui.addField(field_date_end,"control-panel-date-end");
 		gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
-		offset_x += 30;
+		
+		if(node.date_end != ""){
+			moment.locale('pt');
+			var from_now = moment(node.date_end).fromNow();
+			var field_from_now = {id:"control-panel-date-end-fromnow",top:14,left:140,fontsize:12,fontweight:200,texttransform:"none"};
+			gui.addField(field_from_now,"control-panel-date-end");
+			gui.addText("control-panel-date-end-fromnow",'( ' + from_now + ' )');
+		}
+
+		offset_x += 34;
 	}
 
 	this.addLinks = function(node){
@@ -651,7 +669,7 @@ function RhisomaGui(gui){
 		var description = {id:"control-panel-description",top:offset_x,height:120,width:300};
 		gui.addField(description,"control-panel");
 		var text_area_description = {class: "edit-description",id: "control-panel-edit-description",cols:39,rows:8,padding:4};
-		gui.addTextArea(text_area_description,"","control-panel-description",node.description);
+		gui.addTextArea(text_area_description,"Descrição","control-panel-description",node.description);
 		document.getElementById("control-panel-edit-description").style.border = "1px "+groups[node.group].color+" solid";
 		offset_x += 190;
 	}
@@ -668,7 +686,7 @@ function RhisomaGui(gui){
 		var field_date_start = {id:"control-panel-date-start-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
 		gui.addField(field_date_start,"control-panel-date-start");
 		gui.addText("control-panel-date-start-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
-		offset_x += 30;
+		offset_x += 40;
 	}
 
 	this.addEditDateEnd = function(node){
@@ -1444,13 +1462,13 @@ function RhisomaGui(gui){
 		var button = document.getElementById("control-panel-task-completed-checkbox");
 		var mouseOverCompleted = function(){
 			this.style.cursor = "pointer";
-			this.style.color = node.color;//color(node.group);
+			this.style.color = node.color;
 		}
 		var mouseOutCompleted = function(){
 			this.style.color = "black";
 		}
 		var mouseDownCompleted = function(){
-			if(node.completed === 1){
+			if(current_editing.completed === 1){
 				current_editing.completed = 0;
 				document.getElementById("control-panel-task-completed-checkbox").innerHTML = '<i class="fa fa-minus-square" aria-hidden="true"></i>';
 			}

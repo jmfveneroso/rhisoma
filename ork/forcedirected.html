@@ -1,29 +1,65 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="public/css/rhisoma.css?v=0.0.1">
-<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script> -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
-<script src="public/js/rhisoma.js"></script>
-<script src="public/js/rhisomaGui.js"></script>
-<script src="public/js/rhisomaGuiFunctions.js"></script>
-<script src="public/js/rhisomaGuiElements.js"></script>
-<script src="public/js/rhisomaGuiCalendar.js"></script>
-<script src="public/js/rhisomaStyle.js"></script>
-<script src="public/js/rhisomaCommunicator.js"></script>
-<script src="public/js/systemGui.js"></script>
-<script src="public/js/gui.js"></script>
-<!-- Vendor -->
-<link rel="stylesheet" href="vendor/jquery-ui-1.12.1/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="vendor/jquery-ui-1.12.1/jquery-ui.js"></script>
-<script src="vendor/colorpicker-master/jquery.colorpicker.js"></script>
-<link href="vendor/colorpicker-master/jquery.colorpicker.css" rel="stylesheet" type="text/css"/>
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Sumbioun">
+  <meta name="description" content="… EN" />
+  <link rel="icon" href="public/media/logo.png" type="image/x-icon" />
+  <title>Rhisoma</title>
+  <meta property='og:title' content='Rhisoma' />
+  <!-- <meta property='og:locale' content="pt_BR"/> -->
+  <meta property='og:description' content='… EN' />
+  <meta property='og:url' content='http://rhisoma.com/' />
+  <!-- <meta property="og:image" content="http://rhisoma.com/public/media/highlight/01.jpg" /> -->
+  <meta property='og:type' content='website' />
+  <meta property='og:site_name' content='Rhisoma' />
+  <!-- <meta property='fb:app_id' content='324882344302217' /> -->
+
+  <!-- General -->
+  <script src="public/js/gui.js"></script>
+
+  <!-- System -->
+  <script src="public/js/systemGui.js"></script>
+  <script src="public/js/systemMessages.js"></script>
+
+  <!-- Rhisoma -->
+  <link rel="stylesheet" type="text/css" href="public/css/rhisoma.css?v=0.0.1">
+  <script src="public/js/rhisoma.js"></script>
+  <script src="public/js/rhisomaGui.js"></script>
+  <script src="public/js/rhisomaGuiFunctions.js"></script>
+  <script src="public/js/rhisomaGuiElements.js"></script>
+  <script src="public/js/rhisomaStyle.js"></script>
+  <script src="public/js/rhisomaCommunicator.js"></script>
+  <script src="public/js/rhisomaSearch.js"></script>
+
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
+
+  <!-- moment.js -->
+  <script src="vendor/moment-with-locales.js"></script>
+
+  <!-- D3 -->
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+
+  <!-- JQuery & JQuery UI -->
+  <link rel="stylesheet" href="vendor/jquery-ui-1.12.1/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="vendor/jquery-ui-1.12.1/jquery-ui.js"></script>
+
+  <!-- Color picker -->
+  <script src="vendor/colorpicker-master/jquery.colorpicker.js"></script>
+  <link href="vendor/colorpicker-master/jquery.colorpicker.css" rel="stylesheet" type="text/css"/>
+
+  <!-- Date picker -->
+  <script type="text/javascript" src="vendor/jquery-simple-datetimepicker-1.12.0/jquery.simple-dtpicker.js"></script>
+  <link type="text/css" href="vendor/jquery-simple-datetimepicker-1.12.0/jquery.simple-dtpicker.css" rel="stylesheet" />
+
+</head>
+
 <body>
-<svg id="rhisoma" width="960" height="600" style="position:absolute;top:0px"></svg>
+  <svg id="rhisoma" width="960" height="600" style="position:absolute;top:0px"></svg>
 </body>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<!-- <script src="https://d3js.org/d3.v4.js"></script> -->
+
 <script>
 
   /* INIT */
@@ -1015,7 +1051,6 @@ function clickNode(d){
     }
   }
   else if(gui.editionMode() === "groupedit"){
-      console.log("groupedit");
       structure.updateGroups(d);
       // open group edit with current node's group info
       gui.closeMenus();
