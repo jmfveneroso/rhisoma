@@ -81,8 +81,6 @@ class NodeTest < ActiveSupport::TestCase
   end
 
   test "text nodes should not contain category, task or link fields" do
-    @text_node.description = 'random description'
-    assert_not @text_node.valid?
     @text_node.description = nil
     @text_node.start_date = Time.zone.now
     assert_not @text_node.valid?
@@ -109,8 +107,6 @@ class NodeTest < ActiveSupport::TestCase
   end
 
   test "link nodes should not contain category, text or task fields" do
-    @link_node.description = 'random description'
-    assert_not @link_node.valid?
     @link_node.description = nil
     @link_node.start_date = Time.zone.now
     assert_not @link_node.valid?
