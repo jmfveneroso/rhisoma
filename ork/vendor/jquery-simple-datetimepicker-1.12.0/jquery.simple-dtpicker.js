@@ -11,7 +11,7 @@
 			days: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
 			months: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ],
 			sep: '-',
-			format: 'YYYY-MM-DD hh:mm',
+			format: 'YYYY-MM-DD • hh:mm',
 			prevMonth: 'Previous month',
 			nextMonth: 'Next month',
 			today: 'Today'
@@ -37,15 +37,20 @@
 			months: [ "Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек" ],
 			format: 'DD.MM.YYYY hh:mm'
 		},
-		br: {
+		pt: {
 			days: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
 			months: [ "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ],
-			format: 'DD/MM/YYYY hh:mm'
+			sep: '/',
+			format: 'DD/MM/YYYY • hh:mm',
+			prevMonth: 'Mês anterior',
+			nextMonth: 'Próximo mês',
+			today: 'Hoje'
 		},
-		pt: {
-			days: ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'],
-			months: [ "janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro" ]
-		},
+		// pt: {
+		// 	days: ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'],
+		// 	months: [ "janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro" ],
+		// 	format: 'DD/MM/YYYY hh:mm'
+		// },
 		cn: {
 			days: ['日', '一', '二', '三', '四', '五', '六'],
 			months: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
@@ -617,8 +622,8 @@
 		var $link_before_month = null;
 		if ((!isFutureOnly || !isCurrentMonth) && ((minDate == null) || (minDate < cDate.getTime()))
 		) {
-			$link_before_month = $('<a>');
-			$link_before_month.text('<');
+			$link_before_month = $('<a style="float:left;margin-left:50px">');
+			$link_before_month.text('←');
 			$link_before_month.prop('alt', translate(locale,'prevMonth'));
 			$link_before_month.prop('title', translate(locale,'prevMonth') );
 			$link_before_month.click(function() {
@@ -635,13 +640,13 @@
 		cDate.setDate(1); // First day of next month
 		cDate.setMonth(date.getMonth() + 1);
 
-		var $now_month = $('<span>');
-		$now_month.text(date.getFullYear() + " " + translate(locale, 'sep') + " " + translate(locale, 'months')[date.getMonth()]);
+		var $now_month = $('<span style="float:left;width:125px;height:18px">');
+		$now_month.text(date.getFullYear() + " • "/* + translate(locale, 'sep') + " "*/ + translate(locale, 'months')[date.getMonth()].toUpperCase());
 
 		var $link_next_month = null;
 		if ((maxDate == null) || (maxDate > cDate.getTime())) {
-			$link_next_month = $('<a>');
-			$link_next_month.text('>');
+			$link_next_month = $('<a style="float:left">');
+			$link_next_month.text('→');
 			$link_next_month.prop('alt', translate(locale,'nextMonth'));
 			$link_next_month.prop('title', translate(locale,'nextMonth'));
 			$link_next_month.click(function() {
@@ -1165,7 +1170,7 @@
 			}
 
 			/* Make parent-div for picker */
-			var $d = $('<div>');
+			var $d = $('<div id="datepicker-container">');
 			if(options.inline){ // Inline mode
 				$d.insertAfter(input);	
 			} else { // Float mode

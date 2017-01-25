@@ -66,7 +66,7 @@
 /* LOCALES | Atualizar com container */
 
 $.ajax({
-    url: "../ork/public/json/language-en.json",
+    url: "../ork/public/json/language-pt.json",
     type: "POST",
     contentType: 'application/json; charset=utf-8',
     success: function (resultData) {
@@ -258,6 +258,7 @@ d3.json("public/json/test.json", function(error, in_graph) {
     .style("font-family","Source Sans Pro")
     .attr("text-anchor","middle")
     .style("font-size", rst.labelTextFontSize)
+    .style("font-weight",rst.labelTextFontWeight)
     .text(rst.labelText);
 
   label.append("rect")
@@ -1273,6 +1274,7 @@ function restart(e){
 
   label = label.data(graph.nodes, function(d){return d.id;});
   label.selectAll("rect").remove();
+  label.selectAll("text").remove();
   label.exit().remove();
 
   label = label.enter()
@@ -1287,6 +1289,7 @@ function restart(e){
     .style("font-family","Source Sans Pro")
     .attr("text-anchor","middle")
     .style("font-size", rst.labelTextFontSize)
+    .style("font-weight",rst.labelTextFontWeight)
     .text(rst.labelText);
 
   label.append("rect")
@@ -1355,6 +1358,7 @@ function restart(e){
   }
   
   simulation.alpha(1).restart();
+  // console.log(document.getElementById("all-nodes").getBBox().height);
   
 }
 
@@ -1364,8 +1368,23 @@ function zoomUpdate(node_x,node_y){
   var dx = document.getElementById("all-nodes").getBBox().height;
   var dy = document.getElementById("all-nodes").getBBox().width;
 
+  // var reference_element = svg.select(".nodes").attr("transform");
+  // var reference_transform = null;
+  // var current_scale = null;
+  // if(reference_element != null){
+  //   reference_transform = reference_element.split(" ");
+  //   current_scale = reference_transform[1].substring(reference_transform[1].indexOf("(")+1, reference_transform[1].indexOf(")"));
+  // }
+  // else{
+  //   current_scale = 1;
+  // }
+
   // guardar no drift o bounding box?
-  scale = Math.max(1, Math.min(4, 0.8 / Math.max(dx / width, dy / height)));
+  // scale = Math.max(1, Math.min(4, 0.9 / Math.max((dx*current_scale) / width, (dy*current_scale) / height)));
+  // scale = Math.max(1, Math.min(4, 0.9 / Math.max((dx / width)*current_scale, (dy / height)*current_scale)));
+  scale = Math.max(1, Math.min(4, 0.8 / Math.max(dx/width, dy/height)));
+  // scale /= current_scale;
+
   translate = [width / 2 - scale * node_x, height / 2 - scale * node_y];
 
   svg.transition()

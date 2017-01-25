@@ -689,7 +689,7 @@ function RhisomaGui(gui){
 	}
 
 	this.addEditDateStart = function(node){
-		var field = {id:"control-panel-date-start",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
+		var field = {id:"control-panel-date-start",position:"absolute",top:offset_x,height:30,width:300,color:"black",zindex:11};
 		gui.addField(field,"control-panel");
 
 		var field_label = {id:"control-panel-date-start-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
@@ -699,16 +699,19 @@ function RhisomaGui(gui){
 		// var field_date_start = {id:"control-panel-date-start-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
 		// gui.addField(field_date_start,"control-panel-date-start");
 		// gui.addText("control-panel-date-start-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
-		var input_date_start = {class:"edit-date",id:"control-panel-edit-date-start",width:"auto",margintop:14};
-		gui.addInput(input_date_start,"","control-panel-date-start",node.date_start);
+		var input_date_start = {class:"edit-date",id:"control-panel-edit-date-start",margintop:14};
+		var parse_date = moment(node.date_start,[moment.ISO_8601]).format('L • H:mm');
+		gui.addInput(input_date_start,"","control-panel-date-start",parse_date);
 		document.getElementById("control-panel-edit-date-start").style.color = groups[node.group].color;
 		document.getElementById("control-panel-edit-date-start").style.borderBottom = "1px "+groups[node.group].color+" solid";
 
 		offset_x += 40;
+
+		master.dateStartMouseBehavior(node);
 	}
 
 	this.addEditDateEnd = function(node){
-		var field = {id:"control-panel-date-end",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
+		var field = {id:"control-panel-date-end",position:"absolute",top:offset_x,height:30,width:300,color:"black",zindex:10};
 		gui.addField(field,"control-panel");
 
 		var field_label = {id:"control-panel-date-end-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
@@ -718,16 +721,19 @@ function RhisomaGui(gui){
 		// var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
 		// gui.addField(field_date_end,"control-panel-date-end");
 		// gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
-		var input_date_end = {class:"edit-date",id:"control-panel-edit-date-end",width:"auto",margintop:14};
-		gui.addInput(input_date_end,"","control-panel-date-end",node.date_end);
+		var input_date_end = {class:"edit-date",id:"control-panel-edit-date-end",margintop:14};
+		var parse_date = moment(node.date_end,[moment.ISO_8601]).format('L • H:mm');
+		gui.addInput(input_date_end,"","control-panel-date-end",parse_date);
 		document.getElementById("control-panel-edit-date-end").style.color = groups[node.group].color;
 		document.getElementById("control-panel-edit-date-end").style.borderBottom = "1px "+groups[node.group].color+" solid";
 
 		offset_x += 40;
+
+		master.dateEndMouseBehavior(node);
 	}
 
 	this.addEditTaskCompleted = function(node){
-		var field = {id:"control-panel-task-completed",position:"absolute",top:offset_x,height:30,width:300,color:"black"};
+		var field = {id:"control-panel-task-completed",position:"absolute",top:offset_x,margintop:5,height:30,width:300,color:"black"};
 		gui.addField(field,"control-panel");
 
 		var field_label = {id:"control-panel-task-completed-label",height:12,top:0,fontsize:12,fontweight:200,texttransform:"uppercase"};
@@ -745,7 +751,7 @@ function RhisomaGui(gui){
 		var field_checkbox = {id:"control-panel-task-completed-checkbox",top:-2,left:field_offset_x,width:14,height:14,fontsize:14,fontweight:600,texttransform:"uppercase"};
 		gui.addField(field_checkbox,"control-panel-task-completed");
 		gui.addText("control-panel-task-completed-checkbox",'<i class="fa '+current_icon+'" aria-hidden="true"></i>');
-		offset_x += 30;
+		offset_x += 35;
 
 		master.toggleTaskCompletedMouseBehavior(node);
 	}
@@ -1388,6 +1394,24 @@ function RhisomaGui(gui){
 						the_node.description = current_editing.description;
 						found_node_match = true;
 					}
+					if(document.getElementById("control-panel-edit-date-start")!=null){
+						console.log(document.getElementById("control-panel-edit-date-start").value);
+						var parse_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format();
+						console.log(parse_date);
+						if(parse_date != the_node.date_start){
+							current_editing.date_start = parse_date;
+							the_node.date_start = current_editing.date_start;
+							found_node_match = true;
+						}
+					}
+					if(document.getElementById("control-panel-edit-date-end")!=null){
+						var parse_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).format();
+						if(parse_date != the_node.date_end){
+							current_editing.date_end = parse_date;
+							the_node.date_end = current_editing.date_end;
+							found_node_match = true;
+						}
+					}
 					if(current_editing.type != the_node.type){
 						the_node.type = current_editing.type;
 						found_node_match = true;
@@ -1523,6 +1547,84 @@ function RhisomaGui(gui){
 		button.onmouseover = mouseOverLink;
 		button.onmouseout =   mouseOutLink;
 		button.onmousedown = mouseDownLink;
+	}
+
+	this.dateStartMouseBehavior = function(node){
+		var button = document.getElementById("control-panel-edit-date-start");
+		var onFocus = function(){
+			if(document.getElementById("datepicker-container") === null){
+				var parse_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format('YYYY-M-D H:mm');
+				$(function(){
+				    $('#control-panel-edit-date-start').appendDtpicker({
+				        "inline": true,
+				        "locale": "pt",
+				        "minuteInterval": 15,
+				        "calendarMouseScroll": false,
+				        "todayButton": false,
+				        "animation":false
+				    });
+				});
+
+				var close_datepicker = {id:"control-panel-close-datepicker",position:"absolute",top:40,left:278,fontsize:18};
+				gui.addField(close_datepicker,"datepicker-container");
+				gui.addText("control-panel-close-datepicker",'<i class="fa fa-close" aria-hidden="true"></i>');
+
+				date = $('#control-panel-edit-date-start').handleDtpicker('setDate',parse_date);
+
+				master.closeDatepickerMouseBehavior();
+			}
+		};
+		button.onfocus = onFocus;
+	}
+
+	this.closeDatepickerMouseBehavior = function(){
+		button = document.getElementById("control-panel-close-datepicker");
+		var mouseOver = function(){
+			this.style.cursor = "pointer";
+			this.style.color = "#aeaeae";
+		};
+		var mouseOut = function(){
+			this.style.color = "black";
+		};
+		var mouseDown = function(){
+			$('#control-panel-edit-date-start').handleDtpicker('destroy');
+			$('#control-panel-edit-date-end').handleDtpicker('destroy');
+			master.removeElement("close-datepicker");
+			if(document.getElementById('datepicker-container') != null){
+				document.getElementById('datepicker-container').parentElement.removeChild(document.getElementById('datepicker-container'));
+			}
+		};
+		button.onmouseover = mouseOver;
+		button.onmouseout = mouseOut;
+		button.onmousedown = mouseDown;
+	}
+
+	this.dateEndMouseBehavior = function(node){
+		var button = document.getElementById("control-panel-edit-date-end");
+		var onFocus = function(){
+			if(document.getElementById("datepicker-container") === null){
+				var parse_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).format('YYYY-M-D H:mm');
+				$(function(){
+				    $('#control-panel-edit-date-end').appendDtpicker({
+				        "inline": true,
+				        "locale": "pt",
+				        "minuteInterval": 15,
+				        "calendarMouseScroll": false,
+				        "todayButton": false,
+				        "animation":false
+				    });
+				});
+
+				var close_datepicker = {id:"control-panel-close-datepicker",position:"absolute",top:40,left:278,fontsize:18};
+				gui.addField(close_datepicker,"datepicker-container");
+				gui.addText("control-panel-close-datepicker",'<i class="fa fa-close" aria-hidden="true"></i>');
+
+				date = $('#control-panel-edit-date-end').handleDtpicker('setDate',parse_date);
+
+				master.closeDatepickerMouseBehavior();
+			}
+		};
+		button.onfocus = onFocus;
 	}
 
 	this.mainMouseBehavior = function(id){

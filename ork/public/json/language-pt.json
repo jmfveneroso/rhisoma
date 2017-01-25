@@ -6,7 +6,7 @@
     "node-type-task": "Tarefa",
     "node-type-text": "Texto",
     "node-type-link": "Link",
-    "node-type-wormhole": "Buraco negro",
+    "node-type-wormhole": "Portal",
 
     "system-menu-search-placeholder": "Busca",
     "system-menu-user-avatar": "Usuário",

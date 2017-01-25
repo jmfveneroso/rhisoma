@@ -383,22 +383,40 @@ function Rhisoma(){
 				else if(active_graph.links[j].type === 2){
 					if(active_graph.links[j].source === active_graph.nodes[i].id || active_graph.links[j].target === active_graph.nodes[i].id){
 						// this is the one we want to keep
-						keep[keep.length] = active_graph.links[j];
+						var match_found = false;
+						for(var z = 0; z < keep.length; z++){
+							if(keep[z].id === active_graph.links[j].id){
+								match_found = true;
+							}
+						}
+						if(!match_found){
+							keep[keep.length] = active_graph.links[j];
+						}
 					}
 				}
 				else if(active_graph.links[j].type === 3){ // mostra ligação tipo 3 quando os dois nodes estão no grupo a ser mostrado
-					var match_source = false;
-					var match_target = false;
-					for(var h = 0; h < active_graph.nodes.length; h++){
-						if(active_graph.nodes[h].id === active_graph.links[j].source){
-							match_source = true;
+					if(active_graph.links[j].target === active_graph.nodes[i].id || active_graph.links[j].source === active_graph.nodes[i].id){
+						var match_source = false;
+						var match_target = false;
+						for(var h = 0; h < active_graph.nodes.length; h++){
+							if(active_graph.nodes[h].id === active_graph.links[j].source){
+								match_source = true;
+							}
+							if(active_graph.nodes[h].id === active_graph.links[j].target){
+								match_target = true;
+							}
 						}
-						if(active_graph.nodes[h].id === active_graph.links[j].target){
-							match_target = true;
+						if(match_source && match_target){
+							var match_found = false;
+							for(var z = 0; z < keep.length; z++){
+								if(active_graph.links[j].id === keep[z].id){
+									match_found = true;
+								}
+							}
+							if(!match_found){	
+								keep[keep.length] = active_graph.links[j];
+							}
 						}
-					}
-					if(match_source && match_target){
-						keep[keep.length] = active_graph.links[j];
 					}
 				}
 			}
@@ -524,26 +542,36 @@ function Rhisoma(){
 					}
 				}
 				else if(entire_graph.links[j].type === 3){
-					var match_source = false;
-					var match_target = false;
-					for(var h = 0; h < include.length; h++){
-						if(include[h] === entire_graph.links[j].source){
-							match_source = true;
+					if(include[i] === entire_graph.links[j].target || include[i] === entire_graph.links[j].source){
+						var match_source = false;
+						var match_target = false;
+						for(var h = 0; h < include.length; h++){
+							if(include[h] === entire_graph.links[j].source){
+								match_source = true;
+							}
+							if(include[h] === entire_graph.links[j].target){
+								match_target = true;
+							}
 						}
-						if(include[h] === entire_graph.links[j].target){
-							match_target = true;
+						for(var h = 0; h < active_graph.nodes.length; h++){
+							if(active_graph.nodes[h].id === entire_graph.links[j].source){
+								match_source = true;
+							}
+							if(active_graph.nodes[h].id === entire_graph.links[j].target){
+								match_target = true;
+							}
 						}
-					}
-					for(var h = 0; h < active_graph.nodes.length; h++){
-						if(active_graph.nodes[h].id === entire_graph.links[j].source){
-							match_source = true;
+						if(match_source && match_target){
+							var match_found = false;
+							for(var z = 0; z < links.length; z++){
+								if(links[z] === entire_graph.links[j]){
+									match_found = true;
+								}
+							}
+							if(!match_found){
+								links[links.length] = entire_graph.links[j];
+							}
 						}
-						if(active_graph.nodes[h].id === entire_graph.links[j].target){
-							match_target = true;
-						}
-					}
-					if(match_source && match_target){
-						links[links.length] = entire_graph.links[j];
 					}
 				}
 			}
@@ -1190,27 +1218,37 @@ function Rhisoma(){
 						links[links.length] = entire_graph.links[j];
 					}
 				}
-				else if(entire_graph.links[j].type === 3){
-					var match_source = false;
-					var match_target = false;
-					for(var h = 0; h < include.length; h++){
-						if(include[h] === entire_graph.links[j].source){
-							match_source = true;
+				else if(entire_graph.links[j].type === 3){ 
+					if(include[i] === entire_graph.links[j].target || include[i] === entire_graph.links[j].source){
+						var match_source = false;
+						var match_target = false;
+						for(var h = 0; h < include.length; h++){
+							if(include[h] === entire_graph.links[j].source){
+								match_source = true;
+							}
+							if(include[h] === entire_graph.links[j].target){
+								match_target = true;
+							}
 						}
-						if(include[h] === entire_graph.links[j].target){
-							match_target = true;
+						if(!match_source || !match_target){
+							if(match_source && !match_target){
+								for(var h = 0; h < active_graph.nodes.length; h++){
+									if(active_graph.nodes[h].id === entire_graph.links[j].target){
+										match_target = true;
+									}
+								}
+							}
+							else if(match_target && !match_source){
+								for(var h = 0; h < active_graph.nodes.length; h++){
+									if(active_graph.nodes[h].id === entire_graph.links[j].source){
+										match_source = true;
+									}
+								}
+							}
 						}
-					}
-					for(var h = 0; h < active_graph.nodes.length; h++){
-						if(active_graph.nodes[h].id === entire_graph.links[j].source){
-							match_source = true;
+						if(match_source && match_target){
+							links[links.length] = entire_graph.links[j];
 						}
-						if(active_graph.nodes[h].id === entire_graph.links[j].target){
-							match_target = true;
-						}
-					}
-					if(match_source && match_target){
-						links[links.length] = entire_graph.links[j];
 					}
 				}
 			}
@@ -1289,8 +1327,12 @@ function Rhisoma(){
 			var name_field = {id:"system-groups-edit-name",class:"edit-group"};
 			gui.addInput(name_field,"Nome do grupo","system-groups-edit","");
 
-			var color_field = {id:"system-groups-edit-color",class:"edit-group",position:"absolute",top:48,left:20};
-			gui.addInput(color_field,"Cor do grupo","system-groups-edit","#000000");
+			var color_label = {id:"system-groups-edit-color-label",class:"edit-group",position:"absolute",top:50,left:20,color:"#aeaeae"};
+			gui.addField(color_label,"system-groups-edit");
+			gui.addText("system-groups-edit-color-label","#");
+
+			var color_field = {id:"system-groups-edit-color",class:"edit-group",width:210,position:"absolute",top:48,left:20,paddingleft:10};
+			gui.addInput(color_field,"Cor do grupo","system-groups-edit","000000");
 
 			var preview_field = {id:"system-groups-edit-preview",width:48,height:48,left:260, top:20, backgroundColor:"#000000",border:"1px #aeaeae solid"};
 			gui.addField(preview_field,"system-groups-edit");
@@ -1309,8 +1351,9 @@ function Rhisoma(){
 			document.getElementById("system-groups-edit-name").onfocus = selectField;
 		}
 		if(node != undefined){
+			var process_color = groups[node.group].color.substr(1,groups[node.group].color.length-1);
 			document.getElementById("system-groups-edit-name").value = groups[node.group].name;
-			document.getElementById("system-groups-edit-color").value = groups[node.group].color;
+			document.getElementById("system-groups-edit-color").value = process_color;
 			document.getElementById("system-groups-edit-preview").style.backgroundColor = groups[node.group].color;
 			$(function() {
 			    $('#system-groups-edit-color').colorpicker({

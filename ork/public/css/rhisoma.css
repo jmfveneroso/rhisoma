@@ -26,6 +26,7 @@ input.edit-title:focus{
 }
 
 input.edit-date{
+  width:95px;
   border:none;
   border-bottom: 1px black solid;
   font-family: Source Sans Pro;

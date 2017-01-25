@@ -13,7 +13,7 @@
 </head>
 <body>
 <!-- <input type="text" name="date5" value=""> -->
-<div id="datepicker"></div>
+<input id="datepicker"></div>
 <!-- <input type="text" id="colorpicker-popup" value="fe9810"> -->
 <script>
 // checar session; se usuário não estiver logado, enviar para página de login e cadastro
@@ -32,18 +32,21 @@
 // });
 
 $(function(){
-                $('#datepicker').appendDtpicker({
-                    "inline": true,
-                    "locale": "pt",
-                    "minuteInterval": 15,
-                    "calendarMouseScroll": false,
-                    "dateFormat": "DD/MM/YYYY h:m"
-                });
-            });
+    $('#datepicker').appendDtpicker({
+        // "inline": true,
+        "locale": "pt",
+        "minuteInterval": 15,
+        "calendarMouseScroll": false,
+        "dateFormat": "DD/MM/YYYY h:m",
+        "todayButton": false,
+        "animation":false
+    });
+});
+//"minTime":"08:30",
+//"maxTime":"19:15"
 
 // Current date ("current": "2012-3-4 12:30")
 // dateFormat ("dateFormat": "YY/MM/DD h:m")
-// Only allow future datetimes ("futureOnly": true)
 </script>
 </body>
 </html>
