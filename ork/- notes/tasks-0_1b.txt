@@ -105,7 +105,6 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 		- Inicialização processa informações relativas à navegação no grafo [hierarquia, tamanho, etc]
 				. stand-by, ativo, datas; reconhecer e processar tudo
 		- Ferramenta de apresentação do mapa por período [default = ontem,hoje,amanhã {visão simultânea de 3 dias}]
-		- Ajustes GMT com base na localização do usuário [base do BD é GMT-0; no processamento traduz para GMT do usuário]
 
 		Estilo
 	OK - Nódulos com formas diferentes para diferentes categorias [círculo para categoria, quadrado para tarefa, triângulo para comentário, etc] {solução com svg:path e, no futuro, custom symbols {ver link no .txt}}
@@ -206,7 +205,7 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 			- Esboço [pensar em layout que já caminhe para uma barra de filtragem mais geral, não somente data]
 			- Seleção de período
 			- Funcionalidade de edição do grafo segundo o período selecionado
-6		>> - Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
+9		>> - Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 			- Utilizar função de busca [busca pode merecer uma classe específica desde o início]
 		% (?) Ao adicionar link a partir de node sem ligações, se ele for source criar um grupo novo
 
@@ -313,13 +312,15 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 		OK - Corrigir comportamento do menu quando o usuário sobe na lista usando as setas
 	OK - Fixar posição dos nódulos que acabaram de ser adicionados no grafo
 	OK - Habilitar scroll no control panel [tanto para edição como para visualização]
-		- Corrigir data inválida quando usuário tenta editar tarefa que não tem data de início nem fim [quando usuário abre o date o picker: dia atual]
-		- Acrescentar botão de resetar data no edit date_start e date_end
-		- Ao fazer lock do control panel de node: conferir se a data e hora de início são menores que a data e hora de fim; se não for, corrigir antes de jogar no BD
+	OK - Cancelar linkadd depois de ter selecionado source ao clicar no menu também quando dentro de um nódulo
+	OK - Acrescentar botão de resetar data no edit date_start e date_end
+	OK - Ao abrir edição de data de início ou fim vazias: today é a base
+	OK - Corrigir data inválida quando usuário tenta editar tarefa que não tem data de início nem fim [quando usuário abre o date o picker: dia atual]
+	OK - Ao fazer lock do control panel de node: conferir se a data e hora de início são menores que a data e hora de fim; se não for, corrigir antes de jogar no BD [inverte as duas datas para o início ser sempre antes do fim]
 		- Na edição de cor do grupo, impedir input que não seja hex
 8		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
-7		- Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
-9		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
+7		>> - Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
+6		>> - Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
 &&1		- Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
 &&2		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
 		- Impedir ação de clique no clique duplo

@@ -725,9 +725,14 @@ function RhisomaGui(gui){
 		document.getElementById("control-panel-edit-date-start").style.color = groups[node.group].color;
 		document.getElementById("control-panel-edit-date-start").style.borderBottom = "1px "+groups[node.group].color+" solid";
 
+		var field_reset_date = {id:"control-panel-date-start-reset",fontsize:14,font:'Source Sans Pro',textalign:"center",height:20,width:14,top:15,left:120};
+		gui.addField(field_reset_date,"control-panel-date-start");
+		gui.addText("control-panel-date-start-reset",'<i class="fa fa-ban" aria-hidden="true"></i>');
+
 		offset_x += 40;
 
 		master.dateStartMouseBehavior(node);
+		master.dateResetMouseBehavior("start");
 	}
 
 	this.addEditDateEnd = function(node){
@@ -748,9 +753,14 @@ function RhisomaGui(gui){
 		document.getElementById("control-panel-edit-date-end").style.color = groups[node.group].color;
 		document.getElementById("control-panel-edit-date-end").style.borderBottom = "1px "+groups[node.group].color+" solid";
 
+		var field_reset_date = {id:"control-panel-date-end-reset",fontsize:14,font:'Source Sans Pro',textalign:"center",height:20,width:14,top:15,left:120};
+		gui.addField(field_reset_date,"control-panel-date-end");
+		gui.addText("control-panel-date-end-reset",'<i class="fa fa-ban" aria-hidden="true"></i>');
+
 		offset_x += 40;
 
 		master.dateEndMouseBehavior(node);
+		master.dateResetMouseBehavior("end");
 	}
 
 	this.addEditTaskCompleted = function(node){
@@ -1179,7 +1189,7 @@ function RhisomaGui(gui){
 	}
 
 	this.drawTypeDropDown = function(){
-		var container = {id:"dropdown-type",left:10,top:70,width:100,height: node_types.length*20,backgroundColor:"white",font:"Source Sans Pro",fontsize:12};
+		var container = {id:"dropdown-type",left:10,top:70,width:100,height: node_types.length*20,backgroundColor:"white",font:"Source Sans Pro",fontsize:12,zindex:11};
 		var offset_item_x = 0;
 		gui.addContainer(container);
 		for(var i = 0; i < node_types.length; i++){
@@ -1419,7 +1429,21 @@ function RhisomaGui(gui){
 						found_node_match = true;
 					}
 					if(document.getElementById("control-panel-edit-date-start")!=null){
-						var parse_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format();
+						var parse_date = "";
+						if(document.getElementById("control-panel-edit-date-start").value != ""){
+							if(document.getElementById("control-panel-edit-date-end").value != ""){
+								if(moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).isBefore(moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']))){
+									parse_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format();
+								}
+								else{
+									parse_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).format();
+								}
+								
+							}
+							else{
+								parse_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format();
+							}	
+						}
 						if(parse_date != the_node.date_start){
 							current_editing.date_start = parse_date;
 							the_node.date_start = current_editing.date_start;
@@ -1427,7 +1451,20 @@ function RhisomaGui(gui){
 						}
 					}
 					if(document.getElementById("control-panel-edit-date-end")!=null){
-						var parse_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).format();
+						var parse_date = "";
+						if(document.getElementById("control-panel-edit-date-end").value != ""){
+							if(document.getElementById("control-panel-edit-date-start").value != ""){
+								if(moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).isAfter(moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']))){
+									parse_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).format();
+								}
+								else{
+									parse_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format();
+								}
+							}
+							else{
+								parse_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).format();
+							}
+						}
 						if(parse_date != the_node.date_end){
 							current_editing.date_end = parse_date;
 							the_node.date_end = current_editing.date_end;
@@ -1579,6 +1616,19 @@ function RhisomaGui(gui){
 				if(document.getElementById("control-panel-edit-date-start").value != ""){
 					parse_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format('YYYY-M-D H:mm');
 				}
+				else{
+					if(document.getElementById("control-panel-edit-date-end").value != ""){
+						if(moment().isBefore(moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']))){
+							parse_date = moment().format('YYYY-M-D H:mm');
+						}
+						else{
+							parse_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).subtract(24, 'hours').format('YYYY-M-D H:mm');
+						}
+					}
+					else{
+						parse_date = moment().format('YYYY-M-D H:mm');
+					}
+				}
 				var max_date = null;
 				if(document.getElementById("control-panel-edit-date-end").value != ""){
 					max_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).format('YYYY-M-D');
@@ -1651,6 +1701,19 @@ function RhisomaGui(gui){
 				if(document.getElementById("control-panel-edit-date-end").value != ""){
 					parse_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).format('YYYY-M-D H:mm');
 				}
+				else{
+					if(document.getElementById("control-panel-edit-date-start").value != ""){
+						if(moment().isAfter(moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']))){
+							parse_date = moment().format('YYYY-M-D H:mm');
+						}
+						else{
+							parse_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).add(24, 'hours').format('YYYY-M-D H:mm');
+						}
+					}
+					else{
+						parse_date = moment().format('YYYY-M-D H:mm');
+					}
+				}
 				var min_date = null;
 				if(document.getElementById("control-panel-edit-date-start").value != ""){
 					min_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format('YYYY-M-D');
@@ -1691,6 +1754,25 @@ function RhisomaGui(gui){
 			}
 		};
 		button.onfocus = onFocus;
+	}
+
+	this.dateResetMouseBehavior = function(mode){
+		button = document.getElementById("control-panel-date-"+mode+"-reset");
+		var mouseOver = function(){
+			this.style.cursor = "pointer";
+			this.style.color = groups[the_node.group].color;
+		};
+		var mouseOut = function(){
+			this.style.color = "black";
+		};
+		var mouseDown = function(){
+			var current_id = this.id.split("-");
+			var element = document.getElementById("control-panel-edit-date-"+current_id[3]);
+			element.value = "";
+		};
+		button.onmouseover = mouseOver;
+		button.onmouseout = mouseOut;
+		button.onmousedown = mouseDown;
 	}
 
 	this.mainMouseBehavior = function(id){

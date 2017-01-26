@@ -652,6 +652,9 @@ function environmentStabilize(){
       centerEnvironment();
       gui.closeMenus();
     }
+    else if(gui.editionMode() === "cancellink"){
+      cancelEdit();
+    }
   }
   else if(gui.saveNode() != false){
     structure.updateNode(gui.saveNode());
