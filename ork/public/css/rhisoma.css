@@ -131,3 +131,78 @@ textarea.edit-description:focus{
             user-select: none; /* Non-prefixed version, currently
                                   not supported by any browser */
 }
+
+.scroll-search::-webkit-scrollbar {
+  overflow: hidden;
+  width: 7px;
+  /*background: #fafafa;*/
+  background: rgb(243,243,243);
+  border-right: 1px solid #aeaeae;
+  
+  /*border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  -webkit-border-top-right-radius:  3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright:    3px;
+  -moz-border-radius-bottomright: 3px;*/
+}
+
+.scroll-search::-webkit-scrollbar:horizontal {
+  height: 1px;
+}
+
+.scroll-search::-webkit-scrollbar-button {
+  display: none;
+}
+
+.scroll-search::-webkit-scrollbar-piece {
+  background: #eee;
+}
+
+.scroll-search::-webkit-scrollbar-piece:start {
+  background: #eee;
+}
+
+.scroll-search::-webkit-scrollbar-thumb {
+  background: #aaaaaa;
+  /*border-radius: 3px;
+    -webkit-border-radius: 3px;  
+    -moz-border-radius: 3px;*/
+}
+
+.scroll-search::-webkit-scrollbar-corner {
+  background: #333;
+}
+
+.scroll-control-panel::-webkit-scrollbar {
+  display: none;
+  overflow: hidden;
+  margin-left: 3px;
+  width: 6px;
+  background: rgb(243,243,243);
+}
+
+.scroll-control-panel::-webkit-scrollbar:horizontal {
+  height: 1px;
+}
+
+.scroll-control-panel::-webkit-scrollbar-button {
+  display: none;
+}
+
+.scroll-control-panel::-webkit-scrollbar-piece {
+  background: #eee;
+}
+
+.scroll-control-panel::-webkit-scrollbar-piece:start {
+  background: #eee;
+}
+
+.scroll-control-panel::-webkit-scrollbar-thumb {
+  background: #aaaaaa;
+}
+
+.scroll-control-panel::-webkit-scrollbar-corner {
+  background: #333;
+}
+

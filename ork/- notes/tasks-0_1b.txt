@@ -206,7 +206,7 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 			- Esboço [pensar em layout que já caminhe para uma barra de filtragem mais geral, não somente data]
 			- Seleção de período
 			- Funcionalidade de edição do grafo segundo o período selecionado
-4		>> - Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
+6		>> - Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 			- Utilizar função de busca [busca pode merecer uma classe específica desde o início]
 		% (?) Ao adicionar link a partir de node sem ligações, se ele for source criar um grupo novo
 
@@ -304,16 +304,26 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 	OK	- Adaptações para mudança de conexão quando dentro de um nódulo (exemplo [navigationEnter]: trocar conexão tipo 2 por tipo 3 não está atualizando) {erro: estava criando várias conexões iguais de tipo 3}
 	OK - Atualizar estilo da label de categoria primária no navigateExit
 	OK - Sempre colocar # nas cores do input de edição de cor do grupo
+	OK - Implementar correção de locales para data
+	OK - Quando uma data de início é setada, data de fim deve necessariamente ser depois do início 
+	OK - Ao acrescentar nódulo e clicar nele: problema no processamento de cor
+	OK - Se usuário tentar editar grupo default: impedir ação [além disso: retirar grupo Default de dropdown, etc]
+	OK - Mostrar só 10 resultados de query e habilitar scroll down e up [liberar navegação com setas também nesse caso]
+		OK - Scrollbar não deve aparecer quando número de resultados for menor que 10
+		OK - Corrigir comportamento do menu quando o usuário sobe na lista usando as setas
+	OK - Fixar posição dos nódulos que acabaram de ser adicionados no grafo
+	OK - Habilitar scroll no control panel [tanto para edição como para visualização]
+		- Corrigir data inválida quando usuário tenta editar tarefa que não tem data de início nem fim [quando usuário abre o date o picker: dia atual]
+		- Acrescentar botão de resetar data no edit date_start e date_end
+		- Ao fazer lock do control panel de node: conferir se a data e hora de início são menores que a data e hora de fim; se não for, corrigir antes de jogar no BD
 		- Na edição de cor do grupo, impedir input que não seja hex
-		- Habilitar scroll no control panel [tanto para edição como para visualização]
-&1		>> - Mostrar só 10 resultados de query e habilitar scroll down e up [liberar navegação com setas também nesse caso]
-&2		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
-5		- Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
-&4		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
+8		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
+7		- Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
+9		- Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
 &&1		- Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
 &&2		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
 		- Impedir ação de clique no clique duplo
-		% Expandir a partir da posição do nódulo sendo expandido (para evitar saltos no grafo)
+		% Criar forma de aproximar os grupos autônomos da área central do grafo
 		% - (?) Node sem source que não seja categoria não deve mostrar label
 		% lentidão no primeiro drag do graph (e em momentos eventuais: fazer teste de benchmark quando estiver pronto para descobrir as funções que podem ser otimizadas)
 		% (?) iterar rect do label somente nos elementos sem sources (primários) de modo que não seja necessário desenhar todos os labels [integrar no init; colocar classe "primary" nos labels respectivos]

@@ -386,8 +386,14 @@ d3.json("public/json/test.json", function(error, in_graph) {
 
   function ticked() {
     node
-
-        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        .attr("transform", function(d) {
+            if(d.fixed === undefined){
+              return "translate(" + d.x + "," + d.y + ")";
+            }
+            else{
+              return "translate(" + d.fx + "," + d.fy + ")";
+            }
+          });
 
     link
         .attr("x1", function(d) { return d.source.x; })
@@ -430,8 +436,10 @@ d3.json("public/json/test.json", function(error, in_graph) {
 
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
+  if(d.fixed === undefined){
+    d.fx = d.x;
+    d.fy = d.y;
+  }
   if(!reveal_labels){
     document.getElementById("labels-"+d.id).style.display = "none";
   }
@@ -470,8 +478,10 @@ function dragged(d) {
 function dragended(d) {
   // if(!stop_simulation){
     if (!d3.event.active) simulation.alphaTarget(0);
-    d.fx = null;
-    d.fy = null;
+    if(d.fixed === undefined){
+      d.fx = undefined;
+      d.fy = undefined;
+    }
   // }
   // else{
     if(stop_simulation)
@@ -1144,7 +1154,9 @@ function clickNode(d){
         current_node = {};
       }
       gui.hideControlPanel();
-      structure.updateGroups(d);
+      if(d.group != "_DEFAULT"){
+        structure.updateGroups(d);
+      }
       gui.closeMenus();
     }
 }

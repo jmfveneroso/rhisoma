@@ -12,6 +12,7 @@ function SystemGui(){
 	var hidden_system_menu = false;
 	var lock_system_menu = true;
 	var locales = undefined;
+	var prevent_search_mouse_behavior = false;
 
 	var buttons = {};
 
@@ -315,6 +316,25 @@ function SystemGui(){
 	// 	button.onmousedown = mouseDown;
 	// }
 
+	this.searchKeyboardNavigation = function(){
+		var start = $("#system-menu-autocomplete").scrollTop()/25;
+		var end = 9 + start;
+		var new_offset = 0;
+		if(current_query >= start && current_query <= end && start > 0){
+			new_offset = $("#system-menu-autocomplete").scrollTop();
+			prevent_search_mouse_behavior = true;
+		}
+		else if(current_query < start && start > 0){
+			new_offset = ((start)-1)*25;
+			prevent_search_mouse_behavior = true;
+		}
+		else if(current_query > end && end < query_results.length){
+			new_offset = ((end-9)+1)*25;
+			prevent_search_mouse_behavior = true;
+		}
+		return new_offset;
+	}
+
 	this.searchWriteBehavior = function(){
 		var search_field = document.getElementById("system-menu-search");
 		var searchUp = function(){
@@ -322,10 +342,10 @@ function SystemGui(){
 				if(current_query+1 < query_results.length){
 					if(current_query >= 0){
 						document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "rgba(243,243,243,0.8)";
-
 					}
 					current_query++;
 					document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "white";
+					$("#system-menu-autocomplete").scrollTop(master.searchKeyboardNavigation);
 				}
 			}
 			else if(window.event.keyCode === 38){
@@ -335,6 +355,7 @@ function SystemGui(){
 					if(current_query >= 0){
 						document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "white";
 					}
+					$("#system-menu-autocomplete").scrollTop(master.searchKeyboardNavigation);
 				}
 			}
 			else if(window.event.keyCode === 13){
@@ -414,40 +435,61 @@ function SystemGui(){
 			gui.addText("system-menu-autocomplete-"+query_results[i].id,query_results[i].name);
 			offset_entry_y += 25;
 			master.selectSearchResultMouseBehavior(query_results[i].id);
+			if(i === query_results.length-1 && query_results.length > 10){
+				document.getElementById("system-menu-autocomplete-"+query_results[i].id).style.borderBottom = "none";
+			}
 		}
-		document.getElementById("system-menu-autocomplete").style.height = offset_entry_y+"px";
+		if(offset_entry_y>250){
+			document.getElementById("system-menu-autocomplete").className = "scroll-search";
+			document.getElementById("system-menu-autocomplete").style.borderBottom = "1px solid #000000";
+			document.getElementById("system-menu-autocomplete").style.overflow = "auto";
+			document.getElementById("system-menu-autocomplete").style.height = "249px";
+			$("#system-menu-autocomplete").scrollTop(0);
+		}
+		else{
+			document.getElementById("system-menu-autocomplete").className = "";
+			document.getElementById("system-menu-autocomplete").style.borderBottom = "none";
+			document.getElementById("system-menu-autocomplete").style.height = offset_entry_y+"px";
+		}
 	}
 
 	this.selectSearchResultMouseBehavior = function(id){
 		var button = document.getElementById("system-menu-autocomplete-"+id);
 		var mouseOver = function(){
-			var current_id = this.id.split("-");
-			current_id = current_id[current_id.length-1];
-			if(current_query >= 0 && current_query < query_results.length){
-				document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "rgba(243,243,243,0.8)";
-			}
-			var found_match = false;
-			var query_index = -1;
-			while(found_match === false && query_index < query_results.length){
-				query_index++;
-				if(query_results[query_index].id === current_id){
-					found_match = true;
+			if(!prevent_search_mouse_behavior){
+				var current_id = this.id.split("-");
+				current_id = current_id[current_id.length-1];
+				if(current_query >= 0 && current_query < query_results.length){
+					document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "rgba(243,243,243,0.8)";
 				}
+				var found_match = false;
+				var query_index = -1;
+				while(found_match === false && query_index < query_results.length){
+					query_index++;
+					if(query_results[query_index].id === current_id){
+						found_match = true;
+					}
+				}
+				if(found_match){
+					current_query = query_index;
+				}
+				document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "white";
+				this.style.cursor = "pointer";
 			}
-			if(found_match){
-				current_query = query_index;
+			else{
+				prevent_search_mouse_behavior = false;
 			}
-			document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "white";
-			this.style.cursor = "pointer";
 		};
 		var mouseOut = function(){
-			var current_id = this.id.split("-");
-			current_id = current_id[current_id.length-1];
-			if(current_query >= 0 && current_query < query_results.length){
-				document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "rgba(243,243,243,0.8)";
+			if(!prevent_search_mouse_behavior){
+				var current_id = this.id.split("-");
+				current_id = current_id[current_id.length-1];
+				if(current_query >= 0 && current_query < query_results.length){
+					document.getElementById("system-menu-autocomplete-"+query_results[current_query].id).style.backgroundColor = "rgba(243,243,243,0.8)";
+				}
+				current_query = -1;
+				document.getElementById("system-menu-autocomplete-"+current_id).style.backgroundColor = "rgba(243,243,243,0.8)";
 			}
-			current_query = -1;
-			document.getElementById("system-menu-autocomplete-"+current_id).style.backgroundColor = "rgba(243,243,243,0.8)";
 		};
 		var mouseDown = function(){
 			var current_id = this.id.split("-");

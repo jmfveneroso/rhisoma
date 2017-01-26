@@ -140,6 +140,8 @@ function RhisomaGui(gui){
 
 	this.setGroups = function(in_groups){
 		groups = in_groups;
+		var default_color = {"color":"#000000","name":"Default"};
+		groups["_DEFAULT"] = default_color;
 	}
 
 	/* CONTROL PANEL */
@@ -155,8 +157,10 @@ function RhisomaGui(gui){
 			border_color = "black";
 		}
 		if(document.getElementById("control-panel") === null){
-			var container = {id:"control-panel", display: "inline",width:300, height:window.innerHeight,pointerevents:"none",left:-300,top:0, backgroundColor:"rgba(255,255,255,0.9)", font:"Source Sans Pro", padding:10, borderright: "1px "+border_color+" dashed"};
+			var container = {id:"control-panel",class:"scroll-control-panel",display: "inline",width:300, height:window.innerHeight,/*pointerevents:"none",*/left:-300,top:0, backgroundColor:"rgba(255,255,255,0.9)", font:"Source Sans Pro", padding:10, borderright: "1px "+border_color+" dashed"};
 			gui.addContainer(container);
+			document.getElementById("control-panel").style.overflow = "auto";
+			$("#control-panel").scrollTop(0);
 		}
 		if(document.getElementById("control-panel-lock") === null){
 			var button = {id:"control-panel-lock", pointerevents:"all",zindex:2,height:20,width:20,top:50,fontsize:18,left:290,textalign:"right",font:"Font Awesome",text:'<i class="fa fa-lock" aria-hidden="true"></i>'};
@@ -227,7 +231,7 @@ function RhisomaGui(gui){
 	this.drawNodeControl = function(){
 		offset_x = 50;
 		master.clearControlPanel();
-		gui.$pointerevents("control-panel","none");
+		// gui.$pointerevents("control-panel","none");
 
 		master.addType(the_node);
 		master.addTitle(the_node);
@@ -253,12 +257,14 @@ function RhisomaGui(gui){
 		if(hidden_control_panel){
 			master.showControlPanel();
 		}
+
+		master.addFooter();
 	}
 
 	this.drawNodeEditControl = function(){
 		offset_x = 40;
 		master.clearControlPanel();
-		gui.$pointerevents("control-panel","all");
+		// gui.$pointerevents("control-panel","all");
 
 		if(the_node.type === "categoria"){
 			master.addEditType(the_node);
@@ -296,12 +302,14 @@ function RhisomaGui(gui){
 		if(all_links != undefined){
 			master.addEditLinks(the_node);
 		}
+
+		master.addFooter();
 	}
 
 	this.drawLinkControl = function(){
 		offset_x = 50;
 		master.clearControlPanel();
-		gui.$pointerevents("control-panel","none");
+		// gui.$pointerevents("control-panel","none");
 
 		master.addLinkType(the_link);
 		master.addSource(the_link);
@@ -310,18 +318,22 @@ function RhisomaGui(gui){
 		if(hidden_control_panel){
 			master.showControlPanel();
 		}
+
+		master.addFooter();
 	}
 
 	this.drawLinkEditControl = function(){
 		offset_x = 40;
 		master.clearControlPanel();
-		gui.$pointerevents("control-panel","all");
+		// gui.$pointerevents("control-panel","all");
 
 		master.addEditLinkType(the_link);
 		master.addSource(the_link);
 		master.addTarget(the_link);
 		master.addInvertDependency(the_link);
 		master.addRemoveLink(the_link);
+
+		master.addFooter();
 	}
 
 	this.hideControlPanel = function(){
@@ -369,7 +381,7 @@ function RhisomaGui(gui){
 
 	this.clearControlPanel = function(){
 		offset_x = 50;
-		var check_all_elements = ["title","description","date-start","date-end","type","link-type","source-label","source","target-label","target","links","remove","invert-dependency","task-completed","group"];
+		var check_all_elements = ["title","description","date-start","date-end","type","link-type","source-label","source","target-label","target","links","remove","invert-dependency","task-completed","group","footer"];
 		for(var i = 0; i < check_all_elements.length; i++){
 			master.removeElement(check_all_elements[i]);
 		}
@@ -418,6 +430,12 @@ function RhisomaGui(gui){
 	}
 
 	/* FIELDS CONTROL PANEL */
+
+	this.addFooter = function(){
+		var footer = {id:"control-panel-footer",height:100,width:300,backgroundColor:"transparent",top:offset_x,left:10};
+		gui.addField(footer,"control-panel");
+		offset_x+=100;
+	}
 
 	this.addType = function(node){
 		var field = {id:"control-panel-type",top:offset_x,fontsize:12,height:12,width:300,texttransform:"uppercase",fontweight:200,color:"#9c9c9c"};
@@ -551,6 +569,7 @@ function RhisomaGui(gui){
 				}
 				offset_link_x += 18;
 			}
+			offset_x+=offset_link_x;
 		}
 	}
 
@@ -696,11 +715,12 @@ function RhisomaGui(gui){
 		gui.addField(field_label,"control-panel-date-start");
 		gui.addText("control-panel-date-start-label",locales['control-panel-date-start']);
 
-		// var field_date_start = {id:"control-panel-date-start-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
-		// gui.addField(field_date_start,"control-panel-date-start");
-		// gui.addText("control-panel-date-start-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
 		var input_date_start = {class:"edit-date",id:"control-panel-edit-date-start",margintop:14};
-		var parse_date = moment(node.date_start,[moment.ISO_8601]).format('L • H:mm');
+		// var parse_date = moment().format('L • H:mm');
+		var parse_date = "";
+		if(node.date_start != ""){
+			parse_date = moment(node.date_start,[moment.ISO_8601]).format('L • H:mm');
+		}
 		gui.addInput(input_date_start,"","control-panel-date-start",parse_date);
 		document.getElementById("control-panel-edit-date-start").style.color = groups[node.group].color;
 		document.getElementById("control-panel-edit-date-start").style.borderBottom = "1px "+groups[node.group].color+" solid";
@@ -718,11 +738,12 @@ function RhisomaGui(gui){
 		gui.addField(field_label,"control-panel-date-end");
 		gui.addText("control-panel-date-end-label",locales['control-panel-date-end']);
 
-		// var field_date_end = {id:"control-panel-date-end-date",top:12,fontsize:14,fontweight:600,texttransform:"uppercase"};
-		// gui.addField(field_date_end,"control-panel-date-end");
-		// gui.addText("control-panel-date-end-date",current_date[0] + '<span style="font-size:12px;font-weight:200;margin-left:20px;text-transform:none">' + current_date[1] + "</span>");
 		var input_date_end = {class:"edit-date",id:"control-panel-edit-date-end",margintop:14};
-		var parse_date = moment(node.date_end,[moment.ISO_8601]).format('L • H:mm');
+		// var parse_date = moment().format('L • H:mm');
+		var parse_date = "";
+		if(node.date_end != ""){
+			parse_date = moment(node.date_end,[moment.ISO_8601]).format('L • H:mm');
+		}
 		gui.addInput(input_date_end,"","control-panel-date-end",parse_date);
 		document.getElementById("control-panel-edit-date-end").style.color = groups[node.group].color;
 		document.getElementById("control-panel-edit-date-end").style.borderBottom = "1px "+groups[node.group].color+" solid";
@@ -791,6 +812,7 @@ function RhisomaGui(gui){
 				offset_link_x += 18;
 				master.linksMouseBehavior(all_links[i].id,groups[node.group].color);
 			}
+			offset_x+=offset_link_x;
 		}
 	}
 
@@ -1198,35 +1220,37 @@ function RhisomaGui(gui){
 		gui.addContainer(container);
 		var inc = 0;
 		for(group in groups){
-			var fontweight = 400;
-			var bordertop = null;
-			var borderbottom = null;
-			if(current_group === undefined){
-				if(groups[group].color === the_node.color){
-					fontweight = 800;
+			if(group != "_DEFAULT"){	
+				var fontweight = 400;
+				var bordertop = null;
+				var borderbottom = null;
+				if(current_group === undefined){
+					if(groups[group].color === the_node.color){
+						fontweight = 800;
+					}
 				}
-			}
-			else{
-				if(group === current_group){
-					fontweight = 800;
+				else{
+					if(group === current_group){
+						fontweight = 800;
+					}
 				}
-			}
-			if(inc === 0){
-				bordertop = "1px "+the_node.color+" dotted"
-				borderbottom = "1px "+the_node.color+" dotted";
-			}
-			else{
-				borderbottom = "1px "+the_node.color+" dotted";
-			}
-			var field = {id:"dropdown-color-"+group,top:offset_item_x+3,height:15,fontweight:fontweight,width:30,backgroundColor:groups[group].color};
-			gui.addField(field,"dropdown-group");
+				if(inc === 0){
+					bordertop = "1px "+the_node.color+" dotted"
+					borderbottom = "1px "+the_node.color+" dotted";
+				}
+				else{
+					borderbottom = "1px "+the_node.color+" dotted";
+				}
+				var field = {id:"dropdown-color-"+group,top:offset_item_x+3,height:15,fontweight:fontweight,width:30,backgroundColor:groups[group].color};
+				gui.addField(field,"dropdown-group");
 
-			var field = {id:"dropdown-group-"+group,top:offset_item_x,paddingleft:40,paddingtop:3,height:17,fontweight:fontweight,width:160,bordertop:bordertop,borderbottom:borderbottom,color:"black"};
-			gui.addField(field,"dropdown-group");
-			gui.addText("dropdown-group-"+group,groups[group].name);
-			master.selectGroupMouseBehavior("dropdown-group-"+group);
-			offset_item_x += 20;
-			inc++;
+				var field = {id:"dropdown-group-"+group,top:offset_item_x,paddingleft:40,paddingtop:3,height:17,fontweight:fontweight,width:160,bordertop:bordertop,borderbottom:borderbottom,color:"black"};
+				gui.addField(field,"dropdown-group");
+				gui.addText("dropdown-group-"+group,groups[group].name);
+				master.selectGroupMouseBehavior("dropdown-group-"+group);
+				offset_item_x += 20;
+				inc++;
+			}
 		}
 	}
 
@@ -1395,9 +1419,7 @@ function RhisomaGui(gui){
 						found_node_match = true;
 					}
 					if(document.getElementById("control-panel-edit-date-start")!=null){
-						console.log(document.getElementById("control-panel-edit-date-start").value);
 						var parse_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format();
-						console.log(parse_date);
 						if(parse_date != the_node.date_start){
 							current_editing.date_start = parse_date;
 							the_node.date_start = current_editing.date_start;
@@ -1553,18 +1575,40 @@ function RhisomaGui(gui){
 		var button = document.getElementById("control-panel-edit-date-start");
 		var onFocus = function(){
 			if(document.getElementById("datepicker-container") === null){
-				var parse_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format('YYYY-M-D H:mm');
-				$(function(){
-				    $('#control-panel-edit-date-start').appendDtpicker({
-				        "inline": true,
-				        "locale": "pt",
-				        "minuteInterval": 15,
-				        "calendarMouseScroll": false,
-				        "todayButton": false,
-				        "animation":false
-				    });
-				});
-
+				var parse_date = null;
+				if(document.getElementById("control-panel-edit-date-start").value != ""){
+					parse_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format('YYYY-M-D H:mm');
+				}
+				var max_date = null;
+				if(document.getElementById("control-panel-edit-date-end").value != ""){
+					max_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).format('YYYY-M-D');
+				}
+				if(locales.language === "PT"){
+					$(function(){
+					    $('#control-panel-edit-date-start').appendDtpicker({
+					        "inline": true,
+					        "locale": "pt",
+					        "minuteInterval": 15,
+					        "calendarMouseScroll": false,
+					        "todayButton": false,
+					        "animation":false,
+					        "maxDate":max_date
+					    });
+					});
+				}
+				else{
+					$(function(){
+					    $('#control-panel-edit-date-start').appendDtpicker({
+					        "inline": true,
+					        "locale": "en",
+					        "minuteInterval": 15,
+					        "calendarMouseScroll": false,
+					        "todayButton": false,
+					        "animation":false,
+					        "maxDate":max_date
+					    });
+					});
+				}
 				var close_datepicker = {id:"control-panel-close-datepicker",position:"absolute",top:40,left:278,fontsize:18};
 				gui.addField(close_datepicker,"datepicker-container");
 				gui.addText("control-panel-close-datepicker",'<i class="fa fa-close" aria-hidden="true"></i>');
@@ -1603,18 +1647,40 @@ function RhisomaGui(gui){
 		var button = document.getElementById("control-panel-edit-date-end");
 		var onFocus = function(){
 			if(document.getElementById("datepicker-container") === null){
-				var parse_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).format('YYYY-M-D H:mm');
-				$(function(){
-				    $('#control-panel-edit-date-end').appendDtpicker({
-				        "inline": true,
-				        "locale": "pt",
-				        "minuteInterval": 15,
-				        "calendarMouseScroll": false,
-				        "todayButton": false,
-				        "animation":false
-				    });
-				});
-
+				var parse_date = null;
+				if(document.getElementById("control-panel-edit-date-end").value != ""){
+					parse_date = moment(document.getElementById("control-panel-edit-date-end").value,['L • H:mm']).format('YYYY-M-D H:mm');
+				}
+				var min_date = null;
+				if(document.getElementById("control-panel-edit-date-start").value != ""){
+					min_date = moment(document.getElementById("control-panel-edit-date-start").value,['L • H:mm']).format('YYYY-M-D');
+				}
+				if(locales.language === "PT"){
+					$(function(){
+					    $('#control-panel-edit-date-end').appendDtpicker({
+					        "inline": true,
+					        "locale": "pt",
+					        "minuteInterval": 15,
+					        "calendarMouseScroll": false,
+					        "todayButton": false,
+					        "animation":false,
+					        "minDate":min_date
+					    });
+					});
+				}
+				else{
+					$(function(){
+					    $('#control-panel-edit-date-end').appendDtpicker({
+					        "inline": true,
+					        "locale": "en",
+					        "minuteInterval": 15,
+					        "calendarMouseScroll": false,
+					        "todayButton": false,
+					        "animation":false,
+					        "minDate":min_date
+					    });
+					});
+				}
 				var close_datepicker = {id:"control-panel-close-datepicker",position:"absolute",top:40,left:278,fontsize:18};
 				gui.addField(close_datepicker,"datepicker-container");
 				gui.addText("control-panel-close-datepicker",'<i class="fa fa-close" aria-hidden="true"></i>');

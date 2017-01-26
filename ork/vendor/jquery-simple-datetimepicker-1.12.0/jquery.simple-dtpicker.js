@@ -11,7 +11,7 @@
 			days: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
 			months: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ],
 			sep: '-',
-			format: 'YYYY-MM-DD • hh:mm',
+			format: 'MM/DD/YYYY • hh:mm',
 			prevMonth: 'Previous month',
 			nextMonth: 'Next month',
 			today: 'Today'
@@ -619,6 +619,7 @@
 		cDate.setSeconds(59);
 		cDate.setDate(0); // last day of previous month
 
+		$offset_now_month = 0;
 		var $link_before_month = null;
 		if ((!isFutureOnly || !isCurrentMonth) && ((minDate == null) || (minDate < cDate.getTime()))
 		) {
@@ -631,6 +632,7 @@
 			});
 			$picker.data('stateAllowBeforeMonth', true);
 		} else {
+			$offset_now_month = 62;
 			$picker.data('stateAllowBeforeMonth', false);
 		}
 
@@ -640,7 +642,7 @@
 		cDate.setDate(1); // First day of next month
 		cDate.setMonth(date.getMonth() + 1);
 
-		var $now_month = $('<span style="float:left;width:125px;height:18px">');
+		var $now_month = $('<span style="float:left;width:125px;height:18px;margin-left:'+$offset_now_month+'px">');
 		$now_month.text(date.getFullYear() + " • "/* + translate(locale, 'sep') + " "*/ + translate(locale, 'months')[date.getMonth()].toUpperCase());
 
 		var $link_next_month = null;

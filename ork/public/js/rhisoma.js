@@ -693,13 +693,14 @@ function Rhisoma(){
 		new_node.date_start = "";
 		new_node.description = "";
 		var new_color = "#000000";
-		new_node.group = undefined;
+		new_node.group = "_DEFAULT";
 		new_node.color = new_color;
 		new_node.size = 1;
 		new_node.standby = 0;
 		new_node.type = "categoria";
 		new_node.fx = fx;
 		new_node.fy = fy;
+		new_node.fixed = 1;
 		entire_graph.nodes.push(new_node);
 		active_graph.nodes.push(new_node);
 		master.updateGraph();
@@ -787,10 +788,12 @@ function Rhisoma(){
 				entire_graph.nodes[index_target].group = entire_graph.nodes[index_source].group;
 				entire_graph.nodes[index_target].color = entire_graph.nodes[index_source].color;
 			}
-			entire_graph.nodes[index_target].fx = null;
-			entire_graph.nodes[index_target].fy = null;
-			entire_graph.nodes[index_source].fx = null;
-			entire_graph.nodes[index_source].fy = null;
+			entire_graph.nodes[index_target].fx = undefined;
+			entire_graph.nodes[index_target].fy = undefined;
+			entire_graph.nodes[index_target].fixed = undefined;
+			entire_graph.nodes[index_source].fx = undefined;
+			entire_graph.nodes[index_source].fy = undefined;
+			entire_graph.nodes[index_source].fixed = undefined;
 
 			var link = {}; // pegar id do BD
 			link.source = links.source.toString();
