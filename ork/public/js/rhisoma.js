@@ -335,6 +335,8 @@ function Rhisoma(){
 	}
 
 	this.navigateRhisomaEnter = function(selected_node){ // contracts rhisoma
+		var check_free_nodes = [];
+
 		var increment = 0;
 		var found_match = false;
 		var index = undefined;
@@ -354,9 +356,10 @@ function Rhisoma(){
 			var increment = 0;
 			while(!included && increment < entire_graph.nodes[index].children.length){
 				if(active_graph.nodes[i].id === entire_graph.nodes[index].children[increment]){
-					// if(entire_graph.nodes[master.getNodeIndex(entire_graph.nodes[index].children[increment])].collapse === 1){
-						included = true;
-					// }
+					included = true;
+					if(active_graph.nodes[i].collapse === 0){
+						check_free_nodes.push(active_graph.nodes[i]);
+					}
 				}
 				increment++;
 			}
@@ -431,10 +434,21 @@ function Rhisoma(){
 			}
 		}
 
-		/**
-		 * TODO: crawlToPrimary para descobrir se algum node fechado está conectado em um filho do node ativo ou de algum node da rede
-		 * 		 aplicar também em navigateExit
-		 */
+		// node fechado sem conexão com elementos ativos no grafo é conectado ao selected_node
+		var inc_link = 0;
+		for(var i = 0; i < check_free_nodes.length; i++){
+			var match_found = false;
+			for(var j = 0; j < active_graph.links.length; j++){
+				if(check_free_nodes[i].id === active_graph.links[j].source || check_free_nodes[i].id === active_graph.links[j].target){
+					match_found = true;
+				}
+			}
+			if(!match_found){
+				var create_link = {"id":"_FILLER_"+inc_link,"type":3,"source":selected_node,"target":check_free_nodes[i].id};
+				active_graph.links.push(create_link);
+				inc_link++;
+			}
+		}
 	}
 
 	this.navigateRhisomaExitCheck = function(this_node){
@@ -447,6 +461,8 @@ function Rhisoma(){
 	}
 
 	this.navigateRhisomaExit = function(selected_node){ // expands rhisoma
+		var check_free_nodes = [];
+
 		var increment = 0;
 		var found_match = false;
 		var index = undefined;
@@ -478,9 +494,12 @@ function Rhisoma(){
 					}
 				}
 				if(!found_match){
-					// if(entire_graph.nodes[master.getNodeIndex(entire_graph.nodes[index].children[i])].collapse === 1){
-						include[include.length] = entire_graph.nodes[index].children[i];
-					// }
+					var free_node_index = master.getNodeIndex(entire_graph.nodes[index].children[i]);
+					if(entire_graph.nodes[free_node_index].collapse === 0){		
+						check_free_nodes.push(entire_graph.nodes[free_node_index]);
+						console.log(entire_graph.nodes[free_node_index]);
+					}
+					include[include.length] = entire_graph.nodes[index].children[i];
 				}
 			}
 		}
@@ -584,6 +603,22 @@ function Rhisoma(){
 			    }
 			}
 			active_graph.links.push(construct_link);
+		}
+
+		// node fechado sem conexão com elementos ativos no grafo é conectado ao selected_node
+		var inc_link = 0;
+		for(var i = 0; i < check_free_nodes.length; i++){
+			var match_found = false;
+			for(var j = 0; j < active_graph.links.length; j++){
+				if(check_free_nodes[i].id === active_graph.links[j].source || check_free_nodes[i].id === active_graph.links[j].target){
+					match_found = true;
+				}
+			}
+			if(!match_found){
+				var create_link = {"id":"_FILLER_"+inc_link,"type":3,"source":selected_node,"target":check_free_nodes[i].id};
+				active_graph.links.push(create_link);
+				inc_link++;
+			}
 		}
 
 		master.applyStandby(true);
@@ -692,9 +727,8 @@ function Rhisoma(){
 		new_node.date_end = "";
 		new_node.date_start = "";
 		new_node.description = "";
-		var new_color = "#000000";
 		new_node.group = "_DEFAULT";
-		new_node.color = new_color;
+		new_node.color = "#000000";
 		new_node.size = 1;
 		new_node.standby = 0;
 		new_node.type = "categoria";
