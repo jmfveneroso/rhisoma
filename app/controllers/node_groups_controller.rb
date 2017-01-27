@@ -10,8 +10,11 @@ class NodeGroupsController < ApplicationController
     render :json => {
       node_groups: @user.node_groups,
       # The JSON parse is necessary to select the type column.
-      nodes: JSON.parse(@user.nodes.select("nodes.id, title, type, node_group_id")
-        .to_json(only: [:id, :title, :type, :node_group_id])),
+      nodes: JSON.parse(@user.nodes.select(
+        "nodes.id, title, type, node_group_id, x, y, vx, vy, fx, fy"
+      ).to_json(only: [
+        :id, :title, :type, :node_group_id, :x, :y, :vx, :vy, :fx, :fy
+      ])),
       edges: @user.edges,
       templates: NodeGroup.where(:public => true)
     }

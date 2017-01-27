@@ -1,7 +1,8 @@
 class NodesController < ApplicationController
   before_action :logged_in_user
-  before_action :correct_user, except: [:create]
+  before_action :correct_user, only: [:show, :update, :destroy]
   before_action :node_group_belongs_to_user, only: [:create, :update]
+  before_action :all_nodes_belong_to_user, only: [:bulk_update_pos]
 
   # Creates a new node.
   # @route POST /nodes
@@ -26,7 +27,8 @@ class NodesController < ApplicationController
   # Shows an existing node.
   # @route GET /nodes/$(id)
   def show
-    attributes = [:id, :title, :type, :node_group_id]
+    attributes = [:id, :title, :x, :y, :vx, :vy, 
+                  :fx, :fy, :type, :node_group_id]
     case @node.type
       when 'CategoryNode' 
         attributes.concat([:description])
@@ -67,12 +69,20 @@ class NodesController < ApplicationController
     end
   end
 
+  # Updates the position of multiple nodes.
+  # @route PATCH /nodes/pos
+  def bulk_update_pos
+    Node.bulk_update_pos(@nodes.to_json)
+    render :json => 'success'
+  end
+
   private
 
     # Allowed node parameters in JSON requests.
     def node_params
       params.require(:node).permit(:title, :type, :node_group_id, :start_date, 
-        :end_date, :description, :location, :text, :link, :active, :hidden)
+        :end_date, :description, :location, :text, :link, :active, :hidden, :x,
+        :y, :vx, :vy, :fx, :fy)
     end
 
     # Before filter that confirms a logged-in user.
@@ -102,6 +112,24 @@ class NodesController < ApplicationController
       unless !@node_group || current_user?(@node_group.user)
         render :status => 403, :json => { code: 403, errors: [ {
           message: 'Unauthorized user' 
+        } ] }
+      end
+    end
+
+    # Before filter that confirms all nodes referenced in the request belong
+    # to the current user.
+    def all_nodes_belong_to_user
+      @nodes = params.require(:nodes).permit!
+
+      # Convert to array.
+      @nodes = @nodes.to_h().map { |key, value| value } 
+
+      # Check if all nodes belong to user.
+      ids = @nodes.map do |n| n['id'] end
+      if current_user.nodes.where("nodes.id IN (#{ids.join(',')})").count !=
+        @nodes.count
+        render :status => 403, :json => { code: 403, errors: [ {
+          message: 'The user does not have permission to edit one or more nodes' 
         } ] }
       end
     end

@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   end
 
   resources :node_groups
+  patch '/nodes/position', to: 'nodes#bulk_update_pos'
   resources :nodes
   resources :edges
   post '/node_groups/:id/clone', to: 'node_groups#clone'
