@@ -28,16 +28,24 @@ class Node < ApplicationRecord
         self.text = nil
         self.link = nil
       when 'TextNode' 
-        self.description = nil
         self.start_date = nil
         self.end_date = nil
         self.location = nil
       when 'LinkNode' 
-        self.description = nil
         self.start_date = nil
         self.end_date = nil
         self.location = nil
     end
+  end
+
+  # Updates the position of multiple nodes by calling a db stored procedure.
+  # @param json an array of nodes and their positions in JSON format.
+  # @return [void]
+  def self.bulk_update_pos(json)
+    # Non existent node ids and fields different from x and y will 
+    # simply be ignored.
+    query = "select bulk_update_node_pos('#{json}'::json)"
+    ActiveRecord::Base.connection.execute query
   end
 
   private

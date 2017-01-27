@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170101214525) do
+ActiveRecord::Schema.define(version: 20170124215744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,12 @@ ActiveRecord::Schema.define(version: 20170101214525) do
     t.string   "location"
     t.text     "text"
     t.string   "link"
+    t.float    "x"
+    t.float    "y"
+    t.float    "vx"
+    t.float    "vy"
+    t.float    "fx"
+    t.float    "fy"
     t.index ["user_id"], name: "index_nodes_on_user_id", using: :btree
   end
 

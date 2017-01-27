@@ -68,6 +68,12 @@ class Api
       method: 'PATCH',
       data: 'node[title]': title
 
+  @bulk_update_pos: (nodes_pos) ->
+    $.ajax
+      url: '/nodes/position'
+      method: 'PATCH',
+      data: { nodes: nodes_pos }
+
 class Canvas
   constructor: ->
     this.view = $('#main_canvas')[0]
@@ -171,6 +177,11 @@ class Node
     this.force = new Vector(0, 0)
     this.children = []
     this.edges = []
+
+    if (data.x)
+      this.pos = new Vector(data.x, data.y)
+      this.velocity = new Vector(data.vx, data.vy)
+      this.force = new Vector(data.fx, data.fy)
 
   destroy: -> Api.delete_node(this.id)
 
@@ -389,6 +400,7 @@ class Graph
 
   update_position: ->
     Physics.calculate_forces nodes, this.canvas.view.width, this.canvas.view.height
+    this.ui.update_node_position()
     Physics.update_motion nodes
     this.limit_to_bounds(node) for key, node of nodes
     this.refresh_canvas()
@@ -436,6 +448,22 @@ class Graph
   get_node_group: (id) -> node_groups[id]
   get_edge: (id) -> edges[id]
 
+  save_nodes_position: ->
+    nodes_pos = []
+    for key, n of nodes
+      nodes_pos.push {
+        id: Number(key),
+        x: n.pos.x,
+        y: n.pos.y,
+        vx: n.velocity.x,
+        vy: n.velocity.y,
+        fx: n.force.x,
+        fy: n.force.y
+      }
+
+    Api.bulk_update_pos(nodes_pos).done (data) ->
+      console.log data
+
 class Ui
   settings: false
   creating: false
@@ -455,6 +483,7 @@ class Ui
     @toolbar = {}
     @toolbar['refresh'] = $('#toolbar\\[refresh\\]')
     @toolbar['settings'] = $('#toolbar\\[settings\\]')
+    @toolbar['save'] = $('#toolbar\\[save\\]')
     @tabs[0] = $('#tab\\[node_groups\\]')
     @tabs[1] = $('#tab\\[nodes\\]')
     @tabs[2] = $('#tab\\[edges\\]')
@@ -472,6 +501,12 @@ class Ui
     @properties['node'] = $('#properties\\[node\\]')
     @properties['node']['title'] = $('#properties\\[node\\]\\[title\\]')
     @properties['node']['type'] = $('#properties\\[node\\]\\[type\\]')
+    @properties['node']['x'] = $('#properties\\[node\\]\\[x\\]')
+    @properties['node']['y'] = $('#properties\\[node\\]\\[y\\]')
+    @properties['node']['vx'] = $('#properties\\[node\\]\\[vx\\]')
+    @properties['node']['vy'] = $('#properties\\[node\\]\\[vy\\]')
+    @properties['node']['fx'] = $('#properties\\[node\\]\\[fx\\]')
+    @properties['node']['fy'] = $('#properties\\[node\\]\\[fy\\]')
     @properties['node']['node_group'] = $('#properties\\[node\\]\\[node_group\\]')
     @properties['node']['edges'] = $('#properties\\[node\\]\\[edges\\]')
     @properties['node']['edges_container'] = $('#properties\\[node\\]\\[edges_container\\]')
@@ -526,6 +561,10 @@ class Ui
       e.data.self.update()
     )
 
+    @toolbar['save'].on('click', { self: @ }, (e) ->
+      self.graph.save_nodes_position()
+    )
+
     @update()
 
   cancel_creation: ->
@@ -537,6 +576,12 @@ class Ui
     data['node[title]'] = @properties['node']['title'].val()
     data['node[type]'] = @properties['node']['type'].val()
     data['node[node_group_id]'] = @properties['node']['node_group'].val()
+    data['node[x]'] = @properties['node']['x'].html()
+    data['node[y]'] = @properties['node']['y'].html()
+    data['node[vx]'] = @properties['node']['vx'].html()
+    data['node[vy]'] = @properties['node']['vy'].html()
+    data['node[fx]'] = @properties['node']['fx'].html()
+    data['node[fy]'] = @properties['node']['fy'].html()
     switch data['node[type]']
       when 'CategoryNode'
         data['node[description]'] = @properties['category_node']['description'].val()
@@ -553,6 +598,8 @@ class Ui
       when 'LinkNode'
         data['node[link]'] = @properties['link_node']['link'].val()
         break
+
+    console.log data
     return data
 
   create_element: ->
@@ -876,6 +923,16 @@ class Ui
         @properties['text_node'].css('display', 'block')
       when 'LinkNode'
         @properties['link_node'].css('display', 'block')
+
+  update_node_position: ->
+    return if !@selected_element
+    if @selected_element.constructor.name == 'Node'
+      @properties['node']['x'] .html Number(@selected_element.pos.x).toFixed(5)
+      @properties['node']['y'] .html Number(@selected_element.pos.y).toFixed(5)
+      @properties['node']['vx'].html Number(@selected_element.velocity.x).toFixed(5)
+      @properties['node']['vy'].html Number(@selected_element.velocity.y).toFixed(5)
+      @properties['node']['fx'].html Number(@selected_element.force.x).toFixed(5)
+      @properties['node']['fy'].html Number(@selected_element.force.y).toFixed(5)
 
   enable_new_node_group_form: ->
     @selected_tab_num = -1

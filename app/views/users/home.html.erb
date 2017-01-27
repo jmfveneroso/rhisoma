@@ -19,6 +19,7 @@
       </div>
       <button id="toolbar[refresh]" class="toolbar-btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
       <button id="toolbar[settings]" class="toolbar-btn"><i class="fa fa-cog" aria-hidden="true"></i></button>
+      <button id="toolbar[save]" class="toolbar-btn"><i class="fa fa-save" aria-hidden="true"></i></button>
     </div>
 
     <!-- Tabs -->
@@ -66,6 +67,18 @@
           <option value="TextNode">Text</option>
           <option value="LinkNode">Link</option>
         </select>
+        <label>X:</label>
+        <span id="properties[node][x]"></span></br>
+        <label>Y:</label>
+        <span id="properties[node][y]"></span></br>
+        <label>Velocity X:</label>
+        <span id="properties[node][vx]"></span></br>
+        <label>Velocity Y:</label>
+        <span id="properties[node][vy]"></span></br>
+        <label>Force X:</label>
+        <span id="properties[node][fx]"></span></br>
+        <label>Force Y:</label>
+        <span id="properties[node][fy]"></span></br>
         <label>Node Group:</label>
         <select id="properties[node][node_group]"></select>
         <div id="properties[category_node]">
