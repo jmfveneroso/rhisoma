@@ -1350,8 +1350,10 @@ function Rhisoma(){
 
 			var selectField = function(){
 				this.style.borderBottom = "1px solid #aeaeae";
+				this.style.color = "black";
 			}
 			document.getElementById("system-groups-edit-name").onfocus = selectField;
+			document.getElementById("system-groups-edit-color").onfocus = selectField;
 		}
 		if(node != undefined){
 			var process_color = groups[node.group].color.substr(1,groups[node.group].color.length-1);
@@ -1459,40 +1461,62 @@ function Rhisoma(){
 			var edit_color = document.getElementById("system-groups-edit-color").value;
 			var check_update = false;
 			if(node != undefined){
-				if(edit_name != groups[node.group].name){
-					groups[node.group].name = edit_name;
-					check_update = true;
+				var isOk  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(document.getElementById("system-groups-edit-color").value);
+				if(isOk){
+					if(edit_name != ""){
+						if(edit_name != groups[node.group].name){
+							groups[node.group].name = edit_name;
+							check_update = true;
+						}
+						if(edit_color != groups[node.group].color){
+							groups[node.group].color = "#"+edit_color;
+							check_update = true;
+						}
+						if(check_update){
+							update_groups = true;
+							master.updateGraphGroups();
+							master.eventFire(document.body, 'click');
+							master.removeElement("system-message-popup");
+							master.removeElement("system-groups-edit");
+							master.removeElementClass("ui-colorpicker");
+						}
+					}
+					else{
+						var element = document.getElementById("system-groups-edit-name");
+						element.style.borderBottom = "1px solid red";
+						element.style.color = "red";
+					}
 				}
-				if(edit_color != groups[node.group].color){
-					groups[node.group].color = "#"+edit_color;
-					check_update = true;
-				}
-				if(check_update){
-					update_groups = true;
-					master.updateGraphGroups();
-					master.eventFire(document.body, 'click');
-					master.removeElement("system-message-popup");
-					master.removeElement("system-groups-edit");
-					master.removeElementClass("ui-colorpicker");
+				else{
+					var element = document.getElementById("system-groups-edit-color");
+					element.style.borderBottom = "1px solid red";
+					element.style.color = "red";
 				}
 			}
 			else{
-				if(edit_name != ""){
-					var element = document.getElementById("system-groups-edit-name");
-					element.style.borderBottom = "1px solid #aeaeae";
-					var generate_id = entire_graph.nodes.length + Math.floor(Math.random() * (900 - 1)) + 1;
-					var group_id = generate_id.toString();
-					groups[group_id] = {};
-					groups[group_id].name = edit_name;
-					groups[group_id].color = "#"+edit_color;
-					update_groups = true;
-					master.eventFire(document.body, 'click');
-					master.removeElement("system-message-popup");
-					master.removeElement("system-groups-edit");
-					master.removeElementClass("ui-colorpicker");
+				var isOk  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(document.getElementById("system-groups-edit-color").value);
+				if(isOk){
+					if(edit_name != ""){
+						var element = document.getElementById("system-groups-edit-name");
+						element.style.borderBottom = "1px solid #aeaeae";
+						var generate_id = entire_graph.nodes.length + Math.floor(Math.random() * (900 - 1)) + 1;
+						var group_id = generate_id.toString();
+						groups[group_id] = {};
+						groups[group_id].name = edit_name;
+						groups[group_id].color = "#"+edit_color;
+						update_groups = true;
+						master.eventFire(document.body, 'click');
+						master.removeElement("system-message-popup");
+						master.removeElement("system-groups-edit");
+						master.removeElementClass("ui-colorpicker");
+					}
+					else{
+						var element = document.getElementById("system-groups-edit-name");
+						element.style.borderBottom = "1px dashed red";
+					}
 				}
 				else{
-					var element = document.getElementById("system-groups-edit-name");
+					var element = document.getElementById("system-groups-edit-color");
 					element.style.borderBottom = "1px dashed red";
 				}
 			}
@@ -1530,6 +1554,36 @@ function Rhisoma(){
 	    evObj.initEvent(etype, true, false);
 	    el.dispatchEvent(evObj);
 	  }
+	}
+
+	this.getPeriod = function(){
+		var period = {};
+		period["start"] = null;
+		period["end"] = null; 
+		for(var i = 0; i < entire_graph.nodes.length; i++){
+			// se start não estiver definido: pega date_added
+			// se end não estiver definido: ignora
+			// aplicar somente com tasks? todos os outros nodes devem ser mostrados?
+
+			if(entire_graph.nodes[i].date_start != "" && period.start === null){
+				period.start = entire_graph.nodes[i].date_start;
+			}
+			if(entire_graph.nodes[i].date_end != "" && period.end === null){
+				period.end = entire_graph.nodes[i].date_end;
+			}
+
+			if(entire_graph.nodes[i].date_start != "" && moment(period.start).isAfter(moment(entire_graph.nodes[i].date_start))){
+				period.start = entire_graph.nodes[i].date_start;
+			}
+			if(entire_graph.nodes[i].date_end != "" && moment(period.end).isBefore(moment(entire_graph.nodes[i].date_end))){
+				period.end = entire_graph.nodes[i].date_end;
+			}
+		}
+		var a = moment(period.end);
+		var b = moment(period.start);
+		var dif = a.diff(b, 'days') // 1
+		console.log(dif);
+		console.log(period);
 	}
 
 }

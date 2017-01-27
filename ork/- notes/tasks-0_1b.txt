@@ -105,6 +105,7 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 		- Inicialização processa informações relativas à navegação no grafo [hierarquia, tamanho, etc]
 				. stand-by, ativo, datas; reconhecer e processar tudo
 		- Ferramenta de apresentação do mapa por período [default = ontem,hoje,amanhã {visão simultânea de 3 dias}]
+			- usuário pode selecionar período básico de visualização clicando em configurações
 
 		Estilo
 	OK - Nódulos com formas diferentes para diferentes categorias [círculo para categoria, quadrado para tarefa, triângulo para comentário, etc] {solução com svg:path e, no futuro, custom symbols {ver link no .txt}}
@@ -202,10 +203,10 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 				OK - Dar nome para grupo
 	OK - Date/time picker no control panel do node
 &&3		- Barra de seleção de tempo (na base, da primeira data até a última)
-			- Esboço [pensar em layout que já caminhe para uma barra de filtragem mais geral, não somente data]
+			~~ Esboço [pensar em layout que já caminhe para uma barra de filtragem mais geral, não somente data]
 			- Seleção de período
 			- Funcionalidade de edição do grafo segundo o período selecionado
-9		>> - Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
+10		>> - Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
 			- Utilizar função de busca [busca pode merecer uma classe específica desde o início]
 		% (?) Ao adicionar link a partir de node sem ligações, se ele for source criar um grupo novo
 
@@ -317,10 +318,11 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 	OK - Ao abrir edição de data de início ou fim vazias: today é a base
 	OK - Corrigir data inválida quando usuário tenta editar tarefa que não tem data de início nem fim [quando usuário abre o date o picker: dia atual]
 	OK - Ao fazer lock do control panel de node: conferir se a data e hora de início são menores que a data e hora de fim; se não for, corrigir antes de jogar no BD [inverte as duas datas para o início ser sempre antes do fim]
-		- Na edição de cor do grupo, impedir input que não seja hex
-8		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
-7		>> - Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
-6		>> - Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
+	OK - Na edição de cor do grupo, impedir input que não seja hex
+		- Se tarefa for concluída, marcar children como concluídas
+9		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
+8		>> - Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
+7		>> - Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [crawlToPrimary]
 &&1		- Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
 &&2		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
 		- Impedir ação de clique no clique duplo
@@ -333,6 +335,9 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 		% (? resolvido) Ao entrar e sair de node, atualizar estado do node para ser compatível com estado reconhecido pelo control panel (se show = true)
 		% (? resolvido) Ao começar edição de grupo e fechar janela: comportamentos do mouse não funcionam no grafo
 		
+		Fail safety
+		- Checar se a data no input é inválida antes de qualquer operação com data
+
 		Outros
 	OK - JSON para português e para inglês (ver referências)
 	~~ ajustar <head> com título, etc [esboço OK; adicionar descrição, imagem, etc]

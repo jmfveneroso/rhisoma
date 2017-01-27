@@ -227,8 +227,22 @@ function Gui(){
 		if(style.boxshadow != undefined){
 			master.$boxshadow(style.id, style.boxshadow);
 		}
+		if(style.title != undefined){
+			master.$title(style.id, style.title);
+		}
+		if(style.lineheight != undefined){
+			master.$lineheight(style.id, style.lineheight);
+		}
 
 
+	}
+
+	this.$lineheight = function(id, lineheight){
+		document.getElementById(id).style.lineHeight = lineheight + "px";
+	}
+
+	this.$title = function(id, title){
+		document.getElementById(id).title = title;
 	}
 
 	this.$boxshadow = function(id, boxshadow){

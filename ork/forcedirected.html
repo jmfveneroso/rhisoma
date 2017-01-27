@@ -31,6 +31,7 @@
   <script src="public/js/rhisomaCommunicator.js"></script>
   <script src="public/js/rhisomaSearch.js"></script>
   <script src="public/js/rhisomaLocales.js"></script>
+  <script src="public/js/rhisomaFilters.js"></script>
 
   <!-- Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -98,7 +99,9 @@ else{
   moment.locale('en');
 }
 
-  
+var filter_gui = new RhisomaFilters();
+filter_gui.setLocales(locales_data);
+
 var current_node = {};
 var current_link = {};
 var link_to_add = {};
@@ -165,8 +168,11 @@ d3.json("public/json/test.json", function(error, in_graph) {
   structure.setJSON(in_graph);
   graph = structure.getGraph();
   gui.setGroups(structure.getGroups());
+  structure.getPeriod();
 
   setSearchGraph();
+  filter_gui.setCurrentGraph(graph);
+  filter_gui.drawFiltersMenu();
 
   map = svg.append("rect")
   .attr("class", "map")

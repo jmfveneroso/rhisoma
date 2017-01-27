@@ -15,6 +15,10 @@
     "system-menu-signin": "Sign in",
     "system-menu-signup": "Sign up",
 
+    "filters-menu-visibility-hide":"Hide",
+    "filters-menu-visibility-show":"Show",
+    "filters-menu-show-all":"Show<br />all",
+
     "dropdown-type-categoria-principal": "Main category",
     "dropdown-type-categoria": "Category",
     "dropdown-type-tarefa": "Task",
