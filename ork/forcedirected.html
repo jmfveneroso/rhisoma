@@ -102,6 +102,10 @@ else{
 var filter_gui = new RhisomaFilters();
 filter_gui.setLocales(locales_data);
 
+var prevent_click = false;
+var prevent_node = undefined;
+var timeout = undefined;
+
 var current_node = {};
 var current_link = {};
 var link_to_add = {};
@@ -912,6 +916,81 @@ function mouseOutNode(d){
   }
 }
 
+function clickTimeout(){
+  var d = prevent_node;
+  if(!prevent_click){
+    if(gui.editionMode() != "nodedelete" && gui.editionMode() != "nodeadd" && gui.editionMode() != "linkadd" && gui.editionMode() != "stateexplode" && gui.editionMode() != "statecontract" && gui.editionMode() != "stateidle" && gui.editionMode() != "groupedit"){
+      if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) != null){
+        if(inside_node != current_node.id){
+          if(current_node.type != "buraco"){
+            if(current_node.collapse != 0){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
+            }
+            else{
+              if(current_node.standby === 0){
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+              else{
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+            }
+          }
+          else{
+            document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+          }
+        }
+        current_node.id = d.id;
+        current_node.group = d.group;
+        current_node.color = d.color;
+        current_node.type = d.type;
+        current_node.collapse = d.collapse;
+        current_node.standby = d.standby;
+        var in_links = structure.getLinks(d);
+        for(var i = 0; i < in_links.length; i++){
+          for(var j = 0; j < graph.links.length; j++){
+            if(in_links[i].id === graph.links[j].id){
+              in_links[i].source.color = graph.links[j].source.color;
+              in_links[i].target.color = graph.links[j].target.color;
+            }
+          }
+        }
+        gui.setAllLinks(in_links);
+        gui.updateControlPanel(d,"NODE", false);
+      }
+      else if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) === null){
+        current_node.id = d.id;
+        current_node.group = d.group;
+        current_node.color = d.color;
+        current_node.type = d.type;
+        current_node.collapse = d.collapse;
+        current_node.standby = d.standby;
+        var in_links = structure.getLinks(d);
+        for(var i = 0; i < in_links.length; i++){
+          for(var j = 0; j < graph.links.length; j++){
+            if(in_links[i].id === graph.links[j].id){
+              in_links[i].source.color = graph.links[j].source.color;
+              in_links[i].target.color = graph.links[j].target.color;
+            }
+          }
+        }
+        gui.setAllLinks(in_links);
+        gui.updateControlPanel(d, "NODE", false);
+      }
+      else{ // if(current_node === d.id)
+        gui.hideControlPanel();
+        current_node = {};
+      }
+    }
+  }
+  prevent_click = false;
+  prevent_node = undefined;
+  timeout = undefined;
+}
+
 function clickNode(d){
   var current_id = top_menu.getUpdateZoom();
   if(current_id != undefined){
@@ -942,73 +1021,7 @@ function clickNode(d){
     current_link = {};
   }
 
-  if(gui.editionMode() != "nodedelete" && gui.editionMode() != "nodeadd" && gui.editionMode() != "linkadd" && gui.editionMode() != "stateexplode" && gui.editionMode() != "statecontract" && gui.editionMode() != "stateidle" && gui.editionMode() != "groupedit"){
-    if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) != null){
-      if(inside_node != current_node.id){
-        if(current_node.type != "buraco"){
-          if(current_node.collapse != 0){
-            document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
-            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
-          }
-          else{
-            if(current_node.standby === 0){
-              document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
-              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
-            }
-            else{
-              document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
-              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
-            }
-          }
-        }
-        else{
-          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
-          document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
-        }
-      }
-      current_node.id = d.id;
-      current_node.group = d.group;
-      current_node.color = d.color;
-      current_node.type = d.type;
-      current_node.collapse = d.collapse;
-      current_node.standby = d.standby;
-      var in_links = structure.getLinks(d);
-      for(var i = 0; i < in_links.length; i++){
-        for(var j = 0; j < graph.links.length; j++){
-          if(in_links[i].id === graph.links[j].id){
-            in_links[i].source.color = graph.links[j].source.color;
-            in_links[i].target.color = graph.links[j].target.color;
-          }
-        }
-      }
-      gui.setAllLinks(in_links);
-      gui.updateControlPanel(d,"NODE", false);
-    }
-    else if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) === null){
-      current_node.id = d.id;
-      current_node.group = d.group;
-      current_node.color = d.color;
-      current_node.type = d.type;
-      current_node.collapse = d.collapse;
-      current_node.standby = d.standby;
-      var in_links = structure.getLinks(d);
-      for(var i = 0; i < in_links.length; i++){
-        for(var j = 0; j < graph.links.length; j++){
-          if(in_links[i].id === graph.links[j].id){
-            in_links[i].source.color = graph.links[j].source.color;
-            in_links[i].target.color = graph.links[j].target.color;
-          }
-        }
-      }
-      gui.setAllLinks(in_links);
-      gui.updateControlPanel(d, "NODE", false);
-    }
-    else{ // if(current_node === d.id)
-      gui.hideControlPanel();
-      current_node = {};
-    }
-  }
-  else if(gui.editionMode() === "nodedelete"){
+  if(gui.editionMode() === "nodedelete"){
     var these_links = structure.getLinks(d);
     var update_nodes = [];
     for(var i = 0; i < these_links.length; i++){
@@ -1068,8 +1081,7 @@ function clickNode(d){
           rst.setEnvironment(inside_node,current_node.id,structure);
           rst.updateLabel(d.id);
         }
-        gui.removeSelectLine(); 
-        // gui.updateControlPanel(structure.getNode(d), "NODE", true);
+        gui.removeSelectLine();
       }    
     }
   }
@@ -1131,23 +1143,12 @@ function clickNode(d){
     }
   }
   else if(gui.editionMode() === "groupedit"){
-      if(current_node.id != null){
-        if(document.getElementById("node-symbol-"+current_node.id) != null){
-          if(current_node.collapse === 1){
-            if(current_node.type != "buraco"){
-              document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
-              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
-            }
-            else{
-              if(current_node.standby === 0){
-                document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
-                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
-              }
-              else{
-                document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
-                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
-              }
-            }
+    if(current_node.id != null){
+      if(document.getElementById("node-symbol-"+current_node.id) != null){
+        if(current_node.collapse === 1){
+          if(current_node.type != "buraco"){
+            document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
+            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
           }
           else{
             if(current_node.standby === 0){
@@ -1160,14 +1161,29 @@ function clickNode(d){
             }
           }
         }
-        current_node = {};
+        else{
+          if(current_node.standby === 0){
+            document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+          }
+          else{
+            document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+          }
+        }
       }
-      gui.hideControlPanel();
-      if(d.group != "_DEFAULT"){
-        structure.updateGroups(d);
-      }
-      gui.closeMenus();
+      current_node = {};
     }
+    gui.hideControlPanel();
+    if(d.group != "_DEFAULT"){
+      structure.updateGroups(d);
+    }
+    gui.closeMenus();
+  }
+  else{
+    prevent_node = d;
+    timeout = setTimeout(clickTimeout, 750);
+  }
 }
 
 function toggleLinkSelection(check_link_selection){
@@ -1180,6 +1196,8 @@ function toggleLinkSelection(check_link_selection){
 }
 
 function mouseDoubleClick(d){
+  // prevent_click = true;
+  clearTimeout(timeout);
   if(d.collapse != 1){
     structure.collapseNode(d.id);
     gui.closeMenus();
