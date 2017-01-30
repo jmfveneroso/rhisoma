@@ -516,7 +516,6 @@ class Ui
     @properties['task_node']['description'] = $('#properties\\[task_node\\]\\[description\\]')
     @properties['task_node']['start_date'] = $('#properties\\[task_node\\]\\[start_date\\]')
     @properties['task_node']['end_date'] = $('#properties\\[task_node\\]\\[end_date\\]')
-    @properties['task_node']['location'] = $('#properties\\[task_node\\]\\[location\\]')
     @properties['text_node'] = $('#properties\\[text_node\\]')
     @properties['text_node']['text'] = $('#properties\\[text_node\\]\\[text\\]')
     @properties['link_node'] = $('#properties\\[link_node\\]')
@@ -590,7 +589,6 @@ class Ui
         data['node[description]'] = @properties['task_node']['description'].val()
         data['node[start_date]'] = @properties['task_node']['start_date'].val()
         data['node[end_date]'] = @properties['task_node']['end_date'].val()
-        data['node[location]'] = @properties['task_node']['location'].val()
         break
       when 'TextNode'
         data['node[text]'] = @properties['text_node']['text'].val()
@@ -748,7 +746,6 @@ class Ui
     @properties['task_node']['description'].val('')
     @properties['task_node']['start_date'].val('')
     @properties['task_node']['end_date'].val('')
-    @properties['task_node']['location'].val('')
     @properties['text_node']['text'].val('')
     @properties['link_node']['link'].val('')
 
@@ -775,7 +772,6 @@ class Ui
       self.properties['task_node']['description'].val(data.description)
       self.properties['task_node']['start_date'].val(data.start_date)
       self.properties['task_node']['end_date'].val(data.end_date)
-      self.properties['task_node']['location'].val(data.location)
       self.properties['text_node']['text'].val(data.text)
       self.properties['link_node']['link'].val(data.link)
 

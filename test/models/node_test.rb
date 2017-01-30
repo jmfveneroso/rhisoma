@@ -45,9 +45,6 @@ class NodeTest < ActiveSupport::TestCase
     @category_node.end_date = Time.zone.now
     assert_not @category_node.valid?
     @category_node.end_date = nil
-    @category_node.location = 'usa'
-    assert_not @category_node.valid?
-    @category_node.location = nil
     @category_node.text = 'random text'
     assert_not @category_node.valid?
     @category_node.text = nil
@@ -88,9 +85,6 @@ class NodeTest < ActiveSupport::TestCase
     @text_node.end_date = Time.zone.now
     assert_not @text_node.valid?
     @text_node.end_date = nil
-    @text_node.location = 'usa'
-    assert_not @text_node.valid?
-    @text_node.location = nil
     @text_node.link = 'google.com'
     assert_not @text_node.valid?
     @text_node.link = nil
@@ -114,9 +108,6 @@ class NodeTest < ActiveSupport::TestCase
     @link_node.end_date = Time.zone.now
     assert_not @link_node.valid?
     @link_node.end_date = nil
-    @link_node.location = 'usa'
-    assert_not @link_node.valid?
-    @link_node.location = nil
   end
 
   test "should delete node edges" do

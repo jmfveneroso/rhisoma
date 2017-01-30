@@ -21,7 +21,6 @@ class Node < ApplicationRecord
       when 'CategoryNode' 
         self.start_date = nil
         self.end_date = nil
-        self.location = nil
         self.text = nil
         self.link = nil
       when 'TaskNode' 
@@ -30,11 +29,9 @@ class Node < ApplicationRecord
       when 'TextNode' 
         self.start_date = nil
         self.end_date = nil
-        self.location = nil
       when 'LinkNode' 
         self.start_date = nil
         self.end_date = nil
-        self.location = nil
     end
   end
 

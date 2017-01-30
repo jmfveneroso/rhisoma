@@ -33,7 +33,7 @@ class NodesController < ApplicationController
       when 'CategoryNode' 
         attributes.concat([:description])
       when 'TaskNode' 
-        attributes.concat([:description, :start_date, :end_date, :location])
+        attributes.concat([:description, :start_date, :end_date])
       when 'TextNode' 
         attributes.concat([:text])
       when 'LinkNode' 
@@ -81,8 +81,8 @@ class NodesController < ApplicationController
     # Allowed node parameters in JSON requests.
     def node_params
       params.require(:node).permit(:title, :type, :node_group_id, :start_date, 
-        :end_date, :description, :location, :text, :link, :active, :hidden, :x,
-        :y, :vx, :vy, :fx, :fy)
+        :end_date, :description, :text, :link, :active, :hidden, :x, :y, :vx, 
+        :vy, :fx, :fy)
     end
 
     # Before filter that confirms a logged-in user.
