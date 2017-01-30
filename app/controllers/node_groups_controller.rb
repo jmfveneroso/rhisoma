@@ -81,14 +81,14 @@ class NodeGroupsController < ApplicationController
       timestamp = Time.zone.now.getutc
       values = nodes.map { |n| 
         "(#{sqlize n.title},#{sqlize n.type},#{sqlize n.description}," + 
-        "#{sqlize n.start_date},#{sqlize n.end_date},#{sqlize n.location}," + 
+        "#{sqlize n.start_date},#{sqlize n.end_date}," + 
         "#{sqlize n.text},#{sqlize n.link},#{sqlize n.active}," + 
         "#{sqlize n.hidden},#{@new_node_group.id}," +
         "'#{timestamp}','#{timestamp}')" 
       }.join(",")
 
       fields = [:title, :type, :description, :start_date, 
-                :end_date, :location, :text, :link, :active, 
+                :end_date, :text, :link, :active, 
                 :hidden, :node_group_id, :created_at, :updated_at].join(",")
 
       id_map = {}

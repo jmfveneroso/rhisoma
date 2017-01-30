@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170124215744) do
+ActiveRecord::Schema.define(version: 20170130203708) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(version: 20170124215744) do
     t.text     "description"
     t.datetime "start_date"
     t.datetime "end_date"
-    t.string   "location"
     t.text     "text"
     t.string   "link"
     t.float    "x"
