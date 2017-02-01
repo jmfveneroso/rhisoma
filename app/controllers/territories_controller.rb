@@ -82,13 +82,13 @@ class TerritoriesController < ApplicationController
       values = nodes.map { |n| 
         "(#{sqlize n.title},#{sqlize n.type},#{sqlize n.description}," + 
         "#{sqlize n.start_date},#{sqlize n.end_date}," + 
-        "#{sqlize n.text},#{sqlize n.link},#{sqlize n.active}," + 
-        "#{sqlize n.hidden},#{@new_territory.id}," +
+        "#{sqlize n.text},#{sqlize n.link},#{sqlize n.target_territory_id}," + 
+        "#{sqlize n.active},#{sqlize n.hidden},#{@new_territory.id}," +
         "'#{timestamp}','#{timestamp}')" 
       }.join(",")
 
       fields = [:title, :type, :description, :start_date, 
-                :end_date, :text, :link, :active, 
+                :end_date, :text, :link, :target_territory_id, :active, 
                 :hidden, :territory_id, :created_at, :updated_at].join(",")
 
       id_map = {}

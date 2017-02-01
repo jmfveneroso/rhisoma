@@ -393,7 +393,8 @@ class Graph
       switch node.type
         when 'TaskNode'     then type = 'dashed'
         when 'TextNode'     then type = 'dotted'
-        when 'LinkNode'     then line_width = 2
+        when 'LinkNode'     then type = 'dashed'; line_width = 3
+        when 'WormHoleNode' then line_width = 3
 
       this.canvas.draw_circle node.pos, 10, selected, type, line_width, node.territory.color
       this.canvas.draw_text node.id, node.pos.add(new Vector(0, 4))
@@ -501,6 +502,7 @@ class Ui
     @properties['node'] = $('#properties\\[node\\]')
     @properties['node']['title'] = $('#properties\\[node\\]\\[title\\]')
     @properties['node']['type'] = $('#properties\\[node\\]\\[type\\]')
+    @properties['node']['pos'] = $('#properties\\[node\\]\\[pos\\]')
     @properties['node']['x'] = $('#properties\\[node\\]\\[x\\]')
     @properties['node']['y'] = $('#properties\\[node\\]\\[y\\]')
     @properties['node']['vx'] = $('#properties\\[node\\]\\[vx\\]')
@@ -520,6 +522,8 @@ class Ui
     @properties['text_node']['text'] = $('#properties\\[text_node\\]\\[text\\]')
     @properties['link_node'] = $('#properties\\[link_node\\]')
     @properties['link_node']['link'] = $('#properties\\[link_node\\]\\[link\\]')
+    @properties['worm_hole_node'] = $('#properties\\[worm_hole_node\\]')
+    @properties['worm_hole_node']['target_territory_id'] = $('#properties\\[worm_hole_node\\]\\[target_territory_id\\]')
     @properties['edge'] = $('#properties\\[edge\\]')
     @properties['edge']['category'] = $('#properties\\[edge\\]\\[category\\]')
     @properties['edge']['source'] = $('#properties\\[edge\\]\\[source\\]')
@@ -595,6 +599,9 @@ class Ui
         break
       when 'LinkNode'
         data['node[link]'] = @properties['link_node']['link'].val()
+        break
+      when 'WormHoleNode'
+        data['node[target_territory_id]'] = @properties['worm_hole_node']['target_territory_id'].val()
         break
 
     console.log data
@@ -748,6 +755,11 @@ class Ui
     @properties['task_node']['end_date'].val('')
     @properties['text_node']['text'].val('')
     @properties['link_node']['link'].val('')
+    @properties['worm_hole_node']['target_territory_id'].empty()
+    for key, territory of self.graph.get_territories()
+      html = $('<option value="' + territory.id + '">(' + territory.id + ') ' + territory.name + '</option>')
+      self.properties['worm_hole_node']['target_territory_id'].append html
+    @properties['worm_hole_node']['target_territory_id'].val('')
 
     @properties['edge']['category'].val('Positioning')
     @properties['edge']['source'].val('')
@@ -763,6 +775,7 @@ class Ui
     @clean_properties()
     Api.get_node(@selected_element.id).done (data) ->
       self.properties['node'].css('display', 'block')
+      self.properties['node']['pos'].css('display', 'block')
       self.properties['node']['title'].val(data.title)
       self.properties['node']['type'].val(data.type)
       self.properties['node']['territory'].val(self.selected_element.territory.id)
@@ -774,6 +787,7 @@ class Ui
       self.properties['task_node']['end_date'].val(data.end_date)
       self.properties['text_node']['text'].val(data.text)
       self.properties['link_node']['link'].val(data.link)
+      self.properties['worm_hole_node']['target_territory_id'].val(data.target_territory_id)
 
       self.properties['node']['edges_container'].css('display', 'block')
       self.properties['node']['edges'].empty()
@@ -821,6 +835,7 @@ class Ui
     @properties['node'].css('display', 'block')
     @properties['node']['edges_container'].css('display', 'none')
     @properties['content'].css('display', 'block')
+    @properties['node']['pos'].css('display', 'none')
     @clean_properties()
     @update_node_type()
     @update_properties_buttons true
@@ -909,6 +924,7 @@ class Ui
     @properties['task_node'].css('display', 'none')
     @properties['text_node'].css('display', 'none')
     @properties['link_node'].css('display', 'none')
+    @properties['worm_hole_node'].css('display', 'none')
 
     switch type
       when 'CategoryNode'
@@ -919,6 +935,8 @@ class Ui
         @properties['text_node'].css('display', 'block')
       when 'LinkNode'
         @properties['link_node'].css('display', 'block')
+      when 'WormHoleNode'
+        @properties['worm_hole_node'].css('display', 'block')
 
   update_node_position: ->
     return if !@selected_element

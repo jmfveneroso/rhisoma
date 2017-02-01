@@ -66,19 +66,22 @@
           <option value="TaskNode">Task</option>
           <option value="TextNode">Text</option>
           <option value="LinkNode">Link</option>
+          <option value="WormHoleNode">Worm Hole</option>
         </select>
-        <label>X:</label>
-        <span id="properties[node][x]"></span></br>
-        <label>Y:</label>
-        <span id="properties[node][y]"></span></br>
-        <label>Velocity X:</label>
-        <span id="properties[node][vx]"></span></br>
-        <label>Velocity Y:</label>
-        <span id="properties[node][vy]"></span></br>
-        <label>Force X:</label>
-        <span id="properties[node][fx]"></span></br>
-        <label>Force Y:</label>
-        <span id="properties[node][fy]"></span></br>
+        <div id="properties[node][pos]">
+          <label>X:</label>
+          <span id="properties[node][x]"></span></br>
+          <label>Y:</label>
+          <span id="properties[node][y]"></span></br>
+          <label>Velocity X:</label>
+          <span id="properties[node][vx]"></span></br>
+          <label>Velocity Y:</label>
+          <span id="properties[node][vy]"></span></br>
+          <label>Force X:</label>
+          <span id="properties[node][fx]"></span></br>
+          <label>Force Y:</label>
+          <span id="properties[node][fy]"></span></br>
+        </div>
         <label>Territory:</label>
         <select id="properties[node][territory]"></select>
         <div id="properties[category_node]">
@@ -100,6 +103,10 @@
         <div id="properties[link_node]">
           <label>Link:</label>
           <input id="properties[link_node][link]" type="text" />
+        </div>
+        <div id="properties[worm_hole_node]">
+          <label>Target Territory:</label>
+          <select id="properties[worm_hole_node][target_territory_id]"></select>
         </div>
         <div id="properties[node][edges_container]">
           <div class="separator"></div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170130210902) do
+ActiveRecord::Schema.define(version: 20170201163715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(version: 20170130210902) do
     t.string   "type"
     t.boolean  "active"
     t.boolean  "hidden"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.integer  "territory_id", null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.integer  "territory_id",        null: false
     t.text     "description"
     t.datetime "start_date"
     t.datetime "end_date"
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20170130210902) do
     t.float    "vy"
     t.float    "fx"
     t.float    "fy"
+    t.integer  "target_territory_id"
     t.index ["user_id"], name: "index_nodes_on_user_id", using: :btree
   end
 

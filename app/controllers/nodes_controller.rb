@@ -18,7 +18,8 @@ class NodesController < ApplicationController
 
     node = params[:node][:type].constantize.new(node_params)
     if node.save
-      render :json => node 
+      # The JSON parse is necessary to select the type column.
+      render :json => JSON.parse(node.to_json(only: node.attrs))
     else
       render :status => 400, :json => { code: 400, errors: node.errors }
     end
@@ -27,21 +28,8 @@ class NodesController < ApplicationController
   # Shows an existing node.
   # @route GET /nodes/$(id)
   def show
-    attributes = [:id, :title, :x, :y, :vx, :vy, 
-                  :fx, :fy, :type, :territory_id]
-    case @node.type
-      when 'CategoryNode' 
-        attributes.concat([:description])
-      when 'TaskNode' 
-        attributes.concat([:description, :start_date, :end_date])
-      when 'TextNode' 
-        attributes.concat([:text])
-      when 'LinkNode' 
-        attributes.concat([:link])
-    end
-
     # The JSON parse is necessary to select the type column.
-    render :json => JSON.parse(@node.to_json(only: attributes))
+    render :json => JSON.parse(@node.to_json(only: @node.attrs))
   end
 
   # Updates a node.
@@ -82,7 +70,7 @@ class NodesController < ApplicationController
     def node_params
       params.require(:node).permit(:title, :type, :territory_id, :start_date, 
         :end_date, :description, :text, :link, :active, :hidden, :x, :y, :vx, 
-        :vy, :fx, :fy)
+        :vy, :fx, :fy, :target_territory_id)
     end
 
     # Before filter that confirms a logged-in user.
