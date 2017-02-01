@@ -1,8 +1,9 @@
 class NodesController < ApplicationController
-  before_action :logged_in_user
-  before_action :correct_user, only: [:show, :update, :destroy]
+  before_action :logged_in_user, except: [:show]
+  before_action :correct_user, only: [:update, :destroy]
   before_action :territory_belongs_to_user, only: [:create, :update]
   before_action :all_nodes_belong_to_user, only: [:bulk_update_pos]
+  before_action :user_has_read_permission, only: [:show]
 
   # Creates a new node.
   # @route POST /nodes
@@ -118,6 +119,19 @@ class NodesController < ApplicationController
         @nodes.count
         render :status => 403, :json => { code: 403, errors: [ {
           message: 'The user does not have permission to edit one or more nodes' 
+        } ] }
+      end
+    end
+
+    # Before filter that confirms the current user has permission to alter the
+    # requested node.
+    def user_has_read_permission
+      @node = Node.find(params[:id])
+      territory = @node.territory
+      is_public = territory.public || territory.template
+      unless current_user?(@node.user) || is_public
+        render :status => 403, :json => { code: 403, errors: [ {
+          message: 'Unauthorized user'
         } ] }
       end
     end

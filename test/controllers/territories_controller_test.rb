@@ -2,12 +2,13 @@ require 'test_helper'
 
 class TerritoriesControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @territory        = territories(:one)
-    @public_territory = territories(:two)
-    @node             = nodes(:node_one)
-    @task_node        = nodes(:node_two)
-    @user             = users(:basic_user)
-    @other_user       = users(:second_user)
+    @territory          = territories(:one)
+    @template_territory = territories(:two)
+    @public_territory   = territories(:four)
+    @node               = nodes(:node_one)
+    @task_node          = nodes(:node_two)
+    @user               = users(:basic_user)
+    @other_user         = users(:second_user)
   end
 
   test "should return error when user not logged in" do
@@ -18,7 +19,7 @@ class TerritoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
 
     get territory_path(@territory)
-    assert_response 401
+    assert_response 403
 
     patch territory_path(@territory), params: { territory: { name: 'abc' } }
     assert_response 401
@@ -51,8 +52,8 @@ class TerritoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
     data = JSON.parse @response.body
 
-    assert_equal 2, data['territories'].count
-    assert_equal 3, data['nodes'].count
+    assert_equal 3, data['territories'].count
+    assert_equal 5, data['nodes'].count
     assert_equal 1, data['edges'].count
     assert_equal 1, data['templates'].count
   end
@@ -76,13 +77,13 @@ class TerritoriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, data['edges'].count
   end
 
-  test "should show public territory" do
+  test "should show template territory" do
     log_in_as(@other_user)
-    get territory_path(@public_territory)
+    get territory_path(@template_territory)
     assert_response 200
 
     data = JSON.parse @response.body
-    assert_equal 'The Public Territory', data['territory']['name']
+    assert_equal 'The Template Territory', data['territory']['name']
   end
 
   test "should not update territory if missing key parameters" do
@@ -123,11 +124,20 @@ class TerritoriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, ng.edges.count
   end
 
-  test "should clone public territory" do
+  test "should clone template territory" do
     log_in_as(@other_user)
 
     assert_difference 'Territory.count', 1 do
-      post "/territories/#{@public_territory.id}/clone", params: { territory: { name: 'NG' } }
+      post "/territories/#{@template_territory.id}/clone", params: { territory: { name: 'NG' } }
     end
+  end
+
+  test "should show public territory" do
+    log_in_as(@other_user)
+    get territory_path(@public_territory)
+    assert_response 200
+
+    data = JSON.parse @response.body
+    assert_equal 'The Public Territory', data['territory']['name']
   end
 end

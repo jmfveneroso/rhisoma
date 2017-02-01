@@ -15,7 +15,7 @@ class EdgesControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
 
     get edge_path(@edge)
-    assert_response 401
+    assert_response 403
 
     patch edge_path(@edge), params: { }
     assert_response 401
