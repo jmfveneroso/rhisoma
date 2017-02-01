@@ -27,3 +27,13 @@ node_four:
   type: CategoryNode
   active: false
   hidden: false
+
+node_five:
+  territory: two
+  title: TemplateNode
+  type: CategoryNode
+
+node_six:
+  territory: four
+  title: PublicNode
+  type: CategoryNode

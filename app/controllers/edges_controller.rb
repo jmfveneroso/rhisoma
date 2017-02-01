@@ -1,7 +1,8 @@
 class EdgesController < ApplicationController
-  before_action :logged_in_user
-  before_action :correct_user, except: [:create]
+  before_action :logged_in_user, except: [:show]
+  before_action :correct_user, except: [:create, :show]
   before_action :nodes_belong_to_user, only: [:create, :update]
+  before_action :user_has_read_permission, only: [:show]
 
   # Creates a new edge.
   # @route POST /edges
@@ -80,6 +81,17 @@ class EdgesController < ApplicationController
       @target_node = Node.find_by(id: params[:edge][:target_id])
       unless (!@source_node || current_user?(@source_node.user)) &&
              (!@target_node || current_user?(@target_node.user))
+        render :status => 403, :json => { code: 403, errors: [ {
+          message: 'Unauthorized user' 
+        } ] }
+      end
+    end
+
+    def user_has_read_permission
+      @edge = Edge.find(params[:id])
+      public_source = @edge.source.territory.public || @edge.source.territory.template
+      public_target = @edge.target.territory.public || @edge.target.territory.template
+      unless current_user?(@edge.user) || (public_source && public_target)
         render :status => 403, :json => { code: 403, errors: [ {
           message: 'Unauthorized user' 
         } ] }

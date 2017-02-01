@@ -5,6 +5,8 @@ class NodesControllerTest < ActionDispatch::IntegrationTest
     @territory = territories(:one)
     @node       = nodes(:node_one)
     @task_node = nodes(:node_two)
+    @template_node = nodes(:node_five)
+    @public_node = nodes(:node_six)
     @user       = users(:basic_user)
     @other_user = users(:second_user)
   end
@@ -14,7 +16,7 @@ class NodesControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
 
     get node_path(@node)
-    assert_response 401
+    assert_response 403
 
     patch node_path(@node), params: { node: { title: 'new_title' } }
     assert_response 401
@@ -122,5 +124,19 @@ class NodesControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@other_user)
     patch '/nodes/position', params: { nodes: { 0 => { id: @node.id, x: 10, y: 20 } } }
     assert_response 403
+  end
+
+  test "should show template node" do
+    log_in_as(@other_user)
+    get node_path(@template_node)
+    data = JSON.parse @response.body.to_str
+    assert_equal 'TemplateNode', data['title']
+  end
+
+  test "should show public node" do
+    log_in_as(@other_user)
+    get node_path(@public_node)
+    data = JSON.parse @response.body.to_str
+    assert_equal 'PublicNode', data['title']
   end
 end

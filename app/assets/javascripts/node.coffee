@@ -3,6 +3,8 @@ Number.prototype.clamp = (min, max) -> Math.min(Math.max(this, min), max)
 class Api
   @get_graph: -> $.get '/territories',
 
+  @show_graph: (id) -> $.get '/territories/' + id,
+
   @delete_node: (id) -> $.ajax(url: '/nodes/' + id, method: 'DELETE')
 
   @create_edge: (category, source_id, target_id) ->
@@ -38,25 +40,26 @@ class Api
 
   @get_territory: (id) -> $.get '/territories/' + id
 
-  @create_territory: (name, is_public) ->
-    $.post '/territories/', 'territory[name]': name, 'territory[public]': is_public
+  @create_territory: (name, is_template, is_public) ->
+    $.post '/territories/', 'territory[name]': name, 'territory[template]': is_template, 'territory[public]': is_public
 
   @delete_territory: (id) ->
     $.ajax
       url: '/territories/' + id
       method: 'DELETE'
 
-  @clone_territory: (id, name, is_public) ->
+  @clone_territory: (id, name, is_template, is_public) ->
     $.ajax
       url: '/territories/' + id + '/clone'
       method: 'POST',
-      data: 'territory[name]': name, 'territory[public]': is_public
+      data: 'territory[name]': name, 'territory[template]': is_template, 'territory[public]': is_public
 
-  @update_territory: (id, name, is_public) ->
+  @update_territory: (id, name, is_template, is_public) ->
+    console.log(arguments)
     $.ajax
       url: '/territories/' + id
       method: 'PATCH',
-      data: 'territory[name]': name, 'territory[public]': is_public
+      data: 'territory[name]': name, 'territory[template]': is_template, 'territory[public]': is_public
 
   @get_node: (id) -> $.get '/nodes/' + id
 
@@ -146,9 +149,10 @@ class Vector
   distance_to: (v) -> Math.sqrt(Math.pow(this.x - v.x, 2) + Math.pow(this.y - v.y, 2))
 
 class NodeGroup
-  constructor: (id, name, is_public) ->
+  constructor: (id, name, is_template, is_public) ->
     @id = id
     @name = name
+    @template = is_template
     @public = is_public
     @nodes = []
     @color = NodeGroup.getRandomColor()
@@ -161,10 +165,10 @@ class NodeGroup
     return color
 
 class Template
-  constructor: (id, name, is_public) ->
+  constructor: (id, name, is_template) ->
     @id = id
     @name = name
-    @public = is_public
+    @template = is_template
 
 class Node
   constructor: (data, pos) ->
@@ -288,6 +292,7 @@ class Graph
   nodes = {}
   edges = {}
   templates = {}
+
   selected_node_id: null
   dragging: false
   self = null
@@ -335,7 +340,7 @@ class Graph
     node.pos.y = node.pos.y.clamp 1, this.canvas.view.height - 1
 
   create_territory: (ng) ->
-    new_ng = new NodeGroup(ng.id, ng.name, ng.public)
+    new_ng = new NodeGroup(ng.id, ng.name, ng.template)
     territories[ng.id] = new_ng
 
   create_node: (node) ->
@@ -346,14 +351,17 @@ class Graph
     ng.nodes.push new_node
 
   load: ->
-    return Api.get_graph().done (data) ->
+    fn = (data) ->
       territories = {}
       nodes = {}
       edges = {}
       templates = {}
 
-      for ng in data.territories
-        self.create_territory(ng)
+      if data.territories
+        for ng in data.territories
+          self.create_territory(ng)
+      else
+        self.create_territory(data.territory)
 
       for node in data.nodes
         self.create_node(node)
@@ -365,9 +373,15 @@ class Graph
         edges[edge.id] = new_edge
         source.edges.push new_edge
 
-      for template in data.templates
-        new_template = new Template(template.id, template.name, true)
-        templates[template.id] = new_template
+      if data.templates
+        for template in data.templates
+          new_template = new Template(template.id, template.name, true)
+          templates[template.id] = new_template
+
+    matches = window.location.href.match(/#(.+)/)
+   
+    return Api.get_graph().done fn if matches == null
+    return Api.show_graph(matches[1]).done fn
 
   refresh_canvas: ->
     this.canvas.clear()
@@ -494,11 +508,12 @@ class Ui
     @properties['content'] = $('#properties\\[content\\]')
     @properties['territory'] = $('#properties\\[territory\\]')
     @properties['territory']['name'] = $('#properties\\[territory\\]\\[name\\]')
-    @properties['territory']['public'] = $('#properties\\[territory\\]\\[public\\]')
+    @properties['territory']['is_template'] = $('#properties\\[territory\\]\\[is_template\\]')
     @properties['territory']['nodes'] = $('#properties\\[territory\\]\\[nodes\\]')
     @properties['territory']['nodes_container'] = $('#properties\\[territory\\]\\[nodes_container\\]')
     @properties['territory']['template_container'] = $('#properties\\[territory\\]\\[template_container\\]')
     @properties['territory']['template'] = $('#properties\\[territory\\]\\[template\\]')
+    @properties['territory']['public'] = $('#properties\\[territory\\]\\[public\\]')
     @properties['node'] = $('#properties\\[node\\]')
     @properties['node']['title'] = $('#properties\\[node\\]\\[title\\]')
     @properties['node']['type'] = $('#properties\\[node\\]\\[type\\]')
@@ -611,16 +626,17 @@ class Ui
     switch @creating
       when 'territory'
         name = @properties['territory']['name'].val()
+        is_template = @properties['territory']['is_template'].prop('checked')
         is_public = @properties['territory']['public'].prop('checked')
         template_id = @properties['territory']['template'].val()
 
         if Number(template_id) == -1
-          Api.create_territory(name, is_public).done (data) ->
+          Api.create_territory(name, is_template, is_public).done (data) ->
             self.graph.create_territory(data)
             self.creating = false
             self.select_element self.graph.get_territory(data.id)
         else
-          Api.clone_territory(template_id, name, is_public).done (data) ->
+          Api.clone_territory(template_id, name, is_template, is_public).done (data) ->
             territory_id = data.id
             self.graph.load().always (data) ->
               self.creating = false
@@ -661,10 +677,11 @@ class Ui
     switch @selected_element.constructor.name
       when 'NodeGroup'
         name = @properties['territory']['name'].val()
+        is_template = @properties['territory']['is_template'].prop('checked')
         is_public = @properties['territory']['public'].prop('checked')
-        Api.update_territory(@selected_element.id, name, is_public).done (data) ->
+        Api.update_territory(@selected_element.id, name, is_template, is_public).done (data) ->
           self.selected_element.name = name
-          self.selected_element.public = data.public
+          self.selected_element.template = data.template
           self.select_element self.graph.get_territory(data.id)
       when 'Node'
         node_data = @get_node_data()
@@ -703,7 +720,7 @@ class Ui
     for key, el of list
       html = null
       switch el.constructor.name
-        when 'NodeGroup' then html = $('<li>' + el.name + '</li>')
+        when 'NodeGroup' then html = $('<li>(' + el.id + ') ' + el.name + '</li>')
         when 'Node' then html = $('<li>(' + el.id + ') ' + el.title + '</li>')
         when 'Edge' then html = $('<li>' + el.source.id + ' -> ' + el.target.id + '</li>')
         when 'Template' then html = $('<li>' + el.name + '</li>')
@@ -730,6 +747,7 @@ class Ui
     Api.get_territory(@selected_element.id).done (data) ->
       self.properties['territory'].css('display', 'block')
       self.properties['territory']['name'].val(data.territory.name)
+      self.properties['territory']['is_template'].prop('checked', data.territory.template)
       self.properties['territory']['public'].prop('checked', data.territory.public)
       self.properties['territory']['nodes_container'].css('display', 'block')
       self.properties['territory']['nodes'].empty()
@@ -811,6 +829,7 @@ class Ui
     @properties['territory'].css('display', 'block')
     @properties['territory']['nodes_container'].css('display', 'none')
     @properties['territory']['name'].val('')
+    @properties['territory']['is_template'].prop('checked', false)
     @properties['territory']['public'].prop('checked', false)
     @properties['territory']['template'].css('display', 'block')
     @properties['territory']['template'].empty()
@@ -986,5 +1005,8 @@ class App
     $('#refresh').on     'click': -> graph.load()
 
     graph.load()
+
+    window.onhashchange = () ->
+      window.location.reload()
 
 document.App = App

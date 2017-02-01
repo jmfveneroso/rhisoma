@@ -1,14 +1,23 @@
 one:
   user: basic_user
   name: The Territory
+  template: false
   public: false
 
 two:
   user: basic_user
-  name: The Public Territory
-  public: true
+  name: The Template Territory
+  template: true
+  public: false
 
 three:
   user: other_user
   name: The Territory 
+  template: false
   public: false
+
+four:
+  user: basic_user
+  name: The Public Territory 
+  template: false
+  public: true

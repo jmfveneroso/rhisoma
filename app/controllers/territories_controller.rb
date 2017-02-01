@@ -1,7 +1,8 @@
 class TerritoriesController < ApplicationController
-  before_action :logged_in_user
+  before_action :logged_in_user, except: [:show]
   before_action :correct_user, only: [:update, :destroy]
-  before_action :correct_user_or_public, only: [:show, :clone]
+  before_action :correct_user_or_template, only: [:clone]
+  before_action :user_has_read_permission, only: [:show]
 
   # Gets all nodes and edges that belong to a user.
   # @route GET /node-groups
@@ -16,14 +17,14 @@ class TerritoriesController < ApplicationController
         :id, :title, :type, :territory_id, :x, :y, :vx, :vy, :fx, :fy
       ])),
       edges: @user.edges,
-      templates: Territory.where(:public => true)
+      templates: Territory.where(:template => true)
     }
   end
 
   # Creates a new node.
   # @route POST /node-groups
   # @route_param node-group [name]
-  # @route_param node-group [public]
+  # @route_param node-group [template]
   def create
     @territory = Territory.new(territory_params)
     @territory.user = current_user 
@@ -37,7 +38,7 @@ class TerritoriesController < ApplicationController
   # Edits an existing node.
   # @route PATCH /node-groups
   # @route_param node-group [name]
-  # @route_param node-group [public]
+  # @route_param node-group [template]
   def update
     if @territory.update_attributes(territory_params)
       render :json => @territory
@@ -51,7 +52,11 @@ class TerritoriesController < ApplicationController
   def show
     render :json => {
       territory: @territory,
-      nodes: @territory.nodes,
+      nodes: JSON.parse(@territory.nodes.select(
+        "nodes.id, title, type, territory_id, x, y, vx, vy, fx, fy"
+      ).to_json(only: [
+        :id, :title, :type, :territory_id, :x, :y, :vx, :vy, :fx, :fy
+      ])),
       edges: @territory.edges
     }
   end
@@ -124,9 +129,9 @@ class TerritoriesController < ApplicationController
     # Allowed node group parameters in JSON requests.
     def territory_params
       if admin?
-        params.require(:territory).permit(:name, :public)
+        params.require(:territory).permit(:name, :public, :template)
       else
-        params.require(:territory).permit(:name)
+        params.require(:territory).permit(:name, :public)
       end
     end
 
@@ -140,10 +145,10 @@ class TerritoriesController < ApplicationController
     end
 
     # Before filter that confirms the current user has permission to access the
-    # requested territory if it belongs to her or it is public.
-    def correct_user_or_public
+    # requested territory if it belongs to her or is a template.
+    def correct_user_or_template
       @territory = Territory.find(params[:id])
-      unless @territory.public || current_user?(@territory.user)
+      unless @territory.template || current_user?(@territory.user)
         render :status => 403, :json => { code: 403, errors: [ {
           message: 'Unauthorized user' 
         } ] }
@@ -151,10 +156,21 @@ class TerritoriesController < ApplicationController
     end
 
     # Before filter that confirms the current user has permission to alter the
-    # requested node group.
+    # requested territory.
     def correct_user
       @territory = Territory.find(params[:id])
       unless current_user?(@territory.user)
+        render :status => 403, :json => { code: 403, errors: [ {
+          message: 'Unauthorized user' 
+        } ] }
+      end
+    end
+
+    # Before filter that confirms the current user has read permission for the 
+    # requested territory. 
+    def user_has_read_permission
+      @territory = Territory.find(params[:id])
+      unless @territory.template || @territory.public || current_user?(@territory.user)
         render :status => 403, :json => { code: 403, errors: [ {
           message: 'Unauthorized user' 
         } ] }
