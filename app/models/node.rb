@@ -7,10 +7,10 @@ class Node < ApplicationRecord
   validates :title, presence: true, length: { maximum: 255 }
   validates :type, presence: true, inclusion: { in: self.types,
     message: "%{value} is not a valid type" }
-  validate :validate_node_group_id
+  validate :validate_territory_id
 
-  belongs_to :node_group
-  has_one :user, :through => :node_group
+  belongs_to :territory
+  has_one :user, :through => :territory
   has_many(:edges, :foreign_key => :source_id, :dependent => :destroy)
   has_many(:reverse_edges, :class_name => :Edge,
      :foreign_key => :target_id, :dependent => :destroy)
@@ -41,14 +41,14 @@ class Node < ApplicationRecord
   def self.bulk_update_pos(json)
     # Non existent node ids and fields different from x and y will 
     # simply be ignored.
-    query = "select bulk_update_node_pos('#{json}'::json)"
+    query = "select public.bulk_update_node_pos('#{json}'::json)"
     ActiveRecord::Base.connection.execute query
   end
 
   private
 
-    def validate_node_group_id
-      errors.add(:node_group_id, "is invalid") unless NodeGroup.
-        exists?(self.node_group_id)
+    def validate_territory_id
+      errors.add(:territory_id, "is invalid") unless Territory.
+        exists?(self.territory_id)
     end
 end

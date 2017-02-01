@@ -2,21 +2,21 @@ require 'test_helper'
 
 class NodeTest < ActiveSupport::TestCase
   def setup
-    @node_group = node_groups(:one)
+    @territory = territories(:one)
 
-    @node = Node.new(title: "title", node_group_id: @node_group.id, 
+    @node = Node.new(title: "title", territory_id: @territory.id, 
       type: 'CategoryNode')
 
     @category_node = CategoryNode.new(title: "title", 
-      node_group_id: @node_group.id)
+      territory_id: @territory.id)
 
-    @task_node = TaskNode.new(title: "title", node_group_id: @node_group.id,
+    @task_node = TaskNode.new(title: "title", territory_id: @territory.id,
       start_date: Time.zone.now, end_date: Time.zone.now)
 
-    @text_node = TextNode.new(title: "title", node_group_id: @node_group.id,
+    @text_node = TextNode.new(title: "title", territory_id: @territory.id,
       text: 'abc')
 
-    @link_node = LinkNode.new(title: "title", node_group_id: @node_group.id,
+    @link_node = LinkNode.new(title: "title", territory_id: @territory.id,
       link: 'hyperlink')
   end
 

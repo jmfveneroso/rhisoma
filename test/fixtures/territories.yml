@@ -1,14 +1,14 @@
 one:
   user: basic_user
-  name: The Node Group
+  name: The Territory
   public: false
 
 two:
   user: basic_user
-  name: The Public Node Group
+  name: The Public Territory
   public: true
 
 three:
   user: other_user
-  name: The Node Group
+  name: The Territory 
   public: false

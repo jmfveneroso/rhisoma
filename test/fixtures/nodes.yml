@@ -1,12 +1,12 @@
 node_one:
-  node_group: one
+  territory: one
   title: MyString
   type: CategoryNode
   active: false
   hidden: false
 
 node_two:
-  node_group: one
+  territory: one
   title: MyString
   type: TaskNode
   start_date: <%= Time.zone.now %>
@@ -15,14 +15,14 @@ node_two:
   hidden: false
 
 node_three:
-  node_group: one
+  territory: one
   title: MyString
   type: CategoryNode
   active: false
   hidden: false
 
 node_four:
-  node_group: three
+  territory: three
   title: MyString
   type: CategoryNode
   active: false
