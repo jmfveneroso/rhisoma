@@ -1,7 +1,7 @@
 Number.prototype.clamp = (min, max) -> Math.min(Math.max(this, min), max)
 
 class Api
-  @get_graph: -> $.get '/node_groups',
+  @get_graph: -> $.get '/territories',
 
   @delete_node: (id) -> $.ajax(url: '/nodes/' + id, method: 'DELETE')
 
@@ -36,27 +36,27 @@ class Api
       url: '/nodes/' + id
       method: 'DELETE'
 
-  @get_node_group: (id) -> $.get '/node_groups/' + id
+  @get_territory: (id) -> $.get '/territories/' + id
 
-  @create_node_group: (name, is_public) ->
-    $.post '/node_groups/', 'node_group[name]': name, 'node_group[public]': is_public
+  @create_territory: (name, is_public) ->
+    $.post '/territories/', 'territory[name]': name, 'territory[public]': is_public
 
-  @delete_node_group: (id) ->
+  @delete_territory: (id) ->
     $.ajax
-      url: '/node_groups/' + id
+      url: '/territories/' + id
       method: 'DELETE'
 
-  @clone_node_group: (id, name, is_public) ->
+  @clone_territory: (id, name, is_public) ->
     $.ajax
-      url: '/node_groups/' + id + '/clone'
+      url: '/territories/' + id + '/clone'
       method: 'POST',
-      data: 'node_group[name]': name, 'node_group[public]': is_public
+      data: 'territory[name]': name, 'territory[public]': is_public
 
-  @update_node_group: (id, name, is_public) ->
+  @update_territory: (id, name, is_public) ->
     $.ajax
-      url: '/node_groups/' + id
+      url: '/territories/' + id
       method: 'PATCH',
-      data: 'node_group[name]': name, 'node_group[public]': is_public
+      data: 'territory[name]': name, 'territory[public]': is_public
 
   @get_node: (id) -> $.get '/nodes/' + id
 
@@ -169,7 +169,7 @@ class Template
 class Node
   constructor: (data, pos) ->
     this.id = data.id
-    this.node_group = data.node_group
+    this.territory = data.territory
     this.title = data.title
     this.type = data.type
     this.pos = pos || new Vector(10, 10)
@@ -284,7 +284,7 @@ class Physics
       node.force.make_null()
 
 class Graph
-  node_groups = {}
+  territories = {}
   nodes = {}
   edges = {}
   templates = {}
@@ -312,7 +312,7 @@ class Graph
   random_pos: () -> new Vector(Math.random() * this.canvas.view.width,
                                Math.random() * this.canvas.view.height)
 
-  get_node_groups: -> return node_groups
+  get_territories: -> return territories
   get_nodes: -> return nodes
   get_edges: -> return edges
   get_templates: -> return templates
@@ -324,36 +324,36 @@ class Graph
         delete edges[edge.id]
     delete nodes[node.id]
 
-  remove_node_group: (ng) ->
+  remove_territory: (ng) ->
     for key, node of nodes
-      if node.node_group.id == ng.id
+      if node.territory.id == ng.id
         this.remove_node node
-    delete node_groups[ng.id]
+    delete territories[ng.id]
 
   limit_to_bounds: (node) ->
     node.pos.x = node.pos.x.clamp 1, this.canvas.view.width - 1
     node.pos.y = node.pos.y.clamp 1, this.canvas.view.height - 1
 
-  create_node_group: (ng) ->
+  create_territory: (ng) ->
     new_ng = new NodeGroup(ng.id, ng.name, ng.public)
-    node_groups[ng.id] = new_ng
+    territories[ng.id] = new_ng
 
   create_node: (node) ->
-    ng = node_groups[node.node_group_id]
-    node.node_group = ng
+    ng = territories[node.territory_id]
+    node.territory = ng
     new_node = new Node(node, self.random_pos())
     nodes[node.id] = new_node
     ng.nodes.push new_node
 
   load: ->
     return Api.get_graph().done (data) ->
-      node_groups = {}
+      territories = {}
       nodes = {}
       edges = {}
       templates = {}
 
-      for ng in data.node_groups
-        self.create_node_group(ng)
+      for ng in data.territories
+        self.create_territory(ng)
 
       for node in data.nodes
         self.create_node(node)
@@ -386,7 +386,7 @@ class Graph
     for key, node of nodes
       selected = this.ui.selected_element == node
       if this.ui.selected_element instanceof NodeGroup
-        selected = selected || node.node_group == this.ui.selected_element
+        selected = selected || node.territory == this.ui.selected_element
  
       line_width = 1
       type = 'normal'
@@ -395,7 +395,7 @@ class Graph
         when 'TextNode'     then type = 'dotted'
         when 'LinkNode'     then line_width = 2
 
-      this.canvas.draw_circle node.pos, 10, selected, type, line_width, node.node_group.color
+      this.canvas.draw_circle node.pos, 10, selected, type, line_width, node.territory.color
       this.canvas.draw_text node.id, node.pos.add(new Vector(0, 4))
 
   update_position: ->
@@ -445,7 +445,7 @@ class Graph
   selected_node: -> nodes[this.selected_node_id]
 
   get_node: (id) -> nodes[id]
-  get_node_group: (id) -> node_groups[id]
+  get_territory: (id) -> territories[id]
   get_edge: (id) -> edges[id]
 
   save_nodes_position: ->
@@ -477,27 +477,27 @@ class Ui
     @graph = graph
 
   init: ->
-    @new_node_group = $('#new_node_group')
+    @new_territory = $('#new_territory')
     @new_node = $('#new_node')
     @new_edge = $('#new_edge')
     @toolbar = {}
     @toolbar['refresh'] = $('#toolbar\\[refresh\\]')
     @toolbar['settings'] = $('#toolbar\\[settings\\]')
     @toolbar['save'] = $('#toolbar\\[save\\]')
-    @tabs[0] = $('#tab\\[node_groups\\]')
+    @tabs[0] = $('#tab\\[territories\\]')
     @tabs[1] = $('#tab\\[nodes\\]')
     @tabs[2] = $('#tab\\[edges\\]')
     @tabs[3] = $('#tab\\[templates\\]')
     @tab_content = $('#tab\\[content\\]')
     @properties = {}
     @properties['content'] = $('#properties\\[content\\]')
-    @properties['node_group'] = $('#properties\\[node_group\\]')
-    @properties['node_group']['name'] = $('#properties\\[node_group\\]\\[name\\]')
-    @properties['node_group']['public'] = $('#properties\\[node_group\\]\\[public\\]')
-    @properties['node_group']['nodes'] = $('#properties\\[node_group\\]\\[nodes\\]')
-    @properties['node_group']['nodes_container'] = $('#properties\\[node_group\\]\\[nodes_container\\]')
-    @properties['node_group']['template_container'] = $('#properties\\[node_group\\]\\[template_container\\]')
-    @properties['node_group']['template'] = $('#properties\\[node_group\\]\\[template\\]')
+    @properties['territory'] = $('#properties\\[territory\\]')
+    @properties['territory']['name'] = $('#properties\\[territory\\]\\[name\\]')
+    @properties['territory']['public'] = $('#properties\\[territory\\]\\[public\\]')
+    @properties['territory']['nodes'] = $('#properties\\[territory\\]\\[nodes\\]')
+    @properties['territory']['nodes_container'] = $('#properties\\[territory\\]\\[nodes_container\\]')
+    @properties['territory']['template_container'] = $('#properties\\[territory\\]\\[template_container\\]')
+    @properties['territory']['template'] = $('#properties\\[territory\\]\\[template\\]')
     @properties['node'] = $('#properties\\[node\\]')
     @properties['node']['title'] = $('#properties\\[node\\]\\[title\\]')
     @properties['node']['type'] = $('#properties\\[node\\]\\[type\\]')
@@ -507,7 +507,7 @@ class Ui
     @properties['node']['vy'] = $('#properties\\[node\\]\\[vy\\]')
     @properties['node']['fx'] = $('#properties\\[node\\]\\[fx\\]')
     @properties['node']['fy'] = $('#properties\\[node\\]\\[fy\\]')
-    @properties['node']['node_group'] = $('#properties\\[node\\]\\[node_group\\]')
+    @properties['node']['territory'] = $('#properties\\[node\\]\\[territory\\]')
     @properties['node']['edges'] = $('#properties\\[node\\]\\[edges\\]')
     @properties['node']['edges_container'] = $('#properties\\[node\\]\\[edges_container\\]')
     @properties['category_node'] = $('#properties\\[category_node\\]')
@@ -533,7 +533,7 @@ class Ui
     @properties['settings']['electrostatic'] = $('#properties\\[settings\\]\\[electrostatic\\]')
     @properties['settings']['friction'] = $('#properties\\[settings\\]\\[friction\\]')
 
-    @new_node_group.on('click', { self: @ }, (e) -> e.data.self.enable_new_node_group_form())
+    @new_territory.on('click', { self: @ }, (e) -> e.data.self.enable_new_territory_form())
     @new_node.on('click', { self: @ }, (e) -> e.data.self.enable_new_node_form())
     @new_edge.on('click', { self: @ }, (e) -> e.data.self.enable_new_edge_form())
     @properties['create'].on('click', { self: @ }, (e) -> e.data.self.create_element())
@@ -574,7 +574,7 @@ class Ui
     data = {}
     data['node[title]'] = @properties['node']['title'].val()
     data['node[type]'] = @properties['node']['type'].val()
-    data['node[node_group_id]'] = @properties['node']['node_group'].val()
+    data['node[territory_id]'] = @properties['node']['territory'].val()
     data['node[x]'] = @properties['node']['x'].html()
     data['node[y]'] = @properties['node']['y'].html()
     data['node[vx]'] = @properties['node']['vx'].html()
@@ -602,22 +602,22 @@ class Ui
 
   create_element: ->
     switch @creating
-      when 'node_group'
-        name = @properties['node_group']['name'].val()
-        is_public = @properties['node_group']['public'].prop('checked')
-        template_id = @properties['node_group']['template'].val()
+      when 'territory'
+        name = @properties['territory']['name'].val()
+        is_public = @properties['territory']['public'].prop('checked')
+        template_id = @properties['territory']['template'].val()
 
         if Number(template_id) == -1
-          Api.create_node_group(name, is_public).done (data) ->
-            self.graph.create_node_group(data)
+          Api.create_territory(name, is_public).done (data) ->
+            self.graph.create_territory(data)
             self.creating = false
-            self.select_element self.graph.get_node_group(data.id)
+            self.select_element self.graph.get_territory(data.id)
         else
-          Api.clone_node_group(template_id, name, is_public).done (data) ->
-            node_group_id = data.id
+          Api.clone_territory(template_id, name, is_public).done (data) ->
+            territory_id = data.id
             self.graph.load().always (data) ->
               self.creating = false
-              self.select_element self.graph.get_node_group(node_group_id)
+              self.select_element self.graph.get_territory(territory_id)
       when 'node'
         data = @get_node_data()
         Api.create_node(data).done (data) ->
@@ -636,8 +636,8 @@ class Ui
   delete_element: ->
     switch @selected_element.constructor.name
       when 'NodeGroup'
-        Api.delete_node_group(@selected_element.id).done (data) ->
-          self.graph.remove_node_group self.selected_element
+        Api.delete_territory(@selected_element.id).done (data) ->
+          self.graph.remove_territory self.selected_element
           self.select_tab 0
       when 'Node'
         Api.delete_node(@selected_element.id).done (data) ->
@@ -653,18 +653,18 @@ class Ui
   update_element: ->
     switch @selected_element.constructor.name
       when 'NodeGroup'
-        name = @properties['node_group']['name'].val()
-        is_public = @properties['node_group']['public'].prop('checked')
-        Api.update_node_group(@selected_element.id, name, is_public).done (data) ->
+        name = @properties['territory']['name'].val()
+        is_public = @properties['territory']['public'].prop('checked')
+        Api.update_territory(@selected_element.id, name, is_public).done (data) ->
           self.selected_element.name = name
           self.selected_element.public = data.public
-          self.select_element self.graph.get_node_group(data.id)
+          self.select_element self.graph.get_territory(data.id)
       when 'Node'
         node_data = @get_node_data()
         Api.update_node(@selected_element.id, node_data).done((data) ->
           self.selected_element.type = node_data['node[type]']
           self.selected_element.title = data.title
-          self.selected_element.node_group = self.graph.get_node_group(data.node_group_id)
+          self.selected_element.territory = self.graph.get_territory(data.territory_id)
           self.select_element self.graph.get_node(data.id)
         ).error (err) ->
           console.log err
@@ -687,7 +687,7 @@ class Ui
   update_list: ->
     list = null
     switch @selected_tab_num
-      when 0 then list = @graph.get_node_groups()
+      when 0 then list = @graph.get_territories()
       when 1 then list = @graph.get_nodes()
       when 2 then list = @graph.get_edges()
       when 3 then list = @graph.get_templates()
@@ -719,29 +719,29 @@ class Ui
       @properties['update'].css('display', 'inline-block')
       @properties['delete'].css('display', 'inline-block')
 
-  update_node_group_properties: ->
-    Api.get_node_group(@selected_element.id).done (data) ->
-      self.properties['node_group'].css('display', 'block')
-      self.properties['node_group']['name'].val(data.node_group.name)
-      self.properties['node_group']['public'].prop('checked', data.node_group.public)
-      self.properties['node_group']['nodes_container'].css('display', 'block')
-      self.properties['node_group']['nodes'].empty()
-      self.properties['node_group']['template_container'].css('display', 'none')
-      self.properties['node_group']['template'].css('display', 'none')
+  update_territory_properties: ->
+    Api.get_territory(@selected_element.id).done (data) ->
+      self.properties['territory'].css('display', 'block')
+      self.properties['territory']['name'].val(data.territory.name)
+      self.properties['territory']['public'].prop('checked', data.territory.public)
+      self.properties['territory']['nodes_container'].css('display', 'block')
+      self.properties['territory']['nodes'].empty()
+      self.properties['territory']['template_container'].css('display', 'none')
+      self.properties['territory']['template'].css('display', 'none')
       for key, node of data.nodes
         html = $('<li>(' + node.id + ') ' + node.title + '</li>')
         html.on('click', { self: self, obj: self.graph.get_node(node.id) }, (e) ->
           e.data.self.select_element e.data.obj)
-        self.properties['node_group']['nodes'].append html
+        self.properties['territory']['nodes'].append html
       self.properties['content'].css('display', 'block')
 
   clean_properties: ->
     @properties['node']['title'].val('')
     @properties['node']['type'].val('CategoryNode')
-    self.properties['node']['node_group'].empty()
-    for key, ng of self.graph.get_node_groups()
+    self.properties['node']['territory'].empty()
+    for key, ng of self.graph.get_territories()
       html = $('<option value="' + ng.id + '">' + ng.name + '</option>')
-      @properties['node']['node_group'].append html
+      @properties['node']['territory'].append html
     @properties['category_node']['description'].val('')
     @properties['task_node']['description'].val('')
     @properties['task_node']['start_date'].val('')
@@ -765,7 +765,7 @@ class Ui
       self.properties['node'].css('display', 'block')
       self.properties['node']['title'].val(data.title)
       self.properties['node']['type'].val(data.type)
-      self.properties['node']['node_group'].val(self.selected_element.node_group.id)
+      self.properties['node']['territory'].val(self.selected_element.territory.id)
 
       self.update_node_type()
       self.properties['category_node']['description'].val(data.description)
@@ -793,26 +793,26 @@ class Ui
       self.properties['edge']['target'].val(data.target_id)
       self.properties['content'].css('display', 'block')
 
-  update_create_node_group: ->
-    @properties['node_group'].css('display', 'block')
-    @properties['node_group']['nodes_container'].css('display', 'none')
-    @properties['node_group']['name'].val('')
-    @properties['node_group']['public'].prop('checked', false)
-    @properties['node_group']['template'].css('display', 'block')
-    @properties['node_group']['template'].empty()
+  update_create_territory: ->
+    @properties['territory'].css('display', 'block')
+    @properties['territory']['nodes_container'].css('display', 'none')
+    @properties['territory']['name'].val('')
+    @properties['territory']['public'].prop('checked', false)
+    @properties['territory']['template'].css('display', 'block')
+    @properties['territory']['template'].empty()
 
     html = $('<option value="-1">None</option>')
-    @properties['node_group']['template_container'].css('display', 'block')
-    @properties['node_group']['template'].append html
-    @properties['node_group']['template'].val -1
+    @properties['territory']['template_container'].css('display', 'block')
+    @properties['territory']['template'].append html
+    @properties['territory']['template'].val -1
 
-    for key, ng of @graph.get_node_groups()
+    for key, ng of @graph.get_territories()
       html = $('<option value="' + ng.id + '">' + ng.name + '</option>')
-      @properties['node_group']['template'].append html
+      @properties['territory']['template'].append html
 
     for key, ng of @graph.get_templates()
       html = $('<option value="' + ng.id + '">' + ng.name + '</option>')
-      @properties['node_group']['template'].append html
+      @properties['territory']['template'].append html
 
     @properties['content'].css('display', 'block')
     @update_properties_buttons true
@@ -853,7 +853,7 @@ class Ui
   update_properties: ->
     @properties['content'].css('display', 'none')
 
-    @properties['node_group'].css('display', 'none')
+    @properties['territory'].css('display', 'none')
     @properties['node'].css('display', 'none')
     @properties['edge'].css('display', 'none')
     @properties['settings'].css('display', 'none')
@@ -861,7 +861,7 @@ class Ui
     if @creating
       setTimeout(->
         switch self.creating
-          when 'node_group' then return self.update_create_node_group()
+          when 'territory' then return self.update_create_territory()
           when 'node' then return self.update_create_node()
           when 'edge' then return self.update_create_edge()
       , 100)
@@ -874,7 +874,7 @@ class Ui
 
     @update_properties_buttons false
     switch @selected_element.constructor.name
-      when 'NodeGroup' then @update_node_group_properties()
+      when 'NodeGroup' then @update_territory_properties()
       when 'Node' then @update_node_properties()
       when 'Edge' then @update_edge_properties()
 
@@ -930,10 +930,10 @@ class Ui
       @properties['node']['fx'].html Number(@selected_element.force.x).toFixed(5)
       @properties['node']['fy'].html Number(@selected_element.force.y).toFixed(5)
 
-  enable_new_node_group_form: ->
+  enable_new_territory_form: ->
     @selected_tab_num = -1
     @selected_element = null
-    @creating = 'node_group'
+    @creating = 'territory'
     @settings = false
     @update()
 

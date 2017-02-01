@@ -2,7 +2,7 @@ require 'test_helper'
 
 class NodesControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @node_group = node_groups(:one)
+    @territory = territories(:one)
     @node       = nodes(:node_one)
     @task_node = nodes(:node_two)
     @user       = users(:basic_user)
@@ -39,24 +39,24 @@ class NodesControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@user)
     assert_no_difference 'Node.count' do
       post nodes_path, params: { node: { title: '', 
-                                         node_group_id: @node_group.id } }
+                                         territory_id: @territory.id } }
       assert_response 400
 
       post nodes_path, params: { node: { title: 'abc' } }
       assert_response 400
 
       post nodes_path, params: { node: { title: 'abc', 
-                                         node_group_id: @node_group.id,
+                                         territory_id: @territory.id,
                                          type: 'NonExistentNode' } }
       assert_response 400
     end
   end
 
-  test "should not create node if node group does not belong to user" do
+  test "should not create node if territory does not belong to user" do
     log_in_as(@other_user)
     assert_no_difference 'Node.count' do
       post nodes_path, params: { node: { title: 'abc', 
-                                         node_group_id: @node_group.id,
+                                         territory_id: @territory.id,
                                          type: 'CategoryNode' } }
       assert_response 403
     end
@@ -66,7 +66,7 @@ class NodesControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@user)
     assert_difference 'Node.count', 1 do
       post nodes_path, params: { node: { title: 'abc', 
-                                         node_group_id: @node_group.id,
+                                         territory_id: @territory.id,
                                          type: 'CategoryNode' } }
       assert_response 200
     end

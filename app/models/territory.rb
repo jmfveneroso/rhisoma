@@ -1,4 +1,4 @@
-class NodeGroup < ApplicationRecord
+class Territory < ApplicationRecord
   belongs_to :user
 
   validate :validate_user_id

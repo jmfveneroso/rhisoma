@@ -1,14 +1,14 @@
 class NodesController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user, only: [:show, :update, :destroy]
-  before_action :node_group_belongs_to_user, only: [:create, :update]
+  before_action :territory_belongs_to_user, only: [:create, :update]
   before_action :all_nodes_belong_to_user, only: [:bulk_update_pos]
 
   # Creates a new node.
   # @route POST /nodes
   # @route_param node [title]
   # @route_param node [type]
-  # @route_param node [node_group_id]
+  # @route_param node [territory_id]
   def create
     unless Node.types.include? params[:node][:type]
       render :status => 400, :json => { code: 400,  
@@ -28,7 +28,7 @@ class NodesController < ApplicationController
   # @route GET /nodes/$(id)
   def show
     attributes = [:id, :title, :x, :y, :vx, :vy, 
-                  :fx, :fy, :type, :node_group_id]
+                  :fx, :fy, :type, :territory_id]
     case @node.type
       when 'CategoryNode' 
         attributes.concat([:description])
@@ -80,7 +80,7 @@ class NodesController < ApplicationController
 
     # Allowed node parameters in JSON requests.
     def node_params
-      params.require(:node).permit(:title, :type, :node_group_id, :start_date, 
+      params.require(:node).permit(:title, :type, :territory_id, :start_date, 
         :end_date, :description, :text, :link, :active, :hidden, :x, :y, :vx, 
         :vy, :fx, :fy)
     end
@@ -106,10 +106,10 @@ class NodesController < ApplicationController
     end
 
     # Before filter that confirms the current user has permission to assign
-    # a node to the requested node group.
-    def node_group_belongs_to_user
-      @node_group = NodeGroup.find_by(id: params[:node][:node_group_id])
-      unless !@node_group || current_user?(@node_group.user)
+    # a node to the requested territory.
+    def territory_belongs_to_user
+      @territory = Territory.find_by(id: params[:node][:territory_id])
+      unless !@territory || current_user?(@territory.user)
         render :status => 403, :json => { code: 403, errors: [ {
           message: 'Unauthorized user' 
         } ] }

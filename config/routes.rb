@@ -21,9 +21,9 @@ Rails.application.routes.draw do
     post 'delete_account',         to: 'users#delete_account'
   end
 
-  resources :node_groups
+  resources :territories
   patch '/nodes/position', to: 'nodes#bulk_update_pos'
   resources :nodes
   resources :edges
-  post '/node_groups/:id/clone', to: 'node_groups#clone'
+  post '/territories/:id/clone', to: 'territories#clone'
 end
