@@ -15,6 +15,7 @@ class Node < ApplicationRecord
   has_many(:reverse_edges, :class_name => :Edge,
      :foreign_key => :target_id, :dependent => :destroy)
   has_many :nodes, :through => :edges, :source => :target
+  belongs_to :styling_group, optional: true
 
   def erase_type_attributes
     case self.type
@@ -48,8 +49,8 @@ class Node < ApplicationRecord
 
   # Returns an array with the attribute list for this node's type.
   def attrs
-    attributes = [:id, :title, :x, :y, :vx, :vy, 
-                  :fx, :fy, :type, :territory_id]
+    attributes = [:id, :title, :x, :y, :vx, :vy, :fx, :fy, 
+                  :type, :territory_id, :styling_group_id]
 
     case self.type
       when 'CategoryNode' 

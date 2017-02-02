@@ -71,7 +71,7 @@ class NodesController < ApplicationController
     def node_params
       params.require(:node).permit(:title, :type, :territory_id, :start_date, 
         :end_date, :description, :text, :link, :active, :hidden, :x, :y, :vx, 
-        :vy, :fx, :fy, :target_territory_id)
+        :vy, :fx, :fy, :target_territory_id, :styling_group_id)
     end
 
     # Before filter that confirms a logged-in user.

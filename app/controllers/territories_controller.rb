@@ -12,12 +12,13 @@ class TerritoriesController < ApplicationController
       territories: @user.territories,
       # The JSON parse is necessary to select the type column.
       nodes: JSON.parse(@user.nodes.select(
-        "nodes.id, title, type, territory_id, x, y, vx, vy, fx, fy"
+        "nodes.id, title, type, territory_id, styling_group_id, x, y, vx, vy, fx, fy"
       ).to_json(only: [
-        :id, :title, :type, :territory_id, :x, :y, :vx, :vy, :fx, :fy
+        :id, :title, :type, :territory_id, :styling_group_id, :x, :y, :vx, :vy, :fx, :fy
       ])),
       edges: @user.edges,
-      templates: Territory.where(:template => true)
+      templates: Territory.where(:template => true),
+      styling_groups: @user.styling_groups
     }
   end
 
@@ -81,39 +82,7 @@ class TerritoriesController < ApplicationController
       return
     end
 
-    nodes = @territory.nodes
-    if nodes.count > 0
-      timestamp = Time.zone.now.getutc
-      values = nodes.map { |n| 
-        "(#{sqlize n.title},#{sqlize n.type},#{sqlize n.description}," + 
-        "#{sqlize n.start_date},#{sqlize n.end_date}," + 
-        "#{sqlize n.text},#{sqlize n.link},#{sqlize n.target_territory_id}," + 
-        "#{sqlize n.active},#{sqlize n.hidden},#{@new_territory.id}," +
-        "'#{timestamp}','#{timestamp}')" 
-      }.join(",")
-
-      fields = [:title, :type, :description, :start_date, 
-                :end_date, :text, :link, :target_territory_id, :active, 
-                :hidden, :territory_id, :created_at, :updated_at].join(",")
-
-      id_map = {}
-      res = ActiveRecord::Base.connection.execute("INSERT INTO nodes (#{fields}) VALUES #{values} RETURNING id")
-      for i in (0..res.num_tuples - 1)
-        id_map[nodes[i].id] = res[i]['id']
-      end
-    end
-
-    edges = @territory.edges
-    if edges.count > 0
-      values = edges.map { |e| 
-        source_id = 
-        "(#{id_map[e.source_id]},#{id_map[e.target_id]},#{sqlize e.category})"
-      }.join(",")
-
-      fields = [:source_id, :target_id, :category].join(",")
-      ActiveRecord::Base.connection.execute("INSERT INTO edges (#{fields}) VALUES #{values} RETURNING id")
-    end
-
+    @territory.clone(@new_territory)
     render :json => @new_territory
   end
 
