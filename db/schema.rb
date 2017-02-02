@@ -10,17 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170201175753) do
+ActiveRecord::Schema.define(version: 20170202175154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "articles", force: :cascade do |t|
-    t.string   "title"
-    t.text     "text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "edges", force: :cascade do |t|
     t.integer "source_id", null: false
@@ -49,7 +42,15 @@ ActiveRecord::Schema.define(version: 20170201175753) do
     t.float    "fx"
     t.float    "fy"
     t.integer  "target_territory_id"
+    t.integer  "styling_group_id"
     t.index ["user_id"], name: "index_nodes_on_user_id", using: :btree
+  end
+
+  create_table "styling_groups", force: :cascade do |t|
+    t.integer "user_id"
+    t.string  "color"
+    t.string  "name"
+    t.index ["user_id"], name: "index_styling_groups_on_user_id", using: :btree
   end
 
   create_table "territories", force: :cascade do |t|
@@ -81,4 +82,5 @@ ActiveRecord::Schema.define(version: 20170201175753) do
   end
 
   add_foreign_key "nodes", "users"
+  add_foreign_key "styling_groups", "users"
 end

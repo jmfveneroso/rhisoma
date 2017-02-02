@@ -15,6 +15,7 @@
           <li id="new_territory"><a href="javascript:void(0)">Territory</a></li>
           <li id="new_node"><a href="javascript:void(0)">Node</a></li>
           <li id="new_edge"><a href="javascript:void(0)">Edge</a></li>
+          <li id="new_styling_group"><a href="javascript:void(0)">Styling Group</a></li>
         </ul>
       </div>
       <button id="toolbar[refresh]" class="toolbar-btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
@@ -28,6 +29,7 @@
       <li id="tab[nodes]" class="toolbar-tab active" style="left: -4px;">Nodes</li>
       <li id="tab[edges]" class="toolbar-tab" style="left: -8px;">Edges</li>
       <li id="tab[templates]" class="toolbar-tab" style="left: -12px;">Templates</li>
+      <li id="tab[style]" class="toolbar-tab" style="left: -16px;">Styles</li>
     </ul>
     <div class="tab-content">
       <ul id="tab[content]"></ul>
@@ -87,6 +89,8 @@
         </div>
         <label>Territory:</label>
         <select id="properties[node][territory]"></select>
+        <label>Style:</label>
+        <select id="properties[node][style]"></select>
         <div id="properties[category_node]">
           <label>Description:</label>
           <input id="properties[category_node][description]" type="text" />
@@ -146,6 +150,14 @@
         <input id="properties[settings][electrostatic]" type="text" />
         <label>Friction Coefficient:</label>
         <input id="properties[settings][friction]" type="text" />
+      </div>
+
+      <!-- Styling Groups -->
+      <div id="properties[style]">
+        <label>Name:</label>
+        <input id="properties[style][name]" type="text" />
+        <label>Color:</label>
+        <input id="properties[style][color]" type="text" />
       </div>
 
       <div class="separator"></div>

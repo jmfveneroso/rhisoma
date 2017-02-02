@@ -9,6 +9,7 @@ class User < ApplicationRecord
                 :reset_token, :email_reset_token
 
   has_many :territories, dependent: :destroy
+  has_many :styling_groups, dependent: :destroy
   has_many :nodes, through: :territories
   has_many :edges, through: :territories
 

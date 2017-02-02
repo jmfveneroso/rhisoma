@@ -26,4 +26,6 @@ Rails.application.routes.draw do
   resources :nodes
   resources :edges
   post '/territories/:id/clone', to: 'territories#clone'
+
+  resources :styling_groups
 end
