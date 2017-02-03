@@ -11,3 +11,8 @@ services:
 before_script:
   - cp config/database.yml.travis config/database.yml
   - psql -c 'create database travis_ci_test;' -U postgres
+addons:
+  code_climate:
+    repo_token: c47eb8b42f5f0f1e3e4a2a9be556a689056ca774af497f2e66ea75702905120a
+after_success:
+  - bundle exec codeclimate-test-reporter
