@@ -23,8 +23,6 @@ class NodesControllerTest < ActionDispatch::IntegrationTest
 
     delete node_path(@node)
     assert_response 401
-
-    assert false
   end
 
   test "should return error when user does not have permission" do
