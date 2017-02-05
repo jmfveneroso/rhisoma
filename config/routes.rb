@@ -28,4 +28,6 @@ Rails.application.routes.draw do
   post '/territories/:id/clone', to: 'territories#clone'
 
   resources :styling_groups
+
+  get '/.well-known/acme-challenge/:id' => 'sessions#temp'
 end
