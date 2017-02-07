@@ -9,6 +9,7 @@ function RhisomaFilters(){
 	var animation_running = false;
 
 	var show_all = false;
+	var show_view = false;
 
 	var user_start_period = undefined;
 	var user_end_period = undefined;
@@ -25,16 +26,22 @@ function RhisomaFilters(){
 		var container = {id:"filters-menu",height:29,width:window.innerWidth,left:0,top:window.innerHeight,zindex:11,position:"absolute",backgroundColor:"rgba(243,243,243,0.85)",bordertop:"1px solid #aeaeae"};
 		gui.addContainer(container);
 
-		var visibility_button = {id:"filters-menu-visibility",title:locales["filters-menu-visibility-show"],height:26,paddingtop:3,width:30,borderright:"1px solid #aeaeae",bordertop:"1px solid #aeaeae",top:window.innerHeight-30,left:0,zindex:11,textalign:"center",fontsize:18,font:"Font Awesome",backgroundColor:"white"};
+		var visibility_button = {id:"filters-menu-visibility",title:locales["filters-menu-visibility-show"],height:26,paddingtop:3,width:29,borderright:"1px solid #aeaeae",bordertop:"1px solid #aeaeae",top:window.innerHeight-30,left:0,zindex:11,textalign:"center",fontsize:18,font:"Font Awesome",backgroundColor:"white"};
 		gui.addField(visibility_button);
 		gui.addText("filters-menu-visibility",'<i class="fa fa-chevron-up" aria-hidden="true"></i>');
 
-		var show_all_button = {id:"filters-menu-show-all",top:0,left:30,width:50,height:24,paddingtop:5,borderright:"1px solid #aeaeae",font:"Source Sans Pro",fontweight:"400",fontsize:9,texttransform:"uppercase",textalign:"center",lineheight:"10"};
+		var time_view_button = {id:"filters-menu-time-view",top:0,left:30,width:29,height:25,paddingtop:4,borderright:"1px solid #aeaeae",font:"Font Awesome",fontweight:"400",fontsize:18,texttransform:"uppercase",textalign:"center"};
+		gui.addField(time_view_button,"filters-menu");
+		gui.addText("filters-menu-time-view",'<i class="fa fa-clock-o" aria-hidden="true"></i>');
+
+		var show_all_button = {id:"filters-menu-show-all",top:0,left:60,width:49,height:24,paddingtop:5,borderright:"1px solid #aeaeae",font:"Source Sans Pro",fontweight:"400",fontsize:9,texttransform:"uppercase",textalign:"center",lineheight:"10"};
 		gui.addField(show_all_button,"filters-menu");
 		gui.addText("filters-menu-show-all",locales["filters-menu-show-all"]);
 
+		master.drawTimeline();
 		master.visibilityMouseBehavior();
 		master.showAllMouseBehavior();
+		master.timeViewMouseBehavior();
 	}
 
 	this.showFiltersMenu = function(){
@@ -109,7 +116,7 @@ function RhisomaFilters(){
 		var button = document.getElementById("filters-menu-show-all");
 		var mouseOver = function(){
 			this.style.cursor = "pointer";
-			this.style.backgroundColor = "#aeaeae";
+			this.style.backgroundColor = "rgb(30,30,30)";
 			this.style.color = "white";
 		};
 		var mouseOut = function(){
@@ -124,5 +131,46 @@ function RhisomaFilters(){
 		button.onmouseover = mouseOver;
 		button.onmouseout = mouseOut;
 		button.onmousedown = mouseDown;
+	}
+
+	this.timeViewMouseBehavior = function(){
+		var button = document.getElementById("filters-menu-time-view");
+		var mouseOver = function(){
+			this.style.cursor = "pointer";
+			this.style.backgroundColor = "rgb(30,30,30)";
+			this.style.color = "white";
+		};
+		var mouseOut = function(){
+			if(!show_view){
+				this.style.backgroundColor = "transparent";
+				this.style.color = "black";
+			}
+		};
+		var mouseDown = function(){
+			show_view = !show_view;
+		};
+		button.onmouseover = mouseOver;
+		button.onmouseout = mouseOut;
+		button.onmousedown = mouseDown;
+	}
+
+	/* TIMELINE */
+
+	this.drawTimeline = function(){
+		var timeline_width = window.innerWidth - 110;
+		var timeline = {id:"filters-menu-timeline",width:timeline_width,height:29,top:0,left:110,backgroundColor:"#aeaeae"};
+		gui.addField(timeline,"filters-menu");
+	}
+
+	/* FUNCTIONS */
+
+	this.eventFire = function(el, etype){
+	  if (el.fireEvent) {
+	    el.fireEvent('on' + etype);
+	  } else {
+	    var evObj = document.createEvent('Events');
+	    evObj.initEvent(etype, true, false);
+	    el.dispatchEvent(evObj);
+	  }
 	}
 }

@@ -497,7 +497,6 @@ function Rhisoma(){
 					var free_node_index = master.getNodeIndex(entire_graph.nodes[index].children[i]);
 					if(entire_graph.nodes[free_node_index].collapse === 0){		
 						check_free_nodes.push(entire_graph.nodes[free_node_index]);
-						console.log(entire_graph.nodes[free_node_index]);
 					}
 					include[include.length] = entire_graph.nodes[index].children[i];
 				}

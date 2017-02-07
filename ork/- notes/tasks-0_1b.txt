@@ -102,9 +102,9 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 	OK - Pegar array processado [active_graph] como referência para o d3 [substitui o json]
 	OK - Substituir json por entire_graph como referência [mudanças são processadas no entire_graph e propagadas para o active_graph por meio de update]
 	OK - Reconhecer locale e pegar o JSON respectivo [PT ou EN (default)]
-		- Inicialização processa informações relativas à navegação no grafo [hierarquia, tamanho, etc]
+3		- Inicialização processa informações relativas à navegação no grafo [hierarquia, tamanho, etc]
 				. stand-by, ativo, datas; reconhecer e processar tudo
-		- Ferramenta de apresentação do mapa por período [default = ontem,hoje,amanhã {visão simultânea de 3 dias}]
+3		- Ferramenta de apresentação do mapa por período [default = ontem,hoje,amanhã {visão simultânea de 3 dias}]
 			- usuário pode selecionar período básico de visualização clicando em configurações
 
 		Estilo
@@ -121,7 +121,7 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 	OK - Evidenciar link selecionado
 	OK - Anima rotação da logo do rhisoma ao esconder ou revelar system menu
 	OK - Estilo do popup para editar e criar grupo (box-shadow)
-		- (? >> pensar sobre) Estilo das linhas em função da urgência [hoje é preto e grosso?, datas no futuro são mais finas?]
+4		- (? >> pensar sobre) Estilo das linhas em função da urgência [hoje é preto e grosso?, datas no futuro são mais finas?]
 		% Ajustar distâncias entre os nódulos
 		% Detalhes de estilo [cores, desenho dos nódulos, etc]
 		% (?) Quando hidden labels estão visíveis: evidenciar com uppercase e bold no mouse over
@@ -155,7 +155,7 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 			OK - Quando acha: evidencia no rizoma o nódulo encontrado
 		OK - Tooltips
 		OK - Usuário logado clica na logo para revelar o menu; usuário sem estar logado fica com o menu sempre visível
-		- Navegação por período
+2		>> - Navegação por período
 		% Atualiza sistema com mudanças na window [responsive design]
 		% Calibrar centralização durante navegação nos nódulos
 		% Calibrar algoritmo de força do d3 (para espacializar melhor o mapa e promover interações mais fluidas)
@@ -202,15 +202,15 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 				OK - Selecionar cor para grupo (Color picker)
 				OK - Dar nome para grupo
 	OK - Date/time picker no control panel do node
-&&3		- Barra de seleção de tempo (na base, da primeira data até a última)
-			~~ Esboço [pensar em layout que já caminhe para uma barra de filtragem mais geral, não somente data]
-			- Seleção de período
-			- Funcionalidade de edição do grafo segundo o período selecionado
-6		>> - Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
-			- Utilizar função de busca [busca pode merecer uma classe específica desde o início]
+1		>> - Barra de seleção de tempo (na base, da primeira data até a última)
+1a			~~ Esboço [pensar em layout que já caminhe para uma barra de filtragem mais geral, não somente data]
+1b			>> - Seleção de período
+1c			>> - Funcionalidade de edição do grafo segundo o período selecionado
+B		- Ao trocar nome de nódulo [novo ou velho], checa se o nome já existe para confirmar a inserção do nódulo novo
+B			- Utilizar função de busca [busca pode merecer uma classe específica desde o início]
 		% (?) Ao adicionar link a partir de node sem ligações, se ele for source criar um grupo novo
 
-		BD %integração com John
+5		BD %integração com John
 	OK - Esboço de classe que comunica com o back-end
 		[~26/01] - Integração front e back: implementar funções de atualização do BD a cada modificação no grafo
 
@@ -321,11 +321,15 @@ Afazeres p/ 0.1 Beta (entr 26/01 e 31/01):
 	OK - Na edição de cor do grupo, impedir input que não seja hex
 	OK - Ao sair ou entrar em node, conectear, no nódulo ativo, nódulos closed que estejam conectados a um node filho [conectar no selected_node]
 	OK - Impedir ação de clique no clique duplo
-4		- Se tarefa for concluída, marcar children como concluídas
-5		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
-3		>> - Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
-&&1		- Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
-&&2		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
+	OK - Estilo do node selecionado [adaptar para o clique com delay]
+A		- Ao contrair nódulo quando usuário estiver dentro de outro nódulo, checar se é precisa criar conexão para o nódulo não ficar livre
+B		- Se tarefa for marcada como concluída, marcar também suas children como concluídas
+B 		- Botão para propagar grupo para todos os children no control panel do node
+B		- Erros com relação a collapse, close e espera quando muda a cor de um nódulo e modifica esses parâmetros [provavelmente tem a ver com a atualização do the_node]
+B		>> - Se um nódulo estiver contraído e for deletado, deletar os children desse nódulo [mensagem avisando que vai deletar os nodes]
+A		- Após explodir node com double click, ajustar zoomUpdate (não está ajustando scale)
+C		- Nas edições do grafo: fechar control panel e resetar current_link e current_node
+C 	 	- Quando seleciona link no control panel de node: mudar destaque no grafo (está ficando no node, deve passar para o link)
 		% Criar forma de aproximar os grupos autônomos da área central do grafo
 		% - (?) Node sem source que não seja categoria não deve mostrar label
 		% lentidão no primeiro drag do graph (e em momentos eventuais: fazer teste de benchmark quando estiver pronto para descobrir as funções que podem ser otimizadas)

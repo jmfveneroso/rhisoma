@@ -61,9 +61,7 @@
 <body>
   <svg id="rhisoma" width="960" height="600" style="position:absolute;top:0px"></svg>
 </body>
-
 <script>
-
 /* LOCALES | Atualizar com container */
 
 $.ajax({
@@ -858,35 +856,47 @@ function mouseOverNode(d){
 
 function mouseOutNode(d){
   svg.style("cursor","default");
-  var opacity = 0;
-  if(reveal_labels){
-    if(d.type === "categoria" || d.parentConnections === 0){
-      opacity = 0.8;
-    }
-    else if(d.standby === 1){
-      opacity = 0;
+  if(prevent_node != d){
+    var opacity = 0;
+    if(reveal_labels){
+      if(d.type === "categoria" || d.parentConnections === 0){
+        opacity = 0.8;
+      }
+      else if(d.standby === 1){
+        opacity = 0;
+      }
+      else{
+        opacity = 1;
+      }
     }
     else{
-      opacity = 1;
+      if(d.parentConnections === 0 && d.childConnections > 0){
+        opacity = 1;
+      }
+      else if(d.type === "categoria"){
+        opacity = 1;
+      }
     }
-  }
-  else{
-    if(d.parentConnections === 0 && d.childConnections > 0){
-      opacity = 1;
-    }
-    else if(d.type === "categoria"){
-      opacity = 1;
-    }
-  }
-  
-  document.getElementById("label-"+d.id).style.opacity= opacity;
+    
+    document.getElementById("label-"+d.id).style.opacity= opacity;
 
-  if(inside_node != d.id){
-    if(current_node.id != d.id && document.getElementById("node-symbol-"+d.id) != null){
-      if(d.collapse === 1){
-        if(d.type != "buraco"){
-          document.getElementById("node-symbol-"+d.id).style.stroke = "transparent";
-          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "0px";
+    if(inside_node != d.id){
+      if(current_node.id != d.id && document.getElementById("node-symbol-"+d.id) != null){
+        if(d.collapse === 1){
+          if(d.type != "buraco"){
+            document.getElementById("node-symbol-"+d.id).style.stroke = "transparent";
+            document.getElementById("node-symbol-"+d.id).style.strokeWidth = "0px";
+          }
+          else{
+            if(d.standby === 0){
+              document.getElementById("node-symbol-"+d.id).style.stroke = d.color;
+              document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+            }
+            else{
+              document.getElementById("node-symbol-"+d.id).style.stroke = "#c9c9c9";
+              document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+            }
+          }
         }
         else{
           if(d.standby === 0){
@@ -899,20 +909,10 @@ function mouseOutNode(d){
           }
         }
       }
-      else{
-        if(d.standby === 0){
-          document.getElementById("node-symbol-"+d.id).style.stroke = d.color;
-          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
-        }
-        else{
-          document.getElementById("node-symbol-"+d.id).style.stroke = "#c9c9c9";
-          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
-        }
-      }
     }
-  }
-  else{
-    document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+    else{
+      document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+    }
   }
 }
 
@@ -943,6 +943,8 @@ function clickTimeout(){
             document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
           }
         }
+
+        //MODE 1
         current_node.id = d.id;
         current_node.group = d.group;
         current_node.color = d.color;
@@ -962,6 +964,7 @@ function clickTimeout(){
         gui.updateControlPanel(d,"NODE", false);
       }
       else if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) === null){
+        // MODE 2
         current_node.id = d.id;
         current_node.group = d.group;
         current_node.color = d.color;
@@ -981,6 +984,41 @@ function clickTimeout(){
         gui.updateControlPanel(d, "NODE", false);
       }
       else{ // if(current_node === d.id)
+            // resetar as características do node
+            if(inside_node != d.id){
+              if(current_node.id === d.id && document.getElementById("node-symbol-"+d.id) != null){
+                if(d.collapse === 1){
+                  if(d.type != "buraco"){
+                    document.getElementById("node-symbol-"+d.id).style.stroke = "transparent";
+                    document.getElementById("node-symbol-"+d.id).style.strokeWidth = "0px";
+                  }
+                  else{
+                    if(d.standby === 0){
+                      document.getElementById("node-symbol-"+d.id).style.stroke = d.color;
+                      document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+                    }
+                    else{
+                      document.getElementById("node-symbol-"+d.id).style.stroke = "#c9c9c9";
+                      document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+                    }
+                  }
+                }
+                else{
+                  if(d.standby === 0){
+                    document.getElementById("node-symbol-"+d.id).style.stroke = d.color;
+                    document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+                  }
+                  else{
+                    document.getElementById("node-symbol-"+d.id).style.stroke = "#c9c9c9";
+                    document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+                  }
+                }
+              }
+            }
+            else{
+              document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+            }
+
         gui.hideControlPanel();
         current_node = {};
       }
@@ -1182,7 +1220,7 @@ function clickNode(d){
   }
   else{
     prevent_node = d;
-    timeout = setTimeout(clickTimeout, 750);
+    timeout = setTimeout(clickTimeout, 500);
   }
 }
 
@@ -1196,7 +1234,7 @@ function toggleLinkSelection(check_link_selection){
 }
 
 function mouseDoubleClick(d){
-  // prevent_click = true;
+  prevent_click = true;
   clearTimeout(timeout);
   if(d.collapse != 1){
     structure.collapseNode(d.id);
