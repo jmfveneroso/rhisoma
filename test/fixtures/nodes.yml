@@ -1,0 +1,39 @@
+node_one:
+  territory: one
+  title: MyString
+  type: CategoryNode
+  active: false
+  hidden: false
+
+node_two:
+  territory: one
+  title: MyString
+  type: TaskNode
+  start_date: <%= Time.zone.now %>
+  end_date: <%= Time.zone.now %>
+  active: false
+  hidden: false
+
+node_three:
+  territory: one
+  title: MyString
+  type: CategoryNode
+  active: false
+  hidden: false
+
+node_four:
+  territory: three
+  title: MyString
+  type: CategoryNode
+  active: false
+  hidden: false
+
+node_five:
+  territory: two
+  title: TemplateNode
+  type: CategoryNode
+
+node_six:
+  territory: four
+  title: PublicNode
+  type: CategoryNode

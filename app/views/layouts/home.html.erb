@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= full_title(yield(:page_title)) %></title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body style="background: #222;">
+    <%= render 'layouts/header' %>
+    <% flash.each do |message_type, message| %>
+      <div class="alert alert-<%= message_type %> alert-dismissable">
+        <div class="container">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+          <%= message %>
+        </div>
+      </div>
+    <% end %>
+    <%= yield(:errors) %>
+
+    <%= yield %>
+  </body>
+</html>

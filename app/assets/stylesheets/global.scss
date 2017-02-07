@@ -27,29 +27,12 @@ h1 {
   text-align: center;
 }
 
-#logo {
-  float: left;
-  margin-right: 10px;
-  font-size: 1.7em;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: -1px;
-  padding-top: 9px;
-  font-weight: bold;
-  &:hover {
-    color: #000;
-    text-decoration: none;
-  }
-}
-
 .main {
-  margin-top: 125px;
+  margin-top: 60px;
 }
 
-@media (min-width: 768px) {
-  .main {
-    margin-top: 40px;
-  }
+.navbar-brand {
+  margin-left: -15px;
 }
 
 /* forms */
@@ -82,4 +65,211 @@ input {
 
 .checkbox {
   margin-left: 20px;
+}
+
+.no-decoration {
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.no-decoration:hover {
+  text-decoration: none;
+}
+
+.navbar {
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.alert {
+  border-radius: 0;
+}
+
+/* Helpers */
+
+.btn-lft {
+  display: inline-block;
+  width: 50%;
+  padding-right: 15px;
+  float: left;
+  .btn {
+    width: 100%;
+  }
+}
+
+.btn-rgt {
+  display: inline-block;
+  width: 50%;
+  padding-left: 15px;
+  float: left;
+  .btn {
+    width: 100%;
+  }
+}
+
+/* Home */
+
+.toolbar-btn {
+  color: #aaa;
+  padding: 5px 10px;
+  font-size: 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.2);
+  background: #336633;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  cursor: default;
+}
+
+.home-bg {
+  background: #3a3a3a;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+  color: #aaa;
+  .left {
+    .toolbar {
+      background: #3a3a3a;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      margin: 0;
+
+      .toolbar-tab {
+        display: inline-block;
+        background: #3a3a3a;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        padding: 10px;
+        border-right: 1px solid rgba(0,0,0,0.1);
+        color: #aaa;
+        font-size: 10px;
+        position: relative;
+        cursor: default;
+      }
+
+      .active {
+        background: #333;
+        box-shadow: inset 1px 1px 0 rgba(0,0,0, 0.05);
+        color: #990;
+      }
+    }
+
+    .tab-content {
+      height: 200px;
+      background: #333;
+      overflow-y: scroll;
+
+      ul {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #aaa;
+        font-size: 10px;
+        margin-top: 10px;
+        padding-left: 25px;
+        li {
+          margin-bottom: 3px;
+          cursor: pointer;
+
+          &.active {
+            color: #990;
+          }
+        }
+      }
+    }
+
+    .properties {
+      background: #3a3a3a;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      padding: 10px;
+    }
+
+    .properties-content {
+      padding: 10px;
+      max-height: 304px;
+      overflow-y: scroll;
+      font-size: 10px;
+      font-weight: normal;
+      label {
+        font-weight: normal;
+        font-size: 10px;
+      }
+
+      input, textarea {
+        background: #333;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 2px;
+        font-size: 10px;
+        padding: 5px 10px;
+        resize: none;
+        margin-bottom: 5px;  
+      }
+
+      .separator {
+        border-top: 1px solid rgba(0,0,0, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        margin: 5px 0px 10px 0px;
+      }
+
+      ul {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #aaa;
+        font-size: 10px;
+        margin-top: 10px;
+        padding-left: 25px;
+        li {
+          margin-bottom: 3px;
+          cursor: pointer;
+        }
+      }
+
+      input[type="checkbox"] {
+        display: inline-block;
+        width: 10px;
+        margin-left: 10px;
+      }
+
+      select {
+        font-size: 10px;
+        padding: 5px 10px !important;
+        background-color: #333;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 2px;
+        -webkit-appearance: none;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        margin-bottom: 5px;  
+        background: url(https://www.materialui.co/materialIcons/navigation/arrow_drop_down_grey_144x144.png) 99% / 10% no-repeat #333;
+      }
+    }
+
+    width: 300px;
+    background: #333;
+    height: 200px;
+    float: left;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-right: 1px solid rgba(0,0,0,0.3);
+  }
+  
+  .right {
+    margin-left: 300px;
+    background: #fff;
+    min-height: 621px;
+  }
+}
+
+#main_canvas {
+  background: white;
+  user-drag: none; 
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }

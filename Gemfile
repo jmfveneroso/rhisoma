@@ -6,6 +6,7 @@ gem 'bcrypt',         '3.1.11'
 gem 'faker',                   '1.6.6'
 gem 'will_paginate',           '3.1.0'
 gem 'bootstrap-will_paginate', '0.0.10'
+gem "font-awesome-rails"
 
 group :production do
   # Use Puma as the app server
@@ -48,6 +49,9 @@ group :development, :test do
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+
+  gem "simplecov"
+  gem "codeclimate-test-reporter", "~> 1.0.0"
 end
 
 group :development do
@@ -65,3 +69,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'pg'
+
+gem 'http_accept_language'
+
+gem 'scout_apm'

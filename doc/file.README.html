@@ -60,43 +60,104 @@
       <iframe id="search_frame" src="file_list.html"></iframe>
 
       <div id="content"><div id='filecontents'>
-<h1 id="label-README">README</h1>
+<h1 id="label-Orkhestra">Orkhestra</h1>
 
-<h1 id="label-Travis+status">Travis status</h1>
+<p><img src="https://api.travis-ci.org/jmfveneroso/orkhestra.png" /> <a
+href="https://jmfveneroso.github.io/orkhestra/"><img
+src="http://img.shields.io/badge/docs-yard.info-blue.svg"></a></p>
 
-<p><img src="https://api.travis-ci.org/jmfveneroso/orkhestra.png" /></p>
+<p>Orkhestra is a graph visualization engine.</p>
 
-<p>This README would normally document whatever steps are necessary to get the
-application up and running.</p>
+<h1 id="label-Getting+started">Getting started</h1>
 
-<p>Things you may want to cover:</p>
-<ul><li>
-<p>Ruby version</p>
-</li><li>
-<p>System dependencies</p>
-</li><li>
-<p>Configuration</p>
-</li><li>
-<p>Database creation</p>
-</li><li>
-<p>Database initialization</p>
-</li><li>
-<p>How to run the test suite</p>
-</li><li>
-<p>Services (job queues, cache servers, search engines, etc.)</p>
-</li><li>
-<p>Deployment instructions</p>
-</li><li>
-<p>...</p>
-</li></ul>
+<p>The Orkhestra development stack runs on docker containers. Docker is a
+platform to build, ship and run linux containers locally or on the cloud.
+It is available in any major OS, so start by downloading it <a
+href="https://www.docker.com/">here</a> and follow the configuration steps
+provided by the docker team.</p>
 
-<h1 id="label-Acessar+Postgres">Acessar Postgres</h1>
+<p>You can start the docker default VM by typing:</p>
 
-<p>psql -h localhost -U postgres</p>
+<pre class="code ruby"><code class="ruby">$ docker-machine start
+$ eval $(docker-machine env default)</code></pre>
+
+<p>It is useful to add the second inline to the end of ~/.bash_profile to
+configure docker automatically whenever a bash session is started.</p>
+
+<p>Start the orkhestra docker environment by typing:</p>
+
+<pre class="code ruby"><code class="ruby">$ docker-compose build
+$ docker-compose up</code></pre>
+
+<p>These commands will start two docker containers. One running the rails
+application and the other one running Postgres SQL. You can check on the
+started containers by typing:</p>
+
+<pre class="code ruby"><code class="ruby">$ docker ps</code></pre>
+
+<p>The application should be running on port 8080 on the docker machine. To
+get the docker-machine ip run:</p>
+
+<pre class="code ruby"><code class="ruby">$ docker-machine ip default</code></pre>
+
+<p>The last command should yield something like 192.168.99.100. Now you should
+be able to see the first page by typing 192.168.99.100:8080 taking care to
+replace the first part of the url by your docker machine ip.</p>
+
+<h1 id="label-Running+commands+inside+docker+containers">Running commands inside docker containers</h1>
+
+<p>Many times it will be necessary to run commands inside the docker
+containers. To run a command inside a container type:</p>
+
+<pre class="code ruby"><code class="ruby">$ docker exec -it &quot;container name&quot; command</code></pre>
+
+<p>Below there are some examples:</p>
+
+<h3 id="label-Running+tests">Running tests</h3>
+
+<pre class="code ruby"><code class="ruby">$ docker exec -it orkhestra_web_1 rake</code></pre>
+
+<h3 id="label-Running+database+migrations">Running database migrations</h3>
+
+<pre class="code ruby"><code class="ruby">$ docker exec -it orkhestra_web_1 bin/rails db:migrate</code></pre>
+
+<h3 id="label-Seeding+the+database">Seeding the database</h3>
+
+<pre class="code ruby"><code class="ruby">$ docker exec -it orkhestra_web_1 bin/rails db:seed</code></pre>
+
+<h3 id="label-Accessing+Postgres">Accessing Postgres</h3>
+
+<pre class="code ruby"><code class="ruby">$ docker exec -it orkhestra_herokuPostgresql_1 psql</code></pre>
+
+<h1 id="label-Postgres">Postgres</h1>
+
+<p>Run these commands after accessing Postgres inside the docker container.</p>
+
+<h3 id="label-Connecting+to+the+dev+database">Connecting to the dev database</h3>
+
+<pre class="code ruby"><code class="ruby">\connect dev_postgres</code></pre>
+
+<h3 id="label-Describing+all+tables">Describing all tables</h3>
+
+<pre class="code ruby"><code class="ruby">\dt</code></pre>
+
+<h3 id="label-Quiting">Quiting</h3>
+
+<pre class="code ruby"><code class="ruby">\q</code></pre>
+
+<h1 id="label-Deployment">Deployment</h1>
+
+<p>The application is hosted in Heroku. The deployment is done automatically
+whenever a new pull request is merged flawlessly into master.</p>
+
+<h3 id="label-Running+migrations+in+production">Running migrations in production</h3>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_heroku'>heroku</span> <span class='id identifier rubyid_run'>run</span> <span class='id identifier rubyid_rake'>rake</span> <span class='label'>db:</span><span class='id identifier rubyid_migrate'>migrate</span>
+</code></pre>
 </div></div>
 
       <div id="footer">
-  Generated on Tue Dec 13 19:54:21 2016 by
+  Generated on Tue Dec 27 05:23:37 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.5 (ruby-2.2.3).
 </div>

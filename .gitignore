@@ -25,3 +25,7 @@ bower_components
 
 # Yard generated docs.
 .yardoc
+
+*.swp
+/doc/*
+coverage
