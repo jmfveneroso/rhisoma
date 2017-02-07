@@ -1,0 +1,59 @@
+{
+    "language": "PT",
+
+    "node-type-main-category": "Categoria principal",
+    "node-type-category": "Categoria",
+    "node-type-task": "Tarefa",
+    "node-type-text": "Texto",
+    "node-type-link": "Link",
+    "node-type-wormhole": "Portal",
+
+    "system-menu-search-placeholder": "Busca",
+    "system-menu-user-avatar": "Usuário",
+    "system-menu-settings": "Configurações",
+    "system-menu-signout": "Sair",
+    "system-menu-signin": "Entrar",
+    "system-menu-signup": "Cadastrar",
+
+    "filters-menu-visibility-hide":"Esconder",
+    "filters-menu-visibility-show":"Revelar",
+    "filters-menu-show-all":"Mostrar<br />tudo",
+
+    "dropdown-type-categoria-principal": "Categoria principal",
+    "dropdown-type-categoria": "Categoria",
+    "dropdown-type-tarefa": "Tarefa",
+    "dropdown-type-texto": "Texto",
+    "dropdown-type-link": "Link",
+    "dropdown-type-buraco": "Buraco negro",
+
+    "control-panel-description-placeholder": "Descrição",
+    "control-panel-date-start": "Início",
+    "control-panel-date-end": "Fim",
+    "control-panel-task-completed": "Finalizada",
+
+    "control-panel-source-label":"Origem",
+    "control-panel-target-label":"Destino",
+
+    "system-groups-edit-name-placeholder": "Nome do grupo",
+    "system-groups-edit-color-placeholder": "Cor do grupo",
+
+    "edit-panel-node":"Nódulo",
+    "edit-panel-link":"Conexão",
+    "edit-panel-state":"Estado",
+    "edit-panel-group":"Grupo",
+    "edit-panel-environment":"Mapa",
+    "edit-panel-nodeadd":"Novo",
+    "edit-panel-nodedelete":"Remover",
+    "edit-panel-linkadd":"Nova",
+    "edit-panel-linkdelete":"Remover",
+    "edit-panel-stateidle":"Espera",
+    "edit-panel-stateexplode":"Expandir",
+    "edit-panel-statecontract":"Contrair",
+    "edit-panel-groupadd":"Novo",
+    "edit-panel-groupedit":"Editar",
+    "edit-panel-environmentstop":"Parar",
+    "edit-panel-environmentcontinue":"Retomar",
+    "edit-panel-environmentcenter":"Centro",
+
+    "default-node-name":"Sem nome"
+}

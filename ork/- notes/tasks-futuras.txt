@@ -1,0 +1,63 @@
+Afazeres p/ 0.1.1 Beta em diante (31/01+):
+
+
+
+		/ 	LEGENDAS
+		/
+		/ 	OK concluído
+		/ 	~~ em processo
+		/ 	-  a realizar
+		/ 	>> fazer hoje
+		/	%  depois
+		/ 		!!!!! importante checar
+
+		*** AVANÇOS
+			? - (?) no init processar grupos e criar ligacoes tipo 3 com base em conexoes compartilhadas entre os grupos
+			[atualiza links]
+
+			- (?) nódulo do tipo data associado a um nódulo básico com ligação de tipo específico para definir datas
+				forma um módulo
+
+			/*** 0.1.1 beta ***/
+
+				- Organização do código 
+
+			/*** 0.2 beta ***/
+
+				- Salvar imagens do grafo [e compartilhar em redes sociais]	
+
+				- Rede de amigos
+
+				- Módulos de texto, imagem, links, etc (mostram o conteúdo no grafo)
+
+				- Permitir que usuário modifique variáveis de ambiente [proximidade dos nódulos, força dos links, etc]
+
+				- Funções de data:
+					- Alarme
+					- Recorrência
+					- Período (diário, semanal, mensal, custom [por dias na semana, por dias no mês, por dias no ano {feriados…}])
+					- Prazo final
+
+				- Responsive design
+
+				- Preparar uma versão mobile 
+
+			/*** 0.3 beta ***/
+
+				- Ctrl+C Ctrl+V para modificações no mapa (log de ações)
+
+				- Backup do grafo
+
+				- Export de PDF e CSV
+
+			/*** 0.4 beta ***/
+
+				- Atribuir pesos individuais diferentes para os nódulos [para afatar e aproximar]
+
+			/*** 0.5 beta ***/
+
+				- Nódulos com diferentes privacidades
+
+			/*** 0.6 beta ++++ ***/
+
+				- Visualização detalhada de textos, imagens, etc {caminho do scape}

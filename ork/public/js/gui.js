@@ -53,7 +53,14 @@ function Gui(){
 
 	this.addInput = function(style,placeholder,container_id,value){
 		var element = document.getElementById(container_id);
-		element.innerHTML += '<input id="' + style.id + '" class="'+style.class+'" type="text" placeholder="' + placeholder + '" value="'+value+'">';
+		var input_type = null;
+		if(style.type === null || style.type === undefined){
+			input_type = "text";
+		}
+		else{
+			input_type = style.type;
+		}
+		element.innerHTML += '<input id="' + style.id + '" class="'+style.class+'" type="'+input_type+'" placeholder="' + placeholder + '" value="'+value+'">';
 
 		master.$styleElement(style);
 
@@ -205,7 +212,57 @@ function Gui(){
 		if(style.zindex != undefined){
 			master.$zindex(style.id, style.zindex);
 		}
+		if(style.margintop != undefined){
+			master.$margintop(style.id, style.margintop);
+		}
+		if(style.marginleft != undefined){
+			master.$marginleft(style.id, style.marginleft);
+		}
+		if(style.marginbottom != undefined){
+			master.$marginbottom(style.id, style.marginbottom);
+		}
+		if(style.marginright != undefined){
+			master.$marginright(style.id, style.marginright);
+		}
+		if(style.boxshadow != undefined){
+			master.$boxshadow(style.id, style.boxshadow);
+		}
+		if(style.title != undefined){
+			master.$title(style.id, style.title);
+		}
+		if(style.lineheight != undefined){
+			master.$lineheight(style.id, style.lineheight);
+		}
 
+
+	}
+
+	this.$lineheight = function(id, lineheight){
+		document.getElementById(id).style.lineHeight = lineheight + "px";
+	}
+
+	this.$title = function(id, title){
+		document.getElementById(id).title = title;
+	}
+
+	this.$boxshadow = function(id, boxshadow){
+		document.getElementById(id).style.boxShadow = boxshadow;
+	}
+
+	this.$margintop = function(id, margintop){
+		document.getElementById(id).style.marginTop = margintop + "px";
+	}
+
+	this.$marginleft = function(id, marginleft){
+		document.getElementById(id).style.marginLeft = marginleft + "px";
+	}
+
+	this.$marginbottom = function(id, marginbottom){
+		document.getElementById(id).style.marginBottom = marginbottom + "px";
+	}
+
+	this.$marginright = function(id, marginright){
+		document.getElementById(id).style.marginRight = marginright + "px";
 	}
 
 	this.$class = function(id, this_class){
@@ -349,49 +406,14 @@ function Gui(){
 		document.getElementById(id).style.fontFamily = font;
 	}
 
+	/* --- DATE PICKER --- */
 
+		// criar date_picker
 
+	/* --- TIME PICKER --- */
 
-/*
+		// criar time picker
 
-var form_div = document.createElement("div");
-
-var email_field = document.createElement("div");
-	email_field.id = "email-form";
-	email_field.style.width = "350px";
-	email_field.style.position = "absolute";
-	email_field.style.display = "inline";
-	email_field.style.top = "200px";
-	email_field.style.left = "35px";
-	email_field.style.background = "none";
-	email_field.innerHTML = '<input id="input-email" class="block" type="text" name="email" placeholder="CONTE-NOS SEU EMAIL" value>';
-	email_field.innerHTML += '<div id="send-email">ENVIAR</div>';
-	form_div.appendChild(email_field);
-
-	//
-
-	var system_message = document.createElement("div");
-	system_message.id = "system_message";
-	system_message.style.width = "350px";
-	system_message.style.height = "30px";
-	system_message.style.background = "transparent";
-	system_message.style.position = "absolute";
-	system_message.style.display = "inline-block";
-	system_message.style.top = "260px";
-	system_message.style.left = "0px";
-	system_message.style.textTransform = "uppercase";
-	system_message.style.textAlign = "center";
-	system_message.style.fontSize = "12px";
-	system_message.style.fontWeight = "300px";
-	system_message.style.color = "#992388";
-	system_message.innerHTML = 'cadastre-se para receber acesso assim<br/>que a versão beta for lançada';
-	form_div.appendChild(system_message);
-
-	document.body.appendChild(form_div);
-
-
-
-*/
 }
 
 
