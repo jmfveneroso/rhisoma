@@ -7,11 +7,11 @@ module ApplicationHelper
   # @param page_title [String] the subtitle.
   # @return [String] the full title.
   def full_title(page_title = '')
-    base_title = 'Orkhestra'
+    base_title = 'Rhisoma'
     if page_title.empty?
       base_title
     else
-      page_title + ' | ' + base_title
+      base_title + ' | ' + page_title
     end
   end
 

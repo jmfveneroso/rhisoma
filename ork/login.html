@@ -10,7 +10,7 @@
 <link rel="icon" href="favicon.png" type="image/x-icon" />
 <title>Orkhestra | Entrar</title>
 
-<link rel="stylesheet" type="text/css" href="public/css/main.css?v=0.0.1">
+<link rel="stylesheet" type="text/css" href="public/css/system.css?v=0.0.1">
 <link href='http://fonts.googleapis.com/css?family=Source Sans Pro:200,300,400,500,600,700,800' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Dosis:200,300,400,500,600,700,800' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -19,60 +19,128 @@
 </head>
 
 <body>
+<video poster="" id="bgvid" playsinline autoplay muted loop>
+<source src="https://vimeo.com/190179602/download?t=1487018092&v=631426677&s=0fc854a7108aed8d1f9a3f729f94faddbbafb0868afc2b4f2a523c54ed7d1648" type="video/mp4">
+</video>
+
 <script>
-	var $ = new Gui();
+$.ajax({
+    url: "../ork/public/json/language-pt.json", // >> change_value
+    type: "POST",
+    contentType: 'application/json; charset=utf-8',
+    success: function (resultData) {
+        var locales_data = $.parseJSON(resultData);
+        main(locales_data);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+    },
+    timeout: 120000,
+});
 
-	var subscribe_over = function(){
-		this.style.textDecoration = "underline";
-		this.style.cursor = "pointer";
-	};
-	var subscribe_out = function(){
-		this.style.textDecoration = "none";
-	};
-	var subscribe_down = function(){
-		window.open("subscription.html","_self");
-	};
-	var send_over = function(){
-		this.style.backgroundColor = "black";
-		this.style.cursor = "pointer";
-	};
-	var send_out = function(){
-		this.style.backgroundColor = "#92239b";
-	};
-	var send_down = function(){
-		// this.style.backgroundColor = "#92239b";
-	};
-	var forgot_over = function(){
-		this.style.textDecoration = "none";
-		this.style.cursor = "pointer";
-	};
-	var forgot_out = function(){
-		this.style.textDecoration = "underline";
-	};
-	var forgot_down = function(){
-		window.open("forgot.html","_self");
-	};
+function main(locales_data){
+	var gui = new Gui();
 
-	var container = {id:"container", width:800, height:400, align:"CENTER", valign:"MIDDLE", backgroundColor:"transparent", font:"Source Sans Pro"};
-	var logo_field = {id:"logo-field",width:400,font:"Dosis",fontsize:64,top:60,color:"#92239b",fontweight:400,left:200,textalign:"center"};
-	var email_field = {id:"email-field",width:350,height:40,top:200,left:92};
-	var password_field = {id:"password-field",width:250,height:40,top:200,left:458};
-	var send_button = {id:"send-button",width:100,height:32,top:260,left:608,text:"ENTRAR",textalign:"center",fontsize:18,paddingtop:8,over:send_over,out:send_out,down:send_down,backgroundColor:"#92239b",color:"white"};
-	var forgot_button = {id:"forgot-button",width:200,height:20,top:260,left:92,paddingtop:20,text:"Esqueci minha senha",textdecoration:"underline",over:forgot_over,out:forgot_out,down:forgot_down};
-	var subscribe_button = {id:"subscribe-button",width:60,height:20,top:260,left:386,paddingtop:20,text:"Cadastrar",texttransform:"uppercase",fontweight:800,over:subscribe_over,out:subscribe_out,down:subscribe_down};
+	var rhisoma_logo = {id:"system-logo",width:80,height:80,top:(window.innerHeight-240)/2-40,left:((window.innerWidth-320)/2)+((318-80)/2),backgroundColor:"transparent",zindex:10};
+	gui.addField(rhisoma_logo);
+	gui.addText("system-logo",'<img id="rhisoma-logo" src="../ork/public/media/logo.png" width="80px" height="80px" />');
 
-	$.addContainer(container);
-	$.addField(logo_field,container.id);
-	$.addText(logo_field.id,"orkhestra");
-	$.addField(email_field,container.id);
-		$.addInput("input-email","E-mail",email_field.id,"login-form");
-		$.$width("input-email",302);
-	$.addField(password_field,container.id);
-		$.addInput("input-password","Senha",password_field.id,"login-form");
-		$.$width("input-password",202);
-	$.addButton(send_button,container.id);
-	$.addButton(forgot_button,container.id);
-	$.addButton(subscribe_button,container.id);
+	var login_container = {id:"system-login",width:258,height:178,top:(window.innerHeight-240)/2,left:(window.innerWidth-320)/2,backgroundColor:"white",padding:30,border:"1px solid #aeaeae",boxshadow:"-5px 5px #aeaeae"};
+	gui.addContainer(login_container);
+
+	var form_label = {id:"system-label",class:"form-label",width:298};
+	gui.addField(form_label,"system-login");
+	gui.addText("system-label",'LOGIN');
+
+	var form = document.createElement("form");
+	form.setAttribute('method',"post");
+	form.setAttribute('action',"/login");
+	form.setAttribute('accept-charset',"UTF-8");
+
+	var general_input = document.createElement("input");
+	general_input.setAttribute('type',"hidden");
+	general_input.setAttribute('name',"utf8");
+	general_input.setAttribute('value',"✓");
+
+	var auth_input = document.createElement("input");
+	auth_input.setAttribute('type',"hidden");
+	auth_input.setAttribute('name',"authenticity_token");
+	auth_input.setAttribute('value',""); // >> change_value
+
+	var email_input = document.createElement("input");
+	email_input.setAttribute('type',"email");
+	email_input.setAttribute('name',"session[email]");
+	email_input.setAttribute('id',"session_email");
+	email_input.setAttribute('class',"form-control");
+	email_input.setAttribute('placeholder',"E-mail");
+
+	var password_input = document.createElement("input");
+	password_input.setAttribute('type',"password");
+	password_input.setAttribute('name',"session[password]");
+	password_input.setAttribute('id',"session_password");
+	password_input.setAttribute('class',"form-control");
+	password_input.setAttribute('placeholder',"Senha");
+
+	var forgot_password_container = document.createElement("div");
+	forgot_password_container.id = "forgot-password-container";
+
+	var forgot_password = document.createElement("a");
+	forgot_password.setAttribute('class',"forgot-password");
+	forgot_password.setAttribute('href',"/password_resets/new");
+	forgot_password.innerHTML = "Recuperar senha";
+
+	var remember_me = document.createElement("label");
+	remember_me.setAttribute('class',"login-checkbox");
+	remember_me.setAttribute('for',"session_remember_me");
+
+	var remember_me_hidden = document.createElement("input");
+	remember_me_hidden.setAttribute('type',"hidden");
+	remember_me_hidden.setAttribute('name',"session[remember_me]");
+	remember_me_hidden.setAttribute('value',"0");
+
+	var remember_me_checkbox = document.createElement("input");
+	remember_me_checkbox.setAttribute('type',"checkbox");
+	remember_me_checkbox.setAttribute('name',"session[remember_me]");
+	remember_me_checkbox.setAttribute('id',"session_remember_me");
+	remember_me_checkbox.setAttribute('value',"1");
+	remember_me_checkbox.setAttribute('class',"login-checkbox-a");
+
+	var remember_me_label = document.createElement("span");
+	remember_me_label.innerHTML = "Lembrar de mim";
+
+	var submit_button = document.createElement("input");
+	submit_button.setAttribute('type',"submit");
+	submit_button.setAttribute('name',"commit");
+	submit_button.setAttribute('data-disable-with',"ENTRAR");
+	submit_button.setAttribute('class',"button-right");
+	submit_button.setAttribute('id',"submit-button");
+	submit_button.setAttribute('value',"ENTRAR");
+	submit_button.style.width = document.getElementById("system-login").offsetWidth/2+"px";
+	submit_button.style.left = document.getElementById("system-login").offsetWidth/2-1+"px";
+	submit_button.style.top = document.getElementById("system-login").offsetHeight-42-1+"px";
+
+	form.appendChild(general_input);
+	form.appendChild(auth_input);
+	form.appendChild(email_input);
+	form.appendChild(password_input);
+	forgot_password_container.appendChild(forgot_password);
+	form.appendChild(forgot_password_container);
+	remember_me.appendChild(remember_me_hidden);
+	remember_me.appendChild(remember_me_checkbox);
+	remember_me.appendChild(remember_me_label);
+	form.appendChild(remember_me);
+	form.appendChild(submit_button);
+
+	var signup_button = document.createElement("a");
+	signup_button.setAttribute('class',"button-left");
+	signup_button.setAttribute('href',"/signup");
+	signup_button.innerHTML = "CADASTRAR";
+	signup_button.style.width = document.getElementById("system-login").offsetWidth/2-1+"px";
+	signup_button.style.left = "-1px";
+	signup_button.style.top = document.getElementById("system-login").offsetHeight-42-1+"px";
+
+	document.getElementById("system-login").appendChild(signup_button);
+	document.getElementById('system-login').appendChild(form);
+}
 	
 
 </script>

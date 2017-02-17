@@ -1,187 +1,1435 @@
-<% provide(:page_title, "Home") %>
+<!-- <% provide(:page_title, "") %> -->
 
-<div class="home-bg">
+<% content_for :css do %>
+  <%= stylesheet_link_tag 'home.css' %>
+<% end %>
 
-  <!-- Side Menu --> 
-  <div class="left noselect">
+<svg id="rhisoma" width="960" height="600" style="position:absolute;top:0px"></svg>
+<script>
+/* LOCALES | Atualizar com container */
 
-    <!-- Toolbar -->
-    <div class="toolbar">
-      <div class="btn-group">
-        <button type="button" class="toolbar-btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-plus" aria-hidden="true"></i>
-        </button>
-        <ul class="dropdown-menu">
-          <li id="new_territory"><a href="javascript:void(0)"><%= t(:territory) %></a></li>
-          <li id="new_node"><a href="javascript:void(0)"><%= t(:node) %></a></li>
-          <li id="new_edge"><a href="javascript:void(0)"><%= t(:edge) %></a></li>
-          <li id="new_styling_group"><a href="javascript:void(0)"><%= t(:styling_group) %></a></li>
-        </ul>
-      </div>
-      <button id="toolbar[refresh]" class="toolbar-btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-      <button id="toolbar[settings]" class="toolbar-btn"><i class="fa fa-cog" aria-hidden="true"></i></button>
-      <button id="toolbar[save]" class="toolbar-btn"><i class="fa fa-save" aria-hidden="true"></i></button>
-    </div>
+$.ajax({
+    url: "/language-pt.json",
+    type: "GET",
+    contentType: 'application/json; charset=utf-8',
+    success: function (resultData) {
+        var locales_data = resultData;//$.parseJSON(resultData);
+        main(locales_data);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+    },
+    timeout: 120000,
+});
 
-    <!-- Tabs -->
-    <ul class="toolbar" style="padding: 0;">
-      <li id="tab[territories]" class="toolbar-tab"><%= t(:territories) %></li>
-      <li id="tab[nodes]" class="toolbar-tab active" style="left: -4px;"><%= t(:nodes) %></li>
-      <li id="tab[edges]" class="toolbar-tab" style="left: -8px;"><%= t(:edges) %></li>
-      <li id="tab[templates]" class="toolbar-tab" style="left: -12px;"><%= t(:templates) %></li>
-      <li id="tab[style]" class="toolbar-tab" style="left: -16px;"><%= t(:styles) %></li>
-    </ul>
-    <div class="tab-content">
-      <ul id="tab[content]"></ul>
-    </div>
+function main(locales_data){
+  console.log(globals.localize["qualquer_coisa"]);
 
-    <!-- Properties Section -->
-    <div class="properties"><%= t(:properties) %></div>
-    <div id="properties[content]" class="properties-content">
+  /* INIT */
 
-      <!-- Territory -->
-      <div id="properties[territory]">
-        <label><%= t(:name) %>:</label>
-        <input id="properties[territory][name]" type="text" />
-        <label><%= t(:template) %>:</label>
-        <input id="properties[territory][is_template]" type="checkbox" />
-        <br />
-        <label><%= t(:public) %>:</label>
-        <input id="properties[territory][public]" type="checkbox" />
-        <br />
-        <div id="properties[territory][template_container]">
-          <label><%= t(:inherit_from) %>:</label>
-          <select id="properties[territory][template]">
-          </select>
-        </div>
-        <div id="properties[territory][nodes_container]">
-          <div class="separator"></div>
-          <label><%= t(:nodes) %>:</label>
-          <ul id="properties[territory][nodes]"></ul>
-        </div>
-      </div>
+var main_gui = new Gui();
+var gui = new RhisomaGui(main_gui);
+gui.setLocales(locales_data);
 
-      <!-- Node -->
-      <div id="properties[node]">
-        <label><%= t(:title) %>:</label>
-        <input id="properties[node][title]" type="text" />
-        <label><%= t(:type) %>:</label>
-        <select id="properties[node][type]" class="default-dropdown">
-          <option value="CategoryNode"><%= t(:category) %></option>
-          <option value="TaskNode"><%= t(:task) %></option>
-          <option value="TextNode"><%= t(:text) %></option>
-          <option value="LinkNode"><%= t(:link) %></option>
-          <option value="WormHoleNode"><%= t(:worm_hole) %></option>
-        </select>
-        <div id="properties[node][pos]">
-          <label>X:</label>
-          <span id="properties[node][x]"></span></br>
-          <label>Y:</label>
-          <span id="properties[node][y]"></span></br>
-          <label>VX:</label>
-          <span id="properties[node][vx]"></span></br>
-          <label>VY:</label>
-          <span id="properties[node][vy]"></span></br>
-          <label>FX:</label>
-          <span id="properties[node][fx]"></span></br>
-          <label>FY:</label>
-          <span id="properties[node][fy]"></span></br>
-        </div>
-        <label><%= t(:territory) %>:</label>
-        <select id="properties[node][territory]"></select>
-        <label><%= t(:style) %>:</label>
-        <select id="properties[node][style]"></select>
-        <div id="properties[category_node]">
-          <label><%= t(:description) %>:</label>
-          <input id="properties[category_node][description]" type="text" />
-        </div>
-        <div id="properties[task_node]">
-          <label><%= t(:description) %>:</label>
-          <input id="properties[task_node][description]" type="text" />
-          <label><%= t(:start_date) %>:</label>
-          <input id="properties[task_node][start_date]" type="text" />
-          <label><%= t(:end_date) %>:</label>
-          <input id="properties[task_node][end_date]" type="text" />
-        </div>
-        <div id="properties[text_node]">
-          <label><%= t(:text) %>:</label>
-          <textarea id="properties[text_node][text]" rows="10" type="text"></textarea>
-        </div>
-        <div id="properties[link_node]">
-          <label><%= t(:link) %>:</label>
-          <input id="properties[link_node][link]" type="text" />
-        </div>
-        <div id="properties[worm_hole_node]">
-          <label><%= t(:target_territory) %>:</label>
-          <select id="properties[worm_hole_node][target_territory_id]"></select>
-        </div>
-        <div id="properties[node][edges_container]">
-          <div class="separator"></div>
-          <label><%= t(:edges) %>:</label>
-          <ul id="properties[node][edges]"></ul>
-        </div>
-      </div>
+var structure = new Rhisoma();
+var rst = new RhisomaStyle();
+var top_menu = new SystemGui();
+top_menu.setLocales(locales_data);
+top_menu.drawSystemMenu();
+if(locales_data.language === "PT"){
+  moment.locale('pt');
+}
+else{
+  moment.locale('en');
+}
 
-      <!-- Edge -->
-      <div id="properties[edge]">
-        <label><%= t(:category) %>:</label>
-        <select id="properties[edge][category]">
-          <option><%= t(:positioning) %></option>
-          <option><%= t(:relationship) %></option>
-          <option><%= t(:dependency) %></option>
-        </select>
-        <label><%= t(:source) %>:</label>
-        <select id="properties[edge][source]"></select>
-        <label><%= t(:target) %>:</label>
-        <select id="properties[edge][target]"></select>
-      </div>
+var filter_gui = new RhisomaFilters();
+filter_gui.setLocales(locales_data);
 
-      <!-- Settings -->
-      <div id="properties[settings]">
-        <label><%= t(:elastic_coefficient) %>:</label>
-        <input id="properties[settings][elastic]" type="text" />
-        <label><%= t(:electrostatic_coefficient) %>:</label>
-        <input id="properties[settings][electrostatic]" type="text" />
-        <label><%= t(:friction_coefficient) %>:</label>
-        <input id="properties[settings][friction]" type="text" />
-      </div>
+var prevent_click = false;
+var prevent_node = undefined;
+var timeout = undefined;
 
-      <!-- Styling Groups -->
-      <div id="properties[style]">
-        <label><%= t(:name) %>:</label>
-        <input id="properties[style][name]" type="text" />
-        <label><%= t(:color) %>:</label>
-        <input id="properties[style][color]" type="text" />
-      </div>
+var current_node = {};
+var current_link = {};
+var link_to_add = {};
+    link_to_add.source = null;
+    link_to_add.target = null;
 
-      <div class="separator"></div>
-      <button id="properties[cancel]" class="toolbar-btn" style="background: #333;"><%= t(:cancel) %></button>
-      <button id="properties[delete]" class="toolbar-btn" style="background: #663333;"><%= t(:delete) %></button>
-      <button id="properties[create]" class="toolbar-btn"><%= t(:create) %></button>
-      <button id="properties[update]" class="toolbar-btn"><%= t(:update) %></button>
-    </div>
-  </div>
- 
-  <!-- Canvas --> 
-  <div class="right noselect">
-    <canvas id="main_canvas" width="800" height="400">
-    </canvas> 
-  </div>
-</div>
+var element =  document.getElementById("rhisoma"); 
+    element.setAttribute("width", window.innerWidth);
+    element.setAttribute("height", window.innerHeight);
 
-<form name="ignore_me">
-  <input type="hidden" id="page_is_dirty" name="page_is_dirty" value="0" />
-</form>
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
 
-<script type="text/javascript">
-  var dirty_bit = document.getElementById('page_is_dirty');
-  if (dirty_bit.value == '1') {
-    window.location.reload();
+var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.1)
+    .force("link", d3.forceLink().id(function(d) { return d.id; })/*.strength(function(d){return 0.5 / Math.min(d.source.size, d.target.size);})*/.distance(function(d){return 60;}))
+    .force("charge", d3.forceManyBody()/*.strength(function(d){return -200;})*/)
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var min_zoom = 0.1,
+    max_zoom = 7,
+    zoom = d3.zoom().scaleExtent([min_zoom,max_zoom]);
+var go_to_center = false;
+var run_translate = false;
+var stop_simulation = false;
+
+var reveal_labels = false;
+var previous_reveal_labels = false;
+
+var node;
+var link;
+var path;
+var label;
+var graph;
+var map;
+
+var inside_node = undefined;
+var drift = [];
+var prevent_changes = false;
+
+gui.menu();
+
+function setSearchGraph(){
+  var node_names = [];
+  for(var i = 0; i < graph.nodes.length; i++){
+    node_names[i] = {};
+    node_names[i].name = graph.nodes[i].name;
+    node_names[i].id = graph.nodes[i].id;
   }
-  dirty_bit.value = '1';
-
-  $(document).ready(function () {
-    app = new document.App()
-    app.run()
+  node_names.sort(function(a, b) {
+    var textA = a.name.toUpperCase();
+    var textB = b.name.toUpperCase();
+    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
   });
+  top_menu.setCurrentGraph(node_names);
+}
+
+d3.json("/test.json", function(error, in_graph) {
+  if (error) throw error;
+
+  structure.setJSON(in_graph);
+  graph = structure.getGraph();
+  gui.setGroups(structure.getGroups());
+  structure.getPeriod();
+
+  setSearchGraph();
+  filter_gui.setCurrentGraph(graph);
+  filter_gui.drawFiltersMenu();
+
+  map = svg.append("rect")
+  .attr("class", "map")
+  .attr("id","rhizo")
+  .attr("width",window.innerWidth)
+  .attr("height",window.innerHeight)
+  .attr("fill","transparent")
+  .on("mousedown", mouseDownEnvironment)
+  .on("mousemove", environmentMove);
+
+  /* LINKS */
+
+  rst.setEnvironment(inside_node,current_node.id,structure);
+  link = svg.append("g")
+    .attr("class", "links")
+    .selectAll("line")
+    .data(graph.links)
+    .enter().append("line")
+    .attr("id",function(d){return "the-line-"+d.id;})
+    .attr("class","link")
+    // .style("marker-end",  "url(#suit)")
+    .attr("stroke-width", rst.linkStrokeWidth)
+    .attr("stroke-dasharray", rst.linkStrokeDash)
+    .style("stroke-linecap", "round")
+    .style("stroke", rst.linkStroke);
+
+  select_link = svg.append("g")
+  .attr("class","select-links")
+  .selectAll("line").filter(".select-link")
+  .data(graph.links)
+  .enter()
+  .append("line")
+  .attr("class","select-link")
+    .attr("id",function(d){return "line-"+d.id;})
+    .on("mouseover", mouseOverLink)
+    .on("mouseout", mouseOutLink)
+    .on("mousedown", mouseDownLink)
+    .attr("stroke-width", "10px")
+    .attr("stroke-dasharray", "0,0")
+    .style("stroke-linecap", "round")
+    .style("stroke","transparent");
+
+  /* NODES */
+
+  node = svg.append("g")
+    .attr("class", "nodes")
+    .attr("id","all-nodes")
+    .selectAll("g")
+    .data(graph.nodes)
+    .enter()
+    .append("svg:g")
+    .attr("class","node")
+    .attr("id",function(d){return "node-"+d.id;})
+    .on("mouseover", mouseOverNode)
+    .on("click", clickNode)
+    .on("mouseout", mouseOutNode)
+    .on('dblclick', mouseDoubleClick)
+    .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended));  
+  
+  path = node.append("path")
+    .attr("id", function(d){return "node-symbol-"+d.id})
+    .attr("class", "path")
+    .attr("d", d3.symbol()
+    .size(rst.nodeSize)
+    .type(rst.nodeType))
+    .style("stroke-linejoin", rst.nodeLineJoin)
+    .style("stroke",rst.nodeStroke)
+    .style("stroke-width",rst.nodeStrokeWidth)
+    .attr("fill", rst.nodeFill);
+
+  /* LABELS */
+
+  label = svg.append("g")
+    .attr("class", "labels")
+    .selectAll("g")
+    .data(graph.nodes)
+    .enter()
+    .append("svg:g")
+    .attr("id",function(d){return "labels-"+d.id;});
+
+  label.append("svg:text")
+    .attr("class","noselect")
+    .attr("id",function(d){return "label-"+d.id;})
+    .attr("x",0)
+    .attr("y",rst.labelTextY)
+    .style("font-family","Source Sans Pro")
+    .attr("text-anchor","middle")
+    .style("font-size", rst.labelTextFontSize)
+    .style("font-weight",rst.labelTextFontWeight)
+    .text(rst.labelText);
+
+  label.append("rect")
+    .attr("id", function(d){return "rect-"+d.id;})
+    .attr("class","label-rect")
+    .attr("x", rst.labelRectX)
+    .attr("y", rst.labelRectY)
+    .attr("width", function(d){return document.getElementById("label-"+d.id).getBBox().width+10;})
+    .attr("height", function(d){return document.getElementById("label-"+d.id).getBBox().height+6;})
+    .style("fill", "white")
+    .style("opacity", rst.labelRectOpacity)
+    .style("stroke-opacity","1")
+    .style("stroke",rst.labelRectStroke)
+    .attr("stroke-dasharray",rst.labelRectStrokeDash)
+    .style("stroke-linecap", "round")
+    .style("stroke-width",1);
+
+  label.selectAll("text").remove();
+  label.append("svg:text")
+    .attr("class","noselect")
+    .attr("id",function(d){return "label-"+d.id;})
+    .attr("x",0)
+    .attr("y", rst.labelTextY)
+    .attr("fill", rst.labelTextFill)
+    .style("font-family","Source Sans Pro")
+    .attr("text-anchor","middle")
+    .style("font-weight",rst.labelTextFontWeight)
+    .style("font-size",rst.labelTextFontSize)
+    .style("opacity",rst.labelTextOpacity)
+    .text(rst.labelText);
+
+  /* SIMULATION */
+
+  simulation
+      .nodes(graph.nodes)
+      .on("tick", ticked);
+
+  simulation.force("link")
+      .links(graph.links);
+
+  /* ZOOM */
+
+  zoom.filter(function() { return !event.button && event.type !== 'dblclick'; }).on("zoom", function() {
+    if(!prevent_changes){
+      gui.hideControlPanel();
+      if(document.getElementById("node-symbol-"+current_node.id) != null){
+        if(inside_node != current_node.id){
+          if(current_node.type != "buraco"){
+            if(current_node.collapse != 0){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
+            }
+            else{
+              if(current_node.standby === 0){
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+              else{
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+            }
+          }
+          else{
+            document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+          }
+        }
+        current_node = {};
+      }
+      if(document.getElementById("the-line-"+current_link.id) != null){
+        document.getElementById("the-line-"+current_link.id).style.strokeWidth = "1px";
+        current_link = {};
+      }
+    }
+    var reference_element = svg.select(".nodes").attr("transform");
+    var reference_transform = null;
+    var scale = null;
+    if(reference_element != null){
+      reference_transform = reference_element.split(" ");
+      scale = reference_transform[1].substring(reference_transform[1].indexOf("(")+1, reference_transform[1].indexOf(")"));
+    }
+    if(scale > 1.8){
+      reveal_labels = true;
+      revealLabels();
+    }
+    else{
+      reveal_labels = false;  
+      revealLabels(); 
+    }
+    d3.selectAll("g").filter(".labels, .nodes, .links, .select-links, .create-link").attr("transform", d3.event.transform);
+  });
+   
+  svg.call(zoom);   
+
+  function revealLabels(){
+    if(reveal_labels != previous_reveal_labels){
+      if(reveal_labels){
+        var label_opacity = svg.selectAll("text").transition().style("opacity",rst.labelTextZoomOpacity).style("fill",rst.labelTextZoomFill);
+        var label_styles = svg.selectAll("text").style("font-size",rst.labelTextZoomFontSize).attr("y", rst.labelTextZoomY).attr("x", rst.labelTextZoomX).attr("text-anchor",rst.labelTextZoomTextAnchor);
+        // var rect_opacity = svg.selectAll("text").attr("opacity",function(d){console.log(d);return 1;});
+        // var label_rect_opacity = svg.selectAll("rect").filter(".label-rect").style("opacity",rst.labelRectZoomOpacity);
+      }
+      else{
+        var label_opacity = svg.selectAll("text").transition().style("opacity",rst.labelTextOpacity).style("fill",rst.labelTextFill).on("end", labelStyleTransition);
+        // var label_rect_opacity = svg.selectAll("rect").filter(".label-rect").style("opacity",rst.labelRectOpacity);
+      }
+      previous_reveal_labels = reveal_labels;
+    }
+    //     simulation = d3.forceSimulation()
+    //   .velocityDecay(0.1)
+    //   .force("link", d3.forceLink().id(function(d) { return d.id; })/*.strength(function(d){return 0.5 / Math.min(d.source.size, d.target.size);})*/.distance(function(d){return 60;}))
+    //   .force("charge", d3.forceManyBody()/*.strength(function(d){return -200;})*/)
+    //   .force("center", d3.forceCenter(width / 2, height / 2));
+    //   simulation
+    //     .nodes(graph.nodes)
+    //     .on("tick", ticked);
+    // simulation.force("link")
+    //     .links(graph.links);
+  }
+
+  function labelStyleTransition(){
+    var label_styles = svg.selectAll("text").style("font-size",rst.labelTextFontSize).attr("y", rst.labelTextY).attr("x", 0).attr("text-anchor","middle");
+  }
+
+  function ticked() {
+    node
+        .attr("transform", function(d) {
+            if(d.fixed === undefined){
+              return "translate(" + d.x + "," + d.y + ")";
+            }
+            else{
+              return "translate(" + d.fx + "," + d.fy + ")";
+            }
+          });
+
+    link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    select_link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node
+        .attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+        
+    label
+      .attr("transform",function(d){
+        var offset_x = d.x;
+        var offset_y = d.y;
+        return "translate(" + offset_x + "," + offset_y + ")";
+      });
+
+    if(link_to_add.source != null){
+      if(document.getElementById("select-lines")!=null){
+        var source_node = svg.select("#node-"+link_to_add.source);
+        var source_node_transform = source_node.attr("transform");
+        var pass_translate = source_node_transform.substring(source_node_transform.indexOf("(")+1, source_node_transform.indexOf(")")).split(",");
+        var selecting_line = svg.selectAll("#select-line")
+        .attr("x1",pass_translate[0])
+        .attr("y1",pass_translate[1]);
+      }
+    }
+  }
+});
+
+
+  /* DRAG */
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  if(d.fixed === undefined){
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+  if(!reveal_labels){
+    document.getElementById("labels-"+d.id).style.display = "none";
+  }
+  else{
+    if(d.type === "categoria" || d.parentConnections === 0){
+      document.getElementById("labels-"+d.id).style.display = "none";
+    }
+    else{
+      var innerhtml = document.getElementById("label-"+d.id).innerHTML;
+      innerhtml = innerhtml.toUpperCase();
+      document.getElementById("label-"+d.id).innerHTML = innerhtml;
+      document.getElementById("label-"+d.id).style.fontWeight = 800;
+    }
+  }
+}
+
+function dragged(d) {
+  if(link_to_add.source != null){
+    if(document.getElementById("select-lines")!=null){
+      var reference_element = d3.select("g").node();
+      var mouse_xy = d3.mouse(reference_element);
+      var source_node = svg.select("#node-"+link_to_add.source);
+      var source_node_transform = source_node.attr("transform");
+      var pass_translate = source_node_transform.substring(source_node_transform.indexOf("(")+1, source_node_transform.indexOf(")")).split(",");
+      var selecting_line = svg.selectAll("#select-line")
+      .attr("x1",pass_translate[0])
+      .attr("y1",pass_translate[1])
+      .attr("x2",mouse_xy[0])
+      .attr("y2",mouse_xy[1]);
+    }
+  }
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  // if(!stop_simulation){
+    if (!d3.event.active) simulation.alphaTarget(0);
+    if(d.fixed === undefined){
+      d.fx = undefined;
+      d.fy = undefined;
+    }
+  // }
+  // else{
+    if(stop_simulation)
+    simulation.stop();
+  // }
+   document.getElementById("labels-"+d.id).style.display = "inline";
+   if(reveal_labels){
+     if(d.type != "categoria" && d.parentConnections != 0){
+        document.getElementById("label-"+d.id).innerHTML = d.name;
+        document.getElementById("label-"+d.id).style.fontWeight = 400;
+      }
+   }
+}
+
+  /* MOUSE BEHAVIOR > EDITING */
+
+document.body.addEventListener("click", environmentStabilize, true);
+
+function environmentMove(){
+  if(link_to_add.source != null){
+    if(document.getElementById("select-lines")!=null){
+      var reference_element = d3.select("g").node();
+      var mouse_xy = d3.mouse(reference_element);
+      var source_node = svg.select("#node-"+link_to_add.source);
+      var source_node_transform = source_node.attr("transform");
+      var pass_translate = source_node_transform.substring(source_node_transform.indexOf("(")+1, source_node_transform.indexOf(")")).split(",");
+      var selecting_line = svg.selectAll("#select-line")
+      .attr("x1",pass_translate[0])
+      .attr("y1",pass_translate[1])
+      .attr("x2",mouse_xy[0])
+      .attr("y2",mouse_xy[1]);
+    }
+    else{
+      var reference_element = d3.select("g").node();
+      var mouse_xy = d3.mouse(reference_element);
+      var reference_transform = svg.select(".nodes");
+      var pass_transform = "translate(0,0),scale(1)";
+      if(reference_transform.attr("transform") != null){
+        pass_transform = reference_transform.attr("transform");
+      }
+      var source_node = svg.select("#node-"+link_to_add.source);
+      var current_node_index = structure.getActiveNodeIndex(link_to_add.source);
+      var source_node_transform = source_node.attr("transform");
+      var pass_translate = source_node_transform.substring(source_node_transform.indexOf("(")+1, source_node_transform.indexOf(")")).split(",");
+      var init_data = [];
+      init_data[0] = {};
+
+      var selecting_line = svg.append("g")
+      .attr("class","create-link")
+      .attr("id","select-lines")
+      .attr("transform",pass_transform)
+      .selectAll("line")
+      .filter("#select-line")
+      .data(init_data)
+      .enter()
+      .append("line")
+      .attr("id","select-line")
+      .attr("stroke-width", "1")
+      .style("stroke-linecap", "round")
+      .style("stroke", function(){
+        if(graph.nodes[current_node_index].standby === 0){
+          var color_line = graph.nodes[current_node_index].color;
+          return color_line;
+        }
+        else{
+          return "#c9c9c9";
+        }
+      })
+      .style("pointer-events","none");
+
+      var the_line = svg.select("#select-line")
+      .attr("x1",pass_translate[0])
+      .attr("y1",pass_translate[1])
+      .attr("x2",mouse_xy[0])
+      .attr("y2",mouse_xy[1]);
+    }
+  }
+}
+
+function centerEnvironment(){
+  if(inside_node === undefined){
+    zoomReset();
+  }
+  else{
+    var index = undefined;
+    for(var i = 0; i < graph.nodes.length; i++){
+      if(inside_node === graph.nodes[i].id){
+        index = i;
+      }
+    }
+    if(index != undefined){
+      zoomUpdate(graph.nodes[index].x, graph.nodes[index].y);
+    }
+  }
+}
+
+function cancelEdit(){
+    if(link_to_add != null){
+      link_to_add.source = null;
+      link_to_add.target = null;
+      gui.removeSelectLine();
+      toggleLinkSelection(true);
+    }
+  }
+
+function environmentStabilize(){
+  if(structure.checkUpdateGroups()){
+    gui.setGroups(structure.getGroups());
+    gui.resetCurrentEditing();
+    if(current_node.id != undefined){
+      gui.updateControlPanel(structure.getNode(current_node),"NODE", false);
+    }
+    restart();
+  }
+
+  if(gui.editionMode() != undefined && inside_node === undefined){
+    if(gui.editionMode() === "environmentstop"){
+      stop_simulation = !stop_simulation;
+      simulation.stop();
+      gui.closeMenus();
+    }
+    else if(gui.editionMode() === "environmentcenter"){
+      centerEnvironment();
+      gui.closeMenus();
+    }
+    else if(gui.editionMode() === "groupadd"){
+      if(current_node.id != null){
+        if(document.getElementById("node-symbol-"+current_node.id) != null){
+          if(current_node.collapse === 1){
+            if(current_node.type != "buraco"){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
+            }
+            else{
+              if(current_node.standby === 0){
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+              else{
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+            }
+          }
+          else{
+            if(current_node.standby === 0){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+            }
+            else{
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+            }
+          }
+        }
+        current_node = {};
+      }
+      gui.hideControlPanel();
+      structure.updateGroups();
+      gui.closeMenus();
+    }
+    else if(gui.editionMode() === "cancellink"){
+      cancelEdit();
+    }
+  }
+  else if(gui.editionMode() != undefined && inside_node != undefined){
+    if(gui.editionMode() === "environmentcenter"){
+      centerEnvironment();
+      gui.closeMenus();
+    }
+    else if(gui.editionMode() === "cancellink"){
+      cancelEdit();
+    }
+  }
+  else if(gui.saveNode() != false){
+    structure.updateNode(gui.saveNode());
+    var this_id = gui.saveNode().id;
+    gui.resetCurrentEditing();
+    restart();
+    rst.setEnvironment(inside_node,current_node.id,structure);
+    rst.updateLabel(this_id);
+  }
+  else if(gui.saveLink() != false){
+    var source_id = gui.saveLink().source;
+    var target_id = gui.saveLink().target;
+    structure.updateLink(gui.saveLink());
+    structure.updateGraph();
+    gui.resetCurrentEditing();
+    restart();
+    rst.setEnvironment(inside_node,current_node.id,structure);
+    rst.updateLabel(source_id);
+    rst.updateLabel(target_id);
+  }
+
+  if(gui.deleteLink() != undefined){
+    var source_id = null;
+    var target_id = null;
+    for(var i = 0; i < graph.links.length;i++){
+      if(graph.links[i].id === gui.deleteLink()){
+        source_id = graph.links[i].source.id;
+        target_id = graph.links[i].target.id;
+      }
+    }
+    structure.deleteLink(gui.deleteLink());
+    gui.resetLink();
+    gui.closeMenus();
+    restart();
+    rst.setEnvironment(inside_node,current_node.id,structure);
+    rst.updateLabel(source_id);
+    rst.updateLabel(target_id);
+    current_link = {};
+  }
+
+  if(gui.invertDependencyLink() != undefined){
+    var current_index = undefined;
+    var updated_link = {};
+    for(var i = 0; i < graph.links.length;i++){
+      if(graph.links[i].id === gui.invertDependencyLink()){
+        current_index = i;
+      }
+    }
+    for (var property in graph.links[current_index]) {
+        if (graph.links[current_index].hasOwnProperty(property)) {
+            updated_link[property] = graph.links[current_index][property];
+        }
+    }
+    updated_link.source = graph.links[current_index].target.id;
+    updated_link.target = graph.links[current_index].source.id;
+    structure.updateLink(updated_link);
+    gui.resetLink();
+    gui.closeMenus();
+    restart();
+    rst.setEnvironment(inside_node,current_node.id,structure);
+    rst.updateLabel(updated_link.source);
+    rst.updateLabel(updated_link.target);
+    current_link = {};
+  }
+}
+
+function mouseDownEnvironment(){
+  if(gui.editionMode() != undefined){
+    if(gui.editionMode() === "nodeadd"){ 
+      var transform = d3.select("g").node();
+      var mouse_xy = d3.mouse(transform);
+      var node_x = mouse_xy[0];
+      var node_y = mouse_xy[1];
+      structure.addNode(node_x,node_y);
+      gui.closeMenus();
+      restart();
+    }
+  }
+}
+
+  /* MOUSE BEHAVIOR > LINK */
+
+function mouseOverLink(d){
+  document.getElementById("line-"+d.id).style.cursor = "pointer";
+  document.getElementById("the-line-"+d.id).style.strokeWidth = "4px";
+}
+
+function mouseOutLink(d){
+  if(current_link.id != d.id){
+    document.getElementById("the-line-"+d.id).style.strokeWidth = "1px";
+  }
+  else{
+    document.getElementById("the-line-"+d.id).style.strokeWidth = "4px";
+  }
+}
+
+function mouseDownLink(d){
+  if(document.getElementById("node-symbol-"+current_node.id) != null){
+    if(inside_node != current_node.id){
+      if(current_node.type != "buraco"){
+        if(current_node.collapse != 0){
+          document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
+          document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
+        }
+        else{
+          document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+          document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+        }
+      }
+      else{
+        document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+        document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+      }
+    }
+    current_node = {};
+  }
+
+  if(gui.editionMode() === "linkdelete"){
+    var link_source = d.source.id;
+    var link_target = d.target.id;
+    structure.deleteLink(d.id);
+    gui.closeMenus();
+    restart();
+    rst.setEnvironment(inside_node,current_node.id,structure);
+    rst.updateLabel(link_source);
+    rst.updateLabel(link_target);
+  }
+  else{
+    if(current_link.id != d.id && document.getElementById("the-line-"+current_link.id) != null){
+      document.getElementById("the-line-"+current_link.id).style.strokeWidth = "1px";
+      current_link.id = d.id;
+      gui.updateControlPanel(d,"LINK", false);
+    }
+    else if(current_link.id != d.id && document.getElementById("the-line-"+current_link.id) === null){
+      current_link.id = d.id;
+      gui.updateControlPanel(d, "LINK", false);
+    }
+    else{ // if(current_link === d.id)
+      gui.hideControlPanel();
+      current_link = {};
+    }
+  }
+}
+
+  /* MOUSE BEHAVIOR > NODE */
+
+function mouseOverNode(d){
+  if(link_to_add.source != null){
+    if(document.getElementById("select-lines")!=null){
+      var reference_element = d3.select("#node-"+d.id);
+      var reference_element_transform = reference_element.attr("transform");
+      var pass_reference_translate = reference_element_transform.substring(reference_element_transform.indexOf("(")+1, reference_element_transform.indexOf(")")).split(",");
+      var source_node = svg.select("#node-"+link_to_add.source);
+      var source_node_transform = source_node.attr("transform");
+      var pass_translate = source_node_transform.substring(source_node_transform.indexOf("(")+1, source_node_transform.indexOf(")")).split(",");
+      var selecting_line = svg.selectAll("#select-line")
+      .attr("x1",pass_translate[0])
+      .attr("y1",pass_translate[1])
+      .attr("x2",pass_reference_translate[0])
+      .attr("y2",pass_reference_translate[1]);
+    }
+  }
+  document.getElementById("label-"+d.id).style.opacity="1";
+  svg.style("cursor","pointer");
+  if(inside_node != d.id){
+    if(d.collapse === 1){
+      if(d.standby === 0){
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
+        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+      }
+      else{
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
+        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+      }
+    }
+    else{
+      if(d.standby === 0){
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
+        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+      }
+      else{
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
+        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+      }
+    }
+  }
+  else{
+    document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+  }
+}
+
+function mouseOutNode(d){
+  svg.style("cursor","default");
+  if(prevent_node != d){
+    var opacity = 0;
+    if(reveal_labels){
+      if(d.type === "categoria" || d.parentConnections === 0){
+        opacity = 0.8;
+      }
+      else if(d.standby === 1){
+        opacity = 0;
+      }
+      else{
+        opacity = 1;
+      }
+    }
+    else{
+      if(d.parentConnections === 0 && d.childConnections > 0){
+        opacity = 1;
+      }
+      else if(d.type === "categoria"){
+        opacity = 1;
+      }
+    }
+    
+    document.getElementById("label-"+d.id).style.opacity= opacity;
+
+    if(inside_node != d.id){
+      if(current_node.id != d.id && document.getElementById("node-symbol-"+d.id) != null){
+        if(d.collapse === 1){
+          if(d.type != "buraco"){
+            document.getElementById("node-symbol-"+d.id).style.stroke = "transparent";
+            document.getElementById("node-symbol-"+d.id).style.strokeWidth = "0px";
+          }
+          else{
+            if(d.standby === 0){
+              document.getElementById("node-symbol-"+d.id).style.stroke = d.color;
+              document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+            }
+            else{
+              document.getElementById("node-symbol-"+d.id).style.stroke = "#c9c9c9";
+              document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+            }
+          }
+        }
+        else{
+          if(d.standby === 0){
+            document.getElementById("node-symbol-"+d.id).style.stroke = d.color;
+            document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+          }
+          else{
+            document.getElementById("node-symbol-"+d.id).style.stroke = "#c9c9c9";
+            document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+          }
+        }
+      }
+    }
+    else{
+      document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+    }
+  }
+}
+
+function clickTimeout(){
+  var d = prevent_node;
+  if(!prevent_click){
+    if(gui.editionMode() != "nodedelete" && gui.editionMode() != "nodeadd" && gui.editionMode() != "linkadd" && gui.editionMode() != "stateexplode" && gui.editionMode() != "statecontract" && gui.editionMode() != "stateidle" && gui.editionMode() != "groupedit"){
+      if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) != null){
+        if(inside_node != current_node.id){
+          if(current_node.type != "buraco"){
+            if(current_node.collapse != 0){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
+            }
+            else{
+              if(current_node.standby === 0){
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+              else{
+                document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+                document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+              }
+            }
+          }
+          else{
+            document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+          }
+        }
+
+        //MODE 1
+        current_node.id = d.id;
+        current_node.group = d.group;
+        current_node.color = d.color;
+        current_node.type = d.type;
+        current_node.collapse = d.collapse;
+        current_node.standby = d.standby;
+        var in_links = structure.getLinks(d);
+        for(var i = 0; i < in_links.length; i++){
+          for(var j = 0; j < graph.links.length; j++){
+            if(in_links[i].id === graph.links[j].id){
+              in_links[i].source.color = graph.links[j].source.color;
+              in_links[i].target.color = graph.links[j].target.color;
+            }
+          }
+        }
+        gui.setAllLinks(in_links);
+        gui.updateControlPanel(d,"NODE", false);
+      }
+      else if(current_node.id != d.id && document.getElementById("node-symbol-"+current_node.id) === null){
+        // MODE 2
+        current_node.id = d.id;
+        current_node.group = d.group;
+        current_node.color = d.color;
+        current_node.type = d.type;
+        current_node.collapse = d.collapse;
+        current_node.standby = d.standby;
+        var in_links = structure.getLinks(d);
+        for(var i = 0; i < in_links.length; i++){
+          for(var j = 0; j < graph.links.length; j++){
+            if(in_links[i].id === graph.links[j].id){
+              in_links[i].source.color = graph.links[j].source.color;
+              in_links[i].target.color = graph.links[j].target.color;
+            }
+          }
+        }
+        gui.setAllLinks(in_links);
+        gui.updateControlPanel(d, "NODE", false);
+      }
+      else{ // if(current_node === d.id)
+            // resetar as características do node
+            if(inside_node != d.id){
+              if(current_node.id === d.id && document.getElementById("node-symbol-"+d.id) != null){
+                if(d.collapse === 1){
+                  if(d.type != "buraco"){
+                    document.getElementById("node-symbol-"+d.id).style.stroke = "transparent";
+                    document.getElementById("node-symbol-"+d.id).style.strokeWidth = "0px";
+                  }
+                  else{
+                    if(d.standby === 0){
+                      document.getElementById("node-symbol-"+d.id).style.stroke = d.color;
+                      document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+                    }
+                    else{
+                      document.getElementById("node-symbol-"+d.id).style.stroke = "#c9c9c9";
+                      document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+                    }
+                  }
+                }
+                else{
+                  if(d.standby === 0){
+                    document.getElementById("node-symbol-"+d.id).style.stroke = d.color;
+                    document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+                  }
+                  else{
+                    document.getElementById("node-symbol-"+d.id).style.stroke = "#c9c9c9";
+                    document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+                  }
+                }
+              }
+            }
+            else{
+              document.getElementById("node-symbol-"+d.id).style.strokeWidth = "2px";
+            }
+
+        gui.hideControlPanel();
+        current_node = {};
+      }
+    }
+  }
+  prevent_click = false;
+  prevent_node = undefined;
+  timeout = undefined;
+}
+
+function clickNode(d){
+  var current_id = top_menu.getUpdateZoom();
+  if(current_id != undefined){
+    prevent_changes = true;
+    var reference_element = svg.select("#node-"+current_id).attr("transform");
+    var reference_transform = null;
+    if(reference_element != null){
+      var temp_element = reference_element.split(" ");
+      var temp_transform = temp_element[0].substring(temp_element[0].indexOf("(")+1, temp_element[0].indexOf(")"));
+      reference_transform = temp_transform.split(",");
+    }
+    var dx = document.getElementById("node-symbol-"+current_id).getBBox().height;
+    var dy = document.getElementById("node-symbol-"+current_id).getBBox().width;
+    var node_x = reference_transform[0];
+    var node_y = reference_transform[1];
+
+    scale = Math.max(1, Math.min(2, 0.8 / Math.max(dx / width, dy / height)));
+    translate = [width / 2 - scale * node_x, height / 2 - scale * node_y];
+
+    svg.transition()
+        .duration(750)
+        .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) )
+        .on("end", function(){prevent_changes = false;});
+  }
+
+  if(document.getElementById("the-line-"+current_link.id) != null){
+    document.getElementById("the-line-"+current_link.id).style.strokeWidth = "1px";
+    current_link = {};
+  }
+
+  if(gui.editionMode() === "nodedelete"){
+    var these_links = structure.getLinks(d);
+    var update_nodes = [];
+    for(var i = 0; i < these_links.length; i++){
+      if(these_links[i].source.id === d.id){
+        update_nodes.push(these_links[i].target.id);
+      }
+      else{
+        update_nodes.push(these_links[i].source.id);
+      }
+    }
+    gui.hideControlPanel();
+    current_node = {};
+    structure.deleteNode(d.id);
+    gui.closeMenus();
+    restart();
+    rst.setEnvironment(inside_node,current_node.id,structure);
+    for(var i = 0; i < update_nodes.length; i++){
+      rst.updateLabel(update_nodes[i]);
+    }
+  }
+  else if(gui.editionMode() === "nodeadd"){
+    if(d.collapse != 0){
+      var transform = d3.select("g").node();
+      var mouse_xy = d3.mouse(transform);
+      var node_x = mouse_xy[0];
+      var node_y = mouse_xy[1];
+      var node_id = structure.addNode(node_x,node_y);
+      link_to_add.source = d.id;
+      link_to_add.target = node_id;
+      var link_update = structure.addLink(link_to_add);
+      link_to_add.source = null;
+      link_to_add.target = null;
+      gui.closeMenus();
+      if(link_update){
+        restart();
+        rst.setEnvironment(inside_node,current_node.id,structure);
+        rst.updateLabel(d.id);
+      }
+    }
+  }
+  else if(gui.editionMode() === "linkadd"){
+    if(link_to_add.source === null){
+      if(d.collapse != 0){
+        link_to_add.source = d.id;
+        toggleLinkSelection(false);
+      }
+    }
+    else if(link_to_add.source != null && link_to_add.source != d.id){
+      if(d.collapse != 0){
+        link_to_add.target = d.id;
+        var link_update = structure.addLink(link_to_add);
+        link_to_add.source = null;
+        link_to_add.target = null;
+        gui.closeMenus();
+        if(link_update){
+          restart();
+          rst.setEnvironment(inside_node,current_node.id,structure);
+          rst.updateLabel(d.id);
+        }
+        gui.removeSelectLine();
+      }    
+    }
+  }
+  else if(gui.editionMode() === "stateexplode"){
+    if(d.collapse != 1){
+      structure.collapseNode(d.id);
+      gui.closeMenus();
+      restart();
+      if(d.id === current_node.id){
+        if(d.standby === 0){
+          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
+          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+        }
+        else{
+          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
+          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+        }
+        current_node.collapse = 1;
+      }
+    }
+  }
+  else if(gui.editionMode() === "statecontract"){
+    if(d.collapse != 0){
+      structure.closeNode(d.id);
+      gui.closeMenus();
+      restart();
+      if(d.id === current_node.id){
+        if(d.standby === 0){
+          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
+          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+        }
+        else{
+          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
+          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+        }
+        current_node.collapse = 0;
+      }
+    }
+  }
+  else if(gui.editionMode() === "stateidle"){
+    structure.toggleNodeStandby(d);
+    gui.closeMenus();
+    restart();
+    if(d.id === current_node.id && current_node.id != inside_node){
+      if(d.standby === 1){
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
+        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+      }
+      else{
+        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
+        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+      }
+      if(current_node.standby === 0){
+        current_node.standby = 1;
+      }
+      else{
+        current_node.standby = 0;
+      }
+    }
+  }
+  else if(gui.editionMode() === "groupedit"){
+    if(current_node.id != null){
+      if(document.getElementById("node-symbol-"+current_node.id) != null){
+        if(current_node.collapse === 1){
+          if(current_node.type != "buraco"){
+            document.getElementById("node-symbol-"+current_node.id).style.stroke = "transparent";
+            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "0px";
+          }
+          else{
+            if(current_node.standby === 0){
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+            }
+            else{
+              document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+              document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+            }
+          }
+        }
+        else{
+          if(current_node.standby === 0){
+            document.getElementById("node-symbol-"+current_node.id).style.stroke = current_node.color;
+            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+          }
+          else{
+            document.getElementById("node-symbol-"+current_node.id).style.stroke = "#c9c9c9";
+            document.getElementById("node-symbol-"+current_node.id).style.strokeWidth = "2px";
+          }
+        }
+      }
+      current_node = {};
+    }
+    gui.hideControlPanel();
+    if(d.group != "_DEFAULT"){
+      structure.updateGroups(d);
+    }
+    gui.closeMenus();
+  }
+  else{
+    prevent_node = d;
+    timeout = setTimeout(clickTimeout, 500);
+  }
+}
+
+function toggleLinkSelection(check_link_selection){
+  if(!check_link_selection){
+    var links = svg.selectAll(".select-link").style("pointer-events","none");
+  }
+  else{
+    var links = svg.selectAll(".select-link").style("pointer-events","all");
+  }
+}
+
+function mouseDoubleClick(d){
+  prevent_click = true;
+  clearTimeout(timeout);
+  if(d.collapse != 1){
+    structure.collapseNode(d.id);
+    gui.closeMenus();
+    restart();
+  }
+  else if(gui.editionMode() != "linkadd" && gui.editionMode() != "nodeadd"){
+    run_translate = true;
+    // increase one level on navigation (enter node)
+    if(d.id != inside_node){
+      structure.navigateRhisomaEnter(d.id);
+      inside_node = d.id;
+      drift[drift.length] = d.id;
+      restart(d); 
+    }
+    // decreases one level on navigation (exit node [click on inside_node])
+    else if(d.id === inside_node){
+      if(d.parentConnections > 0){
+        structure.navigateRhisomaExitCheck(drift[drift.length-2]);
+        drift.pop();
+        inside_node = drift[drift.length-1];
+        if(drift.length === 0){
+          go_to_center = true;
+        }
+      }
+      // back to root if level-1 = primary
+      else{
+        structure.navigateRoot();
+        drift = [];//.pop();
+        inside_node = undefined;
+        go_to_center = true;
+      }
+      restart(d);
+    }
+    // back to root if there is an error
+    else{
+      structure.navigateRoot();
+      drift = [];
+      inside_node = undefined;
+      go_to_center = true;
+      restart(d);
+    }
+  }
+}
+
+  /* UPDATE GRAPH FUNCTIONS */
+
+function restart(e){
+  var update_nodes = svg.selectAll("g").filter(".node").each(function(d){structure.updateNodeXY(d);});
+  var update_links = svg.selectAll("line").filter(".link").each(function(d){structure.updateLinkXY(d);});
+  graph = structure.getGraph();
+
+  setSearchGraph();
+
+  rst.setEnvironment(inside_node,current_node.id,structure);
+  node = node.data(graph.nodes, function(d){return d.id});
+  node.selectAll("path").remove();
+  node.exit().remove();
+
+  node = node.enter()
+    .append("svg:g")
+    .attr("class","node")
+    .attr("id",function(d){ return "node-"+d.id;})
+    .on("mouseover", mouseOverNode)
+    .on("click", clickNode)
+    .on("mouseout", mouseOutNode)
+    .on('dblclick', mouseDoubleClick)
+    .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended))
+    .merge(node);  
+
+  path = node.append("path")
+    .attr("id", function(d){return "node-symbol-"+d.id})
+    .attr("d", d3.symbol()
+    .size(rst.nodeSize)
+    .type(rst.nodeType))
+    .style("stroke-linejoin",rst.nodeLineJoin)
+    .style("stroke",rst.nodeStroke)
+    .style("stroke-width",rst.nodeStrokeWidth)
+    .attr("fill",rst.nodeFill);
+
+  link = link.data(graph.links, function(d) { return d.source + "-" + d.target; });
+  link.exit()
+      .remove();
+
+  link = link.enter()
+    .append("line")
+    .attr("id",function(d){return "the-line-"+d.id;})
+    .attr("class","link")
+    .attr("stroke-width", rst.linkStrokeWidth)
+    .attr("stroke-dasharray", rst.linkStrokeDash)
+    .style("stroke-linecap", "round")
+    .style("stroke", rst.linkStroke)
+    .merge(link);
+
+  select_link = select_link.data(graph.links, function(d) { return d.source + "-" + d.target; });
+  select_link.exit()
+      .remove();
+
+  select_link = select_link.enter()
+  .append("line")
+  .attr("class","select-link")
+    .attr("id",function(d){return "line-"+d.id;})
+    .on("mouseover", mouseOverLink)
+    .on("mouseout", mouseOutLink)
+    .on("mousedown", mouseDownLink)
+    .attr("stroke-width", "10px")
+    .attr("stroke-dasharray", "0,0")
+    .style("stroke-linecap", "round")
+    .style("stroke", "transparent")
+    .merge(select_link);
+
+  label = label.data(graph.nodes, function(d){return d.id;});
+  label.selectAll("rect").remove();
+  label.selectAll("text").remove();
+  label.exit().remove();
+
+  label = label.enter()
+    .append("svg:g")
+    .attr("id",function(d){return "labels-"+d.id;}).merge(label);
+
+  label.append("svg:text")
+    .attr("class","noselect")
+    .attr("id",function(d){return "label-"+d.id;})
+    .attr("x",0)
+    .attr("y",rst.labelTextY)
+    .style("font-family","Source Sans Pro")
+    .attr("text-anchor","middle")
+    .style("font-size", rst.labelTextFontSize)
+    .style("font-weight",rst.labelTextFontWeight)
+    .text(rst.labelText);
+
+  label.append("rect")
+    .attr("id", function(d){return "rect-"+d.id;})
+    .attr("x", rst.labelRectX)
+    .attr("y", rst.labelRectY)
+    .attr("width", function(d){return document.getElementById("label-"+d.id).getBBox().width+10;})
+    .attr("height", function(d){return document.getElementById("label-"+d.id).getBBox().height+6;})
+    .style("fill", "white")
+    .style("opacity", rst.labelRectOpacity)
+    .style("stroke-opacity","1")
+    .style("stroke",rst.labelRectStroke)
+    .attr("stroke-dasharray",rst.labelRectStrokeDash)
+    .style("stroke-linecap", "round")
+    .style("stroke-width",1);
+
+  label.selectAll("text").remove();
+
+  if(reveal_labels){
+    label.append("svg:text")
+    .attr("class","noselect")
+    .attr("id",function(d){return "label-"+d.id;})
+    .attr("x",rst.labelTextZoomX)
+    .attr("y", rst.labelTextZoomY)
+    .attr("fill", rst.labelTextZoomFill)
+    .style("font-family","Source Sans Pro")
+    .attr("text-anchor",rst.labelTextZoomTextAnchor)
+    .style("font-weight",rst.labelTextFontWeight)
+    .style("font-size",rst.labelTextZoomFontSize)
+    .style("opacity",rst.labelTextZoomOpacity)
+    .text(rst.labelText);
+  }
+  else{
+    label.append("svg:text")
+    .attr("class","noselect")
+    .attr("id",function(d){return "label-"+d.id;})
+    .attr("x",0)
+    .attr("y", rst.labelTextY)
+    .attr("fill", rst.labelTextFill)
+    .style("font-family","Source Sans Pro")
+    .attr("text-anchor","middle")
+    .style("font-weight",rst.labelTextFontWeight)
+    .style("font-size",rst.labelTextFontSize)
+    .style("opacity",rst.labelTextOpacity)
+    .text(rst.labelText);
+  }
+  
+  // Update and restart the simulation.
+  simulation.nodes(graph.nodes); // + on tick?
+  simulation.force("link").links(graph.links);
+  if(run_translate){
+    var transform = d3.select("g").node();
+    var mouse_xy = d3.mouse(transform);
+    var node_x = mouse_xy[0];
+    var node_y = mouse_xy[1];
+    if(go_to_center){
+      simulation.force("center", d3.forceCenter(width/2,height/2));
+      go_to_center = false;
+      zoomReset();
+    }
+    else{
+      simulation.force("center", d3.forceCenter(node_x,node_y));
+      zoomUpdate(node_x,node_y);
+    }
+    run_translate = false;
+  }
+  
+  simulation.alpha(1).restart();
+  // console.log(document.getElementById("all-nodes").getBBox().height);
+  
+}
+
+  /* ZOOM */
+
+function zoomUpdate(node_x,node_y){
+  var dx = document.getElementById("all-nodes").getBBox().height;
+  var dy = document.getElementById("all-nodes").getBBox().width;
+
+  // var reference_element = svg.select(".nodes").attr("transform");
+  // var reference_transform = null;
+  // var current_scale = null;
+  // if(reference_element != null){
+  //   reference_transform = reference_element.split(" ");
+  //   current_scale = reference_transform[1].substring(reference_transform[1].indexOf("(")+1, reference_transform[1].indexOf(")"));
+  // }
+  // else{
+  //   current_scale = 1;
+  // }
+
+  // guardar no drift o bounding box?
+  // scale = Math.max(1, Math.min(4, 0.9 / Math.max((dx*current_scale) / width, (dy*current_scale) / height)));
+  // scale = Math.max(1, Math.min(4, 0.9 / Math.max((dx / width)*current_scale, (dy / height)*current_scale)));
+  scale = Math.max(1, Math.min(4, 0.8 / Math.max(dx/width, dy/height)));
+  // scale /= current_scale;
+
+  translate = [width / 2 - scale * node_x, height / 2 - scale * node_y];
+
+  svg.transition()
+      .duration(750)
+      .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
+}
+
+function zoomReset(){
+  svg.transition()
+      .duration(750)
+      .call( zoom.transform, d3.zoomIdentity );
+}
+
+function eventFire(el, etype){
+  if (el.fireEvent) {
+    el.fireEvent('on' + etype);
+  } else {
+    var evObj = document.createEvent('Events');
+    evObj.initEvent(etype, true, false);
+    el.dispatchEvent(evObj);
+  }
+}
+
+}
+
 </script>
