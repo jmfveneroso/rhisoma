@@ -1,0 +1,59 @@
+{
+    "language": "EN",
+
+    "node-type-main-category": "Main category",
+    "node-type-category": "Category",
+    "node-type-task": "Task",
+    "node-type-text": "Text",
+    "node-type-link": "Link",
+    "node-type-wormhole": "Wormhole",
+
+    "system-menu-search-placeholder": "Search",
+    "system-menu-user-avatar": "User",
+    "system-menu-settings": "Settings",
+    "system-menu-signout": "Sign out",
+    "system-menu-signin": "Sign in",
+    "system-menu-signup": "Sign up",
+
+    "filters-menu-visibility-hide":"Hide",
+    "filters-menu-visibility-show":"Show",
+    "filters-menu-show-all":"Show<br />all",
+
+    "dropdown-type-categoria-principal": "Main category",
+    "dropdown-type-categoria": "Category",
+    "dropdown-type-tarefa": "Task",
+    "dropdown-type-texto": "Text",
+    "dropdown-type-link": "Link",
+    "dropdown-type-buraco": "Wormhole",
+
+    "control-panel-description-placeholder": "Description",
+    "control-panel-date-start": "Start",
+    "control-panel-date-end": "End",
+    "control-panel-task-completed": "Completed",
+
+    "control-panel-source-label":"Source",
+    "control-panel-target-label":"Target",
+
+    "system-groups-edit-name-placeholder": "Group name",
+    "system-groups-edit-color-placeholder": "Group color",
+
+    "edit-panel-node":"Node",
+    "edit-panel-link":"Link",
+    "edit-panel-state":"State",
+    "edit-panel-group":"Group",
+    "edit-panel-environment":"Map",
+    "edit-panel-nodeadd":"New",
+    "edit-panel-nodedelete":"Remove",
+    "edit-panel-linkadd":"New",
+    "edit-panel-linkdelete":"Remove",
+    "edit-panel-stateidle":"Wait",
+    "edit-panel-stateexplode":"Collapse",
+    "edit-panel-statecontract":"Contract",
+    "edit-panel-groupadd":"New",
+    "edit-panel-groupedit":"Edit",
+    "edit-panel-environmentstop":"Stop",
+    "edit-panel-environmentcontinue":"Continue",
+    "edit-panel-environmentcenter":"Center",
+
+    "default-node-name":"Untitled"
+}

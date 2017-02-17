@@ -13,8 +13,13 @@ function SystemGui(){
 	var lock_system_menu = true;
 	var locales = undefined;
 	var prevent_search_mouse_behavior = false;
+	var search_on = true;
 
 	var buttons = {};
+
+	this.setSearch = function(in_search){
+		search_on = in_search;
+	}
 
 	this.setCurrentGraph = function(in_nodes){
 		node_names = in_nodes;
@@ -44,13 +49,17 @@ function SystemGui(){
 		gui.addField(logo_field);
 		gui.addText("system-menu-logo",'<img id="rhisoma-logo" src="./public/media/logo.png" width="40px" height="40px" />');
 
-		var search_offset_x = 300 + ((window.innerWidth-700)/2);
-		var search_field = {id:"system-menu-search",class:"search-field",height:14,position:"absolute",top:10,left:search_offset_x};
-		gui.addInput(search_field,locales['system-menu-search-placeholder'],"system-menu","");
-
-		var search_button = {id:"system-menu-search-button",height:30,width:40,position:"absolute",top:0,paddingtop:10,left:search_offset_x+260,textalign:"center",font:'Font Awesome',fontsize:18,color:"#aeaeae"}
-		gui.addField(search_button,"system-menu");
-		gui.addText("system-menu-search-button",'<i class="fa fa-search" aria-hidden="true"></i>');
+		if(search_on){
+			var search_offset_x = 300 + ((window.innerWidth-700)/2);
+			var search_field = {id:"system-menu-search",class:"search-field",height:14,position:"absolute",top:10,left:search_offset_x};
+			gui.addInput(search_field,locales['system-menu-search-placeholder'],"system-menu","");
+			
+			var search_button = {id:"system-menu-search-button",height:30,width:40,position:"absolute",top:0,paddingtop:10,left:search_offset_x+260,textalign:"center",font:'Font Awesome',fontsize:18,color:"#aeaeae"}
+			gui.addField(search_button,"system-menu");
+			gui.addText("system-menu-search-button",'<i class="fa fa-search" aria-hidden="true"></i>');
+			// master.searchMouseBehavior();
+			master.searchWriteBehavior();
+		}
 
 		if(logged){
 			master.drawLoggedInMenu();
@@ -64,8 +73,6 @@ function SystemGui(){
 		if(!lock_system_menu){
 			master.logoMouseBehavior();
 		}
-		// master.searchMouseBehavior();
-		master.searchWriteBehavior();
 	}
 
 	this.drawLoggedInMenu = function(){
@@ -149,7 +156,9 @@ function SystemGui(){
 			}
 			hidden_system_menu = true;
 			master.removeElement("system-menu-autocomplete");
-			document.getElementById("system-menu-search").value = "";
+			if(search_on){
+				document.getElementById("system-menu-search").value = "";
+			}
 			current_query = -1;
 			query_results = [];
 		}

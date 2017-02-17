@@ -30,4 +30,5 @@ Rails.application.routes.draw do
   resources :styling_groups
 
   get '/.well-known/acme-challenge/:id' => 'sessions#temp'
+  get '/fake_logout' => 'sessions#fake_destroy'
 end

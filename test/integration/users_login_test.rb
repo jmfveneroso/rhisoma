@@ -23,19 +23,6 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_redirected_to home_path
     follow_redirect!
     assert_template 'users/home'
-    assert_select "a[href=?]", logout_path
-
-    delete logout_path 
-    assert_not logged_in?
-    assert_redirected_to root_url
-    follow_redirect!
-    assert_select "a[href=?]", logout_path, count: 0
-
-    # Simulate a user clicking logout in a second window.
-    delete logout_path
-    assert_redirected_to root_url
-    follow_redirect!
-    assert_select "a[href=?]", logout_path, count: 0
   end
 
   test "login with remembering" do
