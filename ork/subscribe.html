@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<meta name="author" content="sumbioun.com">
+<meta name="description" content="Tecnologias para arte e cultura. Conheça nossos projetos." />
+<meta name="keywords" content="mapa mental, mental map, think map, thought map, mapa de pensamento, rizoma, agenda, cartografia, calendário, tarefas, lista de tarefas, task list, tasks, calendar" />
+<link rel="icon" href="favicon.png" type="image/x-icon" />
+<title>Orkhestra | Entrar</title>
+
+<link rel="stylesheet" type="text/css" href="public/css/system.css?v=0.0.1">
+<link href='http://fonts.googleapis.com/css?family=Source Sans Pro:200,300,400,500,600,700,800' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Dosis:200,300,400,500,600,700,800' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="public/js/gui.js"></script>
+</head>
+
+<body>
+<video poster="" id="bgvid" playsinline autoplay muted loop>
+<source src="https://vimeo.com/190179602/download?t=1487018092&v=631426677&s=0fc854a7108aed8d1f9a3f729f94faddbbafb0868afc2b4f2a523c54ed7d1648" type="video/mp4">
+</video>
+
+<script>
+
+$.ajax({
+    url: "../ork/public/json/language-pt.json", // >> change_value
+    type: "POST",
+    contentType: 'application/json; charset=utf-8',
+    success: function (resultData) {
+        var locales_data = $.parseJSON(resultData);
+        main(locales_data);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+    },
+    timeout: 120000,
+});
+
+function main(locales_data){
+	var gui = new Gui();
+
+	var rhisoma_logo = {id:"system-logo",width:80,height:80,top:(window.innerHeight-230)/2-40,left:((window.innerWidth-320)/2)+((318-80)/2),backgroundColor:"transparent",zindex:10};
+	gui.addField(rhisoma_logo);
+	gui.addText("system-logo",'<img id="rhisoma-logo" src="../ork/public/media/logo.png" width="80px" height="80px" />');
+
+	var subscription_container = {id:"system-signup",width:258,height:168,top:(window.innerHeight-230)/2,left:(window.innerWidth-320)/2,backgroundColor:"white",padding:30,border:"1px solid #aeaeae",boxshadow:"-5px 5px #aeaeae"};
+	gui.addContainer(subscription_container);
+
+	var form_label = {id:"system-label",class:"form-label",width:298};
+	gui.addField(form_label,"system-signup");
+	gui.addText("system-label",'CADASTRO');
+
+	var form = document.createElement("form");
+	form.setAttribute('method',"post");
+	form.setAttribute('action',"/users");
+	form.setAttribute('accept-charset',"UTF-8");
+
+	var general_input = document.createElement("input");
+	general_input.setAttribute('type',"hidden");
+	general_input.setAttribute('name',"utf8");
+	general_input.setAttribute('value',"✓");
+
+	var auth_input = document.createElement("input");
+	auth_input.setAttribute('type',"hidden");
+	auth_input.setAttribute('name',"authenticity_token");
+	auth_input.setAttribute('value',""); // >> change_value
+
+	var email_input = document.createElement("input");
+	email_input.setAttribute('type',"email");
+	email_input.setAttribute('name',"user[email]");
+	email_input.setAttribute('id',"user_email");
+	email_input.setAttribute('class',"form-control");
+	email_input.setAttribute('placeholder',"E-mail");
+
+	var password_input = document.createElement("input");
+	password_input.setAttribute('type',"password");
+	password_input.setAttribute('name',"user[password]");
+	password_input.setAttribute('id',"user_password");
+	password_input.setAttribute('class',"form-control");
+	password_input.setAttribute('placeholder',"Senha");
+
+	var password_confirmation_input = document.createElement("input");
+	password_confirmation_input.setAttribute('type',"password");
+	password_confirmation_input.setAttribute('name',"user[password_confirmation]");
+	password_confirmation_input.setAttribute('id',"user_password_confirmation");
+	password_confirmation_input.setAttribute('class',"form-control");
+	password_confirmation_input.setAttribute('placeholder',"Confirmação de senha");
+
+	var submit_button = document.createElement("input");
+	submit_button.setAttribute('type',"submit");
+	submit_button.setAttribute('name',"commit");
+	submit_button.setAttribute('data-disable-with',"CADASTRAR");
+	submit_button.setAttribute('class',"button-right");
+	submit_button.setAttribute('id',"submit-button");
+	submit_button.setAttribute('value',"CADASTRAR");
+	submit_button.style.width = document.getElementById("system-signup").offsetWidth/2+"px";
+	submit_button.style.left = document.getElementById("system-signup").offsetWidth/2-1+"px";
+	submit_button.style.top = document.getElementById("system-signup").offsetHeight-42-1+"px";
+
+	form.appendChild(general_input);
+	form.appendChild(auth_input);
+	form.appendChild(email_input);
+	form.appendChild(password_input);
+	form.appendChild(password_confirmation_input);
+	form.appendChild(submit_button);
+
+	var back_button = document.createElement("a");
+	back_button.setAttribute('class',"button-left");
+	back_button.setAttribute('href',"https://www.rhisoma.com");
+	back_button.innerHTML = "VOLTAR";
+	back_button.style.width = document.getElementById("system-signup").offsetWidth/2-1+"px";
+	back_button.style.left = "-1px";
+	back_button.style.top = document.getElementById("system-signup").offsetHeight-42-1+"px";
+
+	document.getElementById("system-signup").appendChild(back_button);
+	document.getElementById('system-signup').appendChild(form);
+}
+	
+
+</script>
+</body>
+</html>

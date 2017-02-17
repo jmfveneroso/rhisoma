@@ -45,6 +45,13 @@ class SessionsController < ApplicationController
     redirect_to root_url
   end
 
+  # Logs the user out without the verb delete.
+  # @route GET /logout
+  def fake_destroy
+    log_out if logged_in?
+    redirect_to root_url
+  end
+
   def temp
     render text: "dxABqYIBzcgzE_GXbg1jg6yq5ZbvbP0wr4f5W2DOguo.ffInSMDcCzzBOEdK0yJF1Cidw86HhIcw2cktXgSgsY8"
   end

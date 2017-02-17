@@ -1,0 +1,187 @@
+<% provide(:page_title, "Home") %>
+
+<div class="home-bg">
+
+  <!-- Side Menu --> 
+  <div class="left noselect">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="btn-group">
+        <button type="button" class="toolbar-btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li id="new_territory"><a href="javascript:void(0)"><%= t(:territory) %></a></li>
+          <li id="new_node"><a href="javascript:void(0)"><%= t(:node) %></a></li>
+          <li id="new_edge"><a href="javascript:void(0)"><%= t(:edge) %></a></li>
+          <li id="new_styling_group"><a href="javascript:void(0)"><%= t(:styling_group) %></a></li>
+        </ul>
+      </div>
+      <button id="toolbar[refresh]" class="toolbar-btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+      <button id="toolbar[settings]" class="toolbar-btn"><i class="fa fa-cog" aria-hidden="true"></i></button>
+      <button id="toolbar[save]" class="toolbar-btn"><i class="fa fa-save" aria-hidden="true"></i></button>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="toolbar" style="padding: 0;">
+      <li id="tab[territories]" class="toolbar-tab"><%= t(:territories) %></li>
+      <li id="tab[nodes]" class="toolbar-tab active" style="left: -4px;"><%= t(:nodes) %></li>
+      <li id="tab[edges]" class="toolbar-tab" style="left: -8px;"><%= t(:edges) %></li>
+      <li id="tab[templates]" class="toolbar-tab" style="left: -12px;"><%= t(:templates) %></li>
+      <li id="tab[style]" class="toolbar-tab" style="left: -16px;"><%= t(:styles) %></li>
+    </ul>
+    <div class="tab-content">
+      <ul id="tab[content]"></ul>
+    </div>
+
+    <!-- Properties Section -->
+    <div class="properties"><%= t(:properties) %></div>
+    <div id="properties[content]" class="properties-content">
+
+      <!-- Territory -->
+      <div id="properties[territory]">
+        <label><%= t(:name) %>:</label>
+        <input id="properties[territory][name]" type="text" />
+        <label><%= t(:template) %>:</label>
+        <input id="properties[territory][is_template]" type="checkbox" />
+        <br />
+        <label><%= t(:public) %>:</label>
+        <input id="properties[territory][public]" type="checkbox" />
+        <br />
+        <div id="properties[territory][template_container]">
+          <label><%= t(:inherit_from) %>:</label>
+          <select id="properties[territory][template]">
+          </select>
+        </div>
+        <div id="properties[territory][nodes_container]">
+          <div class="separator"></div>
+          <label><%= t(:nodes) %>:</label>
+          <ul id="properties[territory][nodes]"></ul>
+        </div>
+      </div>
+
+      <!-- Node -->
+      <div id="properties[node]">
+        <label><%= t(:title) %>:</label>
+        <input id="properties[node][title]" type="text" />
+        <label><%= t(:type) %>:</label>
+        <select id="properties[node][type]" class="default-dropdown">
+          <option value="CategoryNode"><%= t(:category) %></option>
+          <option value="TaskNode"><%= t(:task) %></option>
+          <option value="TextNode"><%= t(:text) %></option>
+          <option value="LinkNode"><%= t(:link) %></option>
+          <option value="WormHoleNode"><%= t(:worm_hole) %></option>
+        </select>
+        <div id="properties[node][pos]">
+          <label>X:</label>
+          <span id="properties[node][x]"></span></br>
+          <label>Y:</label>
+          <span id="properties[node][y]"></span></br>
+          <label>VX:</label>
+          <span id="properties[node][vx]"></span></br>
+          <label>VY:</label>
+          <span id="properties[node][vy]"></span></br>
+          <label>FX:</label>
+          <span id="properties[node][fx]"></span></br>
+          <label>FY:</label>
+          <span id="properties[node][fy]"></span></br>
+        </div>
+        <label><%= t(:territory) %>:</label>
+        <select id="properties[node][territory]"></select>
+        <label><%= t(:style) %>:</label>
+        <select id="properties[node][style]"></select>
+        <div id="properties[category_node]">
+          <label><%= t(:description) %>:</label>
+          <input id="properties[category_node][description]" type="text" />
+        </div>
+        <div id="properties[task_node]">
+          <label><%= t(:description) %>:</label>
+          <input id="properties[task_node][description]" type="text" />
+          <label><%= t(:start_date) %>:</label>
+          <input id="properties[task_node][start_date]" type="text" />
+          <label><%= t(:end_date) %>:</label>
+          <input id="properties[task_node][end_date]" type="text" />
+        </div>
+        <div id="properties[text_node]">
+          <label><%= t(:text) %>:</label>
+          <textarea id="properties[text_node][text]" rows="10" type="text"></textarea>
+        </div>
+        <div id="properties[link_node]">
+          <label><%= t(:link) %>:</label>
+          <input id="properties[link_node][link]" type="text" />
+        </div>
+        <div id="properties[worm_hole_node]">
+          <label><%= t(:target_territory) %>:</label>
+          <select id="properties[worm_hole_node][target_territory_id]"></select>
+        </div>
+        <div id="properties[node][edges_container]">
+          <div class="separator"></div>
+          <label><%= t(:edges) %>:</label>
+          <ul id="properties[node][edges]"></ul>
+        </div>
+      </div>
+
+      <!-- Edge -->
+      <div id="properties[edge]">
+        <label><%= t(:category) %>:</label>
+        <select id="properties[edge][category]">
+          <option><%= t(:positioning) %></option>
+          <option><%= t(:relationship) %></option>
+          <option><%= t(:dependency) %></option>
+        </select>
+        <label><%= t(:source) %>:</label>
+        <select id="properties[edge][source]"></select>
+        <label><%= t(:target) %>:</label>
+        <select id="properties[edge][target]"></select>
+      </div>
+
+      <!-- Settings -->
+      <div id="properties[settings]">
+        <label><%= t(:elastic_coefficient) %>:</label>
+        <input id="properties[settings][elastic]" type="text" />
+        <label><%= t(:electrostatic_coefficient) %>:</label>
+        <input id="properties[settings][electrostatic]" type="text" />
+        <label><%= t(:friction_coefficient) %>:</label>
+        <input id="properties[settings][friction]" type="text" />
+      </div>
+
+      <!-- Styling Groups -->
+      <div id="properties[style]">
+        <label><%= t(:name) %>:</label>
+        <input id="properties[style][name]" type="text" />
+        <label><%= t(:color) %>:</label>
+        <input id="properties[style][color]" type="text" />
+      </div>
+
+      <div class="separator"></div>
+      <button id="properties[cancel]" class="toolbar-btn" style="background: #333;"><%= t(:cancel) %></button>
+      <button id="properties[delete]" class="toolbar-btn" style="background: #663333;"><%= t(:delete) %></button>
+      <button id="properties[create]" class="toolbar-btn"><%= t(:create) %></button>
+      <button id="properties[update]" class="toolbar-btn"><%= t(:update) %></button>
+    </div>
+  </div>
+ 
+  <!-- Canvas --> 
+  <div class="right noselect">
+    <canvas id="main_canvas" width="800" height="400">
+    </canvas> 
+  </div>
+</div>
+
+<form name="ignore_me">
+  <input type="hidden" id="page_is_dirty" name="page_is_dirty" value="0" />
+</form>
+
+<script type="text/javascript">
+  var dirty_bit = document.getElementById('page_is_dirty');
+  if (dirty_bit.value == '1') {
+    window.location.reload();
+  }
+  dirty_bit.value = '1';
+
+  $(document).ready(function () {
+    app = new document.App()
+    app.run()
+  });
+</script>

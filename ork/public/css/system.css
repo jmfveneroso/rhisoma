@@ -1,0 +1,255 @@
+@charset "UTF-8";
+
+body{
+  margin:0;
+  top:0;
+  left:0;
+  overflow:hidden;
+}
+
+input.form-control{
+  width:96%;
+  color: black;
+  border:none;
+  border:none;
+  border-bottom: 1px black solid;
+  font-family: Source Sans Pro;
+  font-size: 16px;
+  font-weight:400;
+  background-color: transparent;
+  margin-top: 16px;
+  padding: 0.5% 2% 0.5% 2%;
+}
+
+input.form-control:focus{
+  color: black;
+  outline: none;
+}
+
+::-webkit-input-placeholder {
+  color: black;
+   font-weight:200;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  color: black;
+   font-weight:200; 
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+  color: black;
+   font-weight:200;
+}
+
+:-ms-input-placeholder {  
+  color: black;
+   font-weight:200;  
+}
+
+.form-label{
+  font-family: Source Sans Pro;
+  font-size: 14px;
+  font-weight:200;
+  text-transform: uppercase;
+  color:#aeaeae;
+  top:8px;
+  left:10px;
+  text-align: right;
+}
+
+a.forgot-password{
+  width:100%;
+  font-family: Source Sans Pro;
+  font-size: 12px;
+  font-weight:200;
+  text-align: center;
+  color:#aeaeae;
+}
+
+a.forgot-password:hover{
+  color: black;
+  text-decoration: none;
+}
+
+#forgot-password-container{
+  width:100%;
+  text-align: right;
+  margin-top: 2px;
+}
+
+input.button-right{
+  font-family: Source Sans Pro;
+  font-size: 14px;
+  font-weight:600;
+  position: absolute;
+  border:1px solid #aeaeae;
+  background-color:white;
+  height: 42px;
+}
+
+input.button-right:hover{
+  cursor: pointer;
+  border:1px solid black;
+}
+
+input.button-center{
+  font-family: Source Sans Pro;
+  font-size: 14px;
+  font-weight:600;
+  position: absolute;
+  border:1px solid #aeaeae;
+  background-color:white;
+  height: 42px;
+}
+
+input.button-center:hover{
+  cursor: pointer;
+  border:1px solid black;
+}
+
+a.button-left{
+  font-family: Source Sans Pro;
+  font-size: 14px;
+  font-weight:600;
+  position: absolute;
+  border:1px solid #aeaeae;
+  background-color:white;
+  height: 30px;
+  text-align: center;
+  padding-top: 10px;
+  color:black;
+  text-decoration: none;
+}
+
+a.button-left:hover{
+  z-index: 10;
+  cursor: pointer;
+  border:1px solid black;
+}
+
+.login-checkbox{
+  font-family: Source Sans Pro;
+  font-size: 14px;
+  font-weight:200;
+  color:#aeaeae;
+  margin-top: 20px;
+}
+
+.login-checkbox:hover{
+  cursor:pointer;
+}
+
+input.login-checkbox-a{
+  -webkit-appearance: none;
+  outline: none;
+  position: relative;
+  top:6px;
+  width:16px;
+  height:16px;
+  border: 1px solid #aeaeae;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.login-checkbox-a:hover{
+  cursor:pointer;
+}
+
+input.login-checkbox-a:active, input.login-checkbox-a:checked:active {
+  outline: none;
+}
+
+input.login-checkbox-a:checked {
+  outline: none;
+  border: 1px solid #aeaeae;
+  color: #99a1a7;
+}
+
+input.login-checkbox-a:checked:after {
+  content: '\2715';
+  font-size: 14px;
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  color: #000000;
+}
+
+video { 
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  /*width: auto;*/
+  height: 100%;
+  z-index: -100;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: rgb(230,230,230);
+  background-size: cover;
+  transition: 1s opacity;
+}
+
+.system-sidebar{
+  position: absolute;
+  border-right:1px solid #aeaeae;
+  top:40px;
+  left:0px;
+  background-color: rgba(243,243,243,0.85);
+  font-family: Source Sans Pro;
+  font-size: 14px;
+  font-weight: 600;
+  width:320px;
+}
+
+.system-sidebar-primary-button{
+  left:0px;
+  width:270px;
+  height:35px;
+  border-top: 1px solid #aeaeae;
+  border-bottom: 1px solid #aeaeae;
+  background-color: white;
+  padding-left: 50px;
+  padding-top: 15px;
+  color:black;
+  text-decoration: none;
+}
+
+a.system-sidebar-primary-button:hover{
+  border-top:1px solid black;
+  border-bottom:1px solid black;
+  z-index: 10;
+}
+
+.system-sidebar-secondary-button-active{
+  font-weight: 300;
+  left:0px;
+  width:240px;
+  height:24px;
+  border-top: 1px solid #aeaeae;
+  border-bottom: 1px solid #aeaeae;
+  background-color: rgb(30,30,30);
+  color:white;
+  padding-left: 80px;
+  padding-top: 5px;
+}
+
+.system-sidebar-secondary-button-inactive{
+  font-weight: 300;
+  left:0px;
+  width:240px;
+  height:24px;
+  border-top: 1px solid #aeaeae;
+  border-bottom: 1px solid #aeaeae;
+  background-color: white;
+  padding-left: 80px;
+  padding-top: 5px;
+  color:black;
+  text-decoration: none;
+}
+
+.system-sidebar-secondary-button-inactive:hover{
+  cursor:pointer;
+  border-top:1px solid black;
+  border-bottom:1px solid black;
+  z-index:10;
+}

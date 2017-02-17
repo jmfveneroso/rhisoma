@@ -13,5 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require bootstrap-sprockets
+//= require d3/d3.js
+//= require moment-with-locales.js
+//= require jquery-ui-1.12.1/jquery-ui.js
+//= require colorpicker-master/jquery.colorpicker.js
+//= require jquery-simple-datetimepicker-1.12.0/jquery.simple-dtpicker.js
 //= require_tree .
