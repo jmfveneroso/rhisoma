@@ -4,40 +4,121 @@
   <%= render 'shared/error_messages' %>
 <% end %>
 
-<%= render 'settings_sidebar', :selected_option => 'account' %>
+<% content_for :css do %>
+  <%= stylesheet_link_tag 'system.css' %>
+<% end %>
 
-<div class="col-md-6">
-  <div class="panel panel-default">
-    <div class="panel-heading">Change Password</div>
-    <div class="panel-body">
-      <%= form_tag(controller: 'users', action: 'change_password', method: 'post') do %>
-        <%= label_tag :old_password %>
-        <%= password_field_tag 'user[old_password]', '', class: 'form-control' %>
-      
-        <%= label_tag :new_password %>
-        <%= password_field_tag 'user[password]', '', class: 'form-control' %>
+<script>
+$.ajax({
+    url: "/language-pt.json",
+    type: "GET",
+    contentType: 'application/json; charset=utf-8',
+    success: function (resultData) {
+        var locales_data = resultData;
+        main(locales_data);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+    },
+    timeout: 120000,
+});
 
-        <%= label_tag :password_confirmation %>
-        <%= password_field_tag 'user[password_confirmation]', '', class: 'form-control' %>
-      
-        <%= submit_tag 'Update password', class: "btn btn-primary" %>
-      <% end %>
-    </div>
-  </div>
-</div>
+function main(locales_data){
+  var gui = new Gui();
+  var top_menu = new SystemGui();
+  top_menu.setLocales(locales_data);
+  top_menu.setSearch(false);
+  top_menu.drawSystemMenu();
 
-<div class="col-md-3">
-  <div class="panel panel-default">
-    <div class="panel-heading">Change Email</div>
-    <div class="panel-body">
-      <a href="<%= new_email_reset_path %>" class="no-decoration"><button type="submit" class="btn btn-primary">Change Email</button></a>
-    </div>
-  </div>
+  var sidebar = {id:"system-sidebar",class:"system-sidebar",height:window.innerHeight-40};
+  gui.addContainer(sidebar);
 
-  <div class="panel panel-default">
-    <div class="panel-heading">Delete Account</div>
-    <div class="panel-body">
-      <a href="<%= confirm_delete_account_path %>" class="no-decoration"><button type="submit" class="btn btn-primary">Delete Account</button></a>
-    </div>
-  </div>
-</div>
+  var profile_button = {id:"system-profile-button",class:"system-sidebar-primary-button",top:150};
+  gui.addLink(profile_button,"system-sidebar");
+  gui.addText("system-profile-button","PERFIL");
+  document.getElementById("system-profile-button").setAttribute('href',"/settings/profile");
+
+  var account_button = {id:"system-account-button",class:"system-sidebar-primary-button",top:200,backgroundColor:"rgb(30,30,30)",color:"white"};
+  gui.addField(account_button,"system-sidebar");
+  gui.addText("system-account-button",'CONTA');
+
+  var change_password_button = {id:"system-change-password-button",class:"system-sidebar-secondary-button-active",top:250};
+  gui.addField(change_password_button,"system-sidebar");
+  gui.addText("system-change-password-button","TROCAR SENHA"); // /settings/account
+
+  var change_email_button = {id:"system-change-email-button",class:"system-sidebar-secondary-button-inactive",top:280};
+  gui.addLink(change_email_button,"system-sidebar");
+  gui.addText("system-change-email-button","TROCAR EMAIL");
+  document.getElementById("system-change-email-button").setAttribute('href',"/email_resets/new");
+
+  var delete_account_button = {id:"system-delete-account-button",class:"system-sidebar-secondary-button-inactive",top:310};
+  gui.addLink(delete_account_button,"system-sidebar");
+  gui.addText("system-delete-account-button","DELETAR CONTA");
+  document.getElementById("system-delete-account-button").setAttribute('href',"/settings/confirm_delete_account");
+
+  var change_password_container = {id:"system-change-password",width:258,height:163,top:(window.innerHeight-225)/2,left:(window.innerWidth-320-320)/2+320,backgroundColor:"white",padding:30,border:"1px solid #aeaeae",boxshadow:"-5px 5px #aeaeae"};
+  gui.addContainer(change_password_container);
+
+  var form_label = {id:"system-label",class:"form-label",width:298};
+  gui.addField(form_label,"system-change-password");
+  gui.addText("system-label",'TROCAR SENHA');
+  document.getElementById("system-label").style.textAlign = "center";
+
+  var form = document.createElement("form");
+  form.setAttribute('method',"post");
+  form.setAttribute('action',"/settings/change_password");
+  form.setAttribute('accept-charset',"UTF-8");
+
+  var general_input = document.createElement("input");
+  general_input.setAttribute('type',"hidden");
+  general_input.setAttribute('name',"utf8");
+  general_input.setAttribute('value',"✓");
+
+  var auth_input = document.createElement("input");
+  auth_input.setAttribute('type',"hidden");
+  auth_input.setAttribute('name',"authenticity_token");
+  auth_input.setAttribute('value','<%= form_authenticity_token %>');
+
+  var old_password_input = document.createElement("input");
+  old_password_input.setAttribute('type',"password");
+  old_password_input.setAttribute('name',"user[password]");
+  old_password_input.setAttribute('id',"user_password");
+  old_password_input.setAttribute('class',"form-control");
+  old_password_input.setAttribute('placeholder',"Antiga senha");
+
+  var password_input = document.createElement("input");
+  password_input.setAttribute('type',"password");
+  password_input.setAttribute('name',"user[password]");
+  password_input.setAttribute('id',"user_password");
+  password_input.setAttribute('class',"form-control");
+  password_input.setAttribute('placeholder',"Nova senha");
+
+  var new_password_input = document.createElement("input");
+  new_password_input.setAttribute('type',"password");
+  new_password_input.setAttribute('name',"user[password]");
+  new_password_input.setAttribute('id',"user_password");
+  new_password_input.setAttribute('class',"form-control");
+  new_password_input.setAttribute('placeholder',"Confirmação de senha");
+
+  var submit_button = document.createElement("input");
+  submit_button.setAttribute('type',"submit");
+  submit_button.setAttribute('name',"commit");
+  submit_button.setAttribute('data-disable-with',"ATUALIZAR SENHA");
+  submit_button.setAttribute('class',"button-center");
+  submit_button.setAttribute('id',"submit-button");
+  submit_button.setAttribute('value',"ATUALIZAR SENHA");
+  submit_button.style.width = document.getElementById("system-change-password").offsetWidth+"px";
+  submit_button.style.left = "-1px";
+  submit_button.style.top = document.getElementById("system-change-password").offsetHeight-42-1+"px";
+
+  form.appendChild(general_input);
+  form.appendChild(auth_input);
+  form.appendChild(old_password_input);
+  form.appendChild(password_input);
+  form.appendChild(new_password_input);
+  form.appendChild(submit_button);
+
+  document.getElementById('system-change-password').appendChild(form);
+}
+  
+
+</script>

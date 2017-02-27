@@ -7,31 +7,7 @@
   <% content_for :errors do %>
     <%= render 'shared/error_messages' %>
   <% end %>
-<!--  <div class="row">
-   <div class="col-md-6 col-md-offset-3">
-     <div class="panel panel-default">
-       <div class="panel-heading">Sign Up</div>
-       <div class="panel-body">
-         <%= form_for(@user) do |f| %>
-           <%= f.label :email %>
-           <%= f.email_field :email, class: 'form-control' %>
-        
-           <%= f.label :password %>
-           <%= f.password_field :password, class: 'form-control' %>
-        
-           <%= f.label :password_confirmation, "Confirmation" %>
-           <%= f.password_field :password_confirmation, class: 'form-control' %>
-        
-           <div class="btn-lft"><a href="<%= root_url %>" class="btn btn-default">Back</a></div>
-           <div class="btn-rgt"><%= f.submit "Submit", class: "btn btn-primary btn-rgt" %></div>
-         <% end %>
-       </div>
-     </div>
-   </div>
-   <script type="text/javascript">
- </script>
 
- </div> -->
 
 <video poster="" id="bgvid" playsinline autoplay muted loop>
 <source src="https://vimeo.com/190179602/download?t=1487018092&v=631426677&s=0fc854a7108aed8d1f9a3f729f94faddbbafb0868afc2b4f2a523c54ed7d1648" type="video/mp4">
@@ -39,8 +15,6 @@
 
 <script>
 var x = '<%= @user.errors.full_messages %>';
-console.log(x);
-console.log("teste");
 $.ajax({
     url: "/language-pt.json", // >> change_value
     type: "GET",
