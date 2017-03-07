@@ -50,7 +50,8 @@ class Node < ApplicationRecord
   # Returns an array with the attribute list for this node's type.
   def attrs
     attributes = [:id, :title, :x, :y, :vx, :vy, :fx, :fy, 
-                  :type, :territory_id, :styling_group_id]
+                  :type, :territory_id, :styling_group_id,
+                  :collapse, :standby, :complete_date]
 
     case self.type
       when 'CategoryNode' 
