@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170202175154) do
+ActiveRecord::Schema.define(version: 20170303191240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,9 @@ ActiveRecord::Schema.define(version: 20170202175154) do
     t.float    "fy"
     t.integer  "target_territory_id"
     t.integer  "styling_group_id"
+    t.boolean  "collapse"
+    t.boolean  "standby"
+    t.datetime "complete_date"
     t.index ["user_id"], name: "index_nodes_on_user_id", using: :btree
   end
 

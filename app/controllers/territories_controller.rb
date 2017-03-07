@@ -12,9 +12,9 @@ class TerritoriesController < ApplicationController
       territories: @user.territories,
       # The JSON parse is necessary to select the type column.
       nodes: JSON.parse(@user.nodes.select(
-        "nodes.id, title, type, territory_id, styling_group_id, x, y, vx, vy, fx, fy"
+        "nodes.id, title, type, territory_id, styling_group_id, x, y, vx, vy, fx, fy, collapse, standby, complete_date"
       ).to_json(only: [
-        :id, :title, :type, :territory_id, :styling_group_id, :x, :y, :vx, :vy, :fx, :fy
+        :id, :title, :type, :territory_id, :styling_group_id, :x, :y, :vx, :vy, :fx, :fy, :collapse, :standby, :complete_date
       ])),
       edges: @user.edges,
       templates: Territory.where(:template => true),
@@ -54,9 +54,9 @@ class TerritoriesController < ApplicationController
     render :json => {
       territory: @territory,
       nodes: JSON.parse(@territory.nodes.select(
-        "nodes.id, title, type, territory_id, x, y, vx, vy, fx, fy"
+        "nodes.id, title, type, territory_id, x, y, vx, vy, fx, fy, collapse, standby, complete_date"
       ).to_json(only: [
-        :id, :title, :type, :territory_id, :x, :y, :vx, :vy, :fx, :fy
+        :id, :title, :type, :territory_id, :x, :y, :vx, :vy, :fx, :fy, :collapse, :standby, :complete_date
       ])),
       edges: @territory.edges
     }
@@ -88,7 +88,7 @@ class TerritoriesController < ApplicationController
 
   private
   
-    # Transforms an attribute in SQL friendly text.
+    # Transforms an attribute into SQL friendly text.
     def sqlize(field)
       text = field
       text = field.getutc if field.is_a? ActiveSupport::TimeWithZone
