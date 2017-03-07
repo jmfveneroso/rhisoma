@@ -8,21 +8,24 @@
 <script>
 /* LOCALES | Atualizar com container */
 
+// var converter = new Converter();
+
 $.ajax({
     url: "/language-pt.json",
     type: "GET",
     contentType: 'application/json; charset=utf-8',
     success: function (resultData) {
-        var locales_data = resultData;//$.parseJSON(resultData);
-        main(locales_data);
+          var locales_data = resultData;
+          Converter.getJSON(function (d3_data) {
+          main(locales_data, d3_data);
+        });        
     },
     error: function (jqXHR, textStatus, errorThrown) {
     },
     timeout: 120000,
 });
 
-function main(locales_data){
-  console.log(globals.localize["qualquer_coisa"]);
+function main(locales_data, d3_data){
 
   /* INIT */
 
@@ -109,10 +112,7 @@ function setSearchGraph(){
   top_menu.setCurrentGraph(node_names);
 }
 
-d3.json("/test.json", function(error, in_graph) {
-  if (error) throw error;
-
-  structure.setJSON(in_graph);
+  structure.setJSON(d3_data);
   graph = structure.getGraph();
   gui.setGroups(structure.getGroups());
   structure.getPeriod();
@@ -382,7 +382,6 @@ d3.json("/test.json", function(error, in_graph) {
       }
     }
   }
-});
 
 
   /* DRAG */
@@ -610,12 +609,13 @@ function environmentStabilize(){
     }
   }
   else if(gui.saveNode() != false){
-    structure.updateNode(gui.saveNode());
-    var this_id = gui.saveNode().id;
-    gui.resetCurrentEditing();
-    restart();
-    rst.setEnvironment(inside_node,current_node.id,structure);
-    rst.updateLabel(this_id);
+    structure.updateNode(gui.saveNode(),function(){
+      var this_id = gui.saveNode().id;
+      gui.resetCurrentEditing();
+      restart();
+      rst.setEnvironment(inside_node,current_node.id,structure);
+      rst.updateLabel(this_id);
+    });
   }
   else if(gui.saveLink() != false){
     var source_id = gui.saveLink().source;
@@ -681,9 +681,10 @@ function mouseDownEnvironment(){
       var mouse_xy = d3.mouse(transform);
       var node_x = mouse_xy[0];
       var node_y = mouse_xy[1];
-      structure.addNode(node_x,node_y);
-      gui.closeMenus();
-      restart();
+      structure.addNode(node_x,node_y, function () {
+        gui.closeMenus();
+        restart();  
+      });      
     }
   }
 }
@@ -1017,13 +1018,20 @@ function clickNode(d){
     }
     gui.hideControlPanel();
     current_node = {};
-    structure.deleteNode(d.id);
-    gui.closeMenus();
-    restart();
-    rst.setEnvironment(inside_node,current_node.id,structure);
-    for(var i = 0; i < update_nodes.length; i++){
-      rst.updateLabel(update_nodes[i]);
-    }
+    structure.deleteNode(d.id, function(){
+      gui.closeMenus();
+      restart();
+      rst.setEnvironment(inside_node,current_node.id,structure);
+      for(var i = 0; i < update_nodes.length; i++){
+        rst.updateLabel(update_nodes[i]);
+      }
+    });
+    // gui.closeMenus();
+    // restart();
+    // rst.setEnvironment(inside_node,current_node.id,structure);
+    // for(var i = 0; i < update_nodes.length; i++){
+    //   rst.updateLabel(update_nodes[i]);
+    // }
   }
   else if(gui.editionMode() === "nodeadd"){
     if(d.collapse != 0){
