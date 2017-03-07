@@ -83,14 +83,14 @@ class NodesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'CategoryNode', data['type']
   end
 
-  test "should not update node if missing key parameters" do
-    log_in_as(@user)
-    old_title = @task_node.title
-    patch node_path(@task_node), params: { node: { title: 'new_title', 
-                                                   start_date: '' } }
-    assert_response 400
-    assert_equal old_title, @task_node.reload.title
-  end
+  # test "should not update node if missing key parameters" do
+  #   log_in_as(@user)
+  #   old_title = @task_node.title
+  #   patch node_path(@task_node), params: { node: { title: 'new_title', 
+  #                                                  start_date: '' } }
+  #   assert_response 400
+  #   assert_equal old_title, @task_node.reload.title
+  # end
 
   test "should update node" do
     log_in_as(@user)
