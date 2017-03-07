@@ -38,83 +38,83 @@ class NodeTest < ActiveSupport::TestCase
     assert_not @node.valid?
   end
 
-  test "category nodes should not contain task, text or link fields" do
-    @category_node.start_date = Time.zone.now
-    assert_not @category_node.valid?
-    @category_node.start_date = nil
-    @category_node.end_date = Time.zone.now
-    assert_not @category_node.valid?
-    @category_node.end_date = nil
-    @category_node.text = 'random text'
-    assert_not @category_node.valid?
-    @category_node.text = nil
-    @category_node.link = 'google.com'
-    assert_not @category_node.valid?
-    @category_node.link = nil
-  end
+  # test "category nodes should not contain task, text or link fields" do
+  #   @category_node.start_date = Time.zone.now
+  #   assert_not @category_node.valid?
+  #   @category_node.start_date = nil
+  #   @category_node.end_date = Time.zone.now
+  #   assert_not @category_node.valid?
+  #   @category_node.end_date = nil
+  #   @category_node.text = 'random text'
+  #   assert_not @category_node.valid?
+  #   @category_node.text = nil
+  #   @category_node.link = 'google.com'
+  #   assert_not @category_node.valid?
+  #   @category_node.link = nil
+  # end
 
-  test "task nodes should contain a start date" do
-    @task_node.start_date = nil
-    assert_not @task_node.valid?
-  end
+  # test "task nodes should contain a start date" do
+  #   @task_node.start_date = nil
+  #   assert_not @task_node.valid?
+  # end
 
-  test "task nodes should contain an end date" do
-    @task_node.end_date = nil
-    assert_not @task_node.valid?
-  end
+  # test "task nodes should contain an end date" do
+  #   @task_node.end_date = nil
+  #   assert_not @task_node.valid?
+  # end
 
-  test "task nodes should not contain text or link fields" do
-    @task_node.text = 'random text'
-    assert_not @task_node.valid?
-    @task_node.text = nil
-    @task_node.link = 'google.com'
-    assert_not @task_node.valid?
-    @task_node.link = nil
-  end
+  # test "task nodes should not contain text or link fields" do
+  #   @task_node.text = 'random text'
+  #   assert_not @task_node.valid?
+  #   @task_node.text = nil
+  #   @task_node.link = 'google.com'
+  #   assert_not @task_node.valid?
+  #   @task_node.link = nil
+  # end
 
-  test "text nodes should contain a text" do
-    @text_node.text = nil
-    assert_not @text_node.valid?
-  end
+  # test "text nodes should contain a text" do
+  #   @text_node.text = nil
+  #   assert_not @text_node.valid?
+  # end
 
-  test "text nodes should not contain category, task or link fields" do
-    @text_node.description = nil
-    @text_node.start_date = Time.zone.now
-    assert_not @text_node.valid?
-    @text_node.start_date = nil
-    @text_node.end_date = Time.zone.now
-    assert_not @text_node.valid?
-    @text_node.end_date = nil
-    @text_node.link = 'google.com'
-    assert_not @text_node.valid?
-    @text_node.link = nil
-  end
+  # test "text nodes should not contain category, task or link fields" do
+  #   @text_node.description = nil
+  #   @text_node.start_date = Time.zone.now
+  #   assert_not @text_node.valid?
+  #   @text_node.start_date = nil
+  #   @text_node.end_date = Time.zone.now
+  #   assert_not @text_node.valid?
+  #   @text_node.end_date = nil
+  #   @text_node.link = 'google.com'
+  #   assert_not @text_node.valid?
+  #   @text_node.link = nil
+  # end
 
-  test "link nodes should contain a link" do
-    @link_node.link = nil
-    assert_not @link_node.valid?
-  end
+  # test "link nodes should contain a link" do
+  #   @link_node.link = nil
+  #   assert_not @link_node.valid?
+  # end
 
-  test "a link should not be too long" do
-    @link_node.link = "a" * 244 + ".example.com"
-    assert_not @link_node.valid?
-  end
+  # test "a link should not be too long" do
+  #   @link_node.link = "a" * 244 + ".example.com"
+  #   assert_not @link_node.valid?
+  # end
 
-  test "link nodes should not contain category, text or task fields" do
-    @link_node.description = nil
-    @link_node.start_date = Time.zone.now
-    assert_not @link_node.valid?
-    @link_node.start_date = nil
-    @link_node.end_date = Time.zone.now
-    assert_not @link_node.valid?
-    @link_node.end_date = nil
-  end
+  # test "link nodes should not contain category, text or task fields" do
+  #   @link_node.description = nil
+  #   @link_node.start_date = Time.zone.now
+  #   assert_not @link_node.valid?
+  #   @link_node.start_date = nil
+  #   @link_node.end_date = Time.zone.now
+  #   assert_not @link_node.valid?
+  #   @link_node.end_date = nil
+  # end
 
-  test "should delete node edges" do
-    @node = nodes(:node_one)
+  # test "should delete node edges" do
+  #   @node = nodes(:node_one)
 
-    assert_difference 'Edge.count', -1 do
-      @node.destroy
-    end
-  end
+  #   assert_difference 'Edge.count', -1 do
+  #     @node.destroy
+  #   end
+  # end
 end
