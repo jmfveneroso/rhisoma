@@ -1,18 +1,91 @@
 <% provide(:page_title, "Forgot password") %>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <div class="panel panel-default">
-      <div class="panel-heading">Forgot Password</div>
-      <div class="panel-body">
-        <%= form_for(:password_reset, url: password_resets_path) do |f| %>
-          <%= f.label :email %>
-          <%= f.email_field :email, class: 'form-control' %>
+<% content_for :css do %>
+  <%= stylesheet_link_tag 'system.css' %>
+<% end %>
 
-            <div class="btn-lft"><a href="<%= root_url %>" class="btn btn-default">Back</a></div>
-            <div class="btn-rgt"><%= f.submit "Submit", class: "btn btn-primary btn-rgt" %></div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
+<video poster="" id="bgvid" playsinline autoplay muted loop>
+<source src="https://vimeo.com/190179602/download?t=1487018092&v=631426677&s=0fc854a7108aed8d1f9a3f729f94faddbbafb0868afc2b4f2a523c54ed7d1648" type="video/mp4">
+</video>
+
+<script>
+
+$.ajax({
+    url: "/language-pt.json",
+    type: "GET",
+    contentType: 'application/json; charset=utf-8',
+    success: function (resultData) {
+        var locales_data = resultData;
+        main(locales_data);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+    },
+    timeout: 120000,
+});
+
+function main(locales_data){
+  var gui = new Gui();
+
+  var rhisoma_logo = {id:"system-logo",width:80,height:80,top:(window.innerHeight-160)/2-40,left:((window.innerWidth-320)/2)+((318-80)/2),backgroundColor:"transparent",zindex:10};
+  gui.addField(rhisoma_logo);
+  gui.addText("system-logo",'<img id="rhisoma-logo" src="<%= image_path 'logo.png' %>" width="80px" height="80px" />');
+
+  var forgot_password_container = {id:"system-forgot-password",width:258,height:98,top:(window.innerHeight-160)/2,left:(window.innerWidth-320)/2,backgroundColor:"white",padding:30,border:"1px solid #aeaeae",boxshadow:"-5px 5px #aeaeae"};
+  gui.addContainer(forgot_password_container);
+
+  var form_label = {id:"system-label",class:"form-label",width:298};
+  gui.addField(form_label,"system-forgot-password");
+  gui.addText("system-label",'RECUPERAR SENHA');
+
+  var form = document.createElement("form");
+  form.setAttribute('method',"post");
+  form.setAttribute('action',"/password_resets");
+  form.setAttribute('accept-charset',"UTF-8");
+
+  var general_input = document.createElement("input");
+  general_input.setAttribute('type',"hidden");
+  general_input.setAttribute('name',"utf8");
+  general_input.setAttribute('value',"✓");
+
+  var auth_input = document.createElement("input");
+  auth_input.setAttribute('type',"hidden");
+  auth_input.setAttribute('name',"authenticity_token");
+  auth_input.setAttribute('value','<%= form_authenticity_token %>');
+
+  var email_input = document.createElement("input");
+  email_input.setAttribute('type',"email");
+  email_input.setAttribute('name',"password_reset[email]");
+  email_input.setAttribute('id',"password_reset_email");
+  email_input.setAttribute('class',"form-control");
+  email_input.setAttribute('placeholder',"E-mail");
+
+  var submit_button = document.createElement("input");
+  submit_button.setAttribute('type',"submit");
+  submit_button.setAttribute('name',"commit");
+  submit_button.setAttribute('data-disable-with',"ENVIAR");
+  submit_button.setAttribute('class',"button-right");
+  submit_button.setAttribute('id',"submit-button");
+  submit_button.setAttribute('value',"ENVIAR");
+  submit_button.style.width = document.getElementById("system-forgot-password").offsetWidth/2+"px";
+  submit_button.style.left = document.getElementById("system-forgot-password").offsetWidth/2-1+"px";
+  submit_button.style.top = document.getElementById("system-forgot-password").offsetHeight-42-1+"px";
+
+  form.appendChild(general_input);
+  form.appendChild(auth_input);
+  form.appendChild(email_input);
+  form.appendChild(submit_button);
+
+  var back_button = document.createElement("a");
+  back_button.setAttribute('class',"button-left");
+  back_button.setAttribute('href',"/");
+  back_button.innerHTML = "VOLTAR";
+  back_button.style.width = document.getElementById("system-forgot-password").offsetWidth/2-1+"px";
+  back_button.style.left = "-1px";
+  back_button.style.top = document.getElementById("system-forgot-password").offsetHeight-42-1+"px";
+
+  document.getElementById("system-forgot-password").appendChild(back_button);
+  document.getElementById('system-forgot-password').appendChild(form);
+}
+  
+
+</script>

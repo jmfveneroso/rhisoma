@@ -62,7 +62,7 @@ class NodesController < ApplicationController
   # @route PATCH /nodes/pos
   def bulk_update_pos
     Node.bulk_update_pos(@nodes.to_json)
-    render :json => 'success'
+    render :json => '{ "code": 200, "message": "success" }'
   end
 
   private

@@ -5,6 +5,7 @@ body{
   top:0;
   left:0;
   overflow:hidden;
+  background-color: rgb(230,230,230);
 }
 
 input.form-control{

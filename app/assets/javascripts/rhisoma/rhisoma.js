@@ -686,116 +686,107 @@ function Rhisoma(){
 		}
 	}
 
-	this.updateLinkXY = function(selected_node){
-		for(var i = 0; i < entire_graph.links.length; i++){
-			if(entire_graph.links[i].source.id === selected_node.source.id && entire_graph.links[i].target.id === selected_node.target.id){
-				entire_graph.links[i].source.x = selected_node.source.x;
-				entire_graph.links[i].source.y = selected_node.source.y;
-				entire_graph.links[i].source.vx = selected_node.source.vx;
-				entire_graph.links[i].source.vy = selected_node.source.vy;
-				entire_graph.links[i].target.x = selected_node.target.x;
-				entire_graph.links[i].target.y = selected_node.target.y;
-				entire_graph.links[i].target.vx = selected_node.target.vx;
-				entire_graph.links[i].target.vy = selected_node.target.vy;
-			}
-		}
-		for(var i = 0; i < active_graph.links.length; i++){
-			if(active_graph.links[i].source.id === selected_node.source.id && active_graph.links[i].target.id === selected_node.target.id){
-				active_graph.links[i].source.x = selected_node.source.x;
-				active_graph.links[i].source.y = selected_node.source.y;
-				active_graph.links[i].source.vx = selected_node.source.vx;
-				active_graph.links[i].source.vy = selected_node.source.vy;
-				active_graph.links[i].target.x = selected_node.target.x;
-				active_graph.links[i].target.y = selected_node.target.y;
-				active_graph.links[i].target.vx = selected_node.target.vx;
-				active_graph.links[i].target.vy = selected_node.target.vy;
-			}
-		}
-	}
+	// this.updateLinkXY = function(selected_node){
+	// 	for(var i = 0; i < entire_graph.links.length; i++){
+	// 		if(entire_graph.links[i].source.id === selected_node.source.id && entire_graph.links[i].target.id === selected_node.target.id){
+	// 			entire_graph.links[i].source.x = selected_node.source.x;
+	// 			entire_graph.links[i].source.y = selected_node.source.y;
+	// 			entire_graph.links[i].source.vx = selected_node.source.vx;
+	// 			entire_graph.links[i].source.vy = selected_node.source.vy;
+	// 			entire_graph.links[i].target.x = selected_node.target.x;
+	// 			entire_graph.links[i].target.y = selected_node.target.y;
+	// 			entire_graph.links[i].target.vx = selected_node.target.vx;
+	// 			entire_graph.links[i].target.vy = selected_node.target.vy;
+	// 		}
+	// 	}
+	// 	for(var i = 0; i < active_graph.links.length; i++){
+	// 		if(active_graph.links[i].source.id === selected_node.source.id && active_graph.links[i].target.id === selected_node.target.id){
+	// 			active_graph.links[i].source.x = selected_node.source.x;
+	// 			active_graph.links[i].source.y = selected_node.source.y;
+	// 			active_graph.links[i].source.vx = selected_node.source.vx;
+	// 			active_graph.links[i].source.vy = selected_node.source.vy;
+	// 			active_graph.links[i].target.x = selected_node.target.x;
+	// 			active_graph.links[i].target.y = selected_node.target.y;
+	// 			active_graph.links[i].target.vx = selected_node.target.vx;
+	// 			active_graph.links[i].target.vy = selected_node.target.vy;
+	// 		}
+	// 	}
+	// }
 
-	this.addNode = function(fx,fy){
-		var new_node = {};
-		var generate_id = entire_graph.nodes.length + Math.floor(Math.random() * (900 - 1)) + 1;
-		new_node.id = generate_id.toString();
-		new_node.name = "Untitled";
-		new_node.active = "1";
-		new_node.childConnections = "0";
-		new_node.parentConnections = "1";
-		new_node.children = [];
-		new_node.collapse = 1;
-		new_node.date_end = "";
-		new_node.date_start = "";
-		new_node.description = "";
-		new_node.group = "_DEFAULT";
-		new_node.color = "#000000";
-		new_node.size = 1;
-		new_node.standby = 0;
-		new_node.type = "categoria";
-		new_node.fx = fx;
-		new_node.fy = fy;
-		new_node.fixed = 1;
-		entire_graph.nodes.push(new_node);
-		active_graph.nodes.push(new_node);
-		master.updateGraph();
-		return new_node.id;
+	this.addNode = function(fx,fy,callback){
+		Converter.addNode(fx,fy,function (new_node) {
+			new_node.childConnections = "0";
+			new_node.parentConnections = "1";
+			new_node.children = [];
+			new_node.color = "#000000";
+			new_node.size = 1;
+			// new_node.fixed = 1;
+			entire_graph.nodes.push(new_node);
+			active_graph.nodes.push(new_node);
+			master.updateGraph();
+		    callback(new_node);
+		});
 	}
 
 	this.addGroup = function(){
-		/** 
-		 *  TODO comunicar com BD para pegar novo id e nova cor de grupo
-		 */
-		var new_color = {};
-		new_color.color = color(Object.keys(groups).length+1);
-		new_color.id = Object.keys(groups).length+1;
-		groups[new_color.id] = new_color.color;
-		return new_color;
+		// Converter.addGroup(){function(new_group){
+			var new_color = {};
+			new_color.color = color(Object.keys(groups).length+1);
+			new_color.id = Object.keys(groups).length+1;
+			groups[new_color.id] = new_color.color;
+			// callback();
+			return new_color;
+		// }
 
 	}
 
-	this.deleteNode = function(this_node){	
-		// update nodes
-		var index = undefined;
-		for(var i = 0; i < entire_graph.nodes.length; i++){
-			if(entire_graph.nodes[i].id === this_node){
-				index = i;
+	this.deleteNode = function(this_node, callback){
+		Converter.deleteNode(this_node,function () {
+			// update nodes
+			var index = undefined;
+			for(var i = 0; i < entire_graph.nodes.length; i++){
+				if(entire_graph.nodes[i].id === this_node){
+					index = i;
+				}
 			}
-		}
-		entire_graph.nodes.splice(index,1);
+			entire_graph.nodes.splice(index,1);
 
-		index = undefined;
-		for(var i = 0; i < active_graph.nodes.length; i++){
-			if(active_graph.nodes[i].id === this_node){
-				index = i;
+			index = undefined;
+			for(var i = 0; i < active_graph.nodes.length; i++){
+				if(active_graph.nodes[i].id === this_node){
+					index = i;
+				}
 			}
-		}
-		active_graph.nodes.splice(index,1);
+			active_graph.nodes.splice(index,1);
 
-		// update links
-		var sum = 0;
-		var splice = [];
-		for(var i = 0; i < entire_graph.links.length; i++){
-			if(entire_graph.links[i].source === this_node || entire_graph.links[i].target === this_node){
-				splice[splice.length] = i;
+			// update links
+			var sum = 0;
+			var splice = [];
+			for(var i = 0; i < entire_graph.links.length; i++){
+				if(entire_graph.links[i].source === this_node || entire_graph.links[i].target === this_node){
+					splice[splice.length] = i;
+				}
 			}
-		}
-		for(var i = 0; i < splice.length; i++){
-			entire_graph.links.splice(splice[i]-sum,1);
-			sum++;
-		}
+			for(var i = 0; i < splice.length; i++){
+				entire_graph.links.splice(splice[i]-sum,1);
+				sum++;
+			}
 
-		sum = 0;
-		splice = [];
-		for(var i = 0; i < active_graph.links.length; i++){
-			if(active_graph.links[i].source === this_node || active_graph.links[i].target === this_node){
-				splice[splice.length] = i;
+			sum = 0;
+			splice = [];
+			for(var i = 0; i < active_graph.links.length; i++){
+				if(active_graph.links[i].source === this_node || active_graph.links[i].target === this_node){
+					splice[splice.length] = i;
+				}
 			}
-		}
-		for(var i = 0; i < splice.length; i++){
-			active_graph.links.splice(splice[i]-sum,1);
-			sum++;
-		}
-		master.updateGraph();
-		// quando um node é deletado, os children dele devem ser deletados? ou então: conectar os próximos na cadeia no source do deletado
+			for(var i = 0; i < splice.length; i++){
+				active_graph.links.splice(splice[i]-sum,1);
+				sum++;
+			}
+			master.updateGraph();
+			callback();
+			// quando um node é deletado, os children dele devem ser deletados? ou então: conectar os próximos na cadeia no source do deletado
+		});	
 	}
 
 	this.deleteNodeChildren = function(this_node){
@@ -803,52 +794,77 @@ function Rhisoma(){
 		// deleta nódulos [pegar nodes[x].children] e links relacionados ao nódulos deletados do entire graph
 	}
 
-	this.addLink = function(links){
+	this.addLink = function(links, callback){
 		var link_match = master.linkExists(links);
-		var link_update = false;
+		// var link_update = false;
 		if(!link_match.exists){
-			var index_target = null;
-			var index_source = null;
-			for(var i = 0; i < entire_graph.nodes.length; i++){
-				if(entire_graph.nodes[i].id === links.target){
-					index_target = i;
+			Converter.addEdge(links,function (edge) {
+				var index_target = null;
+				var index_source = null;
+				var node_to_update = {};
+				for(var i = 0; i < entire_graph.nodes.length; i++){
+					if(entire_graph.nodes[i].id === links.target){
+						index_target = i;
+					}
+					if(entire_graph.nodes[i].id === links.source){
+						index_source = i;
+					}
 				}
-				if(entire_graph.nodes[i].id === links.source){
-					index_source = i;
+				if(link_match.new_target){
+					entire_graph.nodes[index_target].group = entire_graph.nodes[index_source].group;
+					entire_graph.nodes[index_target].color = entire_graph.nodes[index_source].color;
+					node_to_update.group = entire_graph.nodes[index_source].group;
+					node_to_update.color = entire_graph.nodes[index_source].color;
 				}
-			}
-			if(link_match.new_target){
-				entire_graph.nodes[index_target].group = entire_graph.nodes[index_source].group;
-				entire_graph.nodes[index_target].color = entire_graph.nodes[index_source].color;
-			}
-			entire_graph.nodes[index_target].fx = undefined;
-			entire_graph.nodes[index_target].fy = undefined;
-			entire_graph.nodes[index_target].fixed = undefined;
-			entire_graph.nodes[index_source].fx = undefined;
-			entire_graph.nodes[index_source].fy = undefined;
-			entire_graph.nodes[index_source].fixed = undefined;
+				entire_graph.nodes[index_target].fx = undefined;
+				entire_graph.nodes[index_target].fy = undefined;
+				// entire_graph.nodes[index_target].fixed = undefined;
+				entire_graph.nodes[index_source].fx = undefined;
+				entire_graph.nodes[index_source].fy = undefined;
+				// entire_graph.nodes[index_source].fixed = undefined;
+				node_to_update.fx = "";
+				node_to_update.fy = "";
 
-			var link = {}; // pegar id do BD
-			link.source = links.source.toString();
-			link.target = links.target.toString();
-			link.value = 1;
-			link.type = 1;
-			var link_id = entire_graph.links.length + Math.floor(Math.random() * (900 - 1)) + 1;
-			link.id = link_id.toString();
-			entire_graph.links.push(link);
-			active_graph.links.push(link);	
-			master.updateGraph();
-			link_update = true;
+				/*
+					TO DO:
+
+					Conferir se fx e fy "" funcionam como undefined no código
+				*/
+
+				node_to_update.id = entire_graph.nodes[index_target].id;
+
+				Converter.updateNode(node_to_update,function(){
+					var link = {}; // pegar id do BD
+					link.source = links.source.toString();
+					link.target = links.target.toString();
+					link.value = 1;
+					link.type = 1;
+					link.id = String(edge.id);
+					// var link_id = entire_graph.links.length + Math.floor(Math.random() * (900 - 1)) + 1;
+					// link.id = link_id.toString(); // pega do back-end
+					entire_graph.links.push(link);
+					active_graph.links.push(link);	
+					master.updateGraph();
+					// link_update = true;
+					callback();
+				});
+			});
 		}
 		else if(link_match.exists && link_match.change_type != undefined && entire_graph.links[link_match.change_type].type != 3){
-			entire_graph.links[link_match.change_type].type = 2;
-			var active_link_index = master.getActiveLinkIndex(entire_graph.links[link_match.change_type].id);
-			active_graph.links[active_link_index].type = 2;
-			master.updateGraph();
-			link_update = true;
+			links.id = link_match.id;
+			links.type = 2;
+			Converter.updateEdge(links,function (edge) {
+				// conferir
+				entire_graph.links[link_match.change_type].type = 2;
+				var active_link_index = master.getActiveLinkIndex(entire_graph.links[link_match.change_type].id);
+				active_graph.links[active_link_index].type = 2;
+				master.updateGraph();
+				// link_update = true;
+				callback();
+			});
 		}
 
-		return link_update;
+		// return link_update;
 	}
 
 	this.linkExists = function(links){
@@ -865,6 +881,7 @@ function Rhisoma(){
 			else if(entire_graph.links[i].source === links.target && entire_graph.links[i].target === links.source){
 				link_match.exists = true;
 				link_match.change_type = i;
+				link_match.id = entire_graph.links[i].id;
 			}
 			if(entire_graph.links[i].source === links.target || entire_graph.links[i].target === links.target){
 				link_match.new_target = false;
@@ -876,18 +893,21 @@ function Rhisoma(){
 		return link_match;
 	}
 
-	this.deleteLink = function(this_link){
-		for(var i = 0; i < entire_graph.links.length; i++){
-			if(entire_graph.links[i].id === this_link){
-				entire_graph.links.splice(i,1);
+	this.deleteLink = function(this_link, callback){
+		Converter.deleteEdge(this_link, function(){
+			for(var i = 0; i < entire_graph.links.length; i++){
+				if(entire_graph.links[i].id.toString() === this_link.toString()){
+					entire_graph.links.splice(i,1);
+				}
 			}
-		}
-		for(var i = 0; i < active_graph.links.length; i++){
-			if(active_graph.links[i].id === this_link){
-				active_graph.links.splice(i,1);
+			for(var i = 0; i < active_graph.links.length; i++){
+				if(active_graph.links[i].id.toString() === this_link.toString()){
+					active_graph.links.splice(i,1);
+				}
 			}
-		}
-		master.updateGraph();
+			master.updateGraph();
+			callback();
+		});
 	}
 
 	/* GET */
@@ -989,102 +1009,120 @@ function Rhisoma(){
 
 	// UPDATE NODE & LINKS
 
-	this.updateNode = function(in_node){
-		var inc = 0;
-		var index = undefined;
-		var found_match = false;
-		while(!found_match){
-			if(entire_graph.nodes[inc].id === in_node.id){
-				index = inc;
-				found_match = true;
+	this.updateNode = function(in_node, callback){
+		Converter.updateNode(in_node,function () {
+			var inc = 0;
+			var index = undefined;
+			var found_match = false;
+			while(!found_match){
+				if(entire_graph.nodes[inc].id === in_node.id){
+					index = inc;
+					found_match = true;
+				}
+				inc++;
 			}
-			inc++;
-		}
-		if(index != undefined){
-			for (var property in in_node) {
-			    if (in_node.hasOwnProperty(property)) {
-			        entire_graph.nodes[index][property] = in_node[property];
-			    }
+			if(index != undefined){
+				for (var property in in_node) {
+				    if (in_node.hasOwnProperty(property)) {
+				        entire_graph.nodes[index][property] = in_node[property];
+				    }
+				}
 			}
-		}
 
-		inc = 0;
-		index = undefined;
-		found_match = false;
-		while(!found_match){
-			if(active_graph.nodes[inc].id === in_node.id){
-				index = inc;
-				found_match = true;
+			inc = 0;
+			index = undefined;
+			found_match = false;
+			while(!found_match){
+				if(active_graph.nodes[inc].id === in_node.id){
+					index = inc;
+					found_match = true;
+				}
+				inc++;
 			}
-			inc++;
-		}
-		if(index != undefined){
-			for (var property in in_node) {
-			    if (in_node.hasOwnProperty(property)) {
-			        active_graph.nodes[index][property] = in_node[property];
-			    }
+			if(index != undefined){
+				for (var property in in_node) {
+				    if (in_node.hasOwnProperty(property)) {
+				        active_graph.nodes[index][property] = in_node[property];
+				    }
+				}
 			}
-		}
 
-		for(var i = 0; i < apply_standby.length; i++){
-			if(active_graph.nodes[index].id === apply_standby[i]){
-				active_graph.nodes[index].standby = 1;
+			for(var i = 0; i < apply_standby.length; i++){
+				if(active_graph.nodes[index].id === apply_standby[i]){
+					active_graph.nodes[index].standby = 1;
+				}
 			}
-		}
+			callback();
+		});
 	}
 
-	this.updateLink = function(in_link){
-		var inc = 0;
-		var index = undefined;
-		var found_match = false;
-		while(!found_match){
-			if(entire_graph.links[inc].id === in_link.id){
-				index = inc;
-				found_match = true;
+	this.updateLink = function(in_link, callback){
+		Converter.updateEdge(in_link, function(){
+			var inc = 0;
+			var index = undefined;
+			var found_match = false;
+			while(!found_match){
+				if(entire_graph.links[inc].id === in_link.id){
+					index = inc;
+					found_match = true;
+				}
+				inc++;
 			}
-			inc++;
-		}
-		if(index != undefined){
-			for (var property in in_link) {
-			    if (in_link.hasOwnProperty(property)) {
-			        entire_graph.links[index][property] = in_link[property];
-			    }
+			if(index != undefined){
+				for (var property in in_link) {
+				    if (in_link.hasOwnProperty(property)) {
+				        entire_graph.links[index][property] = in_link[property];
+				    }
+				}
 			}
-		}
-		inc = 0;
-		index = undefined;
-		found_match = false;
-		while(!found_match){
-			if(active_graph.links[inc].id === in_link.id){
-				index = inc;
-				found_match = true;
+			inc = 0;
+			index = undefined;
+			found_match = false;
+			while(!found_match){
+				if(active_graph.links[inc].id === in_link.id){
+					index = inc;
+					found_match = true;
+				}
+				inc++;
 			}
-			inc++;
-		}
-		if(index != undefined){
-			for (var property in in_link) {
-			    if (in_link.hasOwnProperty(property)) {
-			        active_graph.links[index][property] = in_link[property];
-			    }
+			if(index != undefined){
+				for (var property in in_link) {
+				    if (in_link.hasOwnProperty(property)) {
+				        active_graph.links[index][property] = in_link[property];
+				    }
+				}
 			}
-		}
-		master.updateGraph();
+			master.updateGraph();
+			callback();
+		});
 	}
 
-	this.collapseNode = function(node){
-		check_block = false;
-		entire_graph.nodes[master.getNodeIndex(node)].collapse = 1;
-		active_graph.nodes[master.getActiveNodeIndex(node)].collapse = 1;
-		block_node = [];
-		master.updateCollapseNodes(node);
+	this.collapseNode = function(node, callback){
+		var node_object = {};
+		node_object.id = node;
+		node_object.collapse = 1;
+		Converter.updateNode(node_object, function(){
+			check_block = false;
+			entire_graph.nodes[master.getNodeIndex(node)].collapse = 1;
+			active_graph.nodes[master.getActiveNodeIndex(node)].collapse = 1;
+			block_node = [];
+			master.updateCollapseNodes(node);
+			callback();
+		});
 	}
 
-	this.closeNode = function(node){
-		check_block = false;
-		entire_graph.nodes[master.getNodeIndex(node)].collapse = 0;
-		active_graph.nodes[master.getActiveNodeIndex(node)].collapse = 0;
-		block_node = [];
-		master.updateCloseNodes(node);
+	this.closeNode = function(node, callback){
+		var node_object = {};
+		node_object.id = node;
+		node_object.collapse = 0;
+		Converter.updateNode(node_object, function(){
+			check_block = false;
+			entire_graph.nodes[master.getNodeIndex(node)].collapse = 0;
+			active_graph.nodes[master.getActiveNodeIndex(node)].collapse = 0;
+			block_node = [];
+			master.updateCloseNodes(node);
+			callback();
+		});
 	}
 
 	this.processEntireGraph = function(){
@@ -1332,8 +1370,10 @@ function Rhisoma(){
 		}	
 	}
 
-	this.toggleNodeStandby = function(node){
+	this.toggleNodeStandby = function(node, callback){
 		var index = undefined;
+		var node_object = {};
+		node_object.id = node.id;
 		for(var i = 0; i < entire_graph.nodes.length; i++){
 			if(entire_graph.nodes[i].id === node.id){
 				index = i;
@@ -1341,13 +1381,17 @@ function Rhisoma(){
 		}
 		if(index != undefined){
 			if(entire_graph.nodes[index].standby === 0){
-				entire_graph.nodes[index].standby = 1;
+				node_object.standby = 1;
 			}
 			else{
-				entire_graph.nodes[index].standby = 0;
+				node_object.standby = 0;
 			}
 		}
-		master.updateGraph();
+		Converter.updateNode(node_object, function(){
+			entire_graph.nodes[index].standby = node_object.standby;
+			master.updateGraph();
+			callback();
+		});
 	}
 
 	/* GROUPS */
@@ -1497,21 +1541,30 @@ function Rhisoma(){
 				var isOk  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(document.getElementById("system-groups-edit-color").value);
 				if(isOk){
 					if(edit_name != ""){
+						var group_object = {};
+						group_object.id = node.group;
+						group_object.name = groups[node.group].name;
+						group_object.color = groups[node.group].color;
+						
 						if(edit_name != groups[node.group].name){
-							groups[node.group].name = edit_name;
+							group_object.name = edit_name;
 							check_update = true;
 						}
 						if(edit_color != groups[node.group].color){
-							groups[node.group].color = "#"+edit_color;
+							group_object.color = "#"+edit_color;
 							check_update = true;
 						}
 						if(check_update){
-							update_groups = true;
-							master.updateGraphGroups();
-							master.eventFire(document.body, 'click');
-							master.removeElement("system-message-popup");
-							master.removeElement("system-groups-edit");
-							master.removeElementClass("ui-colorpicker");
+							Converter.updateStylingGroup(group_object,function(){
+								groups[node.group].name = group_object.name;
+								groups[node.group].color = group_object.color;
+								update_groups = true;
+								master.updateGraphGroups();
+								master.eventFire(document.body, 'click');
+								master.removeElement("system-message-popup");
+								master.removeElement("system-groups-edit");
+								master.removeElementClass("ui-colorpicker");
+							});
 						}
 					}
 					else{
@@ -1530,18 +1583,24 @@ function Rhisoma(){
 				var isOk  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(document.getElementById("system-groups-edit-color").value);
 				if(isOk){
 					if(edit_name != ""){
-						var element = document.getElementById("system-groups-edit-name");
-						element.style.borderBottom = "1px solid #aeaeae";
-						var generate_id = entire_graph.nodes.length + Math.floor(Math.random() * (900 - 1)) + 1;
-						var group_id = generate_id.toString();
-						groups[group_id] = {};
-						groups[group_id].name = edit_name;
-						groups[group_id].color = "#"+edit_color;
-						update_groups = true;
-						master.eventFire(document.body, 'click');
-						master.removeElement("system-message-popup");
-						master.removeElement("system-groups-edit");
-						master.removeElementClass("ui-colorpicker");
+						var group_object = {};
+						group_object.name = edit_name;
+						group_object.color = "#"+edit_color;
+						Converter.addStylingGroup(group_object,function(new_group){
+							console.log(new_group);
+							var element = document.getElementById("system-groups-edit-name");
+							element.style.borderBottom = "1px solid #aeaeae";
+							// var generate_id = entire_graph.nodes.length + Math.floor(Math.random() * (900 - 1)) + 1;
+							// var group_id = generate_id.toString();
+							groups[new_group.id] = {};
+							groups[new_group.id].name = edit_name;
+							groups[new_group.id].color = "#"+edit_color;
+							update_groups = true;
+							master.eventFire(document.body, 'click');
+							master.removeElement("system-message-popup");
+							master.removeElement("system-groups-edit");
+							master.removeElementClass("ui-colorpicker");
+						});
 					}
 					else{
 						var element = document.getElementById("system-groups-edit-name");
@@ -1615,8 +1674,8 @@ function Rhisoma(){
 		var a = moment(period.end);
 		var b = moment(period.start);
 		var dif = a.diff(b, 'days') // 1
-		console.log(dif);
-		console.log(period);
+		// console.log(dif);
+		// console.log(period);
 	}
 
 }
