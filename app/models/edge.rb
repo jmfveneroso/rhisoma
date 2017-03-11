@@ -25,7 +25,8 @@ class Edge < ActiveRecord::Base
     end
 
     def validate_reverse_connection
-      if Edge.find_by(:source_id => target_id, :target_id => source_id)
+      edge = Edge.find_by(:source_id => target_id, :target_id => source_id)
+      if !edge.nil? && edge.id != self.id
         errors.add(:target_id, "already has a connection to source_id")
       end
     end

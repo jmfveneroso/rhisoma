@@ -21,8 +21,18 @@ var Converter = (function (){
 		node.date_start    = data.start_date || '';
 		node.date_end      = data.end_date || '';
 		node.date_complete = data.complete_date || '';
-		node.collapse      = data.collapse || 1;
-		node.standby       = data.standby || 0;
+		switch (data.collapse) {
+	 		case false: node.collapse = 0; break;
+	 		case true:     node.collapse = 1; break;
+	 		default: node.collapse = 1; break;
+	 	}
+	 	switch (data.standby) {
+	 		case false: node.standby = 0; break;
+	 		case true:     node.standby = 1; break;
+	 		default: node.standby = 0; break;
+	 	}
+		// node.collapse      = data.collapse || 1;
+		// node.standby       = data.standby || 0;
 		node.fx            = data.fx || undefined;
 		node.fy            = data.fy || undefined;
 		node.x             = data.x || undefined;
@@ -63,6 +73,35 @@ var Converter = (function (){
 		return node;
 	}
 
+	this.serializeEdge = function(data){
+		var edge = {};
+		edge['edge[source_id]'] = data.source;
+		edge['edge[target_id]'] = data.target;
+		switch (data.type) {
+	 		case 1: 	 edge['edge[category]'] = "Dependency"; break;
+	 		case 3:      edge['edge[category]'] = "Positioning"; break;
+	 		case 2:      edge['edge[category]'] = "Relationship"; break;
+	 		default: 	 edge['edge[category]'] = "Dependency"; break;
+	 	}
+	 	edge['edge[id]'] = data.id;
+		// edge['edge[category]']  = data.type || "Dependency";
+		return edge;
+	}
+
+	this.convertEdge = function(data){
+		var edge = {};
+		edge.id = data.id;
+		edge.source = data.source_id;
+		edge.target = data.target_id;
+		switch (data.category) {
+	 		case 'Dependency': 	 edge.type = 1; break;
+	 		case 'Positioning':     edge.type = 3; break;
+	 		case 'Relationship':     edge.type = 2; break;
+	 		default: break;
+	 	}
+		return edge;
+	}
+
 	this.isNull = function (data){
 		return (data === null || data === undefined || data === "");
 	}
@@ -75,23 +114,6 @@ var Converter = (function (){
 
 		for(var i = 0; i < in_data.nodes.length; i++){
 			converted_json.nodes.push(master.convertNode(in_data.nodes[i]));
-			// converted_json.nodes[i].id = in_data.nodes[i].id;
-			// converted_json.nodes[i].name = in_data.nodes[i].title || '';
-			// converted_json.nodes[i].description = in_data.nodes[i].description || '';
-			// converted_json.nodes[i].group = in_data.nodes[i].styling_group_id || '_DEFAULT';
-		 // 	switch (in_data.nodes[i].type) {
-		 // 		case 'CategoryNode': converted_json.nodes[i].type = 'categoria'; break;
-		 // 		case 'TaskNode':     converted_json.nodes[i].type = 'tarefa'; break;
-		 // 		case 'TextNode':     converted_json.nodes[i].type = 'texto'; break;
-		 // 		case 'LinkNode':     converted_json.nodes[i].type = 'link'; break;
-		 // 		case 'WormHoleNode': converted_json.nodes[i].type = 'buraco'; break;
-		 // 		default: break;
-		 // 	}
-			// converted_json.nodes[i].date_start = in_data.nodes[i].start_date || '';
-			// converted_json.nodes[i].date_end = in_data.nodes[i].end_date || '';
-			// converted_json.nodes[i].date_complete = in_data.nodes[i].complete_date || '';
-			// converted_json.nodes[i].collapse = in_data.nodes[i].collapse || 1;
-			// converted_json.nodes[i].standby = in_data.nodes[i].standby || 0;
 		}
 
 		for(var i = 0; i < in_data.edges.length; i++){
@@ -130,8 +152,8 @@ var Converter = (function (){
 		$.post("/nodes",{
 	    	'node[title]': "Untitled", // GLOBALS default_node_name,
 	    	'node[active]': 1,
-	    	//'node[collapse]': 1,
-	    	//'node[standby]': 0,
+	    	'node[collapse]': 1,
+	    	'node[standby]': 0,
 	    	'node[type]': "CategoryNode",
 	    	'node[fx]':fx,
 	    	'node[fy]':fy,
@@ -159,6 +181,68 @@ var Converter = (function (){
       	}).success( function (resultData) {
 	        callback();
 	    }); 
+	}
+
+	this.bulkUpdateNodePosition = function(nodes){
+		$.ajax({
+	        url: '/nodes/position',
+	        method: 'PATCH',
+	        data: nodes
+      	}).done( function (resultData) {
+	        // callback();
+	    }).error( function(resultData){console.log(resultData)}); 
+	}
+
+	this.addEdge = function(edge, callback){
+		$.post('/edges/', master.serializeEdge(edge))
+	    .success( function (resultData) {
+	        callback(master.convertEdge(resultData));
+	    });
+	}
+
+	this.deleteEdge = function(edge, callback){
+		$.ajax({
+        	url: '/edges/' + edge,
+        	method: 'DELETE'
+      	})
+      	.success( function (resultData) {
+	        callback();
+	    });
+	}
+
+	this.updateEdge = function(edge, callback){
+		$.ajax({
+	        url: '/edges/' + edge.id,
+	        method: 'PATCH',
+	        data: master.serializeEdge(edge)
+	      })
+      	.success( function (resultData) {
+	        callback();
+	    });
+	}
+
+	this.addStylingGroup = function(group, callback){
+		$.post('/styling_groups/', {
+	        'styling_group[name]': group.name,
+	        'styling_group[color]': group.color
+	    })
+		.success( function (resultData) {
+	        callback(resultData);
+	    });
+	}
+
+	this.updateStylingGroup = function(group, callback){
+		$.ajax({
+	        url: '/styling_groups/' + group.id,
+	        method: 'PATCH',
+	        data: {
+	          'styling_group[name]': group.name,
+	          'styling_group[color]': group.color
+	        }
+	      })
+		.success( function (resultData) {
+	        callback();
+	    });
 	}
 
     return this;
