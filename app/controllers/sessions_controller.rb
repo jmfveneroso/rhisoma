@@ -53,6 +53,6 @@ class SessionsController < ApplicationController
   end
 
   def temp
-    render text: "dmk2_IQRVg3-InkZuY8eKo7WclWB_0ZN2aMqhc5sNHc.ffInSMDcCzzBOEdK0yJF1Cidw86HhIcw2cktXgSgsY8"
+    render text: "xRopmvAAYIk8wjXUJj1ASeJps3MWPADlcyX3G7tF5uc.ffInSMDcCzzBOEdK0yJF1Cidw86HhIcw2cktXgSgsY8"
   end
 end
