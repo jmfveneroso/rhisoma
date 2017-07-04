@@ -8,21 +8,24 @@
 <script>
 /* LOCALES | Atualizar com container */
 
+// var converter = new Converter();
+
 $.ajax({
     url: "/language-pt.json",
     type: "GET",
     contentType: 'application/json; charset=utf-8',
     success: function (resultData) {
-        var locales_data = resultData;//$.parseJSON(resultData);
-        main(locales_data);
+          var locales_data = resultData;
+          Converter.getJSON(function (d3_data) {
+          main(locales_data, d3_data);
+        });        
     },
     error: function (jqXHR, textStatus, errorThrown) {
     },
     timeout: 120000,
 });
 
-function main(locales_data){
-  console.log(globals.localize["qualquer_coisa"]);
+function main(locales_data, d3_data){
 
   /* INIT */
 
@@ -109,10 +112,7 @@ function setSearchGraph(){
   top_menu.setCurrentGraph(node_names);
 }
 
-d3.json("/test.json", function(error, in_graph) {
-  if (error) throw error;
-
-  structure.setJSON(in_graph);
+  structure.setJSON(d3_data);
   graph = structure.getGraph();
   gui.setGroups(structure.getGroups());
   structure.getPeriod();
@@ -382,7 +382,6 @@ d3.json("/test.json", function(error, in_graph) {
       }
     }
   }
-});
 
 
   /* DRAG */
@@ -610,23 +609,25 @@ function environmentStabilize(){
     }
   }
   else if(gui.saveNode() != false){
-    structure.updateNode(gui.saveNode());
-    var this_id = gui.saveNode().id;
-    gui.resetCurrentEditing();
-    restart();
-    rst.setEnvironment(inside_node,current_node.id,structure);
-    rst.updateLabel(this_id);
+    structure.updateNode(gui.saveNode(),function(){
+      var this_id = gui.saveNode().id;
+      gui.resetCurrentEditing();
+      restart();
+      rst.setEnvironment(inside_node,current_node.id,structure);
+      rst.updateLabel(this_id);
+    });
   }
   else if(gui.saveLink() != false){
     var source_id = gui.saveLink().source;
     var target_id = gui.saveLink().target;
-    structure.updateLink(gui.saveLink());
-    structure.updateGraph();
-    gui.resetCurrentEditing();
-    restart();
-    rst.setEnvironment(inside_node,current_node.id,structure);
-    rst.updateLabel(source_id);
-    rst.updateLabel(target_id);
+    structure.updateLink(gui.saveLink(), function(){
+      structure.updateGraph();
+      gui.resetCurrentEditing();
+      restart();
+      rst.setEnvironment(inside_node,current_node.id,structure);
+      rst.updateLabel(source_id);
+      rst.updateLabel(target_id);
+    });
   }
 
   if(gui.deleteLink() != undefined){
@@ -638,21 +639,22 @@ function environmentStabilize(){
         target_id = graph.links[i].target.id;
       }
     }
-    structure.deleteLink(gui.deleteLink());
-    gui.resetLink();
-    gui.closeMenus();
-    restart();
-    rst.setEnvironment(inside_node,current_node.id,structure);
-    rst.updateLabel(source_id);
-    rst.updateLabel(target_id);
-    current_link = {};
+    structure.deleteLink(gui.deleteLink(), function(){
+      gui.resetLink();
+      gui.closeMenus();
+      restart();
+      rst.setEnvironment(inside_node,current_node.id,structure);
+      rst.updateLabel(source_id);
+      rst.updateLabel(target_id);
+      current_link = {};
+    });
   }
 
   if(gui.invertDependencyLink() != undefined){
     var current_index = undefined;
     var updated_link = {};
     for(var i = 0; i < graph.links.length;i++){
-      if(graph.links[i].id === gui.invertDependencyLink()){
+      if(String(graph.links[i].id) === gui.invertDependencyLink()){
         current_index = i;
       }
     }
@@ -661,16 +663,18 @@ function environmentStabilize(){
             updated_link[property] = graph.links[current_index][property];
         }
     }
+    updated_link.id = graph.links[current_index].id;
     updated_link.source = graph.links[current_index].target.id;
     updated_link.target = graph.links[current_index].source.id;
-    structure.updateLink(updated_link);
-    gui.resetLink();
-    gui.closeMenus();
-    restart();
-    rst.setEnvironment(inside_node,current_node.id,structure);
-    rst.updateLabel(updated_link.source);
-    rst.updateLabel(updated_link.target);
-    current_link = {};
+    structure.updateLink(updated_link, function(){
+      gui.resetLink();
+      gui.closeMenus();
+      restart();
+      rst.setEnvironment(inside_node,current_node.id,structure);
+      rst.updateLabel(updated_link.source);
+      rst.updateLabel(updated_link.target);
+      current_link = {};
+    });
   }
 }
 
@@ -681,9 +685,10 @@ function mouseDownEnvironment(){
       var mouse_xy = d3.mouse(transform);
       var node_x = mouse_xy[0];
       var node_y = mouse_xy[1];
-      structure.addNode(node_x,node_y);
-      gui.closeMenus();
-      restart();
+      structure.addNode(node_x,node_y, function () {
+        gui.closeMenus();
+        restart();  
+      });      
     }
   }
 }
@@ -728,12 +733,13 @@ function mouseDownLink(d){
   if(gui.editionMode() === "linkdelete"){
     var link_source = d.source.id;
     var link_target = d.target.id;
-    structure.deleteLink(d.id);
-    gui.closeMenus();
-    restart();
-    rst.setEnvironment(inside_node,current_node.id,structure);
-    rst.updateLabel(link_source);
-    rst.updateLabel(link_target);
+    structure.deleteLink(d.id,function(){
+      gui.closeMenus();
+      restart();
+      rst.setEnvironment(inside_node,current_node.id,structure);
+      rst.updateLabel(link_source);
+      rst.updateLabel(link_target);
+    });
   }
   else{
     if(current_link.id != d.id && document.getElementById("the-line-"+current_link.id) != null){
@@ -1017,13 +1023,20 @@ function clickNode(d){
     }
     gui.hideControlPanel();
     current_node = {};
-    structure.deleteNode(d.id);
-    gui.closeMenus();
-    restart();
-    rst.setEnvironment(inside_node,current_node.id,structure);
-    for(var i = 0; i < update_nodes.length; i++){
-      rst.updateLabel(update_nodes[i]);
-    }
+    structure.deleteNode(d.id, function(){
+      gui.closeMenus();
+      restart();
+      rst.setEnvironment(inside_node,current_node.id,structure);
+      for(var i = 0; i < update_nodes.length; i++){
+        rst.updateLabel(update_nodes[i]);
+      }
+    });
+    // gui.closeMenus();
+    // restart();
+    // rst.setEnvironment(inside_node,current_node.id,structure);
+    // for(var i = 0; i < update_nodes.length; i++){
+    //   rst.updateLabel(update_nodes[i]);
+    // }
   }
   else if(gui.editionMode() === "nodeadd"){
     if(d.collapse != 0){
@@ -1031,18 +1044,21 @@ function clickNode(d){
       var mouse_xy = d3.mouse(transform);
       var node_x = mouse_xy[0];
       var node_y = mouse_xy[1];
-      var node_id = structure.addNode(node_x,node_y);
-      link_to_add.source = d.id;
-      link_to_add.target = node_id;
-      var link_update = structure.addLink(link_to_add);
-      link_to_add.source = null;
-      link_to_add.target = null;
-      gui.closeMenus();
-      if(link_update){
-        restart();
-        rst.setEnvironment(inside_node,current_node.id,structure);
-        rst.updateLabel(d.id);
-      }
+      /*var node_id = */structure.addNode(node_x,node_y, function(node){
+        link_to_add.source = d.id;
+        link_to_add.target = node.id;
+        /*var link_update = */structure.addLink(link_to_add, function(){
+          // console.log(link_to_add);
+          link_to_add.source = null;
+          link_to_add.target = null;
+          gui.closeMenus();
+          // if(link_update){
+            restart();
+            rst.setEnvironment(inside_node,current_node.id,structure);
+            rst.updateLabel(d.id);
+          // }
+        });
+      });
     }
   }
   else if(gui.editionMode() === "linkadd"){
@@ -1055,44 +1071,64 @@ function clickNode(d){
     else if(link_to_add.source != null && link_to_add.source != d.id){
       if(d.collapse != 0){
         link_to_add.target = d.id;
-        var link_update = structure.addLink(link_to_add);
-        link_to_add.source = null;
-        link_to_add.target = null;
-        gui.closeMenus();
-        if(link_update){
-          restart();
-          rst.setEnvironment(inside_node,current_node.id,structure);
-          rst.updateLabel(d.id);
-        }
-        gui.removeSelectLine();
+        /*var link_update = */structure.addLink(link_to_add, function(){
+          link_to_add.source = null;
+          link_to_add.target = null;
+          gui.closeMenus();
+          // if(link_update){
+            restart();
+            rst.setEnvironment(inside_node,current_node.id,structure);
+            rst.updateLabel(d.id);
+          // }
+          gui.removeSelectLine();
+        });
       }    
     }
   }
   else if(gui.editionMode() === "stateexplode"){
     if(d.collapse != 1){
-      structure.collapseNode(d.id);
-      gui.closeMenus();
-      restart();
-      if(d.id === current_node.id){
-        if(d.standby === 0){
-          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
-          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+      structure.collapseNode(d.id, function(){
+        gui.closeMenus();
+        restart();
+        if(d.id === current_node.id){
+          if(d.standby === 0){
+            document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
+            document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+          }
+          else{
+            document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
+            document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+          }
+          current_node.collapse = 1;
         }
-        else{
-          document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
-          document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
-        }
-        current_node.collapse = 1;
-      }
+      });
     }
   }
   else if(gui.editionMode() === "statecontract"){
     if(d.collapse != 0){
-      structure.closeNode(d.id);
+      structure.closeNode(d.id, function(){
+        gui.closeMenus();
+        restart();
+        if(d.id === current_node.id){
+          if(d.standby === 0){
+            document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
+            document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+          }
+          else{
+            document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
+            document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
+          }
+          current_node.collapse = 0;
+        }
+      });
+    }
+  }
+  else if(gui.editionMode() === "stateidle"){
+    structure.toggleNodeStandby(d, function(){
       gui.closeMenus();
       restart();
-      if(d.id === current_node.id){
-        if(d.standby === 0){
+      if(d.id === current_node.id && current_node.id != inside_node){
+        if(d.standby === 1){
           document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
           document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
         }
@@ -1100,30 +1136,14 @@ function clickNode(d){
           document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
           document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
         }
-        current_node.collapse = 0;
+        if(current_node.standby === 0){
+          current_node.standby = 1;
+        }
+        else{
+          current_node.standby = 0;
+        }
       }
-    }
-  }
-  else if(gui.editionMode() === "stateidle"){
-    structure.toggleNodeStandby(d);
-    gui.closeMenus();
-    restart();
-    if(d.id === current_node.id && current_node.id != inside_node){
-      if(d.standby === 1){
-        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb(d.color).darker(1);
-        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
-      }
-      else{
-        document.getElementById("node-symbol-"+d.id).style.stroke = d3.rgb("#c9c9c9").darker(1);
-        document.getElementById("node-symbol-"+d.id).style.strokeWidth = "4px";
-      }
-      if(current_node.standby === 0){
-        current_node.standby = 1;
-      }
-      else{
-        current_node.standby = 0;
-      }
-    }
+    });
   }
   else if(gui.editionMode() === "groupedit"){
     if(current_node.id != null){
@@ -1182,9 +1202,10 @@ function mouseDoubleClick(d){
   prevent_click = true;
   clearTimeout(timeout);
   if(d.collapse != 1){
-    structure.collapseNode(d.id);
-    gui.closeMenus();
-    restart();
+    structure.collapseNode(d.id, function(){
+      gui.closeMenus();
+      restart();
+    });
   }
   else if(gui.editionMode() != "linkadd" && gui.editionMode() != "nodeadd"){
     run_translate = true;
@@ -1228,8 +1249,24 @@ function mouseDoubleClick(d){
   /* UPDATE GRAPH FUNCTIONS */
 
 function restart(e){
-  var update_nodes = svg.selectAll("g").filter(".node").each(function(d){structure.updateNodeXY(d);});
-  var update_links = svg.selectAll("line").filter(".link").each(function(d){structure.updateLinkXY(d);});
+  var node_list = {};
+  node_list.nodes = [];
+  
+  var update_nodes = svg.selectAll("g").filter(".node").each(function(d){
+    // console.log(d.id);
+    structure.updateNodeXY(d);
+
+    node_list.nodes.push({
+      id: d.id,
+      x: d.x,
+      y: d.y,
+      vx: d.vx,
+      vy: d.vy
+    });
+  });
+  // var update_links = svg.selectAll("line").filter(".link").each(function(d){structure.updateLinkXY(d);});
+
+  Converter.bulkUpdateNodePosition(node_list);//,function () {
   graph = structure.getGraph();
 
   setSearchGraph();
@@ -1363,10 +1400,10 @@ function restart(e){
   simulation.nodes(graph.nodes); // + on tick?
   simulation.force("link").links(graph.links);
   if(run_translate){
-    var transform = d3.select("g").node();
+    var transform = d3.select(".nodes").node();
     var mouse_xy = d3.mouse(transform);
     var node_x = mouse_xy[0];
-    var node_y = mouse_xy[1];
+    var node_y = mouse_xy[1];      
     if(go_to_center){
       simulation.force("center", d3.forceCenter(width/2,height/2));
       go_to_center = false;
@@ -1380,8 +1417,6 @@ function restart(e){
   }
   
   simulation.alpha(1).restart();
-  // console.log(document.getElementById("all-nodes").getBBox().height);
-  
 }
 
   /* ZOOM */

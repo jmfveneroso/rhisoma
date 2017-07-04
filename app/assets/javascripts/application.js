@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require d3/d3.js
 //= require moment-with-locales.js
 //= require jquery-ui-1.12.1/jquery-ui.js
