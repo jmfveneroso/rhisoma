@@ -38,3 +38,6 @@ json['links'].each do |a|
   e = Edge.create(a)
   e.save
 end
+
+connection = ActiveRecord::Base.connection()
+connection.execute("SELECT setval('nodes_id_seq', COALESCE((SELECT MAX(id)+1 FROM nodes), 1), false);")

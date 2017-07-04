@@ -73,7 +73,7 @@ $ docker exec -it orkhestra_web_1 bin/rails db:seed
 ### Accessing Postgres
 
 ```
-$ docker exec -it orkhestra_herokuPostgresql_1 psql
+$ docker exec -it orkhestra_herokuPostgresql_1 psql -U postgres
 ```
 
 
@@ -105,3 +105,9 @@ The application is hosted in Heroku. The deployment is done automatically whenev
 ```
 heroku run rake db:migrate
 ```
+
+# SSL
+
+Tutorial:
+
+https://collectiveidea.com/blog/archives/2016/01/12/lets-encrypt-with-a-rails-app-on-heroku

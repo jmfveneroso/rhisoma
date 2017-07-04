@@ -157,11 +157,12 @@ var Converter = (function (){
 	    	'node[type]': "CategoryNode",
 	    	'node[fx]':fx,
 	    	'node[fy]':fy,
-	    	'node[territory_id]': 1
+	    	'node[territory_id]': 1,
+                success: function (resultData) {
+                  console.log(resultData);
+	          callback(master.convertNode(resultData));
+	        }
 	    })
-	    .success( function (resultData) {
-	        callback(master.convertNode(resultData));
-	    });
 	}
 
 	this.deleteNode = function(id, callback){
