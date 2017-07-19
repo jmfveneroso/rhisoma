@@ -9,8 +9,6 @@ class TerritoriesController < ApplicationController
   def index
     @user = current_user
   
-    puts 'dadwadwadwwa'
-
     render :json => {
       territories: @user.territories,
       # The JSON parse is necessary to select the type column.
