@@ -8,6 +8,7 @@ class TerritoriesController < ApplicationController
   # @route GET /node-groups
   def index
     @user = current_user
+  
     render :json => {
       territories: @user.territories,
       # The JSON parse is necessary to select the type column.
