@@ -1,8 +1,8 @@
 # Orkhestra
 
 
-[![Build Status](https://api.travis-ci.org/jmfveneroso/orkhestra.png)](https://api.travis-ci.org/jmfveneroso/orkhestra.png)
-[![Docs](http://img.shields.io/badge/docs-yard.info-blue.svg)](https://jmfveneroso.github.io/orkhestra/)
+[![Build Status](https://api.travis-ci.org/jmfveneroso/orkhestra.png)](https://api.travis-ci.org/jmfveneroso/rhisoma.png)
+[![Docs](http://img.shields.io/badge/docs-yard.info-blue.svg)](https://jmfveneroso.github.io/rhisoma/)
 
 Orkhestra is a graph visualization engine.
 

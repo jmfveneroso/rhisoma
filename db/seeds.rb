@@ -41,3 +41,5 @@ end
 
 connection = ActiveRecord::Base.connection()
 connection.execute("SELECT setval('nodes_id_seq', COALESCE((SELECT MAX(id)+1 FROM nodes), 1), false);")
+connection.execute("SELECT setval('edges_id_seq', COALESCE((SELECT MAX(id)+1 FROM edges), 1), false);")
+connection.execute("SELECT setval('styling_groups_id_seq', COALESCE((SELECT MAX(id)+1 FROM styling_groups), 1), false);")

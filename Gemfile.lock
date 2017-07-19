@@ -140,7 +140,6 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    scout_apm (2.1.22)
     simplecov (0.13.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -201,7 +200,6 @@ DEPENDENCIES
   rails-controller-testing
   rake
   sass-rails (~> 5.0)
-  scout_apm
   simplecov
   spring
   spring-watcher-listen (~> 2.0.0)
