@@ -38,6 +38,12 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       @user.send_activation_email
+
+      # Creates the first territory for a user.
+      @territory = Territory.new({ name: "Untitled" })
+      @territory.user = @user
+      @territory.save
+
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
     else

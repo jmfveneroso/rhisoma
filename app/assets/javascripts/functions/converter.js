@@ -2,6 +2,11 @@ var Converter = (function (){
   var master = this;
   var json;
   var converted_json;
+  var territory_id;
+
+  this.setTerritoryId = function (id) {
+    territory_id = id;
+  }
 
   this.convertNode = function (data) {
     var node = {};
@@ -158,7 +163,7 @@ var Converter = (function (){
       'node[type]': "CategoryNode",
       'node[fx]':fx,
       'node[fy]':fy,
-      'node[territory_id]': 1
+      'node[territory_id]': territory_id
     }).done(function (resultData) {
       console.log(resultData);
       callback(master.convertNode(resultData));

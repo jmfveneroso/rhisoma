@@ -101,7 +101,7 @@ class NodesController < ApplicationController
       @territory = Territory.find_by(id: params[:node][:territory_id])
       unless !@territory || current_user?(@territory.user)
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user' 
+          message: 'Unauthorized territory' 
         } ] }
       end
     end
@@ -132,7 +132,7 @@ class NodesController < ApplicationController
       is_public = territory.public || territory.template
       unless current_user?(@node.user) || is_public
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user'
+          message: 'User does not have read permission'
         } ] }
       end
     end

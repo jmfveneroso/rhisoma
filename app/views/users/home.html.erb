@@ -10,6 +10,8 @@
 
 // var converter = new Converter();
 
+Converter.setTerritoryId(<%= @user.territories.first().id %>);
+
 $.ajax({
     url: "/language-pt.json",
     type: "GET",
