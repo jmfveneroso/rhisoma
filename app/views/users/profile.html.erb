@@ -31,6 +31,10 @@ function main(locales_data){
   var sidebar = {id:"system-sidebar",class:"system-sidebar",height:window.innerHeight-40};
   gui.addContainer(sidebar);
 
+  var rhisoma_button = {id:"system-rhisoma-button",class:"system-sidebar-primary-button",top:100};
+  gui.addField(rhisoma_button,"system-sidebar");
+  gui.addText("system-rhisoma-button","RHISOMAS");
+
   var profile_button = {id:"system-profile-button",class:"system-sidebar-primary-button",top:150,backgroundColor:"rgb(30,30,30)",color:"white"};
   gui.addField(profile_button,"system-sidebar");
   gui.addText("system-profile-button","PERFIL");
