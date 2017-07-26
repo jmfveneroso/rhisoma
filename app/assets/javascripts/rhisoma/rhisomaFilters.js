@@ -26,7 +26,7 @@ function RhisomaFilters(){
 		var container = {id:"filters-menu",height:29,width:window.innerWidth,left:0,top:window.innerHeight,zindex:11,position:"absolute",backgroundColor:"rgba(243,243,243,0.85)",bordertop:"1px solid #aeaeae"};
 		gui.addContainer(container);
 
-		var visibility_button = {id:"filters-menu-visibility",title:locales["filters-menu-visibility-show"],height:26,paddingtop:3,width:29,borderright:"1px solid #aeaeae",bordertop:"1px solid #aeaeae",top:window.innerHeight-30,left:0,zindex:11,textalign:"center",fontsize:18,font:"Font Awesome",backgroundColor:"white"};
+		var visibility_button = {id:"filters-menu-visibility",title:globals.localize.filters_menu_visibility_show,height:26,paddingtop:3,width:29,borderright:"1px solid #aeaeae",bordertop:"1px solid #aeaeae",top:window.innerHeight-30,left:0,zindex:11,textalign:"center",fontsize:18,font:"Font Awesome",backgroundColor:"white"};
 		gui.addField(visibility_button);
 		gui.addText("filters-menu-visibility",'<i class="fa fa-chevron-up" aria-hidden="true"></i>');
 
@@ -36,7 +36,7 @@ function RhisomaFilters(){
 
 		var show_all_button = {id:"filters-menu-show-all",top:0,left:60,width:49,height:24,paddingtop:5,borderright:"1px solid #aeaeae",font:"Source Sans Pro",fontweight:"400",fontsize:9,texttransform:"uppercase",textalign:"center",lineheight:"10"};
 		gui.addField(show_all_button,"filters-menu");
-		gui.addText("filters-menu-show-all",locales["filters-menu-show-all"]);
+		gui.addText("filters-menu-show-all",globals.localize.filters_menu_show_all);
 
 		master.drawTimeline();
 		master.visibilityMouseBehavior();
@@ -56,7 +56,7 @@ function RhisomaFilters(){
 			        clearInterval(id);
 			        animation_running = false;
 			        gui.addText("filters-menu-visibility",'<i class="fa fa-chevron-down" aria-hidden="true"></i>');
-			        gui.$title("filters-menu-visibility",locales["filters-menu-visibility-hide"]);
+			        gui.$title("filters-menu-visibility",globals.localize.filters_menu_visibility_hide);
 			    }
 			    else {
 			    	position_y -= 1;
@@ -79,7 +79,7 @@ function RhisomaFilters(){
 			        document.getElementById("filters-menu").style.display = "none";
 			        animation_running = false;
 			        gui.addText("filters-menu-visibility",'<i class="fa fa-chevron-up" aria-hidden="true"></i>');
-			        gui.$title("filters-menu-visibility",locales["filters-menu-visibility-show"]);
+			        gui.$title("filters-menu-visibility",globals.localize.filters_menu_visibility_show);
 			    }
 			    else {
 			    	position_y += 1;

@@ -9,21 +9,6 @@
 </video>
 
 <script>
-
-$.ajax({
-    url: "/language-pt.json",
-    type: "GET",
-    contentType: 'application/json; charset=utf-8',
-    success: function (resultData) {
-        var locales_data = resultData;
-        main(locales_data);
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-    },
-    timeout: 120000,
-});
-
-function main(locales_data){
   var gui = new Gui();
 
   var rhisoma_logo = {id:"system-logo",width:80,height:80,top:(window.innerHeight-160)/2-40,left:((window.innerWidth-320)/2)+((318-80)/2),backgroundColor:"transparent",zindex:10};
@@ -35,7 +20,7 @@ function main(locales_data){
 
   var form_label = {id:"system-label",class:"form-label",width:298};
   gui.addField(form_label,"system-forgot-password");
-  gui.addText("system-label",'RECUPERAR SENHA');
+  gui.addText("system-label",globals.localize.system_recover_password.toUpperCase());
 
   var form = document.createElement("form");
   form.setAttribute('method',"post");
@@ -57,15 +42,15 @@ function main(locales_data){
   email_input.setAttribute('name',"password_reset[email]");
   email_input.setAttribute('id',"password_reset_email");
   email_input.setAttribute('class',"form-control");
-  email_input.setAttribute('placeholder',"E-mail");
+  email_input.setAttribute('placeholder',globals.localize.system_email);
 
   var submit_button = document.createElement("input");
   submit_button.setAttribute('type',"submit");
   submit_button.setAttribute('name',"commit");
-  submit_button.setAttribute('data-disable-with',"ENVIAR");
+  submit_button.setAttribute('data-disable-with',globals.localize.system_send.toUpperCase());
   submit_button.setAttribute('class',"button-right");
   submit_button.setAttribute('id',"submit-button");
-  submit_button.setAttribute('value',"ENVIAR");
+  submit_button.setAttribute('value',globals.localize.system_send.toUpperCase());
   submit_button.style.width = document.getElementById("system-forgot-password").offsetWidth/2+"px";
   submit_button.style.left = document.getElementById("system-forgot-password").offsetWidth/2-1+"px";
   submit_button.style.top = document.getElementById("system-forgot-password").offsetHeight-42-1+"px";
@@ -78,14 +63,13 @@ function main(locales_data){
   var back_button = document.createElement("a");
   back_button.setAttribute('class',"button-left");
   back_button.setAttribute('href',"/");
-  back_button.innerHTML = "VOLTAR";
+  back_button.innerHTML = globals.localize.system_back.toUpperCase();
   back_button.style.width = document.getElementById("system-forgot-password").offsetWidth/2-1+"px";
   back_button.style.left = "-1px";
   back_button.style.top = document.getElementById("system-forgot-password").offsetHeight-42-1+"px";
 
   document.getElementById("system-forgot-password").appendChild(back_button);
   document.getElementById('system-forgot-password').appendChild(form);
-}
   
 
 </script>

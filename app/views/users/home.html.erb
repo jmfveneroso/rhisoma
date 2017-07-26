@@ -5,50 +5,37 @@
 <% end %>
 
 <svg id="rhisoma" width="960" height="600" style="position:absolute;top:0px"></svg>
-<script>
-/* LOCALES | Atualizar com container */
 
+<script>
 // var converter = new Converter();
 
 Converter.setTerritoryId(<%= @user.territories.first().id %>);
+Converter.getJSON(function (d3_data) {
+  main(d3_data);
+});        
 
-$.ajax({
-    url: "/language-pt.json",
-    type: "GET",
-    contentType: 'application/json; charset=utf-8',
-    success: function (resultData) {
-          var locales_data = resultData;
-          Converter.getJSON(function (d3_data) {
-          main(locales_data, d3_data);
-        });        
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-    },
-    timeout: 120000,
-});
-
-function main(locales_data, d3_data){
+function main(d3_data){
 
   /* INIT */
 
 var main_gui = new Gui();
 var gui = new RhisomaGui(main_gui);
-gui.setLocales(locales_data);
+gui.setLocales();
 
 var structure = new Rhisoma();
 var rst = new RhisomaStyle();
 var top_menu = new SystemGui();
-top_menu.setLocales(locales_data);
+top_menu.setLocales();
 top_menu.drawSystemMenu();
-if(locales_data.language === "PT"){
+if(globals.localize.language === "pt"){
   moment.locale('pt');
 }
 else{
   moment.locale('en');
 }
 
-var filter_gui = new RhisomaFilters();
-filter_gui.setLocales(locales_data);
+// var filter_gui = new RhisomaFilters();
+// filter_gui.setLocales();
 
 var prevent_click = false;
 var prevent_node = undefined;
@@ -120,8 +107,8 @@ function setSearchGraph(){
   structure.getPeriod();
 
   setSearchGraph();
-  filter_gui.setCurrentGraph(graph);
-  filter_gui.drawFiltersMenu();
+  // filter_gui.setCurrentGraph(graph);
+  // filter_gui.drawFiltersMenu();
 
   map = svg.append("rect")
   .attr("class", "map")

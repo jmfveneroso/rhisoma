@@ -11,7 +11,6 @@ function SystemGui(){
 	var animation_running = false;
 	var hidden_system_menu = false;
 	var lock_system_menu = true;
-	var locales = undefined;
 	var prevent_search_mouse_behavior = false;
 	var search_on = true;
 
@@ -25,20 +24,23 @@ function SystemGui(){
 		node_names = in_nodes;
 	}
 
-	this.setLocales = function(in_locales){
-		locales = in_locales;
-		buttons["system-menu-user-avatar"] = locales["system-menu-user-avatar"];
-		buttons["system-menu-settings"] = locales["system-menu-settings"];
-		buttons["system-menu-signout"] = locales["system-menu-signout"];
-		buttons["system-menu-signin"] = locales["system-menu-signin"];
-		buttons["system-menu-signup"] = locales["system-menu-signup"];
-		buttons["system-menu-search-button"] = locales["system-menu-search-button"];
+	this.setLocales = function(){
+		buttons["system-menu-user-avatar"] = globals.localize.system_menu_user_avatar;
+		buttons["system-menu-settings"] = globals.localize.system_menu_settings;
+		buttons["system-menu-signout"] = globals.localize.system_menu_signout;
+		buttons["system-menu-signin"] = globals.localize.system_menu_signin;
+		buttons["system-menu-signup"] = globals.localize.system_menu_signup;
+		buttons["system-menu-search-button"] = globals.localize.system_menu_search_button;
 	}
 
 	this.getUpdateZoom = function(){
 		var temp_zoom = update_zoom;
 		update_zoom = undefined;
 		return temp_zoom;
+	}
+
+	this.lockMenu = function(){
+		lock_system_menu = true;
 	}
 
 	this.drawSystemMenu = function(logged_in){
@@ -52,7 +54,7 @@ function SystemGui(){
 		if(search_on){
 			var search_offset_x = 300 + ((window.innerWidth-700)/2);
 			var search_field = {id:"system-menu-search",class:"search-field",height:14,position:"absolute",top:10,left:search_offset_x};
-			gui.addInput(search_field,locales['system-menu-search-placeholder'],"system-menu","");
+			gui.addInput(search_field,globals.localize.system_menu_search_placeholder,"system-menu","");
 			
 			var search_button = {id:"system-menu-search-button",height:30,width:40,position:"absolute",top:0,paddingtop:10,left:search_offset_x+260,textalign:"center",font:'Font Awesome',fontsize:18,color:"#aeaeae"}
 			gui.addField(search_button,"system-menu");
@@ -121,11 +123,16 @@ function SystemGui(){
 
 		};
 		var mouseDown = function(){
-			if(hidden_system_menu){
-				master.showSystemMenu();
+			if(!lock_system_menu){
+				if(hidden_system_menu){
+					master.showSystemMenu();
+				}
+				else{
+					master.hideSystemMenu();
+				}
 			}
 			else{
-				master.hideSystemMenu();
+				window.location.assign('/');
 			}
 		};
 		button.onmouseover = mouseOver;

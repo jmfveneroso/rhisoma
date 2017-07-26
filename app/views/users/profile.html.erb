@@ -8,51 +8,38 @@
 <% end %>
 
 <script>
-$.ajax({
-    url: "/language-pt.json",
-    type: "GET",
-    contentType: 'application/json; charset=utf-8',
-    success: function (resultData) {
-        var locales_data = resultData;
-        main(locales_data);
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-    },
-    timeout: 120000,
-});
-
-function main(locales_data){
   var gui = new Gui();
   var top_menu = new SystemGui();
-  top_menu.setLocales(locales_data);
+  top_menu.setLocales();
   top_menu.setSearch(false);
   top_menu.drawSystemMenu();
+  top_menu.lockMenu();
 
   var sidebar = {id:"system-sidebar",class:"system-sidebar",height:window.innerHeight-40};
   gui.addContainer(sidebar);
 
   var profile_button = {id:"system-profile-button",class:"system-sidebar-primary-button",top:150,backgroundColor:"rgb(30,30,30)",color:"white"};
   gui.addField(profile_button,"system-sidebar");
-  gui.addText("system-profile-button","PERFIL");
+  gui.addText("system-profile-button",globals.localize.settings_profile.toUpperCase());
 
   var account_button = {id:"system-account-button",class:"system-sidebar-primary-button",top:200};
   gui.addLink(account_button,"system-sidebar");
-  gui.addText("system-account-button",'CONTA');
+  gui.addText("system-account-button",globals.localize.settings_account.toUpperCase());
   document.getElementById("system-account-button").setAttribute('href',"/settings/account");
 
   var change_password_button = {id:"system-change-password-button",class:"system-sidebar-secondary-button-inactive",top:250};
   gui.addLink(change_password_button,"system-sidebar");
-  gui.addText("system-change-password-button","TROCAR SENHA");
+  gui.addText("system-change-password-button",globals.localize.settings_account_change_password.toUpperCase());
   document.getElementById("system-change-password-button").setAttribute('href',"/settings/account");
 
   var change_email_button = {id:"system-change-email-button",class:"system-sidebar-secondary-button-inactive",top:280};
   gui.addLink(change_email_button,"system-sidebar");
-  gui.addText("system-change-email-button","TROCAR EMAIL");
+  gui.addText("system-change-email-button",globals.localize.settings_account_change_email.toUpperCase());
   document.getElementById("system-change-email-button").setAttribute('href',"/email_resets/new");
 
   var delete_account_button = {id:"system-delete-account-button",class:"system-sidebar-secondary-button-inactive",top:310};
   gui.addLink(delete_account_button,"system-sidebar");
-  gui.addText("system-delete-account-button","DELETAR CONTA");
+  gui.addText("system-delete-account-button",globals.localize.settings_account_delete.toUpperCase());
   document.getElementById("system-delete-account-button").setAttribute('href',"/settings/confirm_delete_account");
 
   var profile_container = {id:"system-profile",width:258,height:98,top:(window.innerHeight-160)/2,left:(window.innerWidth-320-320)/2+320,backgroundColor:"white",padding:30,border:"1px solid #aeaeae",boxshadow:"-5px 5px #aeaeae"};
@@ -60,7 +47,7 @@ function main(locales_data){
 
   var form_label = {id:"system-label",class:"form-label",width:298};
   gui.addField(form_label,"system-profile");
-  gui.addText("system-label",'PERFIL');
+  gui.addText("system-label",globals.localize.settings_profile.toUpperCase());
   document.getElementById("system-label").style.textAlign = "center";
 
   var form = document.createElement("form");
@@ -88,15 +75,15 @@ function main(locales_data){
   name_input.setAttribute('name',"user[name]");
   name_input.setAttribute('id',"user_name");
   name_input.setAttribute('class',"form-control");
-  name_input.setAttribute('placeholder',"Nome do usuário");
+  name_input.setAttribute('placeholder',globals.localize.settings_profile_new_username);
 
   var submit_button = document.createElement("input");
   submit_button.setAttribute('type',"submit");
   submit_button.setAttribute('name',"commit");
-  submit_button.setAttribute('data-disable-with',"ATUALIZANDO PERFIL…");
+  submit_button.setAttribute('data-disable-with',globals.localize.settings_profile_updating.toUpperCase());
   submit_button.setAttribute('class',"button-right");
   submit_button.setAttribute('id',"submit-button");
-  submit_button.setAttribute('value',"ATUALIZAR PERFIL");
+  submit_button.setAttribute('value',globals.localize.settings_profile_update.toUpperCase());
   submit_button.style.width = document.getElementById("system-profile").offsetWidth+"px";
   submit_button.style.left = "-1px";
   submit_button.style.top = document.getElementById("system-profile").offsetHeight-42-1+"px";
@@ -108,7 +95,6 @@ function main(locales_data){
   form.appendChild(submit_button);
 
   document.getElementById('system-profile').appendChild(form);
-}
   
 
 </script>

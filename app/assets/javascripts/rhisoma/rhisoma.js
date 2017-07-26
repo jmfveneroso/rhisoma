@@ -22,7 +22,7 @@ function Rhisoma(){
 	this.setJSON = function(data){
 		json = data;
 		entire_graph = {};
-		entire_graph.nodes = json.nodes; // referência do gráfico completo [substitui json como ref para o programa]
+		entire_graph.nodes = json.nodes; // referência do grafo completo [substitui json como ref para o programa]
 		entire_graph.links = json.links;
 		for(var i = 0; i < json.groups.length; i++){
 			groups[json.groups[i].id] = {};
@@ -1405,14 +1405,14 @@ function Rhisoma(){
 			gui.addContainer(groups_edit);
 
 			var name_field = {id:"system-groups-edit-name",class:"edit-group"};
-			gui.addInput(name_field,"Nome do grupo","system-groups-edit","");
+			gui.addInput(name_field,globals.localize.system_groups_edit_name_placeholder,"system-groups-edit","");
 
 			var color_label = {id:"system-groups-edit-color-label",class:"edit-group",position:"absolute",top:50,left:20,color:"#aeaeae"};
 			gui.addField(color_label,"system-groups-edit");
 			gui.addText("system-groups-edit-color-label","#");
 
 			var color_field = {id:"system-groups-edit-color",class:"edit-group",width:210,position:"absolute",top:48,left:20,paddingleft:10};
-			gui.addInput(color_field,"Cor do grupo","system-groups-edit","000000");
+			gui.addInput(color_field,globals.localize.system_groups_edit_color_placeholder,"system-groups-edit","000000");
 
 			var preview_field = {id:"system-groups-edit-preview",width:48,height:48,left:260, top:20, backgroundColor:"#000000",border:"1px #aeaeae solid"};
 			gui.addField(preview_field,"system-groups-edit");

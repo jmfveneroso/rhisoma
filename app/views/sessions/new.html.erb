@@ -9,20 +9,6 @@
 </video>
 
 <script>
-$.ajax({
-    url: "/language-pt.json", // >> change_value
-    type: "GET",
-    contentType: 'application/json; charset=utf-8',
-    success: function (resultData) {
-        var locales_data = resultData;//$.parseJSON(resultData);
-        main(locales_data);
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-    },
-    timeout: 120000,
-});
-
-function main(locales_data){
   var gui = new Gui();
 
   var rhisoma_logo = {id:"system-logo",width:80,height:80,top:(window.innerHeight-240)/2-40,left:((window.innerWidth-320)/2)+((318-80)/2),backgroundColor:"transparent",zindex:10};
@@ -34,7 +20,7 @@ function main(locales_data){
 
   var form_label = {id:"system-label",class:"form-label",width:298};
   gui.addField(form_label,"system-login");
-  gui.addText("system-label",'LOGIN');
+  gui.addText("system-label",globals.localize.system_menu_login.toUpperCase());
 
   var form = document.createElement("form");
   form.setAttribute('method',"post");
@@ -56,14 +42,14 @@ function main(locales_data){
   email_input.setAttribute('name',"session[email]");
   email_input.setAttribute('id',"session_email");
   email_input.setAttribute('class',"form-control");
-  email_input.setAttribute('placeholder',"E-mail");
+  email_input.setAttribute('placeholder',globals.localize.system_email);
 
   var password_input = document.createElement("input");
   password_input.setAttribute('type',"password");
   password_input.setAttribute('name',"session[password]");
   password_input.setAttribute('id',"session_password");
   password_input.setAttribute('class',"form-control");
-  password_input.setAttribute('placeholder',"Senha");
+  password_input.setAttribute('placeholder',globals.localize.system_password);
 
   var forgot_password_container = document.createElement("div");
   forgot_password_container.id = "forgot-password-container";
@@ -71,7 +57,7 @@ function main(locales_data){
   var forgot_password = document.createElement("a");
   forgot_password.setAttribute('class',"forgot-password");
   forgot_password.setAttribute('href',"/password_resets/new");
-  forgot_password.innerHTML = "Recuperar senha";
+  forgot_password.innerHTML = globals.localize.system_recover_password;
 
   var remember_me = document.createElement("label");
   remember_me.setAttribute('class',"login-checkbox");
@@ -90,15 +76,15 @@ function main(locales_data){
   remember_me_checkbox.setAttribute('class',"login-checkbox-a");
 
   var remember_me_label = document.createElement("span");
-  remember_me_label.innerHTML = "Lembrar de mim";
+  remember_me_label.innerHTML = globals.localize.system_remember_me;
 
   var submit_button = document.createElement("input");
   submit_button.setAttribute('type',"submit");
   submit_button.setAttribute('name',"commit");
-  submit_button.setAttribute('data-disable-with',"ENTRAR");
+  submit_button.setAttribute('data-disable-with',globals.localize.system_menu_signin.toUpperCase());
   submit_button.setAttribute('class',"button-right");
   submit_button.setAttribute('id',"submit-button");
-  submit_button.setAttribute('value',"ENTRAR");
+  submit_button.setAttribute('value',globals.localize.system_menu_signin.toUpperCase());
   submit_button.style.width = document.getElementById("system-login").offsetWidth/2+"px";
   submit_button.style.left = document.getElementById("system-login").offsetWidth/2-1+"px";
   submit_button.style.top = document.getElementById("system-login").offsetHeight-42-1+"px";
@@ -118,13 +104,12 @@ function main(locales_data){
   var signup_button = document.createElement("a");
   signup_button.setAttribute('class',"button-left");
   signup_button.setAttribute('href',"/signup");
-  signup_button.innerHTML = "CADASTRAR";
+  signup_button.innerHTML = globals.localize.system_menu_signup.toUpperCase();
   signup_button.style.width = document.getElementById("system-login").offsetWidth/2-1+"px";
   signup_button.style.left = "-1px";
   signup_button.style.top = document.getElementById("system-login").offsetHeight-42-1+"px";
 
   document.getElementById("system-login").appendChild(signup_button);
   document.getElementById('system-login').appendChild(form);
-}
   
 </script>
