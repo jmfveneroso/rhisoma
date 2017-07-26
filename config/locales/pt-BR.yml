@@ -80,9 +80,13 @@ pt-BR:
 
     default_node_name: "Sem título"
 
+    settings_manage: "Gerenciar"
+    settings_manage_rhisomas: "Rhisomas"
     settings_profile: "Perfil"
     settings_profile_update: "Atualizar perfil"
     settings_profile_updating: "Atualizando perfil"
+    settings_profile_change_username: "Trocar nome de usuário"
+    settings_profile_new_username: "Novo nome de usuário"
     settings_account: "Conta"
     settings_account_change_password: "Trocar senha"
     settings_account_old_password: "Antiga senha"

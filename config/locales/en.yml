@@ -79,9 +79,12 @@ en:
 
     default_node_name: "Untitled"
 
+    settings_manage: "Manage"
+    settings_manage_rhisomas: "Rhisomas"
     settings_profile: "Profile"
     settings_profile_update: "Update profile"
     settings_profile_updating: "Updating profile"
+    settings_profile_change_username: "Change username"
     settings_profile_new_username: "New username"
     settings_account: "Account"
     settings_account_change_password: "Change password"

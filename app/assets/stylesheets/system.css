@@ -93,6 +93,10 @@ input.button-right:hover{
   border:1px solid black;
 }
 
+input.button-right:focus{
+  outline: none;
+}
+
 input.button-center{
   font-family: Source Sans Pro;
   font-size: 14px;
@@ -111,7 +115,7 @@ input.button-center:hover{
 a.button-left{
   font-family: Source Sans Pro;
   font-size: 14px;
-  font-weight:600;
+  font-weight:300;
   position: absolute;
   border:1px solid #aeaeae;
   background-color:white;
@@ -126,6 +130,10 @@ a.button-left:hover{
   z-index: 10;
   cursor: pointer;
   border:1px solid black;
+}
+
+input.button-left:focus{
+  outline: none;
 }
 
 .login-checkbox{
@@ -215,6 +223,19 @@ video {
   text-decoration: none;
 }
 
+.system-sidebar-primary-button-active{
+  left:0px;
+  width:270px;
+  height:35px;
+  border-top: 1px solid #aeaeae;
+  border-bottom: 1px solid #aeaeae;
+  background-color: rgb(30,30,30);
+  padding-left: 50px;
+  padding-top: 15px;
+  color:white;
+  text-decoration: none;
+}
+
 a.system-sidebar-primary-button:hover{
   border-top:1px solid black;
   border-bottom:1px solid black;
@@ -222,34 +243,40 @@ a.system-sidebar-primary-button:hover{
 }
 
 .system-sidebar-secondary-button-active{
-  font-weight: 300;
-  left:0px;
+  font-weight: 400;
+  text-decoration: underline;
+  font-size: 12px;
+  left:49px;
   width:240px;
-  height:24px;
+  height:22px;
+  border-left: 1px solid #aeaeae;
   border-top: 1px solid #aeaeae;
   border-bottom: 1px solid #aeaeae;
-  background-color: rgb(30,30,30);
-  color:white;
-  padding-left: 80px;
-  padding-top: 5px;
+  background-color: rgb(248,248,248);
+  color:black;
+  padding-left: 30px;
+  padding-top: 7px;
 }
 
 .system-sidebar-secondary-button-inactive{
-  font-weight: 300;
-  left:0px;
+  font-weight: 400;
+  font-size: 12px;
+  left:49px;
   width:240px;
-  height:24px;
+  height:22px;
+  border-left: 1px solid #aeaeae;
   border-top: 1px solid #aeaeae;
   border-bottom: 1px solid #aeaeae;
-  background-color: white;
-  padding-left: 80px;
-  padding-top: 5px;
+  background-color: rgb(248,248,248);
+  padding-left: 30px;
+  padding-top: 7px;
   color:black;
   text-decoration: none;
 }
 
 .system-sidebar-secondary-button-inactive:hover{
   cursor:pointer;
+  border-left:1px solid black;
   border-top:1px solid black;
   border-bottom:1px solid black;
   z-index:10;
