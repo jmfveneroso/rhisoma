@@ -106,3 +106,9 @@ pt-BR:
     system_recover_password: "Recuperar senha"
     system_remember_me: "Lembrar de mim"
     system_send: "Enviar"
+
+    mailing_activate: "Ativar conta"
+    mailing_activate_welcome: "Bem-vindo ao Rhisoma."
+    mailing_activate_message: "Conecte conosco no Facebook ou fale conosco no "
+    mailing_activate_footer: "Enviado pelo Rhisoma"
+    mailing_activate_address: "Rua Roquete Mendonça, 373 – Belo Horizonte, MG, Brasil"
