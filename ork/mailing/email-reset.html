@@ -132,16 +132,16 @@
 <div style="width:100%;height:auto;position:absolute;margin-top: 120px">
 	<div class="container">
 		<div class="label">
-			<%= t :mailing_change_email %><br />
+			Change email
 		</div>
 		<div class="information">
-			<%= t :mailing_email_information %><br />
+			To confirm the email change click the button below:
 		</div>
 		<div class="activate-button">
-			<a class="activate" href="<%= edit_email_reset_url(@user.email_reset_token, email: @user.email) %>" target="_blank"><%= t :mailing_change_email %><br /></a>
+			<a class="activate" href="<%= edit_email_reset_url(@user.email_reset_token, email: @user.email) %>" target="_blank">Change email</a>
 		</div>
 		<div class="message" style="color:#aeaeae">
-			<%= t :mailing_email_message %><br />
+			If you did not request your email to be changed, please ignore this email and your email will stay as it is.
 		</div>
 	</div>
 </div>

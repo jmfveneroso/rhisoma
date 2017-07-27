@@ -16,6 +16,17 @@
 		box-shadow: #aeaeae -5px 5px;
 	}
 
+	.label{
+		width: 310px;
+		text-align: right;
+		margin-top: 5px;
+		padding-right: 10px;
+		font-weight: 300;
+		font-size: 14px;
+		text-transform: uppercase;
+		color: #aeaeae;
+	}
+
 	.logo{
 		margin-left: auto;
 		margin-right: auto;
@@ -25,7 +36,7 @@
 
 	.welcome{
 		position: relative;
-		margin-top: 60px;
+		margin-top: 42px;
 		width:100%;
 		height:auto;
 		text-align: center;
@@ -114,6 +125,9 @@
 </style>
 <div style="width:100%;height:auto;position:absolute;margin-top: 120px">
 	<div class="container">
+		<div class="label">
+			<%= t :mailing_activation %>
+		</div>
 		<div class="welcome">
 			<%= t :mailing_activate_welcome %>
 		</div>

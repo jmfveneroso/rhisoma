@@ -107,8 +107,18 @@ en:
     system_remember_me: "Remember me"
     system_send: "Send"
 
+    mailing_activation: "Activation"
     mailing_activate: "Activate account"
     mailing_activate_welcome: "Welcome to Rhisoma."
     mailing_activate_message: "Connect with us on Facebook or talk to us at "
-    mailing_activate_footer: "Sent by Rhisoma"
-    mailing_activate_address: "Rua Roquete Mendonça, 373 – Belo Horizonte, MG, Brazil"
+    mailing_footer: "Sent by Rhisoma"
+    mailing_address: "Rua Roquete Mendonça, 373 – Belo Horizonte, MG, Brazil"
+
+    mailing_change_email: "Change email"
+    mailing_email_information: "To confirm the email change click the button below:"
+    mailing_email_message: "If you did not request your email to be changed, please ignore this email and your email will stay as it is."
+
+    mailing_reset_password: "Reset password"
+    mailing_password_information: "To reset your password click the button below:"
+    mailing_password_message_one: "This link will expire in two hours."
+    mailing_password_message_two: "If you did not request your password to be reset, please ignore this email and your password will stay as it is."

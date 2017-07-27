@@ -23,9 +23,21 @@
 		height: 80px;
 	}
 
+	.label{
+		width: 110px;
+		text-align: right;
+		margin-top: 5px;
+		padding-right: 10px;
+		padding-left: 200px;
+		font-weight: 300;
+		font-size: 14px;
+		text-transform: uppercase;
+		color: #aeaeae;
+	}
+
 	.welcome{
 		position: relative;
-		margin-top: 60px;
+		margin-top: 42px;
 		width:100%;
 		height:auto;
 		text-align: center;
@@ -87,7 +99,9 @@
 	.message{
 		position: relative;
 		margin-top: 12px;
-		width:100%;
+		width:80%;
+		padding-left: 10%;
+		padding-right: 10%;
 		height:auto;
 		text-align: center;
 		font-size: 12px;
@@ -114,6 +128,9 @@
 </style>
 <div style="width:100%;height:auto;position:absolute;margin-top: 120px">
 	<div class="container">
+		<div class="label">
+			<%= t :mailing_activation %>
+		</div>
 		<div class="welcome">
 			<%= t :mailing_activate_welcome %>
 		</div>
@@ -139,21 +156,7 @@
 </div>
 <div style="width:100%;height:auto;position:absolute;margin-top: 536px">
 	<div class="footer">
-		<%= t :mailing_activate_footer %><br />
-		<%= t :mailing_activate_address %>
+		<%= t :mailing_footer %><br />
+		<%= t :mailing_address %>
 	</div>
 </div>
-
-<!-- <%= link_to "Activate", edit_account_activation_url(@user.activation_token, email: @user.email) %> -->
-
-
-
-
-<!-- <h1>Orkhestra</h1>
-
-<p>
-Welcome to Orkhestra! Click on the link below to activate your account:
-</p>
-
-<%= link_to "Activate", edit_account_activation_url(@user.activation_token,
-                                                    email: @user.email) %> -->
