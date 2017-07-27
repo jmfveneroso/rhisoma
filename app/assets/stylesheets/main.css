@@ -66,3 +66,15 @@ input.login-form:focus{
 	font-weight: 300;
    	color: black;  
 }
+
+.alert-message{
+	width:500px;
+	height:100px;
+	text-align: center;
+	font-family: Source Sans Pro;
+	font-size: 18px;
+	font-weight: 300;
+	color: #ffffff;
+	margin:0px;
+	text-align: center;
+}
