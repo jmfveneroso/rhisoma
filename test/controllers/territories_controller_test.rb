@@ -61,7 +61,7 @@ class TerritoriesControllerTest < ActionDispatch::IntegrationTest
   test "should create territory for current user" do
     log_in_as(@user)
     assert_difference '@user.territories.count', 1 do
-      post territories_path, params: { territory: { name: 'abc' } }
+      post territories_path, params: { territory: { name: 'abc' } }, headers: {'HTTP_ACCEPT' => "application/json"}
       assert_response 200
     end
   end
@@ -89,7 +89,7 @@ class TerritoriesControllerTest < ActionDispatch::IntegrationTest
   test "should not update territory if missing key parameters" do
     log_in_as(@user)
     old_name = @territory.name
-    patch territory_path(@territory), params: { territory: { name: '' } }
+    patch territory_path(@territory), params: { territory: { name: '' } }, headers: {'HTTP_ACCEPT' => "application/json"}
     assert_response 400
     assert_equal old_name, @territory.reload.name
   end
@@ -97,14 +97,14 @@ class TerritoriesControllerTest < ActionDispatch::IntegrationTest
   test "should update territory" do
     log_in_as(@user)
     old_name = @territory.name
-    patch territory_path(@territory), params: { territory: { name: 'New Name' } }
+    patch territory_path(@territory), params: { territory: { name: 'New Name' } }, headers: {'HTTP_ACCEPT' => "application/json"}
     assert_response 200
     assert_not_equal old_name, @territory.reload.name
   end
 
   test "should destroy territory" do
     log_in_as(@user)
-    delete territory_path(@territory)
+    delete territory_path(@territory), headers: {'HTTP_ACCEPT' => "application/json"}
     assert_response 200
     assert Territory.where(id: @territory.id).empty?
   end

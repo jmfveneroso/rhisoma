@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     get  'confirm_delete_account', to: 'users#confirm_delete_account'
     post 'change_password',        to: 'users#change_password'
     post 'delete_account',         to: 'users#delete_account'
+    get  'rhisomas',               to: 'territories#list'
+    get  'edit_rhisoma/:id',       to: 'territories#edit'
   end
 
   resources :territories

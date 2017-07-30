@@ -1,0 +1,11 @@
+<tr>
+  <th scope="row"><%= territory.id %></th>
+  <td><%= territory.name %></td>
+  <% if territory.main %>
+    <td>Yes</td>
+  <% else %>
+    <td>No</td>
+  <% end %>
+  <td><%= link_to "Edit", controller: :territories, action: :edit, id: territory.id %></td>
+  <td><%= link_to "Delete", territory, method: :delete, data: { confirm: "Are you sure?" } %></td>
+</tr>

@@ -44,7 +44,7 @@ class UsersController < ApplicationController
       @territory.user = @user
       @territory.save
 
-      flash[:info] = "Please check your email to activate your account."
+      flash[:info] = t :check_email_to_activate_account
       redirect_to root_url
     else
       render 'new'
@@ -57,7 +57,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
-      flash[:success] = "Profile updated"
+      flash[:success] = t :profile_updated
       redirect_to profile_path
     else
       render 'users/profile'
@@ -68,7 +68,7 @@ class UsersController < ApplicationController
   # @route DELETE /users/$(id)
   def destroy
     User.find(params[:id]).destroy
-    flash[:success] = "User deleted"
+    flash[:success] = t :user_deleted
     redirect_to users_url
   end
 
@@ -104,13 +104,13 @@ class UsersController < ApplicationController
     if @user.authenticated?(:password, params[:user][:old_password])
       if @user.update_attributes(user_params)
         if params[:user][:password].empty?
-          @user.errors.add(:base, 'Password can\'t be blank.')
+          @user.errors.add(:base, t(:password_cannot_be_blank))
         else
-          flash.now[:success] = "Profile updated"
+          flash.now[:success] = t :profile_updated
         end
       end
     else
-      @user.errors.add(:base, 'Wrong password')
+      @user.errors.add(:base, t(:wrong_password))
     end
     render 'account'
   end
@@ -131,10 +131,10 @@ class UsersController < ApplicationController
     if @user.authenticated?(:password, params[:user][:password])
       log_out if logged_in?
       @user.destroy
-      flash[:success] = "Account deleted"
+      flash[:success] = t :account_deleted
       redirect_to root_url
     else
-      @user.errors.add(:base, 'Wrong password')
+      @user.errors.add(:base, t(:wrong_password))
       render 'confirm_delete_account'
     end
   end
@@ -150,7 +150,7 @@ class UsersController < ApplicationController
     def logged_in_user
       unless logged_in?
         store_location
-        flash[:danger] = "Please log in"
+        flash[:danger] = t :please_log_in
         redirect_to login_url
       end
     end

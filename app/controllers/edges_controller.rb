@@ -58,7 +58,7 @@ class EdgesController < ApplicationController
     def logged_in_user
       unless logged_in?
         render :status => 401, :json => { code: 401, errors: [ {
-          message: 'Authentication failed' 
+          message: t(:auth_failed)
         } ] }
       end
     end
@@ -69,7 +69,7 @@ class EdgesController < ApplicationController
       @edge = Edge.find(params[:id])
       unless current_user?(@edge.user)
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user' 
+          message: t(:unauthorized_user)
         } ] }
       end
     end
@@ -82,7 +82,7 @@ class EdgesController < ApplicationController
       unless (!@source_node || current_user?(@source_node.user)) &&
              (!@target_node || current_user?(@target_node.user))
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user' 
+          message: t(:unauthorized_user)
         } ] }
       end
     end
@@ -93,7 +93,7 @@ class EdgesController < ApplicationController
       public_target = @edge.target.territory.public || @edge.target.territory.template
       unless current_user?(@edge.user) || (public_source && public_target)
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user' 
+          message: t(:unauthorized_user)
         } ] }
       end
     end

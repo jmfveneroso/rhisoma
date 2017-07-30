@@ -4,8 +4,15 @@ class TerritoriesController < ApplicationController
   before_action :correct_user_or_template, only: [:clone]
   before_action :user_has_read_permission, only: [:show]
 
+  # Shows the territory creation form.
+  # @route GET /territories/new
+  def new
+    @user = current_user
+    @territory = Territory.new
+  end
+
   # Gets all nodes and edges that belong to a user.
-  # @route GET /node-groups
+  # @route GET /territories
   def index
     @user = current_user
   
@@ -24,33 +31,58 @@ class TerritoriesController < ApplicationController
   end
 
   # Creates a new node.
-  # @route POST /node-groups
-  # @route_param node-group [name]
-  # @route_param node-group [template]
+  # @route POST /territories
+  # @route_param territory [name]
+  # @route_param territory [template]
   def create
     @territory = Territory.new(territory_params)
     @territory.user = current_user 
-    if @territory.save
-      render :json => @territory
-    else
-      render :status => 400, :json => { code: 400, errors: @territory.errors }
+
+    respond_to do |format|
+      format.html {
+        if @territory.save
+          flash[:success] = t :territory_created
+        else
+          flash[:error] = @territory.errors
+        end
+        redirect_to '/settings/rhisomas'
+      }
+      format.json { 
+        if @territory.save
+          render :json => @territory
+        else
+          render :status => 400, :json => { code: 400, errors: @territory.errors }
+        end
+      }
     end
   end
 
   # Edits an existing node.
-  # @route PATCH /node-groups
-  # @route_param node-group [name]
-  # @route_param node-group [template]
+  # @route PATCH /territories
+  # @route_param territory [name]
+  # @route_param territory [template]
   def update
-    if @territory.update_attributes(territory_params)
-      render :json => @territory
-    else
-      render :status => 400, :json => { code: 400, errors: @territory.errors }
+    respond_to do |format|
+      format.html {
+        if @territory.update_attributes(territory_params)
+          flash[:success] = t :territory_updated
+        else
+          flash[:error] = @territory.errors
+        end
+        redirect_to '/settings/rhisomas'
+      }
+      format.json { 
+        if @territory.update_attributes(territory_params)
+          render :json => @territory
+        else
+          render :status => 400, :json => { code: 400, errors: @territory.errors }
+        end
+      }
     end
   end
 
   # Shows the entire graph of a single node group.
-  # @route GET /node-groups/$(id)
+  # @route GET /territories/$(id)
   def show
     render :json => {
       territory: @territory,
@@ -64,17 +96,29 @@ class TerritoriesController < ApplicationController
   end
 
   # Deletes a node group.
-  # @route DELETE /node-groups/$(id)
+  # @route DELETE /territories/$(id)
   def destroy
-    if @territory.destroy
-      render :json => @territory
-    else
-      render :json => { errors: @territory.errors }
+    respond_to do |format|
+      format.html {
+        if @territory.destroy
+          flash[:success] = t :territory_destroyed
+        else
+          flash[:error] = @territory.errors
+        end
+        redirect_to '/settings/rhisomas'
+      }
+      format.json { 
+        if @territory.destroy
+          render :json => @territory
+        else
+          render :json => { errors: @territory.errors }
+        end
+      }
     end
   end
 
   # Clones a node group and all its relations.
-  # @route POST /node-groups/$(id)/clone
+  # @route POST /territories/$(id)/clone
   def clone
     @new_territory = Territory.new(territory_params)
     @new_territory.user = current_user 
@@ -86,6 +130,16 @@ class TerritoriesController < ApplicationController
     @territory.clone(@new_territory)
     render :json => @new_territory
   end
+
+  def list 
+    @user = current_user
+  end
+
+  def edit
+    @user = current_user
+    @territory = @user.territories.find(params.require(:id))
+  end
+
 
   private
   
@@ -99,9 +153,9 @@ class TerritoriesController < ApplicationController
     # Allowed node group parameters in JSON requests.
     def territory_params
       if admin?
-        params.require(:territory).permit(:name, :public, :template)
+        params.require(:territory).permit(:name, :public, :main, :template)
       else
-        params.require(:territory).permit(:name, :public)
+        params.require(:territory).permit(:name, :public, :main)
       end
     end
 
@@ -109,7 +163,7 @@ class TerritoriesController < ApplicationController
     def logged_in_user
       unless logged_in?
         render :status => 401, :json => { code: 401, errors: [ {
-          message: 'Authentication failed' 
+          message: t(:auth_failed)
         } ] }
       end
     end
@@ -120,7 +174,7 @@ class TerritoriesController < ApplicationController
       @territory = Territory.find(params[:id])
       unless @territory.template || current_user?(@territory.user)
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user' 
+          message: t(:unauthorized_user)
         } ] }
       end
     end
@@ -131,7 +185,7 @@ class TerritoriesController < ApplicationController
       @territory = Territory.find(params[:id])
       unless current_user?(@territory.user)
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user' 
+          message: t(:unauthorized_user)
         } ] }
       end
     end
@@ -142,7 +196,7 @@ class TerritoriesController < ApplicationController
       @territory = Territory.find(params[:id])
       unless @territory.template || @territory.public || current_user?(@territory.user)
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user' 
+          message: t(:unauthorized_user)
         } ] }
       end
     end

@@ -31,7 +31,7 @@ class EmailResetsController < ApplicationController
     if @user.save
       @user.create_email_reset_digest
       @user.send_email_reset_email
-      flash[:info] = "Email sent to your new email address with reset instructions"
+      flash[:info] = t :email_reset_sent
       redirect_to account_path
     else 
       render 'new'
@@ -54,14 +54,14 @@ class EmailResetsController < ApplicationController
       if @user.save
         @user.update_attribute(:new_email, nil)
         @user.update_attribute(:email_reset_digest, nil)
-        flash[:success] = "Email updated"
+        flash[:success] = t :email_updated 
         log_in @user
       else
-        flash[:danger] = "Invalid email information"
+        flash[:danger] = t :invalid_email_info
       end
       redirect_to home_path and return
     else
-      @user.errors.add(:base, 'Wrong password.')
+      @user.errors.add(:base, t(:wrong_password))
     end
     render 'edit'
   end
@@ -72,7 +72,7 @@ class EmailResetsController < ApplicationController
     def logged_in_user
       unless logged_in?
         store_location
-        flash[:danger] = "Please log in."
+        flash[:danger] = t :please_log_in
         redirect_to login_url
       end
     end
@@ -85,19 +85,19 @@ class EmailResetsController < ApplicationController
     # Before filter that confirms the email reset token is valid.
     def valid_user
       unless @user
-        flash[:danger] = "Invalid user"
+        flash[:danger] = t :invalid_user
         redirect_to root_url
         return
       end
 
       unless @user.activated
-        flash[:danger] = "The user is not activated"
+        flash[:danger] = t :user_not_activated
         redirect_to root_url
         return
       end
 
       unless @user.authenticated?(:email_reset, params[:id])
-        flash[:danger] = "Invalid email reset token"
+        flash[:danger] = t :invalid_email_reset_token
         redirect_to root_url
       end
     end
@@ -105,7 +105,7 @@ class EmailResetsController < ApplicationController
     # Before filter that checks the expiration of the email reset token.
     def check_expiration
       if @user.email_reset_expired?
-        flash[:danger] = "Email reset has expired"
+        flash[:danger] = t :email_reset_expired
         redirect_to home_path
       end
     end
