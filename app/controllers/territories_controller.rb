@@ -109,7 +109,7 @@ class TerritoriesController < ApplicationController
     def logged_in_user
       unless logged_in?
         render :status => 401, :json => { code: 401, errors: [ {
-          message: 'Authentication failed' 
+          message: t(:auth_failed)
         } ] }
       end
     end
@@ -120,7 +120,7 @@ class TerritoriesController < ApplicationController
       @territory = Territory.find(params[:id])
       unless @territory.template || current_user?(@territory.user)
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user' 
+          message: t(:unauthorized_user)
         } ] }
       end
     end
@@ -131,7 +131,7 @@ class TerritoriesController < ApplicationController
       @territory = Territory.find(params[:id])
       unless current_user?(@territory.user)
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user' 
+          message: t(:unauthorized_user)
         } ] }
       end
     end
@@ -142,7 +142,7 @@ class TerritoriesController < ApplicationController
       @territory = Territory.find(params[:id])
       unless @territory.template || @territory.public || current_user?(@territory.user)
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user' 
+          message: t(:unauthorized_user)
         } ] }
       end
     end

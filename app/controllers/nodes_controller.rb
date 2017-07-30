@@ -13,7 +13,7 @@ class NodesController < ApplicationController
   def create
     unless Node.types.include? params[:node][:type]
       render :status => 400, :json => { code: 400,  
-                                        errors: ['Invalid node type']}
+                                        errors: [t(:invalid_node_type)]}
       return
     end
 
@@ -62,7 +62,7 @@ class NodesController < ApplicationController
   # @route PATCH /nodes/pos
   def bulk_update_pos
     Node.bulk_update_pos(@nodes.to_json)
-    render :json => '{ "code": 200, "message": "success" }'
+    render :json => '{ "code": 200, "message": ' + t(:success) + ' }'
   end
 
   private
@@ -79,7 +79,7 @@ class NodesController < ApplicationController
     def logged_in_user
       unless logged_in?
         render :status => 401, :json => { code: 401, errors: [ {
-          message: 'Authentication failed' 
+          message: t(:auth_failed)
         } ] }
       end
     end
@@ -90,7 +90,7 @@ class NodesController < ApplicationController
       @node = Node.find(params[:id])
       unless current_user?(@node.user)
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized user' 
+          message: t(:unauthorized_user)
         } ] }
       end
     end
@@ -101,7 +101,7 @@ class NodesController < ApplicationController
       @territory = Territory.find_by(id: params[:node][:territory_id])
       unless !@territory || current_user?(@territory.user)
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'Unauthorized territory' 
+          message: t(:unauthorized_territory)
         } ] }
       end
     end
@@ -119,7 +119,7 @@ class NodesController < ApplicationController
       if current_user.nodes.where("nodes.id IN (#{ids.join(',')})").count !=
         @nodes.count
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'The user does not have permission to edit one or more nodes' 
+          message: t(:no_permission_to_edit_nodes)
         } ] }
       end
     end
@@ -132,7 +132,7 @@ class NodesController < ApplicationController
       is_public = territory.public || territory.template
       unless current_user?(@node.user) || is_public
         render :status => 403, :json => { code: 403, errors: [ {
-          message: 'User does not have read permission'
+          message: t(:no_read_permission)
         } ] }
       end
     end
