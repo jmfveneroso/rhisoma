@@ -9,6 +9,7 @@ class TerritoriesController < ApplicationController
   def new
     @user = current_user
     @territory = Territory.new
+    @territory.main = false
   end
 
   # Gets all nodes and edges that belong to a user.
