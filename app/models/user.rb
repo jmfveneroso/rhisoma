@@ -133,6 +133,15 @@ class User < ApplicationRecord
     { nodes: self.nodes, edges: self.edges }
   end
 
+  def main_territory
+    territory = self.territories.where(main: true).first
+    if territory.nil?
+      self.territories.first
+    else 
+      return territory
+    end
+  end
+
   private
 
     # Converts email to all lower-case.

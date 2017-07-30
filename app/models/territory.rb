@@ -1,5 +1,6 @@
 class Territory < ApplicationRecord
   belongs_to :user
+  before_save :assert_unique_main
 
   validate :validate_user_id
   validates :name, presence: true, length: { maximum: 255 }
@@ -67,5 +68,11 @@ class Territory < ApplicationRecord
       end
  
       return id_map
+    end
+
+    def assert_unique_main()
+      if self.main
+        Territory.where('id != ? AND main = TRUE', self.id).update_all("main = 'false'")
+      end
     end
 end

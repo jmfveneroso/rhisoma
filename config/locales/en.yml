@@ -90,4 +90,6 @@ en:
   password_cannot_be_blank: "Password can't be blank"
   wrong_password: "Wrong password"
   account_deleted: "Account deleted"
-
+  territory_updated: "Territory updated"
+  territory_created: "Territory created"
+  territory_destroyed: "Territory destroyed"

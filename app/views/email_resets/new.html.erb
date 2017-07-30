@@ -55,6 +55,11 @@ function main(locales_data){
   gui.addText("system-delete-account-button","DELETAR CONTA");
   document.getElementById("system-delete-account-button").setAttribute('href',"/settings/confirm_delete_account");
 
+  var rhisomas_button = {id:"system-rhisomas-button",class:"system-sidebar-primary-button",top:340};
+  gui.addLink(rhisomas_button,"system-sidebar");
+  gui.addText("system-rhisomas-button","RHISOMAS");
+  document.getElementById("system-rhisomas-button").setAttribute('href',"/settings/rhisomas");
+
   var change_email_container = {id:"system-change-email",width:258,height:98,top:(window.innerHeight-160)/2,left:(window.innerWidth-320-320)/2+320,backgroundColor:"white",padding:30,border:"1px solid #aeaeae",boxshadow:"-5px 5px #aeaeae"};
   gui.addContainer(change_email_container);
 

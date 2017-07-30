@@ -1,10 +1,36 @@
-<% provide(:page_title, "Profile") %>
+<% provide(:page_title, 'Rhisomas') %>
+
 <% content_for :errors do %>
   <%= render 'shared/error_messages' %>
 <% end %>
 
 <% content_for :css do %>
   <%= stylesheet_link_tag 'system.css' %>
+<% end %>
+
+<style>
+.rhisoma_form {
+  background: white; 
+  border: 1px solid black; 
+  z-index: 10; 
+  position: relative; 
+  margin: auto; 
+  top: 200px;
+  width: 200px;
+  padding: 10px;
+}
+
+.rhisoma_form input {
+  margin-bottom: 5px;
+}
+</style>
+
+<%= form_for @territory, url: { action: "update" }, html: { class: "rhisoma_form" } do |f| %>
+  <%= f.label :name %> <br/>
+  <%= f.text_field :name %> <br/>
+  <%= f.label :main %> <br/>
+  <%= f.check_box :main%> <br/>
+  <%= f.submit "Update" %>
 <% end %>
 
 <script>
@@ -59,60 +85,6 @@ function main(locales_data){
   gui.addLink(rhisomas_button,"system-sidebar");
   gui.addText("system-rhisomas-button","RHISOMAS");
   document.getElementById("system-rhisomas-button").setAttribute('href',"/settings/rhisomas");
-
-  var profile_container = {id:"system-profile",width:258,height:98,top:(window.innerHeight-160)/2,left:(window.innerWidth-320-320)/2+320,backgroundColor:"white",padding:30,border:"1px solid #aeaeae",boxshadow:"-5px 5px #aeaeae"};
-  gui.addContainer(profile_container);
-
-  var form_label = {id:"system-label",class:"form-label",width:298};
-  gui.addField(form_label,"system-profile");
-  gui.addText("system-label",'PERFIL');
-  document.getElementById("system-label").style.textAlign = "center";
-
-  var form = document.createElement("form");
-  form.setAttribute('method',"post");
-  form.setAttribute('action',"/users/4"); // >>> CHANGE ACTION
-  form.setAttribute('accept-charset',"UTF-8");
-
-  var general_input = document.createElement("input");
-  general_input.setAttribute('type',"hidden");
-  general_input.setAttribute('name',"utf8");
-  general_input.setAttribute('value',"✓");
-
-  var patch_input = document.createElement("input");
-  patch_input.setAttribute('type',"hidden");
-  patch_input.setAttribute('name',"_method");
-  patch_input.setAttribute('value',"patch");
-
-  var auth_input = document.createElement("input");
-  auth_input.setAttribute('type',"hidden");
-  auth_input.setAttribute('name',"authenticity_token");
-  auth_input.setAttribute('value','<%= form_authenticity_token %>');
-
-  var name_input = document.createElement("input");
-  name_input.setAttribute('type',"text");
-  name_input.setAttribute('name',"user[name]");
-  name_input.setAttribute('id',"user_name");
-  name_input.setAttribute('class',"form-control");
-  name_input.setAttribute('placeholder',"Nome do usuário");
-
-  var submit_button = document.createElement("input");
-  submit_button.setAttribute('type',"submit");
-  submit_button.setAttribute('name',"commit");
-  submit_button.setAttribute('data-disable-with',"ATUALIZANDO PERFIL…");
-  submit_button.setAttribute('class',"button-right");
-  submit_button.setAttribute('id',"submit-button");
-  submit_button.setAttribute('value',"ATUALIZAR PERFIL");
-  submit_button.style.width = document.getElementById("system-profile").offsetWidth+"px";
-  submit_button.style.left = "-1px";
-  submit_button.style.top = document.getElementById("system-profile").offsetHeight-42-1+"px";
-
-  form.appendChild(general_input);
-  form.appendChild(patch_input);
-  form.appendChild(auth_input);
-  form.appendChild(name_input);
-  form.appendChild(submit_button);
-
-  document.getElementById('system-profile').appendChild(form);
 }
   
 
