@@ -7,11 +7,12 @@ gem 'faker',                   '1.6.6'
 gem 'will_paginate',           '3.1.0'
 gem 'bootstrap-will_paginate', '0.0.10'
 gem "font-awesome-rails"
+gem 'puma', '~> 3.0'
 
-group :production do
-  # Use Puma as the app server
-  gem 'puma', '~> 3.0'
-end
+# group :production do
+#   # Use Puma as the app server
+#   gem 'puma', '~> 3.0'
+# end
 
 # Twitter bootstrap
 gem 'bootstrap-sass', '3.3.6'
